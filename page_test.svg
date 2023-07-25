@@ -1,0 +1,53 @@
+<svg
+width="210mm" height="297mm"
+viewBox="0 0 210 297" xmlns="http://www.w3.org/2000/svg">
+
+    <defs>
+        <rect id="card-boundary" width="63.5" height="88" rx="2.5" 
+        fill="white" stroke="grey" stroke-width="0.2" />
+    </defs>
+
+    <g transform="translate(0 10)">
+        <g transform="translate(10 0)">
+            <use href="#card-boundary" />
+        </g>
+
+        <g transform="translate(74 0)">
+            <use href="#card-boundary" />
+        </g>
+
+        <g transform="translate(138 0)">
+            <use href="#card-boundary" />
+        </g>
+    </g>
+
+    <g transform="translate(0 99)">
+        <g transform="translate(10 0)">
+            <use href="#card-boundary" />
+        </g>
+
+        <g transform="translate(74 0)">
+            <use href="#card-boundary" />
+        </g>
+
+        <g transform="translate(138 0)">
+            <use href="#card-boundary" />
+        </g>
+    </g>
+
+    <g transform="translate(0 188)">
+        <g transform="translate(10 0)">
+            <use href="#card-boundary" />
+        </g>
+
+        <g transform="translate(74 0)">
+            <use href="#card-boundary" />
+        </g>
+
+        <g transform="translate(138 0)">
+            <use href="#card-boundary" />
+        </g>
+    </g>
+
+
+</svg>
