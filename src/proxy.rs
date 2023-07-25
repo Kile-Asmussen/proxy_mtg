@@ -1,4 +1,4 @@
-use std::{borrow::Cow, fmt::Display};
+
 
 use regex::{Captures, Regex};
 
@@ -10,7 +10,7 @@ fn english_flavor_text(card: &Card) -> Option<&str> {
             return Some(&foreign.flavor_text);
         }
     }
-    return None;
+    None
 }
 
 pub trait ProxyTemplate {
@@ -27,7 +27,7 @@ pub trait ProxyTemplate {
             return None;
         }
 
-        return self.from_cards(cards);
+        self.from_cards(cards)
     }
 }
 
@@ -46,7 +46,7 @@ impl<T: ProxyTemplate> ProxyTemplate for TemplateSet<T> {
                 return t.from_cards(cards);
             }
         }
-        return None;
+        None
     }
 }
 
@@ -96,7 +96,7 @@ impl ProxyTemplate for DiscordTemplate {
         let card = &cards[0];
 
         let mana_cost = Self::replace_symbols(&card.mana_cost);
-        let text = Self::replace_symbols(&card.text).replace("\n", "\n> ");
+        let text = Self::replace_symbols(&card.text).replace('\n', "\n> ");
 
         Some(format!(
             r#"> {name} {mc}
