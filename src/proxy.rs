@@ -1,5 +1,3 @@
-
-
 use regex::{Captures, Regex};
 
 use crate::cards::{AtomicCards, Card, Layout};
