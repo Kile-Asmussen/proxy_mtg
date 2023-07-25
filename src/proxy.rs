@@ -3,12 +3,10 @@ use regex::{Captures, Regex};
 use crate::cards::{AtomicCards, Card, Layout};
 
 fn english_flavor_text(card: &Card) -> Option<&str> {
-    for foreign in &card.foreign_data {
-        if foreign.language == "English" {
-            return Some(&foreign.flavor_text);
-        }
-    }
-    None
+    card.foreign_data
+        .iter()
+        .find(|foreign| foreign.language == "English")
+        .map(|foreign| foreign.flavor_text.as_str())
 }
 
 pub trait ProxyTemplate {
