@@ -14,7 +14,7 @@ pub trait ProxyTemplate {
 
     fn applies_to(&self, layout: Layout) -> bool;
 
-    fn from_cards(&self, cards: &[Card]) -> Option<Self::Output>;
+    fn generate(&self, cards: &[Card]) -> Option<Self::Output>;
 
     fn proxy(&self, name: &str, atomic: &AtomicCards) -> Option<Self::Output> {
         let cards = &atomic.data.get(name)?[..];
@@ -23,7 +23,7 @@ pub trait ProxyTemplate {
             return None;
         }
 
-        self.from_cards(cards)
+        self.generate(cards)
     }
 }
 
@@ -36,10 +36,10 @@ impl<T: ProxyTemplate> ProxyTemplate for TemplateSet<T> {
         self.0.iter().any(|t| t.applies_to(layout))
     }
 
-    fn from_cards(&self, cards: &[Card]) -> Option<Self::Output> {
+    fn generate(&self, cards: &[Card]) -> Option<Self::Output> {
         for t in &self.0 {
             if t.applies_to(cards[0].layout) {
-                return t.from_cards(cards);
+                return t.generate(cards);
             }
         }
         None
@@ -55,7 +55,7 @@ impl ProxyTemplate for SimpleTemplate {
         layout == Layout::Normal
     }
 
-    fn from_cards(&self, cards: &[Card]) -> Option<Self::Output> {
+    fn generate(&self, cards: &[Card]) -> Option<Self::Output> {
         if cards.len() != 1 {
             return None;
         }
@@ -85,7 +85,7 @@ impl ProxyTemplate for DiscordTemplate {
         layout == Layout::Normal
     }
 
-    fn from_cards(&self, cards: &[Card]) -> Option<Self::Output> {
+    fn generate(&self, cards: &[Card]) -> Option<Self::Output> {
         if cards.len() != 1 {
             return None;
         }
