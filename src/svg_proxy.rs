@@ -15,3 +15,9 @@ impl ProxyTemplate for SvgProxy {
         return None;
     }
 }
+
+const NORMAL: &str = r#"
+<g>
+<rect width="63.5mm" height="88mm" stroke="black" stroke-weight="0.25mm">
+</g>
+"#;
