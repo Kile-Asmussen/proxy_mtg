@@ -1,5 +1,6 @@
 mod cards;
 mod proxy;
+mod svg_proxy;
 
 use cards::*;
 use proxy::*;

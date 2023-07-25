@@ -56,11 +56,7 @@ impl ProxyTemplate for SimpleTemplate {
     }
 
     fn generate(&self, cards: &[Card]) -> Option<Self::Output> {
-        if cards.len() != 1 {
-            return None;
-        }
-
-        let card = &cards[0];
+        let card = cards.first()?;
 
         Some(format!(
             r#"----
@@ -86,10 +82,7 @@ impl ProxyTemplate for DiscordTemplate {
     }
 
     fn generate(&self, cards: &[Card]) -> Option<Self::Output> {
-        if cards.len() != 1 {
-            return None;
-        }
-        let card = &cards[0];
+        let card = cards.first()?;
 
         let mana_cost = Self::replace_symbols(&card.mana_cost);
         let text = Self::replace_symbols(&card.text).replace('\n', "\n> ");
