@@ -55,6 +55,18 @@
     font-size: 7pt;
 }
 
+.mana-cost>img.pip {
+    height: 3.5mm;
+}
+
+div.text-box img.pip {
+    height: 3.5mm;
+}
+
+div.text-box.dense img.pip {
+    height: 3mm;
+}
+
 .art-credits {
     border-style: none;
     border-width: 0;
