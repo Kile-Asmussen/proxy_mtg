@@ -27,15 +27,36 @@
     padding: 1mm;
 }
 
-.saga>.text-and-art>.text-box>p.reminder-text {
-    font-size: 7pt;
-    margin: 0.5mm;
-}
-
 .saga>.text-and-art>img {
     display: inline-block;
     width: 29mm;
     position: absolute;
     right: 0;
     height: auto;
+}
+
+.saga>.text-and-art>.text-box>p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.saga>.text-and-art>.text-box>hr {}
+
+.saga>.text-and-art>.text-box>.step {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 2.5mm;
+    position: relative;
+}
+
+.saga>.text-and-art>.text-box>.step>.hex {
+    font-size: 9pt;
+    float: left;
+    margin-left: -5mm;
+    width: 1.2em;
+    text-align: center;
+    border-style: solid;
+    border-width: 0.2mm;
+    border-color: grey;
+    background: linear-gradient(white 0%, lightgray 100%);
 }

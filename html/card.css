@@ -58,7 +58,7 @@
 .art-credits {
     border-style: none;
     border-width: 0;
-    font-size: 7pt;
+    font-size: 6pt;
     left: 5mm;
     bottom: 0.5mm;
     position: absolute;
@@ -66,12 +66,13 @@
 
 .art-credits:before {
     content: "artist: ";
-    font-size: 7pt;
+    font-size: 6pt;
 }
 
 .flavor-text,
 .reminder-text {
     font-style: italic;
+    font-size: 0.85em;
 }
 
 .reminder-text:before {

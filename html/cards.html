@@ -30,6 +30,8 @@
     <link rel="stylesheet" href="./card.css" />
     <link rel="stylesheet" href="./normal-card.css" />
     <link rel="stylesheet" href="./saga-card.css" />
+
+    <link rel="stylesheet" href="./pips.css" />
 </head>
 
 <body>
@@ -38,7 +40,9 @@
             <div class="card normal">
                 <div class="title-bar">
                     <span class="name">One with Nothing</span>
-                    <span class="mana-cost">{B}</span>
+                    <span class="mana-cost">
+                        <img src="../svg/white-mana-pip.svg" />
+                    </span>
                 </div>
                 <img src="../art/one-with-nothing.webp" />
                 <div class="type-bar">
@@ -60,12 +64,25 @@
                     <span class="mana-cost">{7}{U}{U}</span>
                 </div>
                 <div class="text-and-art">
-                    <div class="text-box">
+                    <div class="text-box dense">
                         <p class="reminder-text">As this Saga enters and after your draw step, add a lore counter.
-                            Sacrifice after III</p>
+                            Sacrifice after &#8546;</p>
                         <hr />
                         <p class="step">
-                            <span class="hex">I</span> Create an 8/8 blue Kraken creature token with hexproof.
+                            <span class="hex">&#8544;</span>
+                            Create an 8/8 blue Kraken creature
+                            token with hexproof.
+                        </p>
+                        <hr />
+                        <p class="step">
+                            <span class="hex">&#8545;</span>
+                            Tap all nonland permanents target opponent controls. They don't untap during their
+                            controller's next untap step.
+                        </p>
+                        <hr />
+                        <p class="step">
+                            <span class="hex">&#8546;</span>
+                            Gain control of target permanent an opponent controls. Untap it.
                         </p>
                     </div>
                     <img src="../art/kiora-bests-the-sea-god.png" />
@@ -73,6 +90,7 @@
                 <div class="type-bar">
                     <span>Enchantment &mdash; Saga</span>
                 </div>
+                <span class="art-credits">Joe R. Hacker</span>
             </div>
             <div class="card"></div>
         </div>
