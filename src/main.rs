@@ -1,10 +1,15 @@
 mod cards;
+mod html_proxies;
 mod proxy_builder;
 mod simple_proxy;
-mod svg_proxies;
 
 use cards::*;
 use simple_proxy::*;
+
+use crate::{
+    html_proxies::NormalHtmlBuilder,
+    proxy_builder::{ProxyBuilder, ProxyBuilderNormal},
+};
 
 fn main() {
     print!("Loading... ");
@@ -29,4 +34,17 @@ fn main() {
         );
         println!()
     }
+
+    let mut builder = NormalHtmlBuilder::new();
+
+    builder
+        .name("One with Nothing")
+        .mana_cost("{B}")
+        .art_filename("../art/one-with-nothing.webp")
+        .type_line("Instant")
+        .rules_text("Discard your hand.")
+        .flavor_text("When nothing remains, everything is equally possible.")
+        .art_credits("John Doe");
+
+    println!("{}", builder.build());
 }

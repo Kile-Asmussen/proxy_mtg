@@ -9,37 +9,18 @@ use crate::cards::{AtomicCards, Card, Layout, MetaData};
 pub trait ProxyBuilder {
     type Output;
 
-    fn build(&self) -> Self::Output;
+    fn build(&mut self) -> Self::Output;
     fn name(&mut self, name: &str) -> &mut Self;
     fn type_line(&mut self, type_line: &str) -> &mut Self;
     fn mana_cost(&mut self, mana_cost: &str) -> &mut Self;
-    fn art_filename(&mut self, art_filename: &Path) -> &mut Self;
+    fn art_filename(&mut self, art_filename: &str) -> &mut Self;
     fn art_credits(&mut self, artist: &str) -> &mut Self;
-    fn border_color(&mut self, color: BorderColor) -> &mut Self;
-    fn legendary_decor(&mut self, is_legedary: bool) -> &mut Self;
-}
-
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub enum BorderColor {
-    Mono(Color),
-    Gradient(Color, Color),
-    Gold,
-}
-
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub enum Color {
-    White,
-    Blue,
-    Black,
-    Red,
-    Green,
-    Colorless,
 }
 
 pub trait ProxyBuilderNormal {
-    fn rules_text(&mut self, name: &str) -> &mut Self;
+    fn rules_text(&mut self, rules_text: &str) -> &mut Self;
     fn flavor_text(&mut self, flavor_text: &str) -> &mut Self;
-    fn watermark(&mut self, watermark_filename: &Path) -> &mut Self;
+    fn corner_bubble(&mut self, corner_bubble: &str) -> &mut Self;
 }
 
 pub trait ProxyBuilderReversible: ProxyBuilder {

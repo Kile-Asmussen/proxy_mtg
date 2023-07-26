@@ -22,6 +22,17 @@
     margin-right: auto;
 }
 
+.normal>.art-placeholder {
+    border-top-width: 0;
+    border-bottom-width: 0;
+    display: block;
+    width: 56mm;
+    height: 40mm;
+    margin-left: auto;
+    margin-right: auto;
+    background: linear-gradient(45deg, white 0%, lightgrey 50%, white 100%);
+}
+
 .normal>.text-box {
     margin: 0 auto;
     border-top-width: 0;
