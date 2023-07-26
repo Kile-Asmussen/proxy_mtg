@@ -1,0 +1,41 @@
+.saga>.text-and-art {
+    border-width: 0;
+    width: 56mm;
+    margin: 0 auto;
+    border-width: 0;
+    height: 69mm;
+    position: relative;
+}
+
+.saga>.title-bar,
+.saga>.type-bar {
+    padding: 0.5mm 1.5mm;
+}
+
+.saga>.text-and-art>* {
+    border-width: 0 0.25mm;
+    border-style: solid;
+    border-color: black;
+}
+
+.saga>.text-and-art>.text-box {
+    border-right-width: 0;
+    position: absolute;
+    left: 0;
+    width: 25mm;
+    height: calc(100% - 2mm);
+    padding: 1mm;
+}
+
+.saga>.text-and-art>.text-box>p.reminder-text {
+    font-size: 7pt;
+    margin: 0.5mm;
+}
+
+.saga>.text-and-art>img {
+    display: inline-block;
+    width: 29mm;
+    position: absolute;
+    right: 0;
+    height: auto;
+}

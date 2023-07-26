@@ -1,0 +1,101 @@
+.card {
+    position: relative;
+    box-sizing: border-box;
+    font-size: 9pt;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    border-style: solid;
+    border-radius: 2.5mm;
+    border-color: black;
+    border-width: 2mm;
+    padding: 0;
+    width: 63.5mm;
+    height: 88mm;
+    margin: 0.5mm;
+    background: linear-gradient(white 0%, white 80%, lightgray 100%);
+}
+
+.card>* {
+    box-sizing: border-box;
+    border-width: 0.25mm;
+    border-style: solid;
+    border-color: black;
+}
+
+.title-bar,
+.type-bar {
+    font-weight: bold;
+    padding: 0.5mm 1.5mm;
+    border-radius: 1mm;
+    margin: 0 auto;
+    width: 58mm;
+    display: flex;
+    flex-direction: row;
+}
+
+.title-bar {
+    margin-top: 1.5mm;
+}
+
+.title-bar,
+.type-bar,
+.text-box {
+    background-color: white;
+}
+
+.title-bar {
+    justify-content: space-between;
+    align-content: center;
+}
+
+.type-bar {
+    justify-content: first;
+}
+
+.mana-cost {
+    font-size: 7pt;
+}
+
+.art-credits {
+    border-style: none;
+    border-width: 0;
+    font-size: 7pt;
+    left: 5mm;
+    bottom: 0.5mm;
+    position: absolute;
+}
+
+.art-credits:before {
+    content: "artist: ";
+    font-size: 7pt;
+}
+
+.flavor-text,
+.reminder-text {
+    font-style: italic;
+}
+
+.reminder-text:before {
+    font-style: italic;
+    content: "(";
+}
+
+.reminder-text:after {
+    font-style: italic;
+    content: ")";
+}
+
+.text-box.dense {
+    font-size: 7.5pt;
+}
+
+.type-bar.dense {
+    font-stretch: condensed;
+}
+
+.title-bar.dense {
+    font-stretch: condensed;
+}
+
+.text-box hr {
+    width: 90%;
+}

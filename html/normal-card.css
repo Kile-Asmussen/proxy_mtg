@@ -1,0 +1,31 @@
+.normal>.corner-bubble {
+    font-weight: bold;
+    font-size: 11pt;
+    color: white;
+    background-color: gray;
+    text-shadow: 1pt 1pt black;
+    right: 1mm;
+    bottom: 1mm;
+    z-index: 1;
+    position: absolute;
+    padding: 0.2mm 1.5mm;
+    border-radius: 1.5mm;
+}
+
+.normal>img {
+    border-top-width: 0;
+    border-bottom-width: 0;
+    display: block;
+    width: 56mm;
+    height: 40mm;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.normal>.text-box {
+    margin: 0 auto;
+    border-top-width: 0;
+    width: 56mm;
+    height: 29mm;
+    padding: 1mm;
+}
