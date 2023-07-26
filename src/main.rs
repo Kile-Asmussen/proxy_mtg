@@ -1,9 +1,10 @@
 mod cards;
-mod proxy;
-mod svg_proxy;
+mod proxy_builder;
+mod simple_proxy;
+mod svg_proxies;
 
 use cards::*;
-use proxy::*;
+use simple_proxy::*;
 
 fn main() {
     print!("Loading... ");

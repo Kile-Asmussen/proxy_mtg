@@ -1,0 +1,163 @@
+<html>
+
+<head>
+    <style media="screen, print">
+        @page {
+            size: A4 portrait;
+            padding: 11mm 9mm;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        page {
+            page-break-after: always;
+        }
+
+        .card {
+            position: relative;
+            box-sizing: border-box;
+            font-size: 9pt;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            border-style: solid;
+            border-radius: 2mm;
+            border-color: grey;
+            border-width: 1mm;
+            padding: 0.2mm 0;
+            width: 63.5mm;
+            height: 88mm;
+            margin: 0.5mm;
+        }
+
+        .title-bar,
+        .type-bar,
+        .text-box,
+        .corner-bubble,
+        .normal>img {
+            box-sizing: border-box;
+            border-width: 0.25mm;
+            border-style: solid;
+            border-color: black;
+        }
+
+        .title-bar,
+        .type-bar {
+            padding: 0.2mm 1.5mm;
+            border-radius: 1.5mm;
+            margin: 0 auto;
+            width: 61mm;
+        }
+
+        .title-bar {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+        }
+
+        .card-name {
+            align-self: flex-start;
+        }
+
+        .mana-cost {
+            align-self: flex-end;
+        }
+
+        .normal>img {
+            display: block;
+            width: 59mm;
+            height: 42.5mm;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .text-box {
+            margin: 0 auto;
+            width: 59mm;
+            height: 32.5mm;
+            padding: 1mm;
+        }
+
+        .flavor-text {
+            font-style: italic;
+        }
+
+        .corner-bubble {
+            right: 0.5mm;
+            bottom: 0.5mm;
+            z-index: 1;
+            position: absolute;
+            background-color: white;
+            padding: 0.2mm 1.5mm;
+            border-radius: 1.5mm;
+        }
+
+        .card-row {
+            margin-left: 8mm;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .card-row:first-child {
+            margin-top: 11mm;
+        }
+    </style>
+</head>
+
+<body>
+    <page>
+        <div class="card-row">
+            <div class="card normal">
+                <p class="title-bar">
+                    <span class="name">One with Nothing</span>
+                    <span class="mana-cost">{B}</span>
+                </p>
+                <img
+                    src="https://cdn.cardsrealm.com/images/cartas/fmb1-mystery-booster-retail-edition-foils/en/crop-med/one-with-nothing-41.jpeg?3822" />
+                <p class="type-bar">
+                    Instant
+                </p>
+                <div class="text-box">
+                    <p class="rules-text">Discard your hand.</p>
+                    <hr />
+                    <p class="flavor-text">When nothing remains, everything is equally possible.</p>
+                </div>
+                <div class="corner-bubble">
+                    1/1
+                </div>
+            </div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+        <div class="card-row">
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+        <div class="card-row">
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+    </page>
+    <page>
+        <div class="card-row">
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+        <div class="card-row">
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+        <div class="card-row">
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+    </page>
+</body>
+
+</html>
