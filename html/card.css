@@ -51,20 +51,18 @@
     justify-content: first;
 }
 
-.mana-cost {
-    font-size: 7pt;
-}
-
 .mana-cost>img.pip {
-    height: 3.5mm;
+    height: 3.3mm;
+    margin: 0;
+    vertical-align: center;
 }
 
 div.text-box img.pip {
-    height: 3.5mm;
+    height: 3.3mm;
 }
 
 div.text-box.dense img.pip {
-    height: 3mm;
+    height: 2.8mm;
 }
 
 .art-credits {
