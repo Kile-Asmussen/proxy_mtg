@@ -2,7 +2,9 @@
 
 Just a little toy tool for creating proxies.
 
-You will need to download the JSON files from [here](https://mtgjson.com/downloads/all-files/#atomiccards).
+# Usage notes
+
+You will need to download the Atomic Cards JSON file from [here](https://mtgjson.com/downloads/all-files/#atomiccards), since it is too large for github. (Recommend you run it through a tool like [JQ](https://jqlang.github.io/jq/) to make it readable.)
 
 # License
 
