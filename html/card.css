@@ -30,6 +30,7 @@
     width: 58mm;
     display: flex;
     flex-direction: row;
+    align-content: baseline;
 }
 
 .title-bar {
@@ -44,25 +45,47 @@
 
 .title-bar {
     justify-content: space-between;
-    align-content: center;
 }
 
 .type-bar {
     justify-content: first;
 }
 
+.type-bar>.color-indicator {
+    margin-right: 3mm;
+    align-self: center;
+}
+
+.type-bar>.color-indicator:before {
+    content: "(";
+}
+
+.type-bar>.color-indicator:after {
+    content: ")";
+}
+
+.type-bar img.pip {
+    height: 3.2mm;
+    vertical-align: sub;
+}
+
+.mana-cost {
+    align-self: center;
+}
+
 .mana-cost>img.pip {
-    height: 3.3mm;
+    height: 3.2mm;
     margin: 0;
-    vertical-align: center;
 }
 
 div.text-box img.pip {
-    height: 3.3mm;
+    height: 3.2mm;
+    vertical-align: sub;
 }
 
 div.text-box.dense img.pip {
-    height: 2.8mm;
+    height: 2.6mm;
+    vertical-align: sub;
 }
 
 .art-credits {

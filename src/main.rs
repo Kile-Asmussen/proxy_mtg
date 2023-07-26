@@ -12,29 +12,6 @@ use crate::{
 };
 
 fn main() {
-    print!("Loading... ");
-    let atomic_cards = AtomicCards::load().unwrap();
-    println!("Done!");
-
-    let deck = &[
-        "Lightning Bolt",
-        "One with Nothing",
-        "Gifts Ungiven",
-        "Avacyn, Angel of Hope",
-        "Llanowar Elves",
-        "Emrakul, the Aeons Torn",
-    ][..];
-
-    for name in deck {
-        println!(
-            "{}",
-            DiscordTemplate
-                .proxy(name, &atomic_cards)
-                .unwrap_or_else(|| format!("--- {} not found ---", name))
-        );
-        println!()
-    }
-
     let mut builder = NormalHtmlBuilder::new();
 
     builder
@@ -44,6 +21,20 @@ fn main() {
         .type_line("Instant")
         .rules_text("Discard your hand.")
         .flavor_text("When nothing remains, everything is equally possible.")
+        .art_credits("John Doe");
+
+    println!("{}", builder.build());
+    println!();
+    println!();
+
+    let mut builder = NormalHtmlBuilder::new();
+
+    builder
+        .name("Squirrel")
+        .type_line("Creature &mdash; Squirrel")
+        .color_indicator("{G}}")
+        .rules_text("Token.")
+        .corner_bubble("1/1")
         .art_credits("John Doe");
 
     println!("{}", builder.build());

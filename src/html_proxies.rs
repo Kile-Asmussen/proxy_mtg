@@ -9,6 +9,7 @@ struct Bucket {
     mana_cost: String,
     art_filename: String,
     art_credits: String,
+    color_indicator: String,
 }
 
 macro_rules! delegate_to_bucket {
@@ -48,7 +49,7 @@ impl NormalHtmlBuilder {
 
     fn image_tag(&self) -> String {
         if self.bucket.art_filename.is_empty() {
-            r#"<div class="art-placeholder"/>"#.into()
+            r#"<div class="art-placeholder"></div>"#.into()
         } else {
             format!(r#"<img src="{}" />"#, self.bucket.art_filename)
         }
@@ -82,6 +83,22 @@ impl NormalHtmlBuilder {
 
         res
     }
+
+    fn type_bar(&self) -> String {
+        let mut res = String::new();
+
+        if !self.bucket.color_indicator.is_empty() {
+            res += "<span>";
+            res += &replace_mana_symbols(&self.bucket.color_indicator);
+            res += "</span>";
+        }
+
+        res += "<span>";
+        res += &self.bucket.type_line;
+        res += "</span>";
+
+        res
+    }
 }
 
 impl ProxyBuilder for NormalHtmlBuilder {
@@ -90,33 +107,40 @@ impl ProxyBuilder for NormalHtmlBuilder {
     fn build(&mut self) -> Self::Output {
         format!(
             r#"
-        <div class="card normal">
-        <div class="title-bar">
-            <span class="name">{card_name}</span>
-            <span class="mana-cost">{mana_cost}</span>
-        </div>
-        {image_tag}
-        <div class="type-bar">
-            <span>{type_line}</span>
-        </div>
-        <div class="text-box">
-            {text_box}
-        </div>
-        {corner_bubble}
-        <span class="art-credits">{art_credits}</span>
+<div class="card normal">
+    <div class="title-bar">
+        <span class="name">{card_name}</span>
+        <span class="mana-cost">{mana_cost}</span>
     </div>
+    {image_tag}
+    <div class="type-bar">
+        {type_line}
+    </div>
+    <div class="text-box">
+        {text_box}
+    </div>
+    {corner_bubble}
+    <span class="art-credits">{art_credits}</span>
+</div>
         "#,
             card_name = self.bucket.name,
             mana_cost = replace_mana_symbols(&self.bucket.mana_cost),
             image_tag = self.image_tag(),
-            type_line = self.bucket.type_line,
+            type_line = self.type_bar(),
             text_box = self.text_box_content(),
             corner_bubble = self.corner_bubble_tag(),
             art_credits = self.bucket.art_credits,
         )
     }
 
-    delegate_to_bucket!(name, type_line, mana_cost, art_filename, art_credits);
+    delegate_to_bucket!(
+        name,
+        type_line,
+        mana_cost,
+        art_filename,
+        art_credits,
+        color_indicator
+    );
 }
 
 impl ProxyBuilderNormal for NormalHtmlBuilder {
@@ -130,11 +154,11 @@ fn replace_mana_symbols(mana_notation: &str) -> String {
 
     fn replacer(cap: &Captures<'_>) -> String {
         match cap.get(1).unwrap().as_str() {
-            "W" => r#"<img class="pip" src="./svg/white-mana-pip.svg">"#,
-            "U" => r#"<img class="pip" src="./svg/blue-mana-pip.svg">"#,
-            "B" => r#"<img class="pip" src="./svg/black-mana-pip.svg">"#,
-            "R" => r#"<img class="pip" src="./svg/red-mana-pip.svg">"#,
-            "G" => r#"<img class="pip" src="./svg/green-mana-pip.svg">"#,
+            "W" => r#"<img class="pip" src="../svg/white-mana-pip.svg">"#,
+            "U" => r#"<img class="pip" src="../svg/blue-mana-pip.svg">"#,
+            "B" => r#"<img class="pip" src="../svg/black-mana-pip.svg">"#,
+            "R" => r#"<img class="pip" src="../svg/red-mana-pip.svg">"#,
+            "G" => r#"<img class="pip" src="../svg/green-mana-pip.svg">"#,
             s if i32::from_str_radix(s, 10).is_ok() => {
                 return format!(r#"<img class="pip" src="./svg/generic-{s}-pip.svg">"#);
             }

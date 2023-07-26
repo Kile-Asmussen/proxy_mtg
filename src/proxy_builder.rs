@@ -1,17 +1,10 @@
-use std::{
-    cmp::Reverse,
-    ops::{Range, RangeInclusive},
-    path::Path,
-};
-
-use crate::cards::{AtomicCards, Card, Layout, MetaData};
-
 pub trait ProxyBuilder {
     type Output;
 
     fn build(&mut self) -> Self::Output;
     fn name(&mut self, name: &str) -> &mut Self;
     fn type_line(&mut self, type_line: &str) -> &mut Self;
+    fn color_indicator(&mut self, colors: &str) -> &mut Self;
     fn mana_cost(&mut self, mana_cost: &str) -> &mut Self;
     fn art_filename(&mut self, art_filename: &str) -> &mut Self;
     fn art_credits(&mut self, artist: &str) -> &mut Self;
@@ -47,23 +40,25 @@ pub trait ProxyBuilderSaga: ProxyBuilder {
 //     fn flip_side(&mut self) -> &mut Self::FlipSide;
 // }
 
-pub trait GeneralProxyBuilder {
-    type Metadata;
+pub trait BasicLandProxyBuilder {
     type Output;
-    type Normal: ProxyBuilderNormal + ProxyBuilder<Output = Self::Output>;
-    type Reversible: ProxyBuilderReversible + ProxyBuilder<Output = Self::Output>;
-    type Saga: ProxyBuilderSaga + ProxyBuilder<Output = Self::Output>;
 
-    fn new(metadata: MetaData) -> Self;
+    fn art_filename(&mut self, art_filename: &str) -> &mut Self;
+    fn art_credits(&mut self, artist: &str) -> &mut Self;
 
-    fn build_card(card: &[Card]) -> Option<Self::Output>;
+    fn build(&self, land: BasicLand) -> Self::Output;
 }
 
-trait DeckBuilder {
-    type Output;
+pub enum BasicLand {
+    Wastes,
+    Snow(CoreLand),
+    Base(CoreLand),
+}
 
-    fn add_card(&mut self, card: &[Card]) -> &mut Self;
-    fn unsupported_cards(&self) -> &[Card];
-
-    fn result(&self) -> Self::Output;
+pub enum CoreLand {
+    Plains,
+    Island,
+    Swamp,
+    Mountain,
+    Forest,
 }
