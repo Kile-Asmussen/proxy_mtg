@@ -1,43 +1,78 @@
 mod cards;
+mod decklist;
 mod html_proxies;
 mod proxy_builder;
 mod simple_proxy;
 
-use std::path::Path;
+use std::{
+    error::Error,
+    fmt::Write,
+    path::{Path, PathBuf},
+};
 
 use cards::*;
+use decklist::{Artoid, DeckEDH, Landoid};
+use html_proxies::FirefoxFriendlyHtmlDeckList;
+use proxy_builder::{BasicLand, CoreLand, DeckBuilder};
 use simple_proxy::*;
 
 use crate::{
-    html_proxies::NormalHtmlBuilder,
-    proxy_builder::{ProxyBuilder, ProxyBuilderNormal},
+    html_proxies::{NormalHtmlBuilder, SagaHtmlBuilder},
+    proxy_builder::{ProxyBuilder, ProxyBuilderNormal, ProxyBuilderSaga},
 };
 
 fn main() {
-    let mut builder = NormalHtmlBuilder::new();
+    let deck = DeckEDH {
+        commanders: vec![Artoid {
+            name: "Henzie \"Toolbox\" Torre".into(),
+            art_file: "./art/henzie-toolbox-torre.png".into(),
+            art_credit: "Johannes Voss".into(),
+            flavor_text: "".into(),
+        }],
+        the_99ish: vec![Artoid {
+            name: "Lightning Bolt".into(),
+            art_file: PathBuf::new(),
+            art_credit: String::new(),
+            flavor_text: String::new(),
+        }],
+        basics: vec![Landoid {
+            name: BasicLand::Base(CoreLand::Mountain),
+            number: 1,
+            art_credit: String::new(),
+            art_file: PathBuf::new(),
+        }],
+    };
 
-    builder
-        .name("One with Nothing")
-        .mana_cost("{B}")
-        .art_filename(&Path::new("./art/one-with-nothing.webp"))
-        .type_line("Instant")
-        .rules_text("Discard your hand.")
-        .flavor_text("When nothing remains, everything is equally possible.")
-        .art_credits("John Doe");
+    println!("{}", serde_json::to_string_pretty(&deck).unwrap(),)
+}
 
-    println!("{}", builder.build());
-    println!();
-    println!();
+fn main_2() {
+    let mut deck = FirefoxFriendlyHtmlDeckList::new();
 
-    let mut builder = NormalHtmlBuilder::new();
+    let mut kiora = SagaHtmlBuilder::new();
+    kiora
+        .name("Kiora Bests the Sea God")
+        .mana_cost("{7}{U}{U}")
+        .art_filename(&Path::new("./art/kiora-bests-the-sea-god.png"))
+        .art_credits("Victor Adame Minguez")
+        .type_line("Enchantment &mdash; Saga")
+        .step_text(
+            &[1],
+            "Create an 8/8 blue Kraken creature
+        token with hexproof.",
+        )
+        .step_text(
+            &[2],
+            "Tap all nonland permanents target opponent controls. They don't untap during their controller's next untap step.",
+        )
+        .step_text(&[3], "Gain control of target permanent an opponent controls. Untap it.");
 
-    builder
-        .name("Squirrel")
-        .type_line("Creature &mdash; Squirrel")
-        .color_indicator(&["G".into()])
-        .rules_text("Token.")
-        .corner_bubble("1/1")
-        .art_credits("John Doe");
+    for _ in 1..=36 {
+        deck.add_card(kiora.build());
+    }
 
-    println!("{}", builder.build());
+    let mut out_file: Box<dyn std::io::Write> =
+        Box::new(std::fs::File::create("./card_test.html").unwrap());
+
+    deck.build(&mut out_file).unwrap();
 }

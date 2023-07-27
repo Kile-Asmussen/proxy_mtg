@@ -5,8 +5,12 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AtomicCards {
     pub meta: MetaData,
-    pub data: HashMap<String, Vec<Card>>,
+    pub data: HashMap<String, Cardoid>,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(transparent)]
+pub struct Cardoid(pub Vec<Card>);
 
 impl AtomicCards {
     pub fn load() -> Result<Self, Box<dyn Error>> {

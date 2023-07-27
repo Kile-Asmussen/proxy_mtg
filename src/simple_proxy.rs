@@ -1,6 +1,6 @@
 use regex::{Captures, Regex};
 
-use crate::cards::{AtomicCards, Card, Layout};
+use crate::cards::{AtomicCards, Card, Cardoid, Layout};
 
 fn english_flavor_text(card: &Card) -> Option<&str> {
     card.foreign_data
@@ -14,16 +14,16 @@ pub trait ProxyTemplate {
 
     fn applies_to(&self, layout: Layout) -> bool;
 
-    fn generate(&self, cards: &[Card]) -> Option<Self::Output>;
+    fn generate(&self, cards: &Cardoid) -> Option<Self::Output>;
 
     fn proxy(&self, name: &str, atomic: &AtomicCards) -> Option<Self::Output> {
-        let cards = &atomic.data.get(name)?[..];
+        let card = atomic.data.get(name)?;
 
-        if !cards.iter().all(|c| self.applies_to(c.layout)) {
+        if !card.0.iter().all(|c| self.applies_to(c.layout)) {
             return None;
         }
 
-        self.generate(cards)
+        self.generate(card)
     }
 }
 
@@ -36,9 +36,9 @@ impl<T: ProxyTemplate> ProxyTemplate for TemplateSet<T> {
         self.0.iter().any(|t| t.applies_to(layout))
     }
 
-    fn generate(&self, cards: &[Card]) -> Option<Self::Output> {
+    fn generate(&self, cards: &Cardoid) -> Option<Self::Output> {
         for t in &self.0 {
-            if t.applies_to(cards[0].layout) {
+            if t.applies_to(cards.0[0].layout) {
                 return t.generate(cards);
             }
         }
@@ -55,8 +55,8 @@ impl ProxyTemplate for SimpleTemplate {
         layout == Layout::Normal
     }
 
-    fn generate(&self, cards: &[Card]) -> Option<Self::Output> {
-        let card = cards.first()?;
+    fn generate(&self, cards: &Cardoid) -> Option<Self::Output> {
+        let card = cards.0.first()?;
 
         Some(format!(
             r#"----
@@ -81,8 +81,8 @@ impl ProxyTemplate for DiscordTemplate {
         layout == Layout::Normal
     }
 
-    fn generate(&self, cards: &[Card]) -> Option<Self::Output> {
-        let card = cards.first()?;
+    fn generate(&self, cards: &Cardoid) -> Option<Self::Output> {
+        let card = cards.0.first()?;
 
         let mana_cost = Self::replace_symbols(&card.mana_cost);
         let text = Self::replace_symbols(&card.text).replace('\n', "\n> ");
