@@ -41,6 +41,22 @@
 .type-bar,
 .text-box {
     background-color: white;
+    padding: 0.5mm 1.5mm;
+}
+
+.title-bar.legendary {
+    border-width: 0;
+    background-image: linear-gradient(120deg, grey 40%, darkgrey 60%, lightgray 65%, white 70%, lightgray 75%, darkgray 80%, grey 100%);
+}
+
+.title-bar.legendary>.name {
+    color: white;
+    text-shadow: 1pt 1pt black;
+}
+
+.title-bar.legendary>.mana-cost>img {
+    filter:
+        drop-shadow(0.25pt 0.25pt 0.25pt white) drop-shadow(0.25pt -0.25pt 0.25pt white) drop-shadow(-0.25pt 0.25pt 0.25pt white) drop-shadow(-0.25pt -0.25pt 0.25pt white);
 }
 
 .title-bar {
@@ -76,6 +92,7 @@
 .mana-cost>img.pip {
     height: 3.2mm;
     margin: 0;
+    vertical-align: sub;
 }
 
 div.text-box img.pip {

@@ -3,6 +3,8 @@ mod html_proxies;
 mod proxy_builder;
 mod simple_proxy;
 
+use std::path::Path;
+
 use cards::*;
 use simple_proxy::*;
 
@@ -17,7 +19,7 @@ fn main() {
     builder
         .name("One with Nothing")
         .mana_cost("{B}")
-        .art_filename("../art/one-with-nothing.webp")
+        .art_filename(&Path::new("./art/one-with-nothing.webp"))
         .type_line("Instant")
         .rules_text("Discard your hand.")
         .flavor_text("When nothing remains, everything is equally possible.")
@@ -32,7 +34,7 @@ fn main() {
     builder
         .name("Squirrel")
         .type_line("Creature &mdash; Squirrel")
-        .color_indicator("{G}}")
+        .color_indicator(&["G".into()])
         .rules_text("Token.")
         .corner_bubble("1/1")
         .art_credits("John Doe");

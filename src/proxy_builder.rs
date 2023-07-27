@@ -1,13 +1,17 @@
+use std::path::Path;
+
 pub trait ProxyBuilder {
     type Output;
 
     fn build(&mut self) -> Self::Output;
     fn name(&mut self, name: &str) -> &mut Self;
     fn type_line(&mut self, type_line: &str) -> &mut Self;
-    fn color_indicator(&mut self, colors: &str) -> &mut Self;
+    fn color_indicator(&mut self, colors: &[String]) -> &mut Self;
+    fn color_identity(&mut self, colors: &[String]) -> &mut Self;
     fn mana_cost(&mut self, mana_cost: &str) -> &mut Self;
-    fn art_filename(&mut self, art_filename: &str) -> &mut Self;
+    fn art_filename(&mut self, art_filename: &Path) -> &mut Self;
     fn art_credits(&mut self, artist: &str) -> &mut Self;
+    fn set_legendary(&mut self, is_legendary: bool) -> &mut Self;
 }
 
 pub trait ProxyBuilderNormal {
