@@ -43,19 +43,44 @@ fn main() {
         }],
     };
 
-    println!("{}", serde_json::to_string_pretty(&deck).unwrap(),)
+    println!("{}", serde_json::to_string_pretty(&deck).unwrap(),);
+
+    main_2();
 }
 
 fn main_2() {
     let mut deck = FirefoxFriendlyHtmlDeckList::new();
+    let mut cards = AtomicCards::load().unwrap();
+
+    let raw_henzie = cards
+        .data
+        .get("Henzie \"Toolbox\" Torre")
+        .unwrap()
+        .0
+        .first()
+        .unwrap();
+
+    let mut henzie = NormalHtmlBuilder::new();
+    henzie
+        .name(&raw_henzie.name)
+        .mana_cost(&raw_henzie.mana_cost)
+        .set_legendary(raw_henzie.supertypes.contains(&"Legendary".into()))
+        .type_line(&raw_henzie.type_line)
+        .rules_text(&raw_henzie.text)
+        .art_credits("Johannes Voss")
+        .art_filename(&Path::new("../art/henzie-toolbox-torre.png"))
+        .corner_bubble(&format!("{}/{}", raw_henzie.power, raw_henzie.toughness));
+
+    deck.add_card(henzie.build());
 
     let mut kiora = SagaHtmlBuilder::new();
     kiora
         .name("Kiora Bests the Sea God")
-        .mana_cost("{7}{U}{U}")
-        .art_filename(&Path::new("./art/kiora-bests-the-sea-god.png"))
+        .mana_cost("{5}{U}{U}")
+        .art_filename(&Path::new("../art/kiora-bests-the-sea-god.png"))
         .art_credits("Victor Adame Minguez")
         .type_line("Enchantment &mdash; Saga")
+        .include_reminder(true)
         .step_text(
             &[1],
             "Create an 8/8 blue Kraken creature
@@ -67,12 +92,12 @@ fn main_2() {
         )
         .step_text(&[3], "Gain control of target permanent an opponent controls. Untap it.");
 
-    for _ in 1..=36 {
+    for _ in 2..=9 {
         deck.add_card(kiora.build());
     }
 
     let mut out_file: Box<dyn std::io::Write> =
-        Box::new(std::fs::File::create("./card_test.html").unwrap());
+        Box::new(std::fs::File::create("./output/card_test.html").unwrap());
 
     deck.build(&mut out_file).unwrap();
 }

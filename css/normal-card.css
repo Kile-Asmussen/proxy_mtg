@@ -38,5 +38,10 @@
     border-top-width: 0;
     width: 56mm;
     height: 29mm;
-    padding: 1mm;
+    padding: 0.5mm 1mm;
+}
+
+.normal>.text-box.dense>.rules-text {
+    margin-top: 0mm;
+    margin-bottom: 0.5mm;
 }

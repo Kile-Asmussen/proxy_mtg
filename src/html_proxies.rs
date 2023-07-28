@@ -28,7 +28,7 @@ impl Bucket {
         Default::default()
     }
     fn image_tag(&self) -> String {
-        if (self.art_filename != PathBuf::new()) && self.art_filename.exists() {
+        if self.art_filename != PathBuf::new() {
             format!(r#"<img src="{}" />"#, self.art_filename.to_string_lossy())
         } else {
             r#"<div class="art-placeholder"></div>"#.into()
@@ -139,18 +139,27 @@ impl NormalHtmlBuilder {
         }
     }
 
-    fn text_box_content(&self) -> String {
-        let mut res = String::new();
+    fn text_box_tag(&self) -> String {
+        let mut res: String = if self.rules_text.len() + self.flavor_text.len() > 240 {
+            r#"<div class="text-box dense">"#
+        } else {
+            r#"<div class="text-box">"#
+        }
+        .into();
 
         if !self.rules_text.is_empty() {
-            res += r#"<p class="rules-text">"#;
-            res += &self
-                .rules_text
-                .lines()
-                .map(replace_pip_symbols)
-                .collect::<Vec<_>>()
-                .join("<br />\n");
-            res += "</p>\n"
+            let rules = &regex!(r"\((.*)\)").replace_all(&self.rules_text, |cap: &Captures<'_>| {
+                format!(
+                    r#"<span class="reminder-text">{}</span>"#,
+                    cap.get(1).unwrap().as_str()
+                )
+            });
+
+            for line in rules.lines() {
+                res += r#"<p class="rules-text">"#;
+                res += &replace_pip_symbols(line);
+                res += "</p>";
+            }
         }
 
         if !self.flavor_text.is_empty() {
@@ -161,6 +170,8 @@ impl NormalHtmlBuilder {
             res += &self.flavor_text;
             res += "</p>";
         }
+
+        res += "</div>";
 
         res
     }
@@ -176,9 +187,7 @@ impl ProxyBuilder for NormalHtmlBuilder {
     {title_bar_tag}
     {image_tag}
     {type_bar_tag}
-    <div class="text-box">
-        {text_box_content}
-    </div>
+    {text_box_tag}
     {corner_bubble}
     {art_credits_tag}
 </div>
@@ -186,7 +195,7 @@ impl ProxyBuilder for NormalHtmlBuilder {
             title_bar_tag = self.bucket.title_bar_tag(),
             image_tag = self.bucket.image_tag(),
             type_bar_tag = self.bucket.type_bar_tag(),
-            text_box_content = self.text_box_content(),
+            text_box_tag = self.text_box_tag(),
             corner_bubble = self.corner_bubble_tag(),
             art_credits_tag = self.bucket.art_credits_tag(),
         )
@@ -301,15 +310,11 @@ fn replace_pip_symbols(mana_notation: &str) -> String {
     mana_sym
         .replace_all(mana_notation, |cap: &Captures<'_>| {
             let m = cap.get(0).unwrap().as_str();
-            let p: PathBuf = format!("./svg/{}.svg", m.replace('/', "|")).into();
-            if p.exists() {
-                format!(
-                    r#"<img class="pip" src="{}"/> "#,
-                    p.to_string_lossy().into_owned()
-                )
-            } else {
-                m.into()
-            }
+            let p: PathBuf = format!("../svg/{}.svg", m.replace('/', "|")).into();
+            format!(
+                r#"<img class="pip" src="{}"/> "#,
+                p.to_string_lossy().into_owned()
+            )
         })
         .into_owned()
 }
@@ -417,10 +422,10 @@ impl DeckBuilder for FirefoxFriendlyHtmlDeckList {
         out.write_fmt(format_args!(
             r#"
         <html><head>
-        <link rel="stylesheet" href="./css/page.css" />
-        <link rel="stylesheet" href="./css/card.css" />
-        <link rel="stylesheet" href="./css/normal-card.css" />
-        <link rel="stylesheet" href="./css/saga-card.css" />
+        <link rel="stylesheet" href="../css/page.css" />
+        <link rel="stylesheet" href="../css/card.css" />
+        <link rel="stylesheet" href="../css/normal-card.css" />
+        <link rel="stylesheet" href="../css/saga-card.css" />
         </head><body>
         "#
         ))?;

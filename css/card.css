@@ -1,7 +1,7 @@
 .card {
     position: relative;
     box-sizing: border-box;
-    font-size: 9pt;
+    font-size: 8pt;
     font-family: Georgia, 'Times New Roman', Times, serif;
     border-style: solid;
     border-radius: 2.5mm;
@@ -24,13 +24,14 @@
 .title-bar,
 .type-bar {
     font-weight: bold;
+    height: 5mm;
     padding: 0.5mm 1.5mm;
     border-radius: 1mm;
     margin: 0 auto;
     width: 58mm;
     display: flex;
     flex-direction: row;
-    align-content: baseline;
+    align-content: middle;
 }
 
 .title-bar {
@@ -42,6 +43,10 @@
 .text-box {
     background-color: white;
     padding: 0.5mm 1.5mm;
+}
+
+.text-box {
+    font-size: 7.5pt;
 }
 
 .title-bar.legendary {
@@ -101,7 +106,7 @@ div.text-box img.pip {
 }
 
 div.text-box.dense img.pip {
-    height: 2.6mm;
+    height: 2.4mm;
     vertical-align: sub;
 }
 
@@ -133,18 +138,6 @@ div.text-box.dense img.pip {
 .reminder-text:after {
     font-style: italic;
     content: ")";
-}
-
-.text-box.dense {
-    font-size: 7.5pt;
-}
-
-.type-bar.dense {
-    font-stretch: condensed;
-}
-
-.title-bar.dense {
-    font-stretch: condensed;
 }
 
 .text-box hr {
