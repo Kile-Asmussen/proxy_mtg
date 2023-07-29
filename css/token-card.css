@@ -1,0 +1,19 @@
+div.card.token>div.title-bar {
+    border-width: 0;
+    background-color: none;
+    justify-content: space-around;
+    visibility: hidden;
+}
+
+div.card.token>div.title-bar:before {
+    content: "Token";
+    visibility: visible;
+}
+
+div.card.token>img {
+    border-top-width: 0.25mm;
+}
+
+div.card.token.normal>div.art-placeholder {
+    border-top-width: 0.25mm;
+}

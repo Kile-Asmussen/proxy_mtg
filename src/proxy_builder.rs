@@ -1,4 +1,4 @@
-use std::{default, fmt::Display, path::Path};
+use std::{fmt::Display, marker::PhantomData, path::Path};
 
 use serde::{de::Visitor, Deserialize, Serialize};
 
@@ -157,5 +157,46 @@ pub enum CoreLand {
 impl Display for CoreLand {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         std::fmt::Debug::fmt(&self, f)
+    }
+}
+struct DefaultBuilder<T>(PhantomData<T>);
+
+impl<T: Default> ProxyBuilder for DefaultBuilder<T> {
+    type Output = T;
+
+    fn build(&mut self) -> Self::Output {
+        T::default()
+    }
+
+    fn name(&mut self, name: &str) -> &mut Self {
+        self
+    }
+
+    fn type_line(&mut self, type_line: &str) -> &mut Self {
+        self
+    }
+
+    fn color_indicator(&mut self, colors: &[String]) -> &mut Self {
+        self
+    }
+
+    fn color_identity(&mut self, colors: &[String]) -> &mut Self {
+        self
+    }
+
+    fn mana_cost(&mut self, mana_cost: &str) -> &mut Self {
+        self
+    }
+
+    fn art_filename(&mut self, art_filename: &std::path::Path) -> &mut Self {
+        self
+    }
+
+    fn art_credits(&mut self, artist: &str) -> &mut Self {
+        self
+    }
+
+    fn set_legendary(&mut self, is_legendary: bool) -> &mut Self {
+        self
     }
 }

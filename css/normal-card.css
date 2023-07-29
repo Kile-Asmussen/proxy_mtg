@@ -1,18 +1,4 @@
-.normal>.corner-bubble {
-    font-weight: bold;
-    font-size: 11pt;
-    color: white;
-    background-color: gray;
-    text-shadow: 1pt 1pt black;
-    right: 1mm;
-    bottom: 1mm;
-    z-index: 1;
-    position: absolute;
-    padding: 0.2mm 1.5mm;
-    border-radius: 1.5mm;
-}
-
-.normal>img {
+div.card.normal img.art {
     border-top-width: 0;
     border-bottom-width: 0;
     display: block;
@@ -22,7 +8,7 @@
     margin-right: auto;
 }
 
-.normal>.art-placeholder {
+div.card.normal div.art-placeholder {
     border-top-width: 0;
     border-bottom-width: 0;
     display: block;
@@ -33,7 +19,7 @@
     background: linear-gradient(45deg, white 0%, lightgrey 50%, white 100%);
 }
 
-.normal>.text-box {
+div.card.normal div.text-box {
     margin: 0 auto;
     border-top-width: 0;
     width: 56mm;
@@ -41,7 +27,20 @@
     padding: 0.5mm 1mm;
 }
 
-.normal>.text-box.dense>.rules-text {
+div.card.normal div.text-box.dense p.rules-text {
     margin-top: 0mm;
     margin-bottom: 0.5mm;
+}
+
+div.card.normal div.corner-bubble {
+    right: 0.5mm;
+    bottom: 1mm;
+    border-radius: 1.5mm;
+    color: white;
+    background-color: darkgray;
+    text-shadow: 1pt 1pt black;
+}
+
+div.card.normal .flipside {
+    bottom: 2.3mm;
 }

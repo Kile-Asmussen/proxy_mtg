@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
 
-use crate::proxy_builder::BasicLand;
+use crate::proxy_builder::{BasicLand, ProxyBuilder};
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Artoid {
@@ -30,4 +30,16 @@ pub struct DeckEDH {
     pub commanders: Vec<Artoid>,
     pub the_99ish: Vec<Artoid>,
     pub basics: Vec<Landoid>,
+}
+
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+pub struct Constructed {
+    pub cards: Vec<Artoid>,
+    pub basics: Vec<Landoid>,
+}
+
+pub trait CardParser {
+    type Output;
+    type NormalCard: ProxyBuilderNormal + ProxyBuilder<Output = Self::Output>;
+    type SagaCard: ProxyBuilderSaga + ProxyBuilder<Output = Self::Output>;
 }

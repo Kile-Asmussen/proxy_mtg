@@ -4,17 +4,12 @@ mod html_proxies;
 mod proxy_builder;
 mod simple_proxy;
 
-use std::{
-    error::Error,
-    fmt::Write,
-    path::{Path, PathBuf},
-};
+use std::path::{Path, PathBuf};
 
 use cards::*;
 use decklist::{Artoid, DeckEDH, Landoid};
 use html_proxies::FirefoxFriendlyHtmlDeckList;
 use proxy_builder::{BasicLand, CoreLand, DeckBuilder};
-use simple_proxy::*;
 
 use crate::{
     html_proxies::{NormalHtmlBuilder, SagaHtmlBuilder},
@@ -45,7 +40,7 @@ fn main() {
 
     println!("{}", serde_json::to_string_pretty(&deck).unwrap(),);
 
-    main_2();
+    //main_2();
 }
 
 fn main_2() {

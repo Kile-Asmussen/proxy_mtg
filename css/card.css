@@ -1,4 +1,4 @@
-.card {
+div.card {
     position: relative;
     box-sizing: border-box;
     font-size: 8pt;
@@ -14,15 +14,15 @@
     background: linear-gradient(white 0%, white 80%, lightgray 100%);
 }
 
-.card>* {
+div.card>* {
     box-sizing: border-box;
     border-width: 0.25mm;
     border-style: solid;
     border-color: black;
 }
 
-.title-bar,
-.type-bar {
+div.card div.title-bar,
+div.card div.type-bar {
     font-weight: bold;
     height: 5mm;
     padding: 0.5mm 1.5mm;
@@ -34,112 +34,128 @@
     align-content: middle;
 }
 
-.title-bar {
+div.card div.title-bar {
     margin-top: 1.5mm;
 }
 
-.title-bar,
-.type-bar,
-.text-box {
+div.card div.title-bar,
+div.card div.type-bar,
+div.card div.text-box {
     background-color: white;
     padding: 0.5mm 1.5mm;
 }
 
-.text-box {
+div.card div.text-box {
     font-size: 7.5pt;
 }
 
-.title-bar.legendary {
+div.card div.title-bar.legendary {
     border-width: 0;
     background-image: linear-gradient(120deg, grey 40%, darkgrey 60%, lightgray 65%, white 70%, lightgray 75%, darkgray 80%, grey 100%);
 }
 
-.title-bar.legendary>.name {
+div.card div.title-bar.legendary span.name {
     color: white;
     text-shadow: 1pt 1pt black;
 }
 
-.title-bar.legendary>.mana-cost>img {
+
+div.card img.pip {
+    filter: drop-shadow(0.0pt 0.5pt 0.25pt black);
+}
+
+div.card div.title-bar.legendary span.mana-cost img.pip {
     filter:
         drop-shadow(0.25pt 0.25pt 0.25pt white) drop-shadow(0.25pt -0.25pt 0.25pt white) drop-shadow(-0.25pt 0.25pt 0.25pt white) drop-shadow(-0.25pt -0.25pt 0.25pt white);
 }
 
-.title-bar {
+div.card div.title-bar {
     justify-content: space-between;
 }
 
-.type-bar {
+div.card div.type-bar {
     justify-content: first;
 }
 
-.type-bar>.color-indicator {
+div.card div.type-bar span.color-indicator {
     margin-right: 3mm;
-    align-self: center;
+    align-self: center middle;
 }
 
-.type-bar>.color-indicator:before {
+div.card div.type-bar span.color-indicator:before {
+    font-size: 0.85em;
     content: "(";
 }
 
-.type-bar>.color-indicator:after {
+div.card div.type-bar span.color-indicator:after {
+    font-size: 0.85em;
     content: ")";
 }
 
-.type-bar img.pip {
-    height: 3.2mm;
-    vertical-align: sub;
+div.card div.type-bar span.color-indicator img.pip {
+    display: inline;
+    height: 2.5mm;
+    margin-bottom: -0.3mm;
+    vertical-align: baseline;
 }
 
-.mana-cost {
+div.card div.title-bar span.mana-cost {
     align-self: center;
 }
 
-.mana-cost>img.pip {
+div.card div.title-bar img.pip {
     height: 3.2mm;
-    margin: 0;
-    vertical-align: sub;
+    margin-bottom: -0.65mm;
+    vertical-align: baseline;
 }
 
-div.text-box img.pip {
-    height: 3.2mm;
-    vertical-align: sub;
+div.card div.title-bar div.text-box img.pip {
+    height: 3.0mm;
+    margin-bottom: -0.6mm;
+    vertical-align: baseline;
 }
 
-div.text-box.dense img.pip {
-    height: 2.4mm;
-    vertical-align: sub;
-}
-
-.art-credits {
+div.card span.art-credits {
+    text-align: center;
     border-style: none;
     border-width: 0;
-    font-size: 6pt;
-    left: 5mm;
-    bottom: 0.5mm;
+    width: 100%;
+    font-size: 4.5pt;
+    bottom: 0.1mm;
     position: absolute;
 }
 
-.art-credits:before {
+div.card span.art-credits:before {
     content: "artist: ";
-    font-size: 6pt;
 }
 
-.flavor-text,
-.reminder-text {
+div.card div.text-box span.reminder-text,
+div.card div.text-box p.reminder-text {
     font-style: italic;
-    font-size: 0.85em;
+    font-size: 0.8em;
 }
 
-.reminder-text:before {
+
+div.card div.text-box span.reminder-text:before,
+div.card div.text-box p.reminder-text:before {
     font-style: italic;
     content: "(";
 }
 
-.reminder-text:after {
+div.card div.text-box span.reminder-text:after,
+div.card div.text-box p.reminder-text:after {
     font-style: italic;
     content: ")";
 }
 
-.text-box hr {
+div.card div.text-box hr {
     width: 90%;
+}
+
+div.card div.corner-bubble {
+    font-weight: bold;
+    font-size: 10pt;
+    height: 5.5mm;
+    position: absolute;
+    padding: 0.2mm 1.5mm;
 }
