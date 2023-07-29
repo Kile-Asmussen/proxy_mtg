@@ -29,7 +29,10 @@ impl Bucket {
     }
     fn image_tag(&self) -> String {
         if self.art_filename != PathBuf::new() {
-            format!(r#"<img src="{}" />"#, self.art_filename.to_string_lossy())
+            format!(
+                r#"<img class="art" src="{}" />"#,
+                self.art_filename.to_string_lossy()
+            )
         } else {
             r#"<div class="art-placeholder"></div>"#.into()
         }
@@ -78,7 +81,7 @@ impl Bucket {
         }
 
         format!(
-            r#"<div class="type-bar">{}<span>{}</span></div>"#,
+            r#"<div class="type-bar">{}<span class="type-line">{}</span></div>"#,
             &ind, &self.type_line
         )
     }
@@ -236,7 +239,7 @@ impl SagaHtmlBuilder {
             .unwrap_or(&0)
     }
 
-    fn text_box_content(&self) -> String {
+    fn text_box_tag(&self) -> String {
         let mut res = Vec::new();
 
         if self.include_reminder {
@@ -262,7 +265,7 @@ impl SagaHtmlBuilder {
             ));
         }
 
-        res.join("<hr />")
+        format!(r#"<div class="text-box">{}</div>"#, res.join("<hr />"))
     }
 }
 
@@ -275,9 +278,7 @@ impl ProxyBuilder for SagaHtmlBuilder {
 <div class="card saga">
     {title_bar_tag}
     <div class="text-and-art">
-        <div class="text-box dense">
-            {text_box_content}
-        </div>
+        {text_box_tag}
         {image_tag}
     </div>
     {type_bar_tag}
@@ -285,7 +286,7 @@ impl ProxyBuilder for SagaHtmlBuilder {
 </div>
             "#,
             title_bar_tag = self.bucket.title_bar_tag(),
-            text_box_content = self.text_box_content(),
+            text_box_tag = self.text_box_tag(),
             image_tag = self.bucket.image_tag(),
             type_bar_tag = self.bucket.type_bar_tag(),
             art_credits_tag = self.bucket.art_credits_tag()

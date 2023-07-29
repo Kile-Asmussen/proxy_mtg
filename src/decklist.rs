@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
 
-use crate::proxy_builder::{BasicLand, ProxyBuilder};
+use crate::proxy_builder::{BasicLand, ProxyBuilder, ProxyBuilderNormal, ProxyBuilderSaga};
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Artoid {
