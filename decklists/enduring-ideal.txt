@@ -1,0 +1,86 @@
+Commander: Prismatic Bridge
+Commander?! Enduring Ideal
+
+Facilitators (22):
+    Creatures:
+        Grozoth (Tutor)
+        Scholar of the Lost Trove (Recursion)
+
+    Spell Recursion:
+        Flood of Recollection
+        Mission Briefing
+        Call to Mind
+        Relearn
+
+    Dupers:
+        Reverberate
+        Twincast
+        Teach by Example
+
+    Tutors:
+        Demonic Tutor
+        Profane Tutor
+        Mystical Tutor
+        Personal Tutor
+        Solve the Equation
+        Enlightened Tutor
+        Vampiric Tutor
+        Entomb
+        Unmarked Grave
+        Intuition
+ 
+    Enchantment Recursion:
+        Cleansing Meditation
+        Replenish
+        Resurgent Belief
+
+Sweepers:
+    Wrath of God
+    Damnation
+    Burn Down the House
+
+
+Bonkers Enchantments:
+    Extravagant Replication
+    Paradox Haze
+    Druid Class
+
+Closers :
+
+    Damage:
+        Warstorm Surge (A)
+        Impact Tremors (A)
+        Pandemonium (A)
+
+    Buffing:
+        In the Web of War (B)
+
+    Creature creators:
+        Muster the Legions
+
+        Marit Lage's Slumber
+
+        Endless Ranks of the Dead 
+        Captive Audience 
+        Black Market Connections
+        
+
+
+Closers (alt wincons):
+    Revel in Riches
+    Monologue Tax
+    Smothering Tithe
+    There and Back Again
+    
+
+Lands (25):
+    1x Snow Covered Basics (5)
+    1x All scry duals (10)
+    1x Triomes (5)
+    1x All 1 life Fetch Lands (10)
+
+
+
+    Command Tower
+    Reflecting Pool
+    Thespian Stage

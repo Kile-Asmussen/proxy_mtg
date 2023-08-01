@@ -109,9 +109,9 @@ div.card div.title-bar img.pip {
     vertical-align: baseline;
 }
 
-div.card div.title-bar div.text-box img.pip {
-    height: 3.0mm;
-    margin-bottom: -0.6mm;
+div.card div.text-box img.pip {
+    height: 2.6mm;
+    margin-bottom: -0.4mm;
     vertical-align: baseline;
 }
 

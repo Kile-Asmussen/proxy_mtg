@@ -426,7 +426,9 @@ impl DeckBuilder for FirefoxFriendlyHtmlDeckList {
         <link rel="stylesheet" href="../css/page.css" />
         <link rel="stylesheet" href="../css/card.css" />
         <link rel="stylesheet" href="../css/normal-card.css" />
-        <link rel="stylesheet" href="../css/saga-card.css" />
+        <link rel="stylesheet" href="../css/saga-card.css" /
+        <link rel="stylesheet" href="../css/flip-card.css" />
+        <link rel="stylesheet" href="../css/token-card.css" />
         </head><body>
         "#
         ))?;
