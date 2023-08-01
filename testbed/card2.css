@@ -1,0 +1,128 @@
+:root {
+    --card-width: 63.5mm;
+    --card-height: 88mm;
+    --card-border: 2mm;
+    --card-corner-radius: 3mm;
+    --content-corner-radius: 2mm;
+
+    --fullwidth-box: 56mm;
+    --fullheight-box: 69mm;
+
+    --landscape-height: 40mm;
+
+    --landscape-art-width: 56mm;
+    --landscaep-art-height: 23mm;
+
+    --portrait-art-width: 56mm;
+
+
+
+    --bar-height: 5mm;
+    --bar-width: 57.5mm;
+
+    --title-bar-margin: 1mm;
+
+    --proxy-mark-font-size: 1mm;
+    --proxy-mark-nudge: 0.2mm;
+}
+
+div.card {
+    width: var(--card-width);
+    height: var(--card-height);
+    position: relative;
+    background-color: black;
+    border-radius: var(--card-corner-radius);
+    z-index: 0;
+}
+
+div.card:before,
+div.card:after {
+    position: absolute;
+    content: "PROXY";
+    font-size: var(--proxy-mark-font-size);
+    color: white;
+    text-align: center;
+    width: 100%;
+}
+
+div.card:before {
+    top: calc((var(--card-border) - var(--proxy-mark-font-size) - var(--proxy-mark-nudge)) / 2);
+}
+
+div.card:after {
+    bottom: calc((var(--card-border) - var(--proxy-mark-font-size) - var(--proxy-mark-nudge)) / 2);
+}
+
+div.content {
+    z-index: 1;
+}
+
+div.content,
+div.content>* {
+    position: absolute;
+    box-sizing: border-box;
+}
+
+div.content>* {
+    z-index: 2;
+}
+
+div.content {
+    width: calc(var(--card-width) - 2*var(--card-border));
+    height: calc(var(--card-height) - 2*var(--card-border));
+    left: var(--card-border);
+    top: var(--card-border);
+    border-radius: var(--content-corner-radius);
+    background-color: white;
+}
+
+div.bar {
+    left: calc((var(--card-width) - 2*var(--card-border) - var(--bar-width)) / 2);
+    width: var(--bar-width);
+    height: var(--bar-height);
+    border-radius: var(--content-corner-radius);
+    border-width: 0.25mm;
+    border-style: solid;
+    border-color: black;
+    display: flex;
+    flex-direction: row;
+}
+
+div.title.bar {
+    top: var(--title-bar-margin);
+    justify-content: space-between;
+}
+
+div.bar>span {
+    align-self: center;
+}
+
+div.bar>:first-child {
+    margin-left: calc(var(--content-corner-radius)/2);
+}
+
+div.bar>:last-child {
+    margin-right: calc(var(--content-corner-radius)/2);
+}
+
+div.title.bar>span.name {
+    font-size: 8pt;
+    font-family: Matrix, Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+div.landscape-art,
+img.landscape-art {
+    box-sizing: border-box;
+    border-color: black;
+    border-width: 0.25mm;
+    border-style: solid;
+    width: var(--fullwidth-box);
+    height: var(--landscape-height);
+
+    border-color: res;
+}
+
+div.type.bar {
+    justify-content: first;
+}
