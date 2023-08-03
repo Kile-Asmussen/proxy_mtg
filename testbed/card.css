@@ -1,0 +1,155 @@
+:root {
+    --card-width: 63.5mm;
+    --card-height: 88mm;
+    --card-border: 2mm;
+
+    --card-corner-radius: 3mm;
+    --separator-line: 0.25mm;
+
+    --fullwidth-box: 56mm;
+    --fullheight-box: 69mm;
+
+    --art-height: 40mm;
+
+    --bar-height: 5mm;
+    --bar-endcap: 1mm;
+    --upper-margin: 1mm;
+
+    --proxy-mark-font-size: 1mm;
+    --proxy-mark-nudge: 0.2mm;
+}
+
+:root {
+    --content-width: calc(var(--card-width) - 2*var(--card-border));
+
+    --content-height: calc(var(--card-height) - 2*var(--card-border));
+
+    --text-box-height: calc(var(--fullheight-box) - var(--art-height));
+
+    --fullwidth-margin: calc((var(--content-width) - var(--fullwidth-box))/2);
+
+    --bar-width: calc(var(--fullwidth-box) + 2*var(--bar-endcap));
+
+    --bar-margin: calc((var(--content-width) - var(--bar-width))/2);
+}
+
+@import url("./card-colors.css");
+
+div.card {
+    position: relative;
+    box-sizing: border-box;
+    margin: var(--card-border);
+    width: var(--card-width);
+    height: var(--card-height);
+    border-radius: var(--card-corner-radius);
+    border-width: var(--card-border);
+    border-style: solid;
+    border-color: black;
+}
+
+div.card>* {
+    position: absolute;
+    box-sizing: border-box;
+    border-width: var(--separator-line);
+    border-style: solid;
+    border-color: black;
+    background-color: white;
+}
+
+div.card::before,
+div.card::after {
+    position: absolute;
+    content: "PROXY";
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 5pt;
+    color: white;
+    height: var(--card-border);
+    width: 100%;
+    text-align: center;
+}
+
+div.card::before {
+    top: calc(-1*var(--card-corner-radius) + var(--card-border)/2);
+}
+
+div.card::after {
+    bottom: calc(-1*var(--card-corner-radius) + var(--card-border)/2);
+}
+
+
+div.bar {
+    box-sizing: border-box;
+    left: var(--bar-margin);
+    width: var(--bar-width);
+    height: var(--bar-height);
+    border-width: var(--separator-line);
+    padding: 0 calc(1.5*var(--bar-endcap));
+    display: flex;
+    flex-direction: row;
+    border-top-left-radius: var(--bar-endcap) 50%;
+    border-bottom-left-radius: var(--bar-endcap) 50%;
+    border-top-right-radius: var(--bar-endcap) 50%;
+    border-bottom-right-radius: var(--bar-endcap) 50%;
+}
+
+div.bar>span {
+    align-self: center;
+}
+
+div.title.bar {
+    top: var(--upper-margin);
+    justify-content: space-between;
+}
+
+div.title.bar>span.name {
+    font-size: 8pt;
+    font-family: Matrix, Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+div.art,
+img.art {
+    border-width: 0 var(--separator-line);
+    left: var(--fullwidth-margin);
+    top: calc(var(--bar-height) + var(--upper-margin));
+    width: var(--fullwidth-box);
+    height: var(--art-height);
+}
+
+div.type-line.bar {
+    justify-content: first;
+    top: calc(var(--upper-margin) + var(--bar-height) + var(--art-height));
+}
+
+div.text-box {
+    width: var(--fullwidth-box);
+    height: var(--text-box-height);
+    left: var(--fullwidth-margin);
+    top: calc(var(--upper-margin) + 2*var(--bar-height) + var(--art-height));
+    border-width: 0 var(--separator-line) var(--separator-line);
+}
+
+div.text-box hr {
+    width: 90%;
+}
+
+div.text-box>p {
+    margin-left: 1mm 1mm 0 1mm;
+}
+
+span.art-credits {
+    bottom: 0.1mm;
+    left: calc(var(--fullwidth-margin) + 1mm);
+    font-size: 5pt;
+    font-weight: bold;
+    font-family: Maxtrix;
+    background-color: transparent;
+    border-width: 0;
+    border-color: transparent;
+    border-style: none;
+}
+
+span.art-credits::before {
+    content: "artist: "
+}
