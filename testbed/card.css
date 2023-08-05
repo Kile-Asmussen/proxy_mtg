@@ -1,10 +1,12 @@
 :root {
+
     --card-width: 63.5mm;
     --card-height: 88mm;
     --card-border: 2mm;
 
     --card-corner-radius: 3mm;
-    --separator-line: 0.25mm;
+    --pin-line-width: 0.25mm;
+    --upper-margin: 1mm;
 
     --fullwidth-box: 56mm;
     --fullheight-box: 69mm;
@@ -13,7 +15,11 @@
 
     --bar-height: 5mm;
     --bar-endcap: 1mm;
-    --upper-margin: 1mm;
+    --bar-font: Beleren2016;
+    --title-font-size: 9.5pt;
+    --title-font-adjustment: 0.5mm;
+    --typeline-font-size: 8pt;
+    --typeline-font-adjustment: 0;
 
     --proxy-mark-font-size: 1mm;
     --proxy-mark-nudge: 0.2mm;
@@ -50,7 +56,7 @@ div.card {
 div.card>* {
     position: absolute;
     box-sizing: border-box;
-    border-width: var(--separator-line);
+    border-width: var(--pin-line-width);
     border-style: solid;
     border-color: black;
     background-color: white;
@@ -59,7 +65,7 @@ div.card>* {
 div.card::before,
 div.card::after {
     position: absolute;
-    content: "PROXY";
+    content: "PROXY — NOT FOR RESALE";
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
     font-size: 5pt;
@@ -70,7 +76,7 @@ div.card::after {
 }
 
 div.card::before {
-    top: calc(-1*var(--card-corner-radius) + var(--card-border)/2);
+    top: calc(-1*var(--card-corner-radius) + var(--card-border)/2 + 0.1mm);
 }
 
 div.card::after {
@@ -83,7 +89,7 @@ div.bar {
     left: var(--bar-margin);
     width: var(--bar-width);
     height: var(--bar-height);
-    border-width: var(--separator-line);
+    border-width: var(--pin-line-width);
     padding: 0 calc(1.5*var(--bar-endcap));
     display: flex;
     flex-direction: row;
@@ -95,6 +101,8 @@ div.bar {
 
 div.bar>span {
     align-self: center;
+    font-family: var(--bar-font);
+    font-weight: bold;
 }
 
 div.title.bar {
@@ -103,14 +111,13 @@ div.title.bar {
 }
 
 div.title.bar>span.name {
-    font-size: 8pt;
-    font-family: Matrix, Georgia, 'Times New Roman', Times, serif;
-    font-weight: bold;
+    font-size: var(--title-font-size);
+    margin-top: var(--title-font-adjustment);
 }
 
 div.art,
 img.art {
-    border-width: 0 var(--separator-line);
+    border-width: 0 var(--pin-line-width);
     left: var(--fullwidth-margin);
     top: calc(var(--bar-height) + var(--upper-margin));
     width: var(--fullwidth-box);
@@ -122,12 +129,16 @@ div.type-line.bar {
     top: calc(var(--upper-margin) + var(--bar-height) + var(--art-height));
 }
 
+div.type-line.bar>span.type {
+    font-size: var(--typeline-font-size);
+}
+
 div.text-box {
     width: var(--fullwidth-box);
     height: var(--text-box-height);
     left: var(--fullwidth-margin);
     top: calc(var(--upper-margin) + 2*var(--bar-height) + var(--art-height));
-    border-width: 0 var(--separator-line) var(--separator-line);
+    border-width: 0 var(--pin-line-width) var(--pin-line-width);
 }
 
 div.text-box hr {

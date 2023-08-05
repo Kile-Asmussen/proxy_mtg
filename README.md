@@ -1,10 +1,14 @@
 # Proxying for MTG
 
-Just a little toy tool for creating proxies.
+Just a little toy tool for creating proxies for Magic the Gathering.
 
 # Usage notes
 
-You will need to download the Atomic Cards JSON file from [here](https://mtgjson.com/downloads/all-files/#atomiccards), since it is too large for github. (Recommend you run it through a tool like [JQ](https://jqlang.github.io/jq/) to make it readable.)
+You will need to download the Atomic Cards JSON file from [here](https://mtgjson.com/downloads/all-files/#atomiccards), since it is too large for github. (It is ecommended that you run it through a tool like [JQ](https://jqlang.github.io/jq/) to make it readable.)
+
+You will also need to obtain the Beleren font, the Matrix font, and the Goudy Medeival font through legitimate avenues. While a typeface itself cannot be copyrighted, the font encoding of each of these three fonts are all protected by licensing.
+
+The proxy graphics produced by this tool are NOT to be resold.
 
 # Acknowledgements
 
@@ -13,7 +17,5 @@ You will need to download the Atomic Cards JSON file from [here](https://mtgjson
 - Zach Halpern
 - Milo Rue
 - Eric Lakatos
-
-MtG SVG symbol pack by forum users Goblin Hero and skibulk, found [here](https://www.slightlymagic.net/forum/viewtopic.php?t=4430).
 
 Magic the Gathering is the property of Wizards of the Coast
