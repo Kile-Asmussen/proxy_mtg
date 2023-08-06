@@ -164,6 +164,7 @@ div.text-box {
 div.art.vertical,
 img.art.vertical,
 div.text-box.vertical {
+    top: calc(var(--bar-height) + var(--upper-margin));
     border-width: 0 var(--pin-line-width);
     height: var(--fullheight-box);
     width: var(--halfwidth-box);
@@ -174,6 +175,7 @@ img.art.vertical.left,
 div.text-box.vertical.left {
     border-right-width: 0;
     left: var(--fullwidth-margin);
+    right: auto;
 }
 
 div.art.vertical.right,
@@ -184,7 +186,7 @@ img.art.vertical.right {
 div.art.vertical.right,
 img.art.vertical.right,
 div.text-box.vertical.right {
-    right: var(--fullwidth-margin);
+    left: calc(var(--fullwidth-margin) + var(--halfwidth-box));
 }
 
 div.art.vertical.right,
@@ -226,8 +228,9 @@ span.reminder {
     font-style: italic;
 }
 
-div.corner-bubble {
+div.bar.corner-bubble {
     right: var(--bar-margin);
+    left: auto;
     top: calc(var(--upper-margin) + var(--bar-height)*1.5 + var(--fullheight-box) - var(--pin-line-width));
     padding: 0 calc(1.5*var(--bar-endcap));
     width: min-content;
@@ -245,16 +248,6 @@ div.corner-bubble.shield {
     border-color: white;
     text-shadow: none;
     background-color: black;
-}
-
-div.corner-bubble.spiky {
-    border-radius: 0;
-    border-width: calc(var(--pin-line-width)*2);
-    height: calc(var(--bar-height) + var(--pin-line-width)*2);
-    border-color: black;
-    text-shadow: 1pt 1pt lightgrey;
-    color: black;
-    background-color: white;
 }
 
 span.art-credits {
