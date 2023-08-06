@@ -1,5 +1,6 @@
 mod cards;
 mod decklist;
+mod general_proxy;
 mod html_proxies;
 mod proxy_builder;
 mod simple_proxy;

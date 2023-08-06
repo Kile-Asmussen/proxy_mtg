@@ -1,4 +1,15 @@
+@import url("./settings.css");
+
 :root {
+
+    --title-font-family: Beleren2016;
+    --title-font-size: 9.5pt;
+    --typeline-font-family: Beleren2016;
+    --typeline-font-size: 8pt;
+    --rules-font-family: Georgia;
+    --rules-font-size: 7.5pt;
+    --flavor-font-family: Georgia;
+    --flavor-font-size: 7.5pt;
 
     --card-width: 63.5mm;
     --card-height: 88mm;
@@ -15,11 +26,9 @@
 
     --bar-height: 5mm;
     --bar-endcap: 1mm;
-    --bar-font: Beleren2016;
-    --title-font-size: 9.5pt;
+
     --title-font-adjustment: 0.5mm;
-    --typeline-font-size: 8pt;
-    --typeline-font-adjustment: 0;
+    --typeline-font-adjustment: 0.5mm;
 
     --proxy-mark-font-size: 1mm;
     --proxy-mark-nudge: 0.2mm;
@@ -33,6 +42,8 @@
     --text-box-height: calc(var(--fullheight-box) - var(--art-height));
 
     --fullwidth-margin: calc((var(--content-width) - var(--fullwidth-box))/2);
+
+    --halfwidth-box: calc(var(--fullwidth-box)/2);
 
     --bar-width: calc(var(--fullwidth-box) + 2*var(--bar-endcap));
 
@@ -65,7 +76,7 @@ div.card>* {
 div.card::before,
 div.card::after {
     position: absolute;
-    content: "PROXY — NOT FOR RESALE";
+    content: "PROXY — NOT FOR SALE OR RESALE";
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
     font-size: 5pt;
@@ -83,13 +94,10 @@ div.card::after {
     bottom: calc(-1*var(--card-corner-radius) + var(--card-border)/2);
 }
 
-
 div.bar {
-    box-sizing: border-box;
     left: var(--bar-margin);
     width: var(--bar-width);
     height: var(--bar-height);
-    border-width: var(--pin-line-width);
     padding: 0 calc(1.5*var(--bar-endcap));
     display: flex;
     flex-direction: row;
@@ -101,7 +109,6 @@ div.bar {
 
 div.bar>span {
     align-self: center;
-    font-family: var(--bar-font);
     font-weight: bold;
 }
 
@@ -111,8 +118,24 @@ div.title.bar {
 }
 
 div.title.bar>span.name {
+    font-family: var(--title-font-family);
     font-size: var(--title-font-size);
     margin-top: var(--title-font-adjustment);
+}
+
+div.type-line.bar {
+    justify-content: first;
+    top: calc(var(--upper-margin) + var(--bar-height) + var(--art-height));
+}
+
+div.type-line.bar.bottom {
+    top: calc(var(--upper-margin) + var(--bar-height) + var(--fullheight-box));
+}
+
+div.type-line.bar>span.type {
+    font-family: var(--typeline-font-family);
+    font-size: var(--typeline-font-size);
+    margin-top: var(--typeline-font-adjustment);
 }
 
 div.art,
@@ -124,13 +147,10 @@ img.art {
     height: var(--art-height);
 }
 
-div.type-line.bar {
-    justify-content: first;
-    top: calc(var(--upper-margin) + var(--bar-height) + var(--art-height));
-}
-
-div.type-line.bar>span.type {
-    font-size: var(--typeline-font-size);
+div.art {
+    background-image: url("./Lenna.png");
+    background-position: center;
+    background-size: cover;
 }
 
 div.text-box {
@@ -141,12 +161,100 @@ div.text-box {
     border-width: 0 var(--pin-line-width) var(--pin-line-width);
 }
 
+div.art.vertical,
+img.art.vertical,
+div.text-box.vertical {
+    border-width: 0 var(--pin-line-width);
+    height: var(--fullheight-box);
+    width: var(--halfwidth-box);
+}
+
+div.art.vertical.left,
+img.art.vertical.left,
+div.text-box.vertical.left {
+    border-right-width: 0;
+    left: var(--fullwidth-margin);
+}
+
+div.art.vertical.right,
+img.art.vertical.right {
+    border-left-width: 0;
+}
+
+div.art.vertical.right,
+img.art.vertical.right,
+div.text-box.vertical.right {
+    right: var(--fullwidth-margin);
+}
+
+div.art.vertical.right,
+img.art.vertical.right {
+    border-right-width: 0;
+}
+
 div.text-box hr {
     width: 90%;
 }
 
 div.text-box>p {
-    margin-left: 1mm 1mm 0 1mm;
+    margin: 1mm 1mm 0 1mm;
+}
+
+div.text-box.sparse {
+    padding: 1em 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+div.text-box.sparse>p {
+    margin: 0 1mm;
+}
+
+p.rules-text {
+    font-family: var(--rules-font-family);
+    font-size: var(--rules-font-size);
+}
+
+p.flavor-text {
+    font-style: italic;
+    font-family: var(--flavor-font-family);
+    font-size: var(--flavor-font-size);
+}
+
+span.reminder {
+    font-style: italic;
+}
+
+div.corner-bubble {
+    right: var(--bar-margin);
+    top: calc(var(--upper-margin) + var(--bar-height)*1.5 + var(--fullheight-box) - var(--pin-line-width));
+    padding: 0 calc(1.5*var(--bar-endcap));
+    width: min-content;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1pt 1pt black;
+    background-color: darkgray;
+}
+
+div.corner-bubble.shield {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: calc(var(--bar-height)/2);
+    border-bottom-right-radius: calc(var(--bar-height)/2);
+    border-color: white;
+    text-shadow: none;
+    background-color: black;
+}
+
+div.corner-bubble.spiky {
+    border-radius: 0;
+    border-width: calc(var(--pin-line-width)*2);
+    height: calc(var(--bar-height) + var(--pin-line-width)*2);
+    border-color: black;
+    text-shadow: 1pt 1pt lightgrey;
+    color: black;
+    background-color: white;
 }
 
 span.art-credits {
