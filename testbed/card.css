@@ -2,14 +2,28 @@
 
 :root {
 
-    --title-font-family: Beleren2016;
+    --title-font-family: "Beleren2016";
     --title-font-size: 9.5pt;
-    --typeline-font-family: Beleren2016;
+    --title-font-adjustment: 0.5mm;
+
+    --typeline-font-family: "Beleren2016";
     --typeline-font-size: 8pt;
+    --typeline-font-adjustment: 0.5mm;
+
     --rules-font-family: Georgia;
     --rules-font-size: 7.5pt;
+
     --flavor-font-family: Georgia;
     --flavor-font-size: 7.5pt;
+
+    --corner-bubble-font-family: "Times New Roman";
+    --corner-bubble-font-size: 11pt;
+    --corner-bubble-font-adjustment: -0.25mm;
+
+    --flip-indicator-font-family: "Beleren2016";
+    --flip-indicator-font-size: 6pt;
+    --flip-indicator-font-adjustment: 0.5mm;
+    --flip-indicator-height: 3mm;
 
     --card-width: 63.5mm;
     --card-height: 88mm;
@@ -26,9 +40,6 @@
 
     --bar-height: 5mm;
     --bar-endcap: 1mm;
-
-    --title-font-adjustment: 0.5mm;
-    --typeline-font-adjustment: 0.5mm;
 
     --proxy-mark-font-size: 1mm;
     --proxy-mark-nudge: 0.2mm;
@@ -105,20 +116,41 @@ div.bar {
     border-bottom-right-radius: var(--bar-endcap) 50%;
 }
 
-div.bar>span {
+div.bar>span,
+div.bar::before,
+div.bar::after {
     align-self: center;
     font-weight: bold;
+    margin-top: var(--title-font-adjustment);
 }
 
 div.title.bar {
     top: var(--upper-margin);
     justify-content: space-between;
-}
-
-div.title.bar>span.name {
     font-family: var(--title-font-family);
     font-size: var(--title-font-size);
-    margin-top: var(--title-font-adjustment);
+}
+
+div.title.bar.obverse {
+    padding-left: var(--bar-height);
+}
+
+div.title.bar.obverse::before {
+    position: absolute;
+    font-size: 85%;
+    content: "▲";
+    left: 1mm;
+}
+
+div.title.bar.reverse {
+    padding-right: var(--bar-height);
+}
+
+div.title.bar.reverse::after {
+    position: absolute;
+    font-size: 85%;
+    content: "▼";
+    right: 1mm;
 }
 
 div.type-line.bar {
@@ -208,7 +240,7 @@ div.text-box.sparse {
 }
 
 div.text-box.sparse>p {
-    margin: 0 1mm;
+    margin: 0 3mm;
 }
 
 p.rules-text {
@@ -226,19 +258,21 @@ span.reminder {
     font-style: italic;
 }
 
-div.bar.corner-bubble {
+div.corner-bubble.bar {
     right: var(--bar-margin);
     left: auto;
-    top: calc(var(--upper-margin) + var(--bar-height)*1.5 + var(--fullheight-box) - var(--pin-line-width));
+    top: calc(var(--upper-margin) + 2*var(--bar-height) + var(--fullheight-box) - var(--pin-line-width) - var(--bar-height)/2);
     padding: 0 calc(1.5*var(--bar-endcap));
-    width: min-content;
+    width: auto;
     color: white;
     font-weight: bold;
+    font-size: var(--corner-bubble-font-size);
+    font-family: var(--corner-bubble-font-family);
     text-shadow: 1pt 1pt black;
     background-color: darkgray;
 }
 
-div.corner-bubble.shield {
+div.corner-bubble.bar.shield {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border-bottom-left-radius: calc(var(--bar-height)/2);
@@ -248,9 +282,50 @@ div.corner-bubble.shield {
     background-color: black;
 }
 
+div.corner-bubble.bar>span {
+    margin-top: var(--corner-bubble-font-adjustment);
+}
+
+div.flip-indicator.bar {
+    left: 0;
+    font-size: var(--flip-indicator-font-size);
+    font-family: var(--flip-indicator-font-family);
+    height: var(--flip-indicator-height);
+    top: calc(var(--upper-margin) + var(--bar-height)*2 + var(--fullheight-box) - var(--pin-line-width) - var(--flip-indicator-height)/2);
+    border-left-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: auto;
+    padding-left: 3mm;
+}
+
+div.flip-indicator.bar>span {
+    margin-top: var(--flip-indicator-font-adjustment);
+}
+
+div.flip-indicator.bar.obverse,
+div.flip-indicator.bar.reverse {
+    padding-left: var(--flip-indicator-height)
+}
+
+div.flip-indicator.bar.obverse::before {
+    position: absolute;
+    font-size: 85%;
+    content: "▼";
+    left: 0.5mm;
+}
+
+div.flip-indicator.bar.reverse::before {
+    position: absolute;
+    font-size: 85%;
+    content: "▲";
+    left: 0.5mm;
+}
+
 span.art-credits {
-    bottom: var(--upper-margin);
-    left: calc(var(--fullwidth-margin) + 1mm);
+    bottom: calc(var(--upper-margin)/2);
+    width: 100%;
+    text-align: center;
     font-size: 5pt;
     font-weight: bold;
     font-family: Maxtrix;
