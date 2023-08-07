@@ -22,7 +22,7 @@
 
     --flip-indicator-font-family: "Beleren2016";
     --flip-indicator-font-size: 6pt;
-    --flip-indicator-font-adjustment: 0.5mm;
+    --flip-indicator-font-adjustment: 0.3mm;
     --flip-indicator-height: 3mm;
 
     --card-width: 63.5mm;
@@ -154,7 +154,7 @@ div.title.bar.reverse::after {
 }
 
 div.type-line.bar {
-    justify-content: first;
+    justify-content: start;
     top: calc(var(--upper-margin) + var(--bar-height) + var(--art-height));
 }
 
@@ -228,19 +228,26 @@ div.text-box hr {
     width: 90%;
 }
 
-div.text-box>p {
-    margin: 1mm 1mm 0 1mm;
-}
-
-div.text-box.sparse {
+div.text-box {
     padding: 1em 0;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
 
-div.text-box.sparse>p {
+div.text-box>p {
     margin: 0 3mm;
+}
+
+div.text-box.dense>p {
+    margin: 1mm 1mm 0 1mm;
+}
+
+div.text-box.dense {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
 }
 
 p.rules-text {
