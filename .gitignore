@@ -2,3 +2,5 @@
 AtomicCards.json
 /art
 /output
+*.pdf
+*.html
