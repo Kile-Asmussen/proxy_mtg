@@ -1,6 +1,4 @@
 Unnamed Proxying Tool, Copyright (c) 2023 Kile K. Asmussen
-MTGJson, Copyright (c) 2018 – Present, Zach Halpern, Eric Lakatos
-MTG Font CSS, Copyright (c) 2015 Alexandre Arpin
 
 MIT License
 
@@ -21,3 +19,8 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Unnamed Proxying Tool uses and references:
+
+MTGJson, Copyright (c) 2018 – Present, Zach Halpern, Eric Lakatos
+MTG Font CSS, Copyright (c) 2015 Alexandre Arpin
