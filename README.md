@@ -1,4 +1,4 @@
-# Proxying for MTG
+# Unnamed Proxying Tool for MTG
 
 Just a little toy tool for creating proxies for Magic the Gathering.
 
