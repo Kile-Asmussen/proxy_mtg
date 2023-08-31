@@ -12,10 +12,10 @@ You will also need to obtain the Beleren 2016 font, the Matrix Bold font, and th
 
 The proxy graphics produced by this tool are ***NOT*** to be sold or resold.
 
-Magic the Gathering is the property of Wizards of the Coast.
-
 # Acknowledgements
 
 - [MTGJson](https://mtgjson.com/), which this project is based on, developed by MTGJson team: Zach Halpern, Milo Rue, and Eric Lakatos.
 
 - [MTG Font](https://github.com/AlexandreArpin/mtg-font), which this project uses, is developed by Alexandre Arpin.
+
+Magic the Gathering is the property of Wizards of the Coast.
