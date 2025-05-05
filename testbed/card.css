@@ -11,9 +11,11 @@
 
     --rules-font-family: Georgia;
     --rules-font-size: 7.5pt;
+    --rules-font-size-small: 6pt;
 
     --flavor-font-family: Georgia;
     --flavor-font-size: 7.5pt;
+    --flavor-font-size-small: 6pt;
 
     --corner-bubble-font-family: "Times New Roman";
     --corner-bubble-font-size: 11pt;
@@ -40,7 +42,7 @@
     --bar-height: 5mm;
     --bar-endcap: 1mm;
 
-    --proxy-mark-font-size: 1mm;
+    --proxy-mark-font-size: 1.2mm;
     --proxy-mark-nudge: 0.2mm;
 }
 
@@ -87,7 +89,7 @@ div.card::after {
     content: "PROXY — NOT FOR SALE OR RESALE";
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
-    font-size: 5pt;
+    font-size: var(--proxy-mark-font-size);
     color: white;
     height: var(--card-border);
     width: 100%;
@@ -95,11 +97,11 @@ div.card::after {
 }
 
 div.card::before {
-    top: calc(-1*var(--card-corner-radius) + var(--card-border)/2 + 0.1mm);
+    top: calc(-1*var(--card-corner-radius) + var(--card-border)/2 + var(--proxy-mark-nudge));
 }
 
 div.card::after {
-    bottom: calc(-1*var(--card-corner-radius) + var(--card-border)/2);
+    bottom: calc(-1*var(--card-corner-radius) + var(--card-border)/2 - var(--proxy-mark-nudge));
 }
 
 div.bar {
@@ -242,6 +244,10 @@ div.text-box.dense>p {
     margin: 1mm 1mm 0 1mm;
 }
 
+div.text-box.sparse>p {
+    text-align: center;
+}
+
 div.text-box.dense {
     padding: 0;
     display: flex;
@@ -254,10 +260,18 @@ p.rules-text {
     font-size: var(--rules-font-size);
 }
 
+div.text-box.dense>p.rules-text {
+    font-size: var(--rules-font-size-small);
+}
+
 p.flavor-text {
     font-style: italic;
     font-family: var(--flavor-font-family);
     font-size: var(--flavor-font-size);
+}
+
+div.text-box.dense>p.flavor-text {
+    font-size: var(--flavor-font-size-small);
 }
 
 span.reminder {
@@ -503,7 +517,7 @@ div.card.green>span.art-credits {
     color: white;
 }
 
-/* PRINT */
+/* PAGE */
 
 @page {
     size: A4 portrait;
@@ -519,12 +533,12 @@ page {
     page-break-after: always;
 }
 
-.card-row {
-    margin-left: 8mm;
+div.card-row {
+    margin-left: 4mm;
     display: flex;
     flex-direction: row;
 }
 
-.card-row:first-child {
-    margin-top: 11mm;
+page>div.card-row:first-child {
+    padding-top: 11mm;
 }
