@@ -1,27 +1,27 @@
-@import url("./settings.css");
-
 :root {
-    --title-font-family: "Beleren2016";
+    --title-font-family: Amarante;
     --title-font-size: 9.5pt;
-    --title-font-adjustment: 0.5mm;
+    --title-font-adjustment: 0.3mm;
 
-    --typeline-font-family: "Beleren2016";
+    --typeline-font-family: Amarante;
     --typeline-font-size: 8pt;
-    --typeline-font-adjustment: 0.5mm;
+    --typeline-font-adjustment: 0mm;
 
-    --rules-font-family: Georgia;
-    --rules-font-size: 7.5pt;
+    --rules-font-family: Noto Sans;
+    --rules-font-size: 7pt;
     --rules-font-size-small: 6pt;
+    --rules-font-size-large: 8pt;
 
-    --flavor-font-family: Georgia;
+    --flavor-font-family: Noto Sans;
     --flavor-font-size: 7.5pt;
     --flavor-font-size-small: 6pt;
+    --flavor-font-size-large: 8pt;
 
-    --corner-bubble-font-family: "Times New Roman";
+    --corner-bubble-font-family: Serif;
     --corner-bubble-font-size: 11pt;
-    --corner-bubble-font-adjustment: -0.25mm;
+    --corner-bubble-font-adjustment: -0.5mm;
 
-    --flip-indicator-font-family: "Beleren2016";
+    --flip-indicator-font-family: Amarante;
     --flip-indicator-font-size: 6pt;
     --flip-indicator-font-adjustment: 0.3mm;
     --flip-indicator-height: 3mm;
@@ -31,7 +31,7 @@
     --card-border: 2mm;
 
     --card-corner-radius: 3mm;
-    --pin-line-width: 0.25mm;
+    --pin-line-width: 0.35mm;
     --upper-margin: 1mm;
 
     --fullwidth-box: 56mm;
@@ -62,6 +62,8 @@
     --bar-margin: calc((var(--content-width) - var(--bar-width))/2);
 }
 
+/* CARD */
+
 div.card {
     position: relative;
     box-sizing: border-box;
@@ -83,10 +85,11 @@ div.card>* {
     background-color: white;
 }
 
+/* BORDER TEXT */
+
 div.card::before,
 div.card::after {
     position: absolute;
-    content: "PROXY — NOT FOR SALE OR RESALE";
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
     font-size: var(--proxy-mark-font-size);
@@ -96,13 +99,156 @@ div.card::after {
     text-align: center;
 }
 
+div.card::after {
+    bottom: calc(-1*var(--card-corner-radius) + var(--card-border)/2 - var(--proxy-mark-nudge));
+    content: "PROXY";
+}
+
 div.card::before {
     top: calc(-1*var(--card-corner-radius) + var(--card-border)/2 + var(--proxy-mark-nudge));
 }
 
-div.card::after {
-    bottom: calc(-1*var(--card-corner-radius) + var(--card-border)/2 - var(--proxy-mark-nudge));
+/* COLOR INDICATOR - COLORLESS AND MONO */
+
+div.card::before {
+    content: "Ø"
 }
+
+div.card.white::before {
+    content: "W";
+}
+
+div.card.blue::before {
+    content: "U";
+}
+
+div.card.black::before {
+    content: "B";
+}
+
+div.card.red::before {
+    content: "R";
+}
+
+div.card.green::before {
+    content: "G";
+}
+
+/* COLOR INDICATOR - ALLIED GUILDS */
+
+div.card.white.blue::before {
+    content: "WU";
+}
+
+div.card.blue.black::before {
+    content: "UB";
+}
+
+div.card.black.red::before {
+    content: "BR";
+}
+
+div.card.red.green::before {
+    content: "RG";
+}
+
+div.card.green.white::before {
+    content: "WG";
+}
+
+/* COLOR INDICATOR - OPPOSING GUILDS */
+
+div.card.white.black::before {
+    content: "WB";
+}
+
+div.card.blue.red::before {
+    content: "UR";
+}
+
+div.card.black.green::before {
+    content: "BG";
+}
+
+div.card.red.white::before {
+    content: "WR";
+}
+
+div.card.green.blue::before {
+    content: "UG";
+}
+
+/* COLOR INDICATOR - SHARDS */
+
+div.card.white.blue.black::before {
+    content: "WUB";
+}
+
+div.card.blue.black.red::before {
+    content: "UBR";
+}
+
+div.card.black.red.green::before {
+    content: "BRG";
+}
+
+div.card.red.green.white::before {
+    content: "WRG";
+}
+
+div.card.green.white.blue::before {
+    content: "WUG";
+}
+
+/* COLOR INDICATOR - CLANS */
+
+div.card.white.blue.red::before {
+    content: "WUR";
+}
+
+div.card.blue.black.green::before {
+    content: "UBG";
+}
+
+div.card.black.red.white::before {
+    content: "WBR";
+}
+
+div.card.red.green.blue::before {
+    content: "URG";
+}
+
+div.card.green.white.black::before {
+    content: "WBG";
+}
+
+/* COLOR INDICATOR - SANS AND WUBRG */
+
+div.card.white.blue.black.red::before {
+    content: "WUBR";
+}
+
+div.card.blue.black.red.green::before {
+    content: "UBRG";
+}
+
+div.card.black.red.green.white::before {
+    content: "WBRG";
+}
+
+div.card.red.green.white.blue::before {
+    content: "WURG";
+}
+
+div.card.green.white.blue.black::before {
+    content: "WUBG";
+}
+
+div.card.white.blue.black.red.green::before {
+    content: "WUBRG";
+}
+
+/* CARD PARTS */
 
 div.bar {
     left: var(--bar-margin);
@@ -169,6 +315,8 @@ div.type-line.bar>span.type {
     margin-top: var(--typeline-font-adjustment);
 }
 
+/* ART */
+
 div.art,
 img.art {
     border-width: 0 var(--pin-line-width);
@@ -183,6 +331,8 @@ div.art {
     background-position: center;
     background-size: cover;
 }
+
+/* TEXT BOXES AND ART */
 
 div.text-box {
     width: var(--fullwidth-box);
@@ -225,27 +375,31 @@ img.art.vertical.right {
     border-right-width: 0;
 }
 
-div.text-box hr {
+/* TEXT CONTENT */
+
+div.text-box>hr {
     width: 90%;
+    margin: 0mm auto;
 }
 
 div.text-box {
-    padding: 1em 0;
+    padding: 1mm 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: start;
 }
 
 div.text-box>p {
-    margin: 0 3mm;
+    margin: 2mm 3mm 0mm;
 }
 
 div.text-box.dense>p {
-    margin: 1mm 1mm 0 1mm;
+    margin: 1mm;
 }
 
 div.text-box.sparse>p {
     text-align: center;
+    justify-content: center;
 }
 
 div.text-box.dense {
@@ -264,6 +418,10 @@ div.text-box.dense>p.rules-text {
     font-size: var(--rules-font-size-small);
 }
 
+div.text-box.sparse>p.rules-text {
+    font-size: var(--rules-font-size-large);
+}
+
 p.flavor-text {
     font-style: italic;
     font-family: var(--flavor-font-family);
@@ -272,6 +430,10 @@ p.flavor-text {
 
 div.text-box.dense>p.flavor-text {
     font-size: var(--flavor-font-size-small);
+}
+
+div.text-box.dense>p.flavor-text {
+    font-size: var(--flavor-font-size-large);
 }
 
 span.reminder {
@@ -317,6 +479,10 @@ div.flip-indicator.bar {
     border-bottom-left-radius: 0;
     width: auto;
     padding-left: 3mm;
+}
+
+div.vertical~div.flip-indicator.bar {
+    top: calc(var(--upper-margin) + var(--bar-height) + var(--fullheight-box) - var(--pin-line-width) - var(--flip-indicator-height))
 }
 
 div.flip-indicator.bar>span {
@@ -383,7 +549,7 @@ span.art-credits::before {
 }
 
 div.card {
-    background: linear-gradient(to top, lightgray, white, white);
+    background: linear-gradient(to top, var(--colorless-2), var(--colorless-1));
 }
 
 div.card.red {
@@ -406,12 +572,7 @@ div.card.white {
     background: linear-gradient(to top, var(--white-color-2), var(--white-color-1));
 }
 
-
-div.card.colorless {
-    background: linear-gradient(to top, var(--colorless-2), var(--colorless-1))
-}
-
-div.card.white-blue {
+div.card.white.blue {
     background:
         radial-gradient(ellipse at top left, var(--white-color-1), transparent 75% 75%),
         radial-gradient(ellipse at top right, var(--blue-color-1), transparent 75% 75%),
@@ -419,7 +580,7 @@ div.card.white-blue {
         radial-gradient(ellipse at bottom right, var(--blue-color-2), transparent 75% 75%);
 }
 
-div.card.white-black {
+div.card.white.black {
     background:
         radial-gradient(ellipse at top left, var(--white-color-1), transparent 75% 75%),
         radial-gradient(ellipse at top right, var(--black-color-1), transparent 75% 75%),
@@ -427,7 +588,7 @@ div.card.white-black {
         radial-gradient(ellipse at bottom right, var(--black-color-2), transparent 75% 75%);
 }
 
-div.card.white-red {
+div.card.white.red {
     background:
         radial-gradient(ellipse at top left, var(--white-color-1), transparent 75% 75%),
         radial-gradient(ellipse at top right, var(--red-color-1), transparent 75% 75%),
@@ -435,7 +596,7 @@ div.card.white-red {
         radial-gradient(ellipse at bottom right, var(--red-color-2), transparent 75% 75%);
 }
 
-div.card.white-green {
+div.card.white.green {
     background:
         radial-gradient(ellipse at top left, var(--white-color-1), transparent 75% 75%),
         radial-gradient(ellipse at top right, var(--green-color-1), transparent 75% 75%),
@@ -443,7 +604,7 @@ div.card.white-green {
         radial-gradient(ellipse at bottom right, var(--green-color-2), transparent 75% 75%);
 }
 
-div.card.blue-black {
+div.card.blue.black {
     background:
         radial-gradient(ellipse at top left, var(--blue-color-1), transparent 75% 75%),
         radial-gradient(ellipse at top right, var(--black-color-1), transparent 75% 75%),
@@ -451,7 +612,7 @@ div.card.blue-black {
         radial-gradient(ellipse at bottom right, var(--black-color-2), transparent 75% 75%);
 }
 
-div.card.blue-red {
+div.card.blue.red {
     background:
         radial-gradient(ellipse at top left, var(--blue-color-1), transparent 75% 75%),
         radial-gradient(ellipse at top right, var(--red-color-1), transparent 75% 75%),
@@ -459,7 +620,7 @@ div.card.blue-red {
         radial-gradient(ellipse at bottom right, var(--red-color-2), transparent 75% 75%);
 }
 
-div.card.blue-green {
+div.card.blue.green {
     background:
         radial-gradient(ellipse at top left, var(--blue-color-1), transparent 75% 75%),
         radial-gradient(ellipse at top right, var(--green-color-1), transparent 75% 75%),
@@ -468,7 +629,7 @@ div.card.blue-green {
 }
 
 
-div.card.blue-red {
+div.card.blue.red {
     background:
         radial-gradient(ellipse at top left, var(--blue-color-1), transparent 75% 75%),
         radial-gradient(ellipse at top right, var(--red-color-1), transparent 75% 75%),
@@ -476,7 +637,7 @@ div.card.blue-red {
         radial-gradient(ellipse at bottom right, var(--red-color-2), transparent 75% 75%);
 }
 
-div.card.black-red {
+div.card.black.red {
     background:
         radial-gradient(ellipse at top left, var(--black-color-1), transparent 75% 75%),
         radial-gradient(ellipse at top right, var(--red-color-1), transparent 75% 75%),
@@ -484,7 +645,7 @@ div.card.black-red {
         radial-gradient(ellipse at bottom right, var(--red-color-2), transparent 75% 75%);
 }
 
-div.card.black-green {
+div.card.black.green {
     background:
         radial-gradient(ellipse at top left, var(--black-color-1), transparent 75% 75%),
         radial-gradient(ellipse at top right, var(--green-color-1), transparent 75% 75%),
@@ -492,7 +653,7 @@ div.card.black-green {
         radial-gradient(ellipse at bottom right, var(--green-color-2), transparent 75% 75%);
 }
 
-div.card.red-green {
+div.card.red.green {
     background:
         radial-gradient(ellipse at top left, var(--red-color-1), transparent 75% 75%),
         radial-gradient(ellipse at top right, var(--green-color-1), transparent 75% 75%),
@@ -500,7 +661,21 @@ div.card.red-green {
         radial-gradient(ellipse at bottom right, var(--green-color-2), transparent 75% 75%);
 }
 
-div.card.gold {
+div.card.white.blue.black,
+div.card.white.blue.red,
+div.card.white.blue.green,
+div.card.white.black.red,
+div.card.white.black.green,
+div.card.white.red.green,
+div.card.blue.black.red,
+div.card.blue.black.green,
+div.card.blue.red.green,
+div.card.black.red.green,
+div.card.white.blue.red.green,
+div.card.white.black.red.green,
+div.card.white.blue.black.green,
+div.card.white.blue.black.red,
+div.card.white.blue.black.red.green {
     background:
         linear-gradient(-30deg, transparent 40%, white 50%, transparent 60%),
         radial-gradient(ellipse at top left, gold, transparent 75% 75%),
@@ -510,11 +685,9 @@ div.card.gold {
 
 }
 
-div.card.red>span.art-credits,
-div.card.blue>span.art-credits,
-div.card.black>span.art-credits,
-div.card.green>span.art-credits {
+div.card>span.art-credits {
     color: white;
+    text-shadow: 0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
 }
 
 /* PAGE */
