@@ -249,6 +249,10 @@ div.card.white.blue.black.red.green::before {
     content: "WUBRG";
 }
 
+div.card.colorless::before {
+    content: "Ø"
+}
+
 /* CARD PARTS */
 
 div.bar {
@@ -529,8 +533,8 @@ span.art-credits::before {
 
 :root {
 
-    --white-color-1: lightyellow;
-    --white-color-2: khaki;
+    --white-color-1: white;
+    --white-color-2: lightyellow;
 
     --blue-color-1: aqua;
     --blue-color-2: darkblue;
@@ -546,6 +550,9 @@ span.art-credits::before {
 
     --colorless-1: silver;
     --colorless-2: slategrey;
+
+    --gold-1: gold;
+    --gold-2: goldenrod;
 }
 
 div.card {
@@ -678,10 +685,10 @@ div.card.white.blue.black.red,
 div.card.white.blue.black.red.green {
     background:
         linear-gradient(-30deg, transparent 40%, white 50%, transparent 60%),
-        radial-gradient(ellipse at top left, gold, transparent 75% 75%),
-        radial-gradient(ellipse at top right, peachpuff, transparent 75% 75%),
-        radial-gradient(ellipse at bottom left, cornsilk, transparent 75% 75%),
-        radial-gradient(ellipse at bottom right, goldenrod, transparent 75% 75%);
+        radial-gradient(ellipse at top left, var(--gold-1), transparent 75% 75%),
+        radial-gradient(ellipse at top right, var(--gold-2), transparent 75% 75%),
+        radial-gradient(ellipse at bottom left, var(--gold-1), transparent 75% 75%),
+        radial-gradient(ellipse at bottom right, var(--gold-2), transparent 75% 75%);
 
 }
 
@@ -692,8 +699,34 @@ div.card>span.art-credits {
 
 /* MANA MODIFICATION */
 
+span.mi,
 i.mi {
     font-size: var(--mana-symbol-size);
+}
+
+span.mi-lg,
+i.mi-lg {
+    font-size: calc(1.33333333 * var(--mana-symbol-size));
+}
+
+span.mi-2x,
+i.mi-2x {
+    font-size: calc(2 * var(--mana-symbol-size));
+}
+
+span.mi-3x,
+i.mi-3x {
+    font-size: calc(3 * var(--mana-symbol-size));
+}
+
+span.mi-4x,
+i.mi-4x {
+    font-size: calc(4 * var(--mana-symbol-size));
+}
+
+span.mi-5x,
+i.mi-5x {
+    font-size: calc(5 * var(--mana-symbol-size));
 }
 
 div.title.bar>span.cost {
