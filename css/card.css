@@ -32,6 +32,9 @@
     --proxy-mark-font-size: 1.5mm;
     --proxy-mark-nudge: 0.2mm;
 
+    --mana-symbol-size: 0.8em;
+    --mana-cost-adjustment: -0.2mm;
+
     /* CARD DIMENSIONS */
 
     --card-width: 63.5mm;
@@ -685,6 +688,16 @@ div.card.white.blue.black.red.green {
 div.card>span.art-credits {
     color: white;
     text-shadow: 0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
+}
+
+/* MANA MODIFICATION */
+
+i.mi {
+    font-size: var(--mana-symbol-size);
+}
+
+div.title.bar>span.cost {
+    margin-top: var(--mana-cost-adjustment);
 }
 
 /* PAGE */
