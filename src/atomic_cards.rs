@@ -1,4 +1,4 @@
-use std::{collections::HashMap, error::Error, fs::File, io::Read};
+use std::{collections::HashMap, default, error::Error, fs::File, io::Read};
 
 use serde::{Deserialize, Serialize};
 
@@ -8,7 +8,7 @@ pub struct AtomicCards {
     pub data: HashMap<String, Cardoid>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 #[serde(transparent)]
 pub struct Cardoid(pub Vec<Card>);
 

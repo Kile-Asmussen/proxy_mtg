@@ -26,3 +26,14 @@ pub struct Artoid {
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct DeckList(pub BTreeMap<String, Vec<Artoid>>);
+
+impl DeckList {
+    pub fn vec(&self) -> Vec<Artoid> {
+        self.0
+            .iter()
+            .map(|(_, s)| s.iter())
+            .flatten()
+            .map(Clone::clone)
+            .collect()
+    }
+}

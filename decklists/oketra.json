@@ -266,49 +266,64 @@
     ],
     "Land base 2 (15)": [
         {
-            "name": "Windbrisk Heights"
+            "name": "Windbrisk Heights",
+            "notes": "draw"
         },
         {
-            "name": "Minas Tirith"
+            "name": "Minas Tirith",
+            "notes": "draw"
         },
         {
-            "name": "Emeria, the Sky Ruin"
+            "name": "Emeria, the Sky Ruin",
+            "notes": "recursion"
         },
         {
-            "name": "Serra's Sanctum"
+            "name": "Dunes of the Dead",
+            "notes": "zombies, desert"
         },
         {
-            "name": "Karoo"
+            "name": "Karoo",
+            "notes": "bounce land"
         },
         {
-            "name": "Reliquary Tower"
+            "name": "Guildless Commons",
+            "notes": "bounce land"
         },
         {
-            "name": "War Room"
+            "name": "Arid Archway",
+            "notes": "bounce land, desert"
         },
         {
-            "name": "Cavern of Souls"
+            "name": "Scavenger Grounds",
+            "notes": "desert, graveyard hate"
         },
         {
-            "name": "Bonder's Enclave"
+            "name": "Lotus Vale",
+            "notes": "sacrifice land"
         },
         {
-            "name": "Command Beacon"
+            "name": "Lotus Field",
+            "notes": "sacrifice land"
         },
         {
-            "name": "Sea Gate Wreckage"
+            "name": "Scorched Ruins",
+            "notes": "sacrifice land"
         },
         {
-            "name": "Mistveil Plains"
+            "name": "Mistveil Plains",
+            "notes": "recursion to deck"
         },
         {
-            "name": "Terrain Generator"
+            "name": "Terrain Generator",
+            "notes": "ramp"
         },
         {
-            "name": "Talon Gates of Madara"
+            "name": "Talon Gates of Madara",
+            "notes": "protection"
         },
         {
-            "name": "Mikokoro, Center of the Sea"
+            "name": "Mikokoro, Center of the Sea",
+            "notes": "group hug, draw"
         }
     ]
 }
