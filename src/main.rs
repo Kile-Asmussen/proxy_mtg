@@ -1,99 +1,41 @@
-mod cards;
+mod atomic_cards;
 mod decklist;
-mod general_proxy;
-mod html_proxies;
-mod proxy_builder;
-mod simple_proxy;
+mod proxy_cards;
 
-use std::path::{Path, PathBuf};
+use std::fs::File;
 
-use cards::*;
-use decklist::{Artoid, DeckEDH, Landoid};
-use html_proxies::FirefoxFriendlyHtmlDeckList;
-use proxy_builder::{BasicLand, CoreLand, DeckBuilder};
-
-use crate::{
-    html_proxies::{NormalHtmlBuilder, SagaHtmlBuilder},
-    proxy_builder::{ProxyBuilder, ProxyBuilderNormal, ProxyBuilderSaga},
-};
+use atomic_cards::*;
+use decklist::*;
+use serde::Deserialize;
 
 fn main() {
-    let deck = DeckEDH {
-        commanders: vec![Artoid {
-            name: "Henzie \"Toolbox\" Torre".into(),
-            art_file: "./art/henzie-toolbox-torre.png".into(),
-            art_credit: "Johannes Voss".into(),
-            flavor_text: "".into(),
-        }],
-        the_99ish: vec![Artoid {
-            name: "Lightning Bolt".into(),
-            art_file: PathBuf::new(),
-            art_credit: String::new(),
-            flavor_text: String::new(),
-        }],
-        basics: vec![Landoid {
-            name: BasicLand::Base(CoreLand::Mountain),
-            number: 1,
-            art_credit: String::new(),
-            art_file: PathBuf::new(),
-        }],
-    };
+    let atomic_cards_file = File::open("AtomicCards.pretty.json").unwrap();
 
-    println!("{}", serde_json::to_string_pretty(&deck).unwrap(),);
+    let mut atomic_cards_deserializer = serde_json::Deserializer::from_reader(atomic_cards_file);
 
-    //main_2();
-}
+    let atomic_cards = AtomicCards::deserialize(&mut atomic_cards_deserializer).unwrap();
 
-fn main_2() {
-    let mut deck = FirefoxFriendlyHtmlDeckList::new();
-    let mut cards = AtomicCards::load().unwrap();
+    println!("Read {} atomic cards", atomic_cards.data.len());
 
-    let raw_henzie = cards
-        .data
-        .get("Henzie \"Toolbox\" Torre")
-        .unwrap()
-        .0
-        .first()
-        .unwrap();
+    let decklist_file = File::open("decklists/oketra.json").unwrap();
 
-    let mut henzie = NormalHtmlBuilder::new();
-    henzie
-        .name(&raw_henzie.name)
-        .mana_cost(&raw_henzie.mana_cost)
-        .set_legendary(raw_henzie.supertypes.contains(&"Legendary".into()))
-        .type_line(&raw_henzie.type_line)
-        .rules_text(&raw_henzie.text)
-        .art_credits("Johannes Voss")
-        .art_filename(&Path::new("../art/henzie-toolbox-torre.png"))
-        .corner_bubble(&format!("{}/{}", raw_henzie.power, raw_henzie.toughness));
+    let mut decklist_deserializer = serde_json::Deserializer::from_reader(decklist_file);
 
-    deck.add_card(henzie.build());
+    let decklist = DeckList::deserialize(&mut decklist_deserializer).unwrap();
 
-    let mut kiora = SagaHtmlBuilder::new();
-    kiora
-        .name("Kiora Bests the Sea God")
-        .mana_cost("{5}{U}{U}")
-        .art_filename(&Path::new("../art/kiora-bests-the-sea-god.png"))
-        .art_credits("Victor Adame Minguez")
-        .type_line("Enchantment &mdash; Saga")
-        .include_reminder(true)
-        .step_text(
-            &[1],
-            "Create an 8/8 blue Kraken creature
-        token with hexproof.",
-        )
-        .step_text(
-            &[2],
-            "Tap all nonland permanents target opponent controls. They don't untap during their controller's next untap step.",
-        )
-        .step_text(&[3], "Gain control of target permanent an opponent controls. Untap it.");
+    println!("Read decklist:");
 
-    for _ in 2..=9 {
-        deck.add_card(kiora.build());
+    for (section, cards) in &decklist.0 {
+        println!("  Section {}", section);
+        for card in cards {
+            println!(
+                "    {} x {}",
+                match card.repeats {
+                    0 => 1,
+                    x => x,
+                },
+                card.name
+            );
+        }
     }
-
-    let mut out_file: Box<dyn std::io::Write> =
-        Box::new(std::fs::File::create("./output/card_test.html").unwrap());
-
-    deck.build(&mut out_file).unwrap();
 }

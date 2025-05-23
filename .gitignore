@@ -1,6 +1,8 @@
 /target
 AtomicCards.json
+AtomicCards.pretty.json
 /art
 /output
 *.pdf
 *.html
+/target

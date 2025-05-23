@@ -1,45 +1,28 @@
-use std::path::PathBuf;
+use std::{collections::BTreeMap, path::PathBuf};
 
 use serde::{Deserialize, Serialize};
-
-use crate::proxy_builder::{BasicLand, ProxyBuilder, ProxyBuilderNormal, ProxyBuilderSaga};
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Artoid {
     pub name: String,
+    #[serde(default, rename = "artFile")]
+    pub art_file: Vec<PathBuf>,
+    #[serde(default, rename = "artCredit")]
+    pub art_credit: Vec<String>,
+    #[serde(default, rename = "fullArt")]
+    pub full_art: bool,
+    #[serde(default, rename = "flavorText")]
+    pub flavor_text: Vec<String>,
     #[serde(default)]
-    pub art_file: PathBuf,
+    pub copies: usize,
+    #[serde(default, rename = "reminderText")]
+    pub reminder_text: bool,
     #[serde(default)]
-    pub art_credit: String,
+    pub repeats: usize,
     #[serde(default)]
-    pub flavor_text: String,
+    pub notes: String,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
-pub struct Landoid {
-    pub name: BasicLand,
-    pub number: usize,
-    #[serde(default)]
-    pub art_file: PathBuf,
-    #[serde(default)]
-    pub art_credit: String,
-}
-
-#[derive(Clone, Debug, Default, Serialize, Deserialize)]
-pub struct DeckEDH {
-    pub commanders: Vec<Artoid>,
-    pub the_99ish: Vec<Artoid>,
-    pub basics: Vec<Landoid>,
-}
-
-#[derive(Clone, Debug, Default, Serialize, Deserialize)]
-pub struct Constructed {
-    pub cards: Vec<Artoid>,
-    pub basics: Vec<Landoid>,
-}
-
-pub trait CardParser {
-    type Output;
-    type NormalCard: ProxyBuilderNormal + ProxyBuilder<Output = Self::Output>;
-    type SagaCard: ProxyBuilderSaga + ProxyBuilder<Output = Self::Output>;
-}
+#[serde(transparent)]
+pub struct DeckList(pub BTreeMap<String, Vec<Artoid>>);
