@@ -1,6 +1,8 @@
 mod normal;
 mod utils;
 
+use std::collections::BTreeMap;
+
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -11,6 +13,7 @@ use crate::{
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ProxyDeck {
     pub proxies: Vec<Proxy>,
+    pub tags: BTreeMap<String, usize>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -25,7 +28,7 @@ pub struct HtmlProxyPage(pub Vec<HtmlProxyCard>);
 pub struct HtmlProxyCard(pub String);
 
 impl ProxyDeck {
-    pub fn new(atomic: &AtomicCards, deck: &DeckList) -> Result<ProxyDeck, String> {
+    pub fn build(atomic: &AtomicCards, deck: &DeckList) -> Result<ProxyDeck, String> {
         let artoids = deck.vec();
 
         let mut proxies = vec![];
@@ -41,6 +44,9 @@ impl ProxyDeck {
             }
         }
 
-        Ok(ProxyDeck { proxies })
+        Ok(ProxyDeck {
+            proxies,
+            tags: BTreeMap::new(),
+        })
     }
 }
