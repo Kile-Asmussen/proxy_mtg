@@ -19,14 +19,9 @@ pub struct Cardoid(pub Vec<Card>);
 
 impl AtomicCards {
     pub fn load() -> Result<Self, Box<dyn Error>> {
-        let atomic_cards_file = BufReader::new(File::open("AtomicCards.json")?);
+        let atomic_cards_file = std::fs::read("AtomicCards.json")?;
 
-        let mut atomic_cards_deserializer =
-            serde_json::Deserializer::from_reader(atomic_cards_file);
-
-        let atomic_cards = AtomicCards::deserialize(&mut atomic_cards_deserializer)?;
-
-        return Ok(atomic_cards);
+        Ok(serde_json::from_slice(&atomic_cards_file)?)
     }
 }
 

@@ -2,7 +2,7 @@ mod atomic_cards;
 mod decklist;
 mod proxy_cards;
 
-use std::{fs::File, time::Instant};
+use std::{collections::HashSet, fs::File, time::Instant};
 
 use atomic_cards::*;
 use decklist::*;
@@ -27,10 +27,10 @@ fn main() {
 
     println!("Read decklist:");
 
-    for (section, cards) in &decklist.0 {
+    for (section, artoids) in &decklist.0 {
         println!("  {}:", section);
-        for card in cards {
-            println!("    {} x {}", card.repeats, card.name);
+        for artoid in artoids {
+            println!("    {} x {}", artoid.repeats, artoid.name);
         }
     }
 
@@ -53,4 +53,29 @@ fn main() {
     } else {
         println!("All cards successfully loaded from database.")
     }
+
+    let mut color_id = HashSet::<String>::new();
+    for (section, artoids) in &decklist.0 {
+        for artoid in artoids {
+            if let Some(cardoid) = &artoid.cardoid {
+                for card in &cardoid.0 {
+                    for color in &card.color_identity {
+                        color_id.insert(color.clone());
+                    }
+                }
+            }
+        }
+    }
+    let mut color_id = color_id.into_iter().collect::<Vec<_>>();
+
+    color_id.sort_by_key(|c| match &c[..] {
+        "W" => 1,
+        "U" => 2,
+        "B" => 3,
+        "R" => 4,
+        "G" => 5,
+        _ => 10,
+    });
+
+    println!("Color identity: {}", color_id.join(""))
 }
