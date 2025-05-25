@@ -1,4 +1,8 @@
-use std::{collections::HashMap, default, error::Error, fs::File, io::Read};
+use std::{
+    collections::{HashMap, HashSet},
+    error::Error,
+    fs::File,
+};
 
 use serde::{Deserialize, Serialize};
 
@@ -14,10 +18,14 @@ pub struct Cardoid(pub Vec<Card>);
 
 impl AtomicCards {
     pub fn load() -> Result<Self, Box<dyn Error>> {
-        let mut atomic_cards_file = File::open("./AtomicCards.json")?;
-        let mut atomic_cards_string = String::new();
-        atomic_cards_file.read_to_string(&mut atomic_cards_string)?;
-        Ok(serde_json::from_str(&atomic_cards_string)?)
+        let atomic_cards_file = File::open("AtomicCards.pretty.json")?;
+
+        let mut atomic_cards_deserializer =
+            serde_json::Deserializer::from_reader(atomic_cards_file);
+
+        let atomic_cards = AtomicCards::deserialize(&mut atomic_cards_deserializer)?;
+
+        return Ok(atomic_cards);
     }
 }
 
@@ -34,10 +42,10 @@ pub struct Card {
     #[serde(default, rename = "attractionLights")]
     pub attraction_lights: Vec<String>,
     #[serde(rename = "colorIdentity")]
-    pub color_identity: Vec<String>,
+    pub color_identity: HashSet<String>,
     #[serde(default, rename = "colorIndicator")]
-    pub color_indicator: Vec<String>,
-    pub colors: Vec<String>,
+    pub color_indicator: HashSet<String>,
+    pub colors: HashSet<String>,
     #[serde(default, rename = "convertedManaCost")]
     pub converted_mana_cost: f64,
     #[serde(default)]
@@ -105,7 +113,7 @@ pub struct Card {
     pub types: Vec<CardType>,
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Supertype {
     Basic,
     Legendary,
@@ -113,12 +121,12 @@ pub enum Supertype {
     Snow,
     World,
 
-    Host,
+    #[serde(untagged)]
+    Other(String),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum CardType {
-    #[serde(alias = "Tribal")]
     Kindred,
 
     Instant,
@@ -133,17 +141,6 @@ pub enum CardType {
 
     #[serde(untagged)]
     Other(String),
-    // Conspiracy,
-    // Scheme,
-    // Plane,
-    // Vanguard,
-    // Stickers,
-
-    // Summon,
-    // Legend,
-    // Jaguar,
-    // Eaturecray,
-    // Hero,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]

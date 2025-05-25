@@ -9,11 +9,8 @@ use decklist::*;
 use serde::Deserialize;
 
 fn main() {
-    let atomic_cards_file = File::open("AtomicCards.pretty.json").unwrap();
-
-    let mut atomic_cards_deserializer = serde_json::Deserializer::from_reader(atomic_cards_file);
-
-    let atomic_cards = AtomicCards::deserialize(&mut atomic_cards_deserializer).unwrap();
+    println!("Loading atomic cards...");
+    let atomic_cards = AtomicCards::load().unwrap();
 
     println!("Read {} atomic cards", atomic_cards.data.len());
 
@@ -26,16 +23,20 @@ fn main() {
     println!("Read decklist:");
 
     for (section, cards) in &decklist.0 {
-        println!("  Section {}", section);
+        println!("  {}:", section);
         for card in cards {
-            println!(
-                "    {} x {}",
-                match card.repeats {
-                    0 => 1,
-                    x => x,
-                },
-                card.name
-            );
+            println!("    {} x {}", card.repeats, card.name);
+        }
+    }
+
+    let tag_histogram = decklist.tag_histogram();
+
+    if tag_histogram.is_empty() {
+        println!("No tags")
+    } else {
+        println!("Tags:");
+        for (tag, count) in decklist.tag_histogram() {
+            println!("    {} x {}", count, tag)
         }
     }
 }
