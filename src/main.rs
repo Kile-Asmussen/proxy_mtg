@@ -1,4 +1,5 @@
 mod atomic_cards;
+mod command;
 mod decklist;
 mod proxy_cards;
 
