@@ -2,6 +2,7 @@ use std::{
     collections::{HashMap, HashSet},
     error::Error,
     fs::File,
+    io::BufReader,
 };
 
 use serde::{Deserialize, Serialize};
@@ -18,7 +19,7 @@ pub struct Cardoid(pub Vec<Card>);
 
 impl AtomicCards {
     pub fn load() -> Result<Self, Box<dyn Error>> {
-        let atomic_cards_file = File::open("AtomicCards.pretty.json")?;
+        let atomic_cards_file = BufReader::new(File::open("AtomicCards.json")?);
 
         let mut atomic_cards_deserializer =
             serde_json::Deserializer::from_reader(atomic_cards_file);

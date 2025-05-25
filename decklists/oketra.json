@@ -1,5 +1,5 @@
 {
-    "Commander": [
+    "0 -- Commander": [
         {
             "name": "God-Eternal Oketra",
             "art_file": [
@@ -10,7 +10,7 @@
             ]
         }
     ],
-    "Block 1 -- Ramp": [
+    "1 -- Ramp": [
         {
             "name": "Archaeomancer's Map"
         },
@@ -36,7 +36,7 @@
             "name": "Pearl Medallion"
         }
     ],
-    "Block 2 -- Removal": [
+    "2 -- Removal": [
         {
             "name": "Path to Exile"
         },
@@ -62,7 +62,7 @@
             "name": "Banishing Light"
         }
     ],
-    "Block 3 -- Draw": [
+    "3 -- Draw": [
         {
             "name": "Esper Sentinel"
         },
@@ -88,7 +88,7 @@
             "name": "Endless Atlas"
         }
     ],
-    "Block 4 -- Protection": [
+    "4 -- Protection": [
         {
             "name": "Ghostly Prison"
         },
@@ -114,7 +114,7 @@
             "name": "Blind Obedience"
         }
     ],
-    "Block 5 -- Zombie Tokens": [
+    "5 -- Zombie Tokens": [
         {
             "name": "Mondrak, Glory Dominus"
         },
@@ -140,7 +140,7 @@
             "name": "Defiler of Faith"
         }
     ],
-    "Block 6 -- ETB": [
+    "6 -- ETB": [
         {
             "name": "Elesh Norn, Mother of Machines"
         },
@@ -166,7 +166,7 @@
             "name": "Rumor Gatherer"
         }
     ],
-    "Block 7 -- Flicker/Bounce/Recursion": [
+    "7 -- Flicker/Bounce/Recursion": [
         {
             "name": "Brought Back"
         },
@@ -192,7 +192,7 @@
             "name": "Whitemane Lion"
         }
     ],
-    "Block 8 -- Misc": [
+    "8 -- Misc": [
         {
             "name": "The Immortal Sun"
         },
@@ -218,7 +218,7 @@
             "name": "Lightning Greaves"
         }
     ],
-    "Land base (20)": [
+    "9 -- Land base": [
         {
             "name": "Plains",
             "repeats": 4,
@@ -262,9 +262,7 @@
         {
             "name": "Plains",
             "repeats": 4
-        }
-    ],
-    "Land base 2 (15)": [
+        },
         {
             "name": "Windbrisk Heights",
             "notes": "draw"
