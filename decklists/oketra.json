@@ -3,26 +3,132 @@
         {
             "name": "God-Eternal Oketra",
             "tags": [
-                "zombies"
+                "zombie beatdown"
             ]
         }
     ],
-    "Block 1 - Draw Package": [
+    "Block 1 - Card Advantage": [
         {
             "name": "Esper Sentinel",
             "tags": [
                 "draw",
-                "soft stax"
+                "stax"
             ]
         },
         {
             "name": "Helpful Hunter",
             "tags": [
+                "draw",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Spirited Companion",
+            "tags": [
+                "draw",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Mentor of the Meek",
+            "tags": [
+                "draw",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Caretaker's Talent",
+            "tags": [
+                "draw",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Bennie Bracks, Zoologist",
+            "tags": [
+                "draw",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Rumor Gatherer",
+            "tags": [
+                "draw",
+                "zombie beatdown",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Tocasia's Welcome",
+            "tags": [
                 "draw"
             ]
         }
     ],
-    "Block 2 - Removal": [
+    "Block 2 - Land Advantage": [
+        {
+            "name": "Loyal Warhound",
+            "tags": [
+                "catch-up ramp",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Knight of the White Orchid",
+            "tags": [
+                "catch-up ramp",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Claim Jumper",
+            "tags": [
+                "catch-up ramp",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Sand Scout",
+            "tags": [
+                "catch-up ramp",
+                "desert",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Surveyor's Scope",
+            "tags": [
+                "catch-up ramp"
+            ]
+        },
+        {
+            "name": "Keeper of the Accord",
+            "tags": [
+                "catch-up ramp",
+                "tokens"
+            ]
+        },
+        {
+            "name": "Archaeomancer's Map",
+            "tags": [
+                "catch-up ramp"
+            ]
+        },
+        {
+            "name": "Land Tax",
+            "tags": [
+                "catch-up ramp"
+            ]
+        }
+    ],
+    "Block 3 - Threat Removal": [
+        {
+            "name": "Path to Exile",
+            "tags": [
+                "removal",
+                "ramp"
+            ]
+        },
         {
             "name": "Swords to Plowshares",
             "tags": [
@@ -30,24 +136,432 @@
             ]
         },
         {
-            "name": "Path to Exile",
+            "name": "Cathar Commando",
+            "tags": [
+                "removal",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Loran of the Third Path",
+            "tags": [
+                "removal",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Generous Gift",
             "tags": [
                 "removal"
             ]
+        },
+        {
+            "name": "Slash the Ranks",
+            "tags": [
+                "board wipe",
+                "planeswalker hate"
+            ]
+        },
+        {
+            "name": "Austere Command",
+            "tags": [
+                "board wipe"
+            ]
+        },
+        {
+            "name": "Hour of Reckoning",
+            "tags": [
+                "board wipe",
+                "zombie beatdown"
+            ]
         }
     ],
-    "Block 7 - Zombie Beatdown": [
+    "Block 4 - Protection": [
+        {
+            "name": "Akroma's Will",
+            "tags": [
+                "board protection",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Dawn's Truce",
+            "tags": [
+                "board protection"
+            ]
+        },
+        {
+            "name": "Make a Stand",
+            "tags": [
+                "board protection"
+            ]
+        },
+        {
+            "name": "Flare of Fortitude",
+            "tags": [
+                "board protection",
+                "defense"
+            ]
+        },
+        {
+            "name": "Mother of Runes",
+            "tags": [
+                "commander protection",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Giver of Runes",
+            "tags": [
+                "commander protection",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Selfless Spirit",
+            "tags": [
+                "commander protection",
+                "oketra fodder"
+            ]
+        },
+        {
+            "name": "Lightning Greaves",
+            "tags": [
+                "commander protection"
+            ]
+        }
+    ],
+    "Block 5 - Zombie Beatdown": [
         {
             "name": "Elesh Norn, Grand Cenobite",
             "tags": [
                 "anthem",
-                "hard stax"
+                "stax",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Elesh Norn, Mother of Machines",
+            "tags": [
+                "anthem",
+                "stax",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Mondrak, Glory Dominus",
+            "tags": [
+                "doubler",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Anointed Procession",
+            "tags": [
+                "doubler",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Honor of the Pure",
+            "tags": [
+                "anthem",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Divine Sacrament",
+            "tags": [
+                "anthem",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "True Conviction",
+            "tags": [
+                "anthem",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Akroma's Memorial",
+            "tags": [
+                "anthem",
+                "zombie beatdown"
             ]
         }
     ],
-    "Block 9 - Manabase": [
+    "Block 6 - Bounce Creatures": [
         {
-            "name": "Plains",
+            "name": "Jeskai Barricade",
+            "tags": [
+                "oketra fodder",
+                "bounce creature"
+            ]
+        },
+        {
+            "name": "Kor Skyfisher",
+            "tags": [
+                "oketra fodder",
+                "bounce creature"
+            ]
+        },
+        {
+            "name": "Aviary Mechanic",
+            "tags": [
+                "oketra fodder",
+                "bounce creature"
+            ]
+        },
+        {
+            "name": "Sunpearl Kirin",
+            "tags": [
+                "oketra fodder",
+                "bounce creature"
+            ]
+        },
+        {
+            "name": "Sunpearl Kirin",
+            "tags": [
+                "oketra fodder",
+                "bounce creature"
+            ]
+        },
+        {
+            "name": "Whitemane Lion",
+            "tags": [
+                "oketra fodder",
+                "bounce creature"
+            ]
+        },
+        {
+            "name": "Eiganjo Free-Riders",
+            "tags": [
+                "bounce creature"
+            ]
+        },
+        {
+            "name": "Dust Elemental",
+            "tags": [
+                "bounce creature"
+            ]
+        }
+    ],
+    "Block 7 - Synergies": [
+        {
+            "name": "Pearl Medallion",
+            "tags": [
+                "discount"
+            ]
+        },
+        {
+            "name": "Oketra's Monument",
+            "tags": [
+                "discount"
+            ]
+        },
+        {
+            "name": "Defiler of Faith",
+            "tags": [
+                "discount"
+            ]
+        },
+        {
+            "name": "Soul Warden",
+            "tags": [
+                "life gain",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Soul's Attendant",
+            "tags": [
+                "life gain",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Binding Mummy",
+            "tags": [
+                "stax",
+                "zombie beatdown"
+            ]
+        },
+        {
+            "name": "Extraplanar Lens",
+            "tags": [
+                "catch-up ramp"
+            ]
+        },
+        {
+            "name": "The Immortal Sun",
+            "tags": [
+                "discount",
+                "planeswalker hate"
+            ]
+        }
+    ],
+    "Block 8 - Recursion + Commander Damage": [
+        {
+            "name": "Basilisk Collar",
+            "tags": [
+                "voltron"
+            ]
+        },
+        {
+            "name": "Loxodon Warhammer",
+            "tags": [
+                "voltron"
+            ]
+        },
+        {
+            "name": "Psychic Paper",
+            "tags": [
+                "voltron",
+                "commander protection"
+            ]
+        },
+        {
+            "name": "Whispersilk Cloak",
+            "tags": [
+                "commander protection",
+                "voltron"
+            ]
+        },
+        {
+            "name": "Disciple of the Sun",
+            "tags": [
+                "recursion"
+            ]
+        },
+        {
+            "name": "Brought Back",
+            "tags": [
+                "recursion"
+            ]
+        },
+        {
+            "name": "Sigil of the New Dawn",
+            "tags": [
+                "recursion"
+            ]
+        },
+        {
+            "name": "Emeria Shepherd",
+            "tags": [
+                "recursion"
+            ]
+        }
+    ],
+    "Block 9 - Utility Lands": [
+        {
+            "name": "Karoo",
+            "tags": [
+                "catch-up ramp",
+                "bounce land"
+            ]
+        },
+        {
+            "name": "Guildless Commons",
+            "tags": [
+                "catch-up ramp",
+                "bounce land"
+            ]
+        },
+        {
+            "name": "Arid Archway",
+            "tags": [
+                "catch-up ramp",
+                "desert",
+                "bounce land"
+            ]
+        },
+        {
+            "name": "Lotus Vale",
+            "tags": [
+                "catch-up ramp",
+                "lotus land"
+            ]
+        },
+        {
+            "name": "Lotus Field",
+            "tags": [
+                "catch-up ramp",
+                "lotus land"
+            ]
+        },
+        {
+            "name": "Scorched Ruins",
+            "tags": [
+                "catch-up ramp",
+                "lotus land"
+            ]
+        },
+        {
+            "name": "Vesuva",
+            "tags": [
+                "catch-up ramp",
+                "bounce land",
+                "lotus land",
+                "utility land"
+            ]
+        },
+        {
+            "name": "Scavenger Grounds",
+            "tags": [
+                "desert",
+                "utility land",
+                "graveyard hate"
+            ]
+        },
+        {
+            "name": "Sandstorm Verge",
+            "tags": [
+                "desert",
+                "utility land",
+                "voltron"
+            ]
+        },
+        {
+            "name": "Rogue's Passage",
+            "tags": [
+                "voltron"
+            ]
+        },
+        {
+            "name": "Inventors' Fair",
+            "tags": [
+                "artifact recursion"
+            ]
+        },
+        {
+            "name": "War Room",
+            "tags": [
+                "draw"
+            ]
+        },
+        {
+            "name": "Cavern of Souls",
+            "tags": [
+                "commander protection"
+            ]
+        },
+        {
+            "name": "Emeria, the Sky Ruin",
+            "tags": [
+                "recursion"
+            ]
+        },
+        {
+            "name": "Nykthos, Shrine to Nyx",
+            "tags": [
+                "ramp"
+            ]
+        }
+    ],
+    "Block A - Manabase": [
+        {
+            "name": "Snow-Covered Plains",
             "repeats": 20
         }
     ]

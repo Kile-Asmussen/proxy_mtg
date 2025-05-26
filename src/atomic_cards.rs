@@ -3,7 +3,7 @@ use std::{
     error::Error,
     fmt::{Debug, Display},
     fs::File,
-    io::BufReader,
+    io::{BufReader, BufWriter, Write},
 };
 
 use serde::{Deserialize, Serialize};
@@ -20,9 +20,10 @@ pub struct Cardoid(pub Vec<Card>);
 
 impl AtomicCards {
     pub fn load() -> Result<Self, Box<dyn Error>> {
-        let atomic_cards_file = std::fs::read("AtomicCards.json")?;
+        let atomic_cards_file_json = std::fs::read("AtomicCards.json")?;
+        let atomic_cards: AtomicCards = serde_json::from_slice(&atomic_cards_file_json[..])?;
 
-        Ok(serde_json::from_slice(&atomic_cards_file)?)
+        return Ok(atomic_cards);
     }
 }
 
@@ -114,9 +115,7 @@ pub struct Card {
 pub enum Supertype {
     Basic,
     Legendary,
-    Ongoing,
     Snow,
-    World,
 
     #[serde(untagged)]
     Other(String),
@@ -133,17 +132,15 @@ impl Display for Supertype {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum CardType {
-    Kindred,
-
-    Instant,
-    Sorcery,
-
-    Creature,
     Artifact,
-    Enchantment,
-    Planeswalker,
-    Land,
     Battle,
+    Creature,
+    Enchantment,
+    Instant,
+    Kindred,
+    Land,
+    Planeswalker,
+    Sorcery,
 
     #[serde(untagged)]
     Other(String),

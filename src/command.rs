@@ -106,9 +106,9 @@ impl List {
     fn print_cards(list: &DeckList) {
         let cats: BTreeMap<String, Vec<Artoid>> = list.categories();
 
-        println!("Cards:");
+        println!("Cards ({}):", DeckList::count_cards(&list.0));
         for (cat, artoids) in &cats {
-            println!("  {}:", cat);
+            println!("  {} ({}):", cat, DeckList::count_cards(artoids));
             for artoid in artoids {
                 println!("    {} x {}", artoid.repeats, artoid.name);
             }

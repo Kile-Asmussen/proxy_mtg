@@ -82,8 +82,8 @@ impl DeckList {
         }
     }
 
-    pub fn num_cards(&self) -> usize {
-        self.0.iter().map(|a| a.repeats).sum()
+    pub fn count_cards(artoids: &Vec<Artoid>) -> usize {
+        artoids.iter().map(|a| a.repeats).sum()
     }
 
     pub fn categories(&self) -> BTreeMap<String, Vec<Artoid>> {

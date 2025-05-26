@@ -29,7 +29,6 @@ fn run() -> Result<(), Box<dyn Error>> {
         atomic_cards.data.len(),
         start.elapsed().as_millis()
     );
-    let start = Instant::now();
     let decklist = DeckList::load(command.decklist_file(), &atomic_cards)?;
     let filename = command
         .decklist_file()
@@ -37,12 +36,6 @@ fn run() -> Result<(), Box<dyn Error>> {
         .unwrap()
         .to_str()
         .unwrap();
-    println!(
-        "Read {} card decklist `{}' in {} milliseconds",
-        decklist.num_cards(),
-        filename,
-        start.elapsed().as_millis()
-    );
 
     command.dispatch(&decklist);
 
