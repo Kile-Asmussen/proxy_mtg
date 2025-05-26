@@ -1,6 +1,7 @@
 use std::{
-    collections::{HashMap, HashSet},
+    collections::{BTreeSet, HashMap},
     error::Error,
+    fmt::{Debug, Display},
     fs::File,
     io::BufReader,
 };
@@ -38,10 +39,10 @@ pub struct Card {
     #[serde(default, rename = "attractionLights")]
     pub attraction_lights: Vec<String>,
     #[serde(rename = "colorIdentity")]
-    pub color_identity: HashSet<String>,
+    pub color_identity: BTreeSet<WUBRG>,
     #[serde(default, rename = "colorIndicator")]
-    pub color_indicator: HashSet<String>,
-    pub colors: HashSet<String>,
+    pub color_indicator: BTreeSet<WUBRG>,
+    pub colors: BTreeSet<WUBRG>,
     #[serde(default, rename = "convertedManaCost")]
     pub converted_mana_cost: f64,
     #[serde(default)]
@@ -121,6 +122,15 @@ pub enum Supertype {
     Other(String),
 }
 
+impl Display for Supertype {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Other(s) => f.write_str(s),
+            x => Debug::fmt(x, f),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum CardType {
     Kindred,
@@ -137,6 +147,24 @@ pub enum CardType {
 
     #[serde(untagged)]
     Other(String),
+}
+
+impl Display for CardType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Other(s) => f.write_str(s),
+            x => Debug::fmt(x, f),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
+pub enum WUBRG {
+    W,
+    U,
+    B,
+    R,
+    G,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]

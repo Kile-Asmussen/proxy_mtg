@@ -1,0 +1,327 @@
+{
+    "0 -- Commander": [
+        {
+            "name": "God-Eternal Oketra",
+            "art_file": [
+                "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/b/ba/Oketra.jpg/revision/latest?cb=20170406145220"
+            ],
+            "art_credit": [
+                "Chase Stone"
+            ]
+        }
+    ],
+    "1 -- Ramp": [
+        {
+            "name": "Archaeomancer's Map"
+        },
+        {
+            "name": "Knight of the White Orchid"
+        },
+        {
+            "name": "Loyal Warhound"
+        },
+        {
+            "name": "Claim Jumper"
+        },
+        {
+            "name": "Deep Gnome Terramancer"
+        },
+        {
+            "name": "Kor Cartographer"
+        },
+        {
+            "name": "Oketra's Monument"
+        },
+        {
+            "name": "Pearl Medallion"
+        }
+    ],
+    "2 -- Removal": [
+        {
+            "name": "Path to Exile"
+        },
+        {
+            "name": "Swords to Plowshares"
+        },
+        {
+            "name": "Wrath of God"
+        },
+        {
+            "name": "Austere Command"
+        },
+        {
+            "name": "Planar Cleansing"
+        },
+        {
+            "name": "Dismantling Wave"
+        },
+        {
+            "name": "Sunpearl Kirin"
+        },
+        {
+            "name": "Banishing Light"
+        }
+    ],
+    "3 -- Draw": [
+        {
+            "name": "Esper Sentinel"
+        },
+        {
+            "name": "Caretaker's Talent"
+        },
+        {
+            "name": "Bennie Bracks, Zoologist"
+        },
+        {
+            "name": "Inspiring Overseer"
+        },
+        {
+            "name": "Helpful Hunter"
+        },
+        {
+            "name": "Spirited Companion"
+        },
+        {
+            "name": "Salt Road Packbeast"
+        },
+        {
+            "name": "Endless Atlas"
+        }
+    ],
+    "4 -- Protection": [
+        {
+            "name": "Ghostly Prison"
+        },
+        {
+            "name": "Dawn's Truce"
+        },
+        {
+            "name": "Mother of Runes"
+        },
+        {
+            "name": "Binding Mummy"
+        },
+        {
+            "name": "Flare of Fortitude"
+        },
+        {
+            "name": "Reprieve"
+        },
+        {
+            "name": "Mana Tithe"
+        },
+        {
+            "name": "Blind Obedience"
+        }
+    ],
+    "5 -- Zombie Tokens": [
+        {
+            "name": "Mondrak, Glory Dominus"
+        },
+        {
+            "name": "Elesh Norn, Grand Cenobite"
+        },
+        {
+            "name": "Starry-Eyed Skyrider"
+        },
+        {
+            "name": "Moonshaker Cavalry"
+        },
+        {
+            "name": "Akroma's Will"
+        },
+        {
+            "name": "Anointed Procession"
+        },
+        {
+            "name": "Odric, Lunarch Marshal"
+        },
+        {
+            "name": "Defiler of Faith"
+        }
+    ],
+    "6 -- ETB": [
+        {
+            "name": "Elesh Norn, Mother of Machines"
+        },
+        {
+            "name": "Panharmonicon"
+        },
+        {
+            "name": "Soul Warden"
+        },
+        {
+            "name": "Soul's Attendant"
+        },
+        {
+            "name": "Aviary Mechanic"
+        },
+        {
+            "name": "Arahbo, the First Fang"
+        },
+        {
+            "name": "Recruiter of the Guard"
+        },
+        {
+            "name": "Rumor Gatherer"
+        }
+    ],
+    "7 -- Flicker/Bounce/Recursion": [
+        {
+            "name": "Brought Back"
+        },
+        {
+            "name": "Ephemerate"
+        },
+        {
+            "name": "Cloudstone Curio"
+        },
+        {
+            "name": "Kor Skyfisher"
+        },
+        {
+            "name": "Teleportation Circle"
+        },
+        {
+            "name": "Flickerwisp"
+        },
+        {
+            "name": "Felidar Guardian"
+        },
+        {
+            "name": "Whitemane Lion"
+        }
+    ],
+    "8 -- Misc": [
+        {
+            "name": "The Immortal Sun"
+        },
+        {
+            "name": "Commander's Plate"
+        },
+        {
+            "name": "Land Tax"
+        },
+        {
+            "name": "Authority of the Consuls"
+        },
+        {
+            "name": "Wand of the Worldsoul"
+        },
+        {
+            "name": "Cloud Key"
+        },
+        {
+            "name": "Swiftfoot Boots"
+        },
+        {
+            "name": "Lightning Greaves"
+        }
+    ],
+    "9 -- Land base": [
+        {
+            "name": "Plains",
+            "repeats": 4,
+            "art_file": [
+                "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/52/Plains.png/revision/latest/scale-to-width-down/1000?cb=20220324022601"
+            ],
+            "art_credit": [
+                "Minecraft"
+            ]
+        },
+        {
+            "name": "Plains",
+            "repeats": 4,
+            "art_file": [
+                "https://natureconservancy-h.assetsadobe.com/is/image/content/dam/tnc/nature/en/photos/s/o/south-Blaine-county-Kelsey-Molloy-TNC.jpg?crop=0%2C0%2C2504%2C1565&wid=1640&hei=1025&scl=1.526829268292683"
+            ],
+            "art_credit": [
+                "Kelsey Molloy"
+            ]
+        },
+        {
+            "name": "Plains",
+            "repeats": 4,
+            "art_file": [
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Great_plains_storm_-_Great_Sand_Dunes_National_Park.jpg/1920px-Great_plains_storm_-_Great_Sand_Dunes_National_Park.jpg"
+            ],
+            "art_credit": [
+                "Christian Collins"
+            ]
+        },
+        {
+            "name": "Plains",
+            "repeats": 4,
+            "art_file": [
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Lesbian_pride_flag_2018.svg/960px-Lesbian_pride_flag_2018.svg.png"
+            ],
+            "art_credit": [
+                "Emily Gwen"
+            ]
+        },
+        {
+            "name": "Plains",
+            "repeats": 4
+        },
+        {
+            "name": "Windbrisk Heights",
+            "notes": "draw"
+        },
+        {
+            "name": "Minas Tirith",
+            "notes": "draw"
+        },
+        {
+            "name": "Emeria, the Sky Ruin",
+            "notes": "recursion"
+        },
+        {
+            "name": "Dunes of the Dead",
+            "notes": "zombies, desert"
+        },
+        {
+            "name": "Karoo",
+            "notes": "bounce land"
+        },
+        {
+            "name": "Guildless Commons",
+            "notes": "bounce land"
+        },
+        {
+            "name": "Arid Archway",
+            "notes": "bounce land, desert"
+        },
+        {
+            "name": "Scavenger Grounds",
+            "notes": "desert, graveyard hate"
+        },
+        {
+            "name": "Lotus Vale",
+            "notes": "sacrifice land"
+        },
+        {
+            "name": "Lotus Field",
+            "notes": "sacrifice land"
+        },
+        {
+            "name": "Scorched Ruins",
+            "notes": "sacrifice land"
+        },
+        {
+            "name": "Mistveil Plains",
+            "notes": "recursion to deck"
+        },
+        {
+            "name": "Terrain Generator",
+            "notes": "ramp"
+        },
+        {
+            "name": "Talon Gates of Madara",
+            "notes": "protection"
+        },
+        {
+            "name": "Mikokoro, Center of the Sea",
+            "notes": "group hug, draw"
+        }
+    ]
+}

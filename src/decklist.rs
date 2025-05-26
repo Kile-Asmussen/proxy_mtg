@@ -1,11 +1,14 @@
 use std::{
     collections::{BTreeMap, BTreeSet},
-    path::PathBuf,
+    error::Error,
+    fmt::Display,
+    path::{Path, PathBuf},
+    sync::atomic,
 };
 
 use serde::{Deserialize, Serialize};
 
-use crate::atomic_cards::{AtomicCards, Cardoid};
+use crate::atomic_cards::{AtomicCards, CardType, Cardoid, WUBRG};
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Artoid {
@@ -25,6 +28,8 @@ pub struct Artoid {
     #[serde(default = "repeats_default")]
     pub repeats: usize,
     #[serde(default)]
+    pub category: String,
+    #[serde(default)]
     pub tags: BTreeSet<String>,
     #[serde(default)]
     pub notes: String,
@@ -38,35 +43,35 @@ fn repeats_default() -> usize {
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(transparent)]
-pub struct DeckList(pub BTreeMap<String, Vec<Artoid>>);
+pub struct DeckList(pub Vec<Artoid>);
 
 impl DeckList {
-    fn artoid_iter(&self) -> impl Iterator<Item = &Artoid> {
-        self.0.iter().map(|(_, s)| s.iter()).flatten()
-    }
+    pub fn load(path: &Path, atomics: &AtomicCards) -> Result<DeckList, Box<dyn Error>> {
+        let decklist_file = std::fs::read_to_string(path)?;
+        let decklist_structure: BTreeMap<String, Vec<Artoid>> =
+            serde_json::from_str(&decklist_file)?;
+        let mut res = Self(vec![]);
 
-    pub fn tag_histogram(&self) -> BTreeMap<String, usize> {
-        let mut res = BTreeMap::new();
-
-        for ao in self.artoid_iter() {
-            for tag in ao.tags.iter() {
-                let count = res.entry(tag.clone()).or_insert(0);
-                *count += 1;
+        for (mut category, mut vec) in decklist_structure.into_iter() {
+            vec.sort_by_key(|a| a.name.clone());
+            for mut artoid in vec {
+                artoid.category = category.clone();
+                res.0.push(artoid);
             }
         }
 
-        return res;
+        res.build(&atomics).map_err(|nf| DeckListBuildError(nf))?;
+
+        Ok(res)
     }
 
-    pub fn build(&mut self, atomics: &AtomicCards) -> Result<(), Vec<String>> {
+    fn build(&mut self, atomics: &AtomicCards) -> Result<(), Vec<String>> {
         let mut failed_to_find = vec![];
-        for (_, artoids) in self.0.iter_mut() {
-            for artoid in artoids.iter_mut() {
-                if let Some(cardoid) = atomics.data.get(&artoid.name) {
-                    artoid.cardoid = Some(cardoid.clone())
-                } else {
-                    failed_to_find.push(artoid.name.clone())
-                }
+        for artoid in &mut self.0 {
+            if let Some(cardoid) = atomics.data.get(&artoid.name) {
+                artoid.cardoid = Some(cardoid.clone())
+            } else {
+                failed_to_find.push(artoid.name.clone())
             }
         }
 
@@ -76,4 +81,122 @@ impl DeckList {
             Err(failed_to_find)
         }
     }
+
+    pub fn num_cards(&self) -> usize {
+        self.0.iter().map(|a| a.repeats).sum()
+    }
+
+    pub fn categories(&self) -> BTreeMap<String, Vec<Artoid>> {
+        let mut res = BTreeMap::new();
+
+        for artoid in &self.0 {
+            res.entry(artoid.category.clone())
+                .or_insert_with(|| vec![])
+                .push(artoid.clone());
+        }
+
+        res
+    }
+
+    pub fn color_hist(&self) -> BTreeMap<BTreeSet<WUBRG>, usize> {
+        let mut res = BTreeMap::new();
+
+        for artoid in &self.0 {
+            if let Some(cardoid) = &artoid.cardoid {
+                for card in &cardoid.0 {
+                    if card.types.contains(&CardType::Land) {
+                        continue;
+                    }
+                    *res.entry(card.colors.clone()).or_insert(0) += artoid.repeats;
+                }
+            }
+        }
+
+        res
+    }
+
+    pub fn color_id(&self) -> BTreeSet<WUBRG> {
+        let mut res = BTreeSet::new();
+
+        for artoid in &self.0 {
+            if let Some(cardoid) = &artoid.cardoid {
+                for card in &cardoid.0 {
+                    res.append(&mut card.color_identity.clone())
+                }
+            }
+        }
+
+        res
+    }
+
+    pub fn curve(&self) -> BTreeMap<usize, usize> {
+        let mut res = BTreeMap::new();
+
+        for artoid in &self.0 {
+            if let Some(cardoid) = &artoid.cardoid {
+                for card in &cardoid.0 {
+                    if card.types.contains(&CardType::Land) {
+                        continue;
+                    }
+                    *res.entry(card.mana_value as usize).or_insert(0) += artoid.repeats;
+                }
+            }
+        }
+
+        res
+    }
+
+    pub fn tag_hist(&self) -> BTreeMap<String, usize> {
+        let mut res = BTreeMap::new();
+
+        for artoid in &self.0 {
+            for tag in &artoid.tags {
+                *res.entry(tag.clone()).or_insert(0) += artoid.repeats;
+            }
+        }
+
+        return res;
+    }
+
+    pub fn type_hist(&self) -> BTreeMap<String, usize> {
+        let mut res = BTreeMap::new();
+
+        for artoid in &self.0 {
+            if let Some(cardoid) = &artoid.cardoid {
+                for card in &cardoid.0 {
+                    let typeline = card
+                        .supertypes
+                        .iter()
+                        .map(|t| format!("{}", t))
+                        .chain(card.types.iter().map(|t| format!("{}", t)))
+                        .collect::<Vec<_>>()
+                        .join(" ");
+
+                    let count = res.entry(typeline).or_insert(0);
+                    *count += artoid.repeats;
+                }
+            }
+        }
+
+        return res;
+    }
 }
+
+#[derive(Debug)]
+pub struct DeckListBuildError(pub Vec<String>);
+
+impl Display for DeckListBuildError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("The following cards were not found:\n")?;
+
+        for name in &self.0 {
+            f.write_str("  ")?;
+            f.write_str(name)?;
+            f.write_str("\n")?;
+        }
+
+        Ok(())
+    }
+}
+
+impl Error for DeckListBuildError {}

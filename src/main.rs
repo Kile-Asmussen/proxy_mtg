@@ -1,82 +1,50 @@
+#![allow(unused)]
+
 mod atomic_cards;
 mod command;
 mod decklist;
-mod proxy_cards;
 
-use std::{collections::HashSet, fs::File, time::Instant};
+use std::{error::Error, ffi::OsStr, time::Instant};
 
 use atomic_cards::*;
-use decklist::*;
-use serde::Deserialize;
+use clap::Parser;
+use command::*;
+
+use crate::decklist::DeckList;
 
 fn main() {
-    println!("Loading atomic cards...");
-    let start = Instant::now();
-    let atomic_cards = AtomicCards::load().unwrap();
+    if let Err(e) = run() {
+        eprintln!("{}", e);
+    }
+}
 
+fn run() -> Result<(), Box<dyn Error>> {
+    let command = Command::parse();
+
+    println!("Loading cards...");
+    let start = Instant::now();
+    let atomic_cards = AtomicCards::load()?;
     println!(
-        "Read {} atomic cards in {} seconds",
+        "Read {} atomic cards in {} milliseconds",
         atomic_cards.data.len(),
-        start.elapsed().as_secs()
+        start.elapsed().as_millis()
+    );
+    let start = Instant::now();
+    let decklist = DeckList::load(command.decklist_file(), &atomic_cards)?;
+    let filename = command
+        .decklist_file()
+        .file_name()
+        .unwrap()
+        .to_str()
+        .unwrap();
+    println!(
+        "Read {} card decklist `{}' in {} milliseconds",
+        decklist.num_cards(),
+        filename,
+        start.elapsed().as_millis()
     );
 
-    let decklist_file = File::open("decklists/oketra.json").unwrap();
+    command.dispatch(&decklist);
 
-    let mut decklist_deserializer = serde_json::Deserializer::from_reader(decklist_file);
-
-    let mut decklist = DeckList::deserialize(&mut decklist_deserializer).unwrap();
-
-    println!("Read decklist:");
-
-    for (section, artoids) in &decklist.0 {
-        println!("  {}:", section);
-        for artoid in artoids {
-            println!("    {} x {}", artoid.repeats, artoid.name);
-        }
-    }
-
-    let tag_histogram = decklist.tag_histogram();
-
-    if tag_histogram.is_empty() {
-        println!("No tags.")
-    } else {
-        println!("Tags:");
-        for (tag, count) in decklist.tag_histogram() {
-            println!("    {} x {}", count, tag)
-        }
-    }
-
-    if let Err(misses) = decklist.build(&atomic_cards) {
-        println!("Following cards were not found:");
-        for card in misses {
-            println!("  {}", card);
-        }
-    } else {
-        println!("All cards successfully loaded from database.")
-    }
-
-    let mut color_id = HashSet::<String>::new();
-    for (section, artoids) in &decklist.0 {
-        for artoid in artoids {
-            if let Some(cardoid) = &artoid.cardoid {
-                for card in &cardoid.0 {
-                    for color in &card.color_identity {
-                        color_id.insert(color.clone());
-                    }
-                }
-            }
-        }
-    }
-    let mut color_id = color_id.into_iter().collect::<Vec<_>>();
-
-    color_id.sort_by_key(|c| match &c[..] {
-        "W" => 1,
-        "U" => 2,
-        "B" => 3,
-        "R" => 4,
-        "G" => 5,
-        _ => 10,
-    });
-
-    println!("Color identity: {}", color_id.join(""))
+    Ok(())
 }
