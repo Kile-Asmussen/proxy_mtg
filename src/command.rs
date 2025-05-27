@@ -5,6 +5,8 @@ use std::path::{Display, Path, PathBuf};
 use std::collections::{BTreeMap, BTreeSet};
 
 use clap::{Parser, Subcommand};
+use rand::seq::SliceRandom;
+use rand::{Rng, SeedableRng};
 
 use crate::atomic_cards::WUBRG;
 use crate::decklist::{self, Artoid};
@@ -40,15 +42,17 @@ pub struct List {
     #[arg(long)]
     pub all: bool,
     #[arg(long)]
-    pub color_id: bool,
+    pub identity: bool,
     #[arg(long)]
     pub colors: bool,
     #[arg(long)]
-    pub type_hist: bool,
+    pub types: bool,
     #[arg(long)]
-    pub tag_hist: bool,
+    pub tags: bool,
     #[arg(long)]
-    pub mana_curve: bool,
+    pub curve: bool,
+    #[arg(long)]
+    pub hand: bool,
     #[arg(long)]
     pub cards: bool,
 }
@@ -61,16 +65,17 @@ impl List {
             this = List {
                 decklist: this.decklist,
                 all: true,
-                color_id: true,
+                identity: true,
                 colors: true,
-                type_hist: true,
-                tag_hist: true,
-                mana_curve: true,
+                types: true,
+                tags: true,
+                curve: true,
                 cards: true,
+                hand: true,
             }
         }
 
-        if this.color_id {
+        if this.identity {
             println!();
             Self::print_color_id(decklist);
         }
@@ -85,19 +90,24 @@ impl List {
             Self::print_color_hist(decklist);
         }
 
-        if this.mana_curve {
+        if this.curve {
             println!();
             Self::print_curve(decklist);
         }
 
-        if this.type_hist {
+        if this.types {
             println!();
             Self::print_type_hist(decklist);
         }
 
-        if this.tag_hist {
+        if this.tags {
             println!();
             Self::print_tag_hist(decklist);
+        }
+
+        if this.hand {
+            println!();
+            Self::print_example_hand(decklist);
         }
 
         println!();
@@ -158,6 +168,22 @@ impl List {
         println!("Card Types:");
         for (types, n) in decklist.type_hist() {
             println!("  {} x {}", n, types);
+        }
+    }
+
+    fn print_example_hand(decklist: &DeckList) {
+        let mut names = decklist
+            .0
+            .iter()
+            .flat_map(|x| vec![x.name.clone(); x.repeats])
+            .collect::<Vec<_>>();
+
+        let mut rng = rand::rngs::SmallRng::from_os_rng();
+        names.shuffle(&mut rng);
+
+        println!("Example Hand:");
+        for n in &names[0..=7] {
+            println!("  {}", n);
         }
     }
 
