@@ -181,9 +181,12 @@ impl List {
         let mut rng = rand::rngs::SmallRng::from_os_rng();
         names.shuffle(&mut rng);
 
+        let (hand, _) = names.split_at(7);
+        let mut hand = hand.to_owned();
+        hand.sort();
         println!("Example Hand:");
-        for n in &names[0..=7] {
-            println!("  {}", n);
+        for (i, n) in hand.iter().enumerate() {
+            println!("  {}. {}", i + 1, n);
         }
     }
 
