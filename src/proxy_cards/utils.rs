@@ -1,31 +1,17 @@
-use crate::atomic_cards::{Card, CardType};
+use clap::builder::Str;
 
-pub fn color_css_class(card: &Card) -> String {
-    if card.types.contains(&CardType::Land) {
-        return card
-            .color_identity
-            .iter()
-            .map(|s| map_color(s))
-            .chain(["colorless".to_string()])
-            .collect::<Vec<_>>()
-            .join(" ");
+use crate::atomic_cards::{Card, CardType, WUBRG};
+
+pub fn card_css_class(card: &Card) -> String {
+    let (colors, extra) = if card.types.contains(&CardType::Land) {
+        (&card.color_identity, vec!["colorless", "card"])
     } else {
-        return card
-            .colors
-            .iter()
-            .map(|s| map_color(s))
-            .collect::<Vec<_>>()
-            .join(" ");
-    }
-
-    fn map_color(initial: &str) -> String {
-        match initial {
-            "W" => "white".to_owned(),
-            "U" => "blue".to_owned(),
-            "B" => "black".to_owned(),
-            "R" => "red".to_owned(),
-            "G" => "green".to_owned(),
-            _ => panic!(),
-        }
-    }
+        (&card.colors, vec!["card"])
+    };
+    return colors
+        .iter()
+        .map(WUBRG::name)
+        .chain(extra.into_iter())
+        .collect::<Vec<_>>()
+        .join(" ");
 }

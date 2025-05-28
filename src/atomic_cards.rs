@@ -272,6 +272,16 @@ impl WUBRG {
             res
         }
     }
+
+    pub fn name(&self) -> &'static str {
+        match self {
+            WUBRG::W => "white",
+            WUBRG::U => "blue",
+            WUBRG::B => "black",
+            WUBRG::R => "red",
+            WUBRG::G => "green",
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]

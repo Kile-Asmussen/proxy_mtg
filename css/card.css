@@ -529,31 +529,7 @@ span.art-credits::before {
     content: "artist: "
 }
 
-/* COLORS */
 
-:root {
-
-    --white-color-1: white;
-    --white-color-2: lightyellow;
-
-    --blue-color-1: aqua;
-    --blue-color-2: darkblue;
-
-    --black-color-1: indigo;
-    --black-color-2: darkslategrey;
-
-    --red-color-1: red;
-    --red-color-2: darkred;
-
-    --green-color-1: lightgreen;
-    --green-color-2: green;
-
-    --colorless-1: silver;
-    --colorless-2: slategrey;
-
-    --gold-1: gold;
-    --gold-2: goldenrod;
-}
 
 div.card {
     background: linear-gradient(to top, var(--colorless-2), var(--colorless-1));
@@ -731,30 +707,4 @@ i.mi-5x {
 
 div.title.bar>span.cost {
     margin-top: var(--mana-cost-adjustment);
-}
-
-/* PAGE */
-
-@page {
-    size: A4 portrait;
-    padding: 11mm 9mm;
-}
-
-body {
-    padding: 0;
-    margin: 0;
-}
-
-page {
-    page-break-after: always;
-}
-
-div.card-row {
-    margin-left: 4mm;
-    display: flex;
-    flex-direction: row;
-}
-
-page>div.card-row:first-child {
-    padding-top: 11mm;
 }

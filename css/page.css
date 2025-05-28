@@ -1,0 +1,25 @@
+/* PAGE */
+
+@page {
+    size: A4 portrait;
+    padding: 11mm 9mm;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+page {
+    page-break-after: always;
+}
+
+div.card-row {
+    margin-left: 4mm;
+    display: flex;
+    flex-direction: row;
+}
+
+page>div.card-row:first-child {
+    padding-top: 11mm;
+}
