@@ -8,7 +8,8 @@ use clap::{Parser, Subcommand};
 use rand::seq::SliceRandom;
 use rand::{Rng, SeedableRng};
 
-use crate::atomic_cards::WUBRG;
+use crate::atomic_cards::CardType::Land;
+use crate::atomic_cards::{Supertype, WUBRG};
 use crate::decklist::{self, Artoid};
 use crate::{atomic_cards::AtomicCards, decklist::DeckList};
 
@@ -42,7 +43,7 @@ pub struct List {
     #[arg(long)]
     pub all: bool,
     #[arg(long)]
-    pub identity: bool,
+    pub id: bool,
     #[arg(long)]
     pub colors: bool,
     #[arg(long)]
@@ -55,6 +56,8 @@ pub struct List {
     pub hand: bool,
     #[arg(long)]
     pub cards: bool,
+    #[arg(long)]
+    pub lands: bool,
 }
 
 impl List {
@@ -65,17 +68,18 @@ impl List {
             this = List {
                 decklist: this.decklist,
                 all: true,
-                identity: true,
+                id: true,
                 colors: true,
                 types: true,
                 tags: true,
                 curve: true,
-                cards: true,
                 hand: true,
+                cards: true,
+                lands: true,
             }
         }
 
-        if this.identity {
+        if this.id {
             println!();
             Self::print_color_id(decklist);
         }
@@ -108,6 +112,11 @@ impl List {
         if this.hand {
             println!();
             Self::print_example_hand(decklist);
+        }
+
+        if this.lands {
+            println!();
+            Self::print_lands(decklist);
         }
 
         println!();
@@ -187,6 +196,59 @@ impl List {
         println!("Example Hand:");
         for (i, n) in hand.iter().enumerate() {
             println!("  {}. {}", i + 1, n);
+        }
+    }
+
+    fn print_lands(decklist: &DeckList) {
+        println!("Land base:");
+        let mut basic = 0usize;
+        let mut basic_names = BTreeSet::new();
+        let mut tapland = 0usize;
+        let mut tapland_names = BTreeSet::new();
+        let mut nonmana = 0usize;
+        let mut nonmana_names = BTreeSet::new();
+        let mut total = 0usize;
+        for artoid in &decklist.0 {
+            let Some(cardoid) = &artoid.cardoid else {
+                continue;
+            };
+
+            if !cardoid.0[0].types.contains(&Land) {
+                continue;
+            }
+
+            let land = &cardoid.0[0];
+
+            total += artoid.repeats;
+
+            if land.text.contains("enters tapped") {
+                tapland += artoid.repeats;
+                tapland_names.insert(land.name.clone());
+            }
+
+            if land.supertypes.contains(&Supertype::Basic) {
+                basic += artoid.repeats;
+                basic_names.insert(land.name.clone());
+            }
+
+            if !land.text.contains("{T}: Add") {
+                nonmana += artoid.repeats;
+                nonmana_names.insert(land.name.clone());
+            }
+        }
+
+        println!("  {} x total", total);
+        println!("  {} x basic", basic);
+        for name in &basic_names {
+            println!("    {}", name);
+        }
+        println!("  {} x tapland", tapland);
+        for name in &tapland_names {
+            println!("    {}", name);
+        }
+        println!("  {} x nonmana land", nonmana);
+        for name in &nonmana_names {
+            println!("    {}", name);
         }
     }
 

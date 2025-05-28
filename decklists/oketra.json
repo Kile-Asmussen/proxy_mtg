@@ -555,12 +555,19 @@
             "tags": [
                 "ramp"
             ]
+        },
+        {
+            "name": "Thespian's Stage",
+            "tags": [
+                "utility land",
+                "ramp"
+            ]
         }
     ],
     "Block A - Manabase": [
         {
             "name": "Snow-Covered Plains",
-            "repeats": 20
+            "repeats": 19
         }
     ]
 }
