@@ -6,6 +6,7 @@ use std::{
     sync::atomic,
 };
 
+use rand::rand_core::block;
 use serde::{Deserialize, Serialize};
 
 use crate::atomic_cards::{AtomicCards, CardType, Cardoid, WUBRG};
@@ -43,7 +44,7 @@ fn repeats_default() -> usize {
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(transparent)]
-pub struct DeckList(pub Vec<Artoid>);
+pub struct DeckList(Vec<Artoid>);
 
 impl DeckList {
     pub fn load(path: &Path, atomics: &AtomicCards) -> Result<DeckList, Box<dyn Error>> {
@@ -82,17 +83,34 @@ impl DeckList {
         }
     }
 
-    pub fn count_cards(artoids: &Vec<Artoid>) -> usize {
-        artoids.iter().map(|a| a.repeats).sum()
+    pub fn card_names(&self) -> BTreeMap<String, usize> {
+        let mut res = BTreeMap::new();
+
+        for artoid in self {
+            *res.entry(artoid.name.clone()).or_insert(0) += artoid.repeats;
+        }
+
+        res
     }
 
-    pub fn categories(&self) -> BTreeMap<String, Vec<Artoid>> {
+    pub fn count_cards(&self) -> usize {
+        Self::count_cards_raw(self)
+    }
+
+    pub fn count_cards_raw<'a, I>(artoids: I) -> usize
+    where
+        I: IntoIterator<Item = &'a Artoid>,
+    {
+        artoids.into_iter().map(|a| a.repeats).sum()
+    }
+
+    pub fn categories(&self) -> BTreeMap<String, BTreeSet<String>> {
         let mut res = BTreeMap::new();
 
         for artoid in &self.0 {
             res.entry(artoid.category.clone())
-                .or_insert_with(|| vec![])
-                .push(artoid.clone());
+                .or_insert_with(BTreeSet::new)
+                .insert(artoid.name.clone());
         }
 
         res
@@ -102,13 +120,14 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for artoid in &self.0 {
-            if let Some(cardoid) = &artoid.cardoid {
-                for card in &cardoid.0 {
-                    if card.types.contains(&CardType::Land) {
-                        continue;
-                    }
-                    *res.entry(card.colors.clone()).or_insert(0) += artoid.repeats;
+            let Some(cardoid) = &artoid.cardoid else {
+                continue;
+            };
+            for card in cardoid {
+                if card.types.contains(&CardType::Land) {
+                    continue;
                 }
+                *res.entry(card.colors.clone()).or_insert(0) += artoid.repeats;
             }
         }
 
@@ -119,10 +138,11 @@ impl DeckList {
         let mut res = BTreeSet::new();
 
         for artoid in &self.0 {
-            if let Some(cardoid) = &artoid.cardoid {
-                for card in &cardoid.0 {
-                    res.append(&mut card.color_identity.clone())
-                }
+            let Some(cardoid) = &artoid.cardoid else {
+                continue;
+            };
+            for card in cardoid {
+                res.append(&mut card.color_identity.clone())
             }
         }
 
@@ -133,13 +153,14 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for artoid in &self.0 {
-            if let Some(cardoid) = &artoid.cardoid {
-                for card in &cardoid.0 {
-                    if card.types.contains(&CardType::Land) {
-                        continue;
-                    }
-                    *res.entry(card.mana_value as usize).or_insert(0) += artoid.repeats;
+            let Some(cardoid) = &artoid.cardoid else {
+                continue;
+            };
+            for card in cardoid {
+                if card.types.contains(&CardType::Land) {
+                    continue;
                 }
+                *res.entry(card.mana_value as usize).or_insert(0) += artoid.repeats;
             }
         }
 
@@ -162,23 +183,62 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for artoid in &self.0 {
-            if let Some(cardoid) = &artoid.cardoid {
-                for card in &cardoid.0 {
-                    let typeline = card
-                        .supertypes
-                        .iter()
-                        .map(|t| format!("{}", t))
-                        .chain(card.types.iter().map(|t| format!("{}", t)))
-                        .collect::<Vec<_>>()
-                        .join(" ");
+            let Some(cardoid) = &artoid.cardoid else {
+                continue;
+            };
+            for card in cardoid {
+                let typeline = card
+                    .supertypes
+                    .iter()
+                    .map(|t| format!("{}", t))
+                    .chain(card.types.iter().map(|t| format!("{}", t)))
+                    .collect::<Vec<_>>()
+                    .join(" ");
 
-                    let count = res.entry(typeline).or_insert(0);
-                    *count += artoid.repeats;
-                }
+                let count = res.entry(typeline).or_insert(0);
+                *count += artoid.repeats;
             }
         }
 
         return res;
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = &Artoid> {
+        self.into_iter()
+    }
+
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Artoid> {
+        self.into_iter()
+    }
+}
+
+impl IntoIterator for DeckList {
+    type Item = Artoid;
+
+    type IntoIter = <Vec<Artoid> as IntoIterator>::IntoIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a DeckList {
+    type Item = &'a Artoid;
+
+    type IntoIter = <&'a Vec<Artoid> as IntoIterator>::IntoIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        (&self.0).into_iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a mut DeckList {
+    type Item = &'a mut Artoid;
+
+    type IntoIter = <&'a mut Vec<Artoid> as IntoIterator>::IntoIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        (&mut self.0).into_iter()
     }
 }
 
@@ -200,3 +260,34 @@ impl Display for DeckListBuildError {
 }
 
 impl Error for DeckListBuildError {}
+
+impl Display for Artoid {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let Some(cardoid) = &self.cardoid else {
+            return f.write_str("> ERROR: no such card");
+        };
+
+        cardoid.fmt(f);
+
+        f.write_str("\n> # # #")?;
+
+        f.write_fmt(format_args!("\n> category: {}", self.category))?;
+        if !self.tags.is_empty() {
+            f.write_str("\n> tags: ");
+            f.write_str(
+                &self
+                    .tags
+                    .iter()
+                    .map(Clone::clone)
+                    .collect::<Vec<_>>()
+                    .join(", "),
+            )?;
+        }
+
+        if self.repeats > 1 {
+            f.write_fmt(format_args!("> copies: {}", self.repeats))?;
+        }
+
+        return Ok(());
+    }
+}

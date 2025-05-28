@@ -105,7 +105,7 @@
             "name": "Keeper of the Accord",
             "tags": [
                 "catch-up ramp",
-                "tokens"
+                "soldier tokens"
             ]
         },
         {
@@ -121,7 +121,7 @@
             ]
         }
     ],
-    "Block 3 - Threat Removal": [
+    "Block 3 - Removal": [
         {
             "name": "Path to Exile",
             "tags": [
@@ -146,7 +146,8 @@
             "name": "Loran of the Third Path",
             "tags": [
                 "removal",
-                "oketra fodder"
+                "oketra fodder",
+                "draw"
             ]
         },
         {
@@ -206,28 +207,28 @@
         {
             "name": "Mother of Runes",
             "tags": [
-                "commander protection",
+                "single target protection",
                 "oketra fodder"
             ]
         },
         {
             "name": "Giver of Runes",
             "tags": [
-                "commander protection",
+                "single target protection",
                 "oketra fodder"
             ]
         },
         {
             "name": "Selfless Spirit",
             "tags": [
-                "commander protection",
+                "board protection",
                 "oketra fodder"
             ]
         },
         {
             "name": "Lightning Greaves",
             "tags": [
-                "commander protection"
+                "single target protection"
             ]
         }
     ],
@@ -321,13 +322,6 @@
             ]
         },
         {
-            "name": "Sunpearl Kirin",
-            "tags": [
-                "oketra fodder",
-                "bounce creature"
-            ]
-        },
-        {
             "name": "Whitemane Lion",
             "tags": [
                 "oketra fodder",
@@ -335,14 +329,23 @@
             ]
         },
         {
-            "name": "Eiganjo Free-Riders",
+            "name": "Ambrosia Whiteheart",
             "tags": [
-                "bounce creature"
+                "bounce creature",
+                "oketra fodder",
+                "single target protection"
             ]
         },
         {
             "name": "Dust Elemental",
             "tags": [
+                "bounce creature"
+            ]
+        },
+        {
+            "name": "Stonecloaker",
+            "tags": [
+                "oketra fodder",
                 "bounce creature"
             ]
         }
@@ -363,21 +366,23 @@
         {
             "name": "Defiler of Faith",
             "tags": [
-                "discount"
+                "discount",
+                "soldier tokens"
             ]
         },
         {
-            "name": "Soul Warden",
+            "name": "Clarion Conqueror",
             "tags": [
-                "life gain",
-                "zombie beatdown"
+                "stax",
+                "oketra fodder"
             ]
         },
         {
-            "name": "Soul's Attendant",
+            "name": "Lunarch Veteran // Luminous Phantom",
             "tags": [
-                "life gain",
-                "zombie beatdown"
+                "oketra fodder",
+                "recursion",
+                "life gain"
             ]
         },
         {
@@ -401,31 +406,32 @@
             ]
         }
     ],
-    "Block 8 - Recursion + Commander Damage": [
+    "Block 8 - Recursion + Stax": [
         {
-            "name": "Basilisk Collar",
+            "name": "Thalia, Guardian of Thraben",
             "tags": [
-                "voltron"
+                "stax",
+                "oketra fodder"
             ]
         },
         {
-            "name": "Loxodon Warhammer",
+            "name": "Myrel, Shield of Argive",
             "tags": [
-                "voltron"
+                "stax",
+                "soldier tokens"
             ]
         },
         {
-            "name": "Psychic Paper",
+            "name": "Crucible of Worlds",
             "tags": [
-                "voltron",
-                "commander protection"
+                "recursion",
+                "catch-up ramp"
             ]
         },
         {
-            "name": "Whispersilk Cloak",
+            "name": "Sun Titan",
             "tags": [
-                "commander protection",
-                "voltron"
+                "recursion"
             ]
         },
         {
@@ -521,12 +527,6 @@
             ]
         },
         {
-            "name": "Rogue's Passage",
-            "tags": [
-                "voltron"
-            ]
-        },
-        {
             "name": "Inventors' Fair",
             "tags": [
                 "recursion"
@@ -541,7 +541,7 @@
         {
             "name": "Cavern of Souls",
             "tags": [
-                "commander protection"
+                "counter protection"
             ]
         },
         {
@@ -567,7 +567,7 @@
     "Block A - Manabase": [
         {
             "name": "Snow-Covered Plains",
-            "repeats": 19
+            "repeats": 20
         }
     ]
 }

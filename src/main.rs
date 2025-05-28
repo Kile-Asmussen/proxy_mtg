@@ -29,15 +29,10 @@ fn run() -> Result<(), Box<dyn Error>> {
         atomic_cards.data.len(),
         start.elapsed().as_millis()
     );
-    let decklist = DeckList::load(command.decklist_file(), &atomic_cards)?;
-    let filename = command
-        .decklist_file()
-        .file_name()
-        .unwrap()
-        .to_str()
-        .unwrap();
+    let decklist = DeckList::load(&command.decklist, &atomic_cards)?;
+    let filename = command.decklist.file_name().unwrap().to_str().unwrap();
 
-    command.dispatch(&decklist);
+    command.subcommand.dispatch(&atomic_cards, &decklist);
 
     Ok(())
 }

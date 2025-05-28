@@ -12,6 +12,7 @@ regex = "1.11.1"
 lazy-regex = "3.4.1"
 clap = { version = "4.5.38", features = [ "derive" ] }
 rand = "0.9.1"
+build_html = "2.6.0"
 
 [profile.dev]
 opt-level = 2
