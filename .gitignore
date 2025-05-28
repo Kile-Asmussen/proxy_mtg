@@ -4,4 +4,5 @@ AtomicCards.*
 /output
 *.pdf
 *.html
+!/examples/*.html
 /target
