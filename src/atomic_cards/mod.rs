@@ -26,7 +26,7 @@ pub struct AtomicCardsFile {
 
 impl AtomicCardsFile {
     pub fn load() -> anyhow::Result<Self> {
-        let (atomic_cards_file_json, start) = Self::read_or_download();
+        let (atomic_cards_file_json, start) = Self::read_or_download()?;
 
         let atomic_cards: AtomicCardsFile = serde_json::from_slice(&atomic_cards_file_json[..])?;
 
@@ -51,7 +51,7 @@ impl AtomicCardsFile {
         }
     }
 
-    fn read_or_download() -> (Vec<u8>, Instant) {
+    fn read_or_download() -> anyhow::Result<(Vec<u8>, Instant)> {
         const ATOMIC_CARDS_FILENAME: &'static str = "AtomicCards.json";
         const ATOMIC_CARDS_URL: &'static str = "https://mtgjson.com/api/v5/AtomicCards.json";
 
@@ -81,12 +81,12 @@ impl AtomicCardsFile {
             start = Instant::now();
             std::fs::write(ATOMIC_CARDS_FILENAME, &downloaded[..])?;
 
-            (downloaded, start)
+            Ok((downloaded, start))
         } else {
             println!("Loading cards database...");
             start = Instant::now();
 
-            (std::fs::read(ATOMIC_CARDS_FILENAME)?, start)
+            Ok((std::fs::read(ATOMIC_CARDS_FILENAME)?, start))
         }
     }
 }
