@@ -25,7 +25,7 @@ fn run() -> Result<(), Box<dyn Error>> {
 
     println!("Loading cards...");
     let start = Instant::now();
-    let atomic_cards = AtomicCards::load()?;
+    let atomic_cards = AtomicCardsFile::load()?;
     println!(
         "Read {} atomic cards in {} milliseconds",
         atomic_cards.data.len(),

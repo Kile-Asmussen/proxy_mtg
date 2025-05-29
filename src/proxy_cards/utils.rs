@@ -4,19 +4,19 @@ use build_html::HtmlElement;
 use clap::builder::Str;
 
 use crate::{
-    atomic_cards::{Card, CardType, WUBRG},
+    atomic_cards::{modname::Card, modname::CardType, modname::WUBRG},
     vec_entry::{IterExt, VecEntryExt, VecEntryMethods},
 };
 
-pub fn card_css_class(card: &Card) -> Vec<&str> {
-    let (colors, extra) = if card.types.contains(&CardType::Land) {
+pub fn card_css_class(card: &modname::Card) -> Vec<&str> {
+    let (colors, extra) = if card.types.contains(&modname::CardType::Land) {
         (&card.color_identity, vec!["colorless", "card"])
     } else {
         (&card.colors, vec!["card"])
     };
     return colors
         .iter()
-        .map(WUBRG::name)
+        .map(modname::WUBRG::name)
         .chain(extra.into_iter())
         .collect::<Vec<_>>();
 }
@@ -43,7 +43,11 @@ impl HtmlElementExt for HtmlElement {
         SS: IntoIterator<Item = S>,
         S: ToString,
     {
-        let mut strings = ss.into_iter().map(|s| s.to_string()).collvect();
+        let mut strings = ss
+            .into_iter()
+            .map(|s| s.to_string())
+            .filter(|s| !s.is_empty())
+            .collvect();
 
         let class = self.attributes.entry("class".to_string()).or_default();
 

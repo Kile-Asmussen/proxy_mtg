@@ -9,7 +9,7 @@ use std::{
 use rand::rand_core::block;
 use serde::{Deserialize, Serialize};
 
-use crate::atomic_cards::{AtomicCards, CardType, Cardoid, WUBRG};
+use crate::atomic_cards::{modname::CardType, modname::Cardoid, modname::WUBRG, AtomicCardsFile};
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Artoid {
@@ -47,7 +47,7 @@ fn repeats_default() -> usize {
 pub struct DeckList(Vec<Artoid>);
 
 impl DeckList {
-    pub fn load(path: &Path, atomics: &AtomicCards) -> Result<DeckList, Box<dyn Error>> {
+    pub fn load(path: &Path, atomics: &AtomicCardsFile) -> Result<DeckList, Box<dyn Error>> {
         let decklist_file = std::fs::read_to_string(path)?;
         let decklist_structure: BTreeMap<String, Vec<Artoid>> =
             serde_json::from_str(&decklist_file)?;
@@ -66,7 +66,7 @@ impl DeckList {
         Ok(res)
     }
 
-    fn build(&mut self, atomics: &AtomicCards) -> Result<(), Vec<String>> {
+    fn build(&mut self, atomics: &AtomicCardsFile) -> Result<(), Vec<String>> {
         let mut failed_to_find = vec![];
         for artoid in &mut self.0 {
             if let Some(cardoid) = atomics.data.get(&artoid.name) {
@@ -134,7 +134,7 @@ impl DeckList {
         res
     }
 
-    pub fn color_id(&self) -> BTreeSet<WUBRG> {
+    pub fn color_id(&self) -> BTreeSet<modname::WUBRG> {
         let mut res = BTreeSet::new();
 
         for artoid in &self.0 {
@@ -157,7 +157,7 @@ impl DeckList {
                 continue;
             };
             for card in cardoid {
-                if card.types.contains(&CardType::Land) {
+                if card.types.contains(&modname::CardType::Land) {
                     continue;
                 }
                 *res.entry(card.mana_value as usize).or_insert(0) += artoid.repeats;

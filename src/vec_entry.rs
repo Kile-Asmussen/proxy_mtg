@@ -83,9 +83,9 @@ impl<'a, K, V> VecEntryMethods<'a, K, V> for VecEntry<'a, K, V> {
 }
 
 pub struct OccupiedVecEntry<'a, K: 'a, V: 'a> {
-    pub(crate) index: usize,
-    pub(crate) vec: &'a mut Vec<(K, V)>,
-    pub(crate) _marker: PhantomData<&'a mut (K, V)>,
+    index: usize,
+    vec: &'a mut Vec<(K, V)>,
+    _marker: PhantomData<&'a mut (K, V)>,
 }
 
 impl<'a, K, V> OccupiedVecEntry<'a, K, V> {
@@ -133,9 +133,9 @@ impl<'a, K, V> VecEntryMethods<'a, K, V> for OccupiedVecEntry<'a, K, V> {
 }
 
 pub struct VacantVecEntry<'a, K: 'a, V: 'a> {
-    pub(crate) key: K,
-    pub(crate) vec: &'a mut Vec<(K, V)>,
-    pub(crate) _marker: PhantomData<&'a mut (K, V)>,
+    key: K,
+    vec: &'a mut Vec<(K, V)>,
+    _marker: PhantomData<&'a mut (K, V)>,
 }
 
 impl<'a, K, V> VecEntryMethods<'a, K, V> for VacantVecEntry<'a, K, V> {
@@ -173,7 +173,7 @@ impl<'a, K, V> VecEntryMethods<'a, K, V> for VacantVecEntry<'a, K, V> {
     }
 }
 
-pub(crate) trait VecEntryExt<K, V>: Sized {
+pub trait VecEntryExt<K, V>: Sized {
     fn entry(&mut self, key: K) -> VecEntry<K, V>;
 }
 
