@@ -46,6 +46,37 @@ fn repeats_default() -> usize {
     1
 }
 
+impl Display for Proxy {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let Some(cardoid) = &self.cardoid else {
+            return f.write_str("> ERROR: no such card");
+        };
+
+        cardoid.fmt(f);
+
+        f.write_str("\n> # # #")?;
+
+        f.write_fmt(format_args!("\n> category: {}", self.category))?;
+        if !self.tags.is_empty() {
+            f.write_str("\n> tags: ");
+            f.write_str(
+                &self
+                    .tags
+                    .iter()
+                    .map(Clone::clone)
+                    .collect::<Vec<_>>()
+                    .join(", "),
+            )?;
+        }
+
+        if self.repeats > 1 {
+            f.write_fmt(format_args!("> copies: {}", self.repeats))?;
+        }
+
+        return Ok(());
+    }
+}
+
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct DeckList(Vec<Proxy>);
@@ -264,34 +295,3 @@ impl Display for DeckListBuildError {
 }
 
 impl Error for DeckListBuildError {}
-
-impl Display for Proxy {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let Some(cardoid) = &self.cardoid else {
-            return f.write_str("> ERROR: no such card");
-        };
-
-        cardoid.fmt(f);
-
-        f.write_str("\n> # # #")?;
-
-        f.write_fmt(format_args!("\n> category: {}", self.category))?;
-        if !self.tags.is_empty() {
-            f.write_str("\n> tags: ");
-            f.write_str(
-                &self
-                    .tags
-                    .iter()
-                    .map(Clone::clone)
-                    .collect::<Vec<_>>()
-                    .join(", "),
-            )?;
-        }
-
-        if self.repeats > 1 {
-            f.write_fmt(format_args!("> copies: {}", self.repeats))?;
-        }
-
-        return Ok(());
-    }
-}
