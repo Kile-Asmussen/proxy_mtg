@@ -4,10 +4,7 @@ use build_html::HtmlElement;
 use clap::builder::Str;
 
 use crate::{
-    atomic_cards::{
-        cards::Card,
-        types::{Type, WUBRG},
-    },
+    atomic_cards::{cards::Card, types::*},
     vec_entry::{IterExt, VecEntryExt, VecEntryMethods},
 };
 

@@ -2,21 +2,12 @@ pub mod build;
 pub mod list;
 pub mod search;
 
-use std::fmt::Debug;
-use std::iter;
-use std::path::{Display, Path, PathBuf};
+use std::{fmt::Debug, path::PathBuf};
 
-use std::sync::atomic;
-
-use clap::builder::Str;
-use clap::{Parser, Subcommand};
+use clap::{builder::Str, Parser, Subcommand};
 use rand::seq::SliceRandom;
-use rand::{Rng, SeedableRng};
 use regex::Regex;
 
-use crate::atomic_cards::{cards::Cardoid, types::*};
-use crate::proxy::{self, Proxy};
-use crate::vec_entry::IterExt;
 use crate::{atomic_cards::AtomicCardsFile, proxy::decklist::DeckList};
 
 #[derive(Parser, Debug)]

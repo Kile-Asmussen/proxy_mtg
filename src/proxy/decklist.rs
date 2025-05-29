@@ -9,44 +9,9 @@ use std::{
 use rand::rand_core::block;
 use serde::{Deserialize, Serialize};
 
-use crate::atomic_cards::{
-    cards::Cardoid,
-    types::{Type, WUBRG},
-    AtomicCardsFile,
-};
+use crate::atomic_cards::{cards::Cardoid, types::*, AtomicCardsFile};
 
 use super::Proxy;
-
-impl Display for Proxy {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let Some(cardoid) = &self.cardoid else {
-            return f.write_str("> ERROR: no such card");
-        };
-
-        cardoid.fmt(f);
-
-        f.write_str("\n> # # #")?;
-
-        f.write_fmt(format_args!("\n> category: {}", self.category))?;
-        if !self.tags.is_empty() {
-            f.write_str("\n> tags: ");
-            f.write_str(
-                &self
-                    .tags
-                    .iter()
-                    .map(Clone::clone)
-                    .collect::<Vec<_>>()
-                    .join(", "),
-            )?;
-        }
-
-        if self.repeats > 1 {
-            f.write_fmt(format_args!("> copies: {}", self.repeats))?;
-        }
-
-        return Ok(());
-    }
-}
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -58,34 +23,25 @@ impl DeckList {
         let decklist_structure: BTreeMap<String, Vec<Proxy>> =
             serde_json::from_str(&decklist_file)?;
         let mut res = Self(vec![]);
+        let mut failed_to_find = vec![];
 
-        for (mut category, mut vec) in decklist_structure.into_iter() {
+        for (mut category, mut vec) in decklist_structure {
             vec.sort_by_key(|a| a.name.clone());
             for mut artoid in vec {
                 artoid.category = category.clone();
-                res.0.push(artoid);
-            }
-        }
-
-        res.build(&atomics).map_err(|nf| DeckListBuildError(nf))?;
-
-        Ok(res)
-    }
-
-    fn build(&mut self, atomics: &AtomicCardsFile) -> Result<(), Vec<String>> {
-        let mut failed_to_find = vec![];
-        for artoid in &mut self.0 {
-            if let Some(cardoid) = atomics.data.get(&artoid.name) {
-                artoid.cardoid = Some(cardoid.clone())
-            } else {
-                failed_to_find.push(artoid.name.clone())
+                artoid.cardoid = atomics.data.get(&artoid.name).map(Clone::clone);
+                if artoid.cardoid.is_none() {
+                    failed_to_find.push(artoid.name);
+                } else {
+                    res.0.push(artoid);
+                }
             }
         }
 
         if failed_to_find.is_empty() {
-            Ok(())
+            Ok(res)
         } else {
-            Err(failed_to_find)
+            Err(Box::new(DeckListBuildError(failed_to_find)))
         }
     }
 
