@@ -4,7 +4,7 @@ use build_html::{Html, HtmlChild, HtmlElement, HtmlTag};
 
 use crate::{
     atomic_cards::cards::{Card, Cardoid},
-    decklist::Artoid,
+    decklist::Proxy,
 };
 
 use super::{
@@ -12,8 +12,8 @@ use super::{
     RenderSettings,
 };
 
-fn normal_card(artoid: &Artoid, settings: &RenderSettings) -> HtmlElement {
-    let card = artoid.cardoid.as_ref().unwrap().front();
+fn normal_card(proxy: &Proxy, settings: &RenderSettings) -> HtmlElement {
+    let card = proxy.cardoid.as_ref().unwrap().front();
     let mut res = HtmlElement::new(HtmlTag::Div);
 
     res.add_classes(card_css_class(card));
