@@ -2,8 +2,8 @@
 
 mod atomic_cards;
 mod command;
-mod html;
 mod proxy;
+mod rendering;
 mod utils;
 
 use std::{error::Error, ffi::OsStr, time::Instant};

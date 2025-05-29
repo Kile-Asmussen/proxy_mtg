@@ -3,8 +3,8 @@ use clap::Parser;
 use std::path::PathBuf;
 
 use crate::{
-    html::{RenderContext, RenderSettings},
     proxy::decklist::DeckList,
+    rendering::{RenderContext, RenderSettings},
 };
 
 #[derive(Parser, Debug, Clone)]
