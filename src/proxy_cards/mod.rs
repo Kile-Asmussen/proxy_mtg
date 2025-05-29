@@ -1,6 +1,5 @@
-mod normal;
-mod utils;
-mod vec_entry;
+pub mod normal;
+pub mod utils;
 
 pub struct RenderSettings {
     pub color: bool,

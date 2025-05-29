@@ -9,6 +9,8 @@ use std::{
 use serde::{Deserialize, Serialize};
 use serde_json::map::IntoIter;
 
+use crate::vec_entry::IterExt;
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AtomicCards {
     pub meta: MetaData,
@@ -263,7 +265,7 @@ impl WUBRG {
         let res = colors
             .into_iter()
             .map(|c| format!("{:?}", c))
-            .collect::<Vec<_>>()
+            .collvect()
             .join("");
 
         if res.is_empty() {
