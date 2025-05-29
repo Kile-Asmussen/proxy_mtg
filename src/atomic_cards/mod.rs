@@ -1,6 +1,6 @@
-mod cards;
-mod metadata;
-mod types;
+pub mod cards;
+pub mod metadata;
+pub mod types;
 
 use std::{
     collections::{HashMap},

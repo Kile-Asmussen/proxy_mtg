@@ -1,18 +1,13 @@
 use clap::Parser;
 use rand::{seq::SliceRandom, SeedableRng};
 
-use crate::{
-    atomic_cards::{
-        modname::CardType::{self, Land},
-        modname::Supertype,
-        modname::WUBRG,
-    },
-    vec_entry::IterExt,
-};
-
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::decklist::DeckList;
+use crate::{
+    atomic_cards::types::{self, Supertype, Type, WUBRG},
+    decklist::DeckList,
+    vec_entry::IterExt,
+};
 
 #[derive(Parser, Debug, Clone)]
 pub struct List {
@@ -130,7 +125,7 @@ impl List {
                 continue;
             };
             for card in cardoid {
-                if !card.types.contains(&CardType::Creature) {
+                if !card.types.contains(&Type::Creature) {
                     continue;
                 }
                 let pt = format!("{}/{}", &card.power, &card.toughness);
@@ -156,7 +151,7 @@ impl List {
                 continue;
             };
             for card in cardoid {
-                if !card.types.contains(&modname::CardType::Creature) {
+                if !card.types.contains(&Type::Creature) {
                     continue;
                 }
                 let pt = if power {
@@ -257,7 +252,7 @@ impl List {
             };
 
             for land in cardoid {
-                if !land.types.contains(&Land) {
+                if !land.types.contains(&Type::Land) {
                     continue;
                 }
 
@@ -268,7 +263,7 @@ impl List {
                     tapland_names.insert(land.name.clone());
                 }
 
-                if land.supertypes.contains(&modname::Supertype::Basic) {
+                if land.supertypes.contains(&Supertype::Basic) {
                     basic += artoid.repeats;
                     basic_names.insert(land.name.clone());
                 }
@@ -302,7 +297,7 @@ impl List {
                 continue;
             };
             for card in cardoid {
-                if !card.types.contains(&modname::CardType::Creature) {
+                if !card.types.contains(&Type::Creature) {
                     continue;
                 }
                 for subtypes in &card.subtypes {

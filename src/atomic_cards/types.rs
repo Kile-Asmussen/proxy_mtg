@@ -25,7 +25,7 @@ impl Display for Supertype {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub enum CardType {
+pub enum Type {
     Artifact,
     Battle,
     Creature,
@@ -40,7 +40,7 @@ pub enum CardType {
     Other(String),
 }
 
-impl Display for CardType {
+impl Display for Type {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Other(s) => f.write_str(s),

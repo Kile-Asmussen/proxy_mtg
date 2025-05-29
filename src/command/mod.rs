@@ -1,6 +1,6 @@
-mod build;
-mod list;
-mod search;
+pub mod build;
+pub mod list;
+pub mod search;
 
 use std::fmt::Debug;
 use std::iter;
@@ -14,8 +14,7 @@ use rand::seq::SliceRandom;
 use rand::{Rng, SeedableRng};
 use regex::Regex;
 
-use crate::atomic_cards::modname::CardType::{self};
-use crate::atomic_cards::{modname::Cardoid, modname::WUBRG};
+use crate::atomic_cards::{cards::Cardoid, types::Type, types::WUBRG};
 use crate::decklist::{self, Artoid};
 use crate::vec_entry::IterExt;
 use crate::{atomic_cards::AtomicCardsFile, decklist::DeckList};

@@ -3,7 +3,7 @@ use std::ops::Div;
 use build_html::{Html, HtmlChild, HtmlElement, HtmlTag};
 
 use crate::{
-    atomic_cards::{modname::Card, modname::Cardoid},
+    atomic_cards::cards::{Card, Cardoid},
     decklist::Artoid,
 };
 
@@ -22,7 +22,7 @@ fn normal_card(artoid: &Artoid, settings: &RenderSettings) -> HtmlElement {
     res
 }
 
-fn title_bar(card: &modname::Card) -> HtmlElement {
+fn title_bar(card: &Card) -> HtmlElement {
     let mut res = HtmlElement::new(HtmlTag::Div);
     res.add_classes([""]);
     res

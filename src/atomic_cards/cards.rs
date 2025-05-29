@@ -2,10 +2,10 @@ use serde::{Deserialize, Serialize};
 
 use super::{
     metadata::{self, ForeignData, Identifiers, Legalities, PurchaseUrls, RelatedCards, Ruling},
-    types::CardType,
     types::Layout,
     types::LeadershipSkills,
     types::Supertype,
+    types::Type,
     types::WUBRG,
 };
 
@@ -148,14 +148,14 @@ pub struct Card {
     #[serde(default)]
     pub subsets: Vec<String>,
     pub subtypes: Vec<String>,
-    pub supertypes: Vec<modname::Supertype>,
+    pub supertypes: Vec<Supertype>,
     #[serde(default)]
     pub text: String,
     #[serde(default)]
     pub toughness: String,
     #[serde(rename = "type")]
     pub type_line: String,
-    pub types: Vec<modname::CardType>,
+    pub types: Vec<Type>,
 }
 
 impl Display for Card {
@@ -173,13 +173,13 @@ impl Display for Card {
         for line in self.text.lines() {
             f.write_fmt(format_args!("\n> {}", line))?;
         }
-        if self.types.contains(&modname::CardType::Planeswalker) {
+        if self.types.contains(&Type::Planeswalker) {
             f.write_fmt(format_args!("\n> [{}]", self.loyalty))?;
         }
-        if self.types.contains(&modname::CardType::Creature) {
+        if self.types.contains(&Type::Creature) {
             f.write_fmt(format_args!("\n> {}/{}", self.power, self.toughness))?;
         }
-        if self.types.contains(&modname::CardType::Battle) {
+        if self.types.contains(&Type::Battle) {
             f.write_fmt(format_args!("\n> {{{}}}", self.defense))?;
         }
         Ok(())

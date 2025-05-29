@@ -9,7 +9,11 @@ use std::{
 use rand::rand_core::block;
 use serde::{Deserialize, Serialize};
 
-use crate::atomic_cards::{modname::CardType, modname::Cardoid, modname::WUBRG, AtomicCardsFile};
+use crate::atomic_cards::{
+    cards::Cardoid,
+    types::{Type, WUBRG},
+    AtomicCardsFile,
+};
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Artoid {
@@ -124,7 +128,7 @@ impl DeckList {
                 continue;
             };
             for card in cardoid {
-                if card.types.contains(&CardType::Land) {
+                if card.types.contains(&Type::Land) {
                     continue;
                 }
                 *res.entry(card.colors.clone()).or_insert(0) += artoid.repeats;
@@ -134,7 +138,7 @@ impl DeckList {
         res
     }
 
-    pub fn color_id(&self) -> BTreeSet<modname::WUBRG> {
+    pub fn color_id(&self) -> BTreeSet<WUBRG> {
         let mut res = BTreeSet::new();
 
         for artoid in &self.0 {
@@ -157,7 +161,7 @@ impl DeckList {
                 continue;
             };
             for card in cardoid {
-                if card.types.contains(&modname::CardType::Land) {
+                if card.types.contains(&Type::Land) {
                     continue;
                 }
                 *res.entry(card.mana_value as usize).or_insert(0) += artoid.repeats;

@@ -4,19 +4,22 @@ use build_html::HtmlElement;
 use clap::builder::Str;
 
 use crate::{
-    atomic_cards::{modname::Card, modname::CardType, modname::WUBRG},
+    atomic_cards::{
+        cards::Card,
+        types::{Type, WUBRG},
+    },
     vec_entry::{IterExt, VecEntryExt, VecEntryMethods},
 };
 
-pub fn card_css_class(card: &modname::Card) -> Vec<&str> {
-    let (colors, extra) = if card.types.contains(&modname::CardType::Land) {
+pub fn card_css_class(card: &Card) -> Vec<&str> {
+    let (colors, extra) = if card.types.contains(&Type::Land) {
         (&card.color_identity, vec!["colorless", "card"])
     } else {
         (&card.colors, vec!["card"])
     };
     return colors
         .iter()
-        .map(modname::WUBRG::name)
+        .map(WUBRG::name)
         .chain(extra.into_iter())
         .collect::<Vec<_>>();
 }
