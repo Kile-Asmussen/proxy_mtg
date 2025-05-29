@@ -1,5 +1,30 @@
 use std::marker::PhantomData;
 
+pub trait VecExt<K, V>: Sized {
+    fn entry(&mut self, key: K) -> VecEntry<K, V>;
+}
+
+impl<K, V> VecExt<K, V> for Vec<(K, V)>
+where
+    K: PartialEq,
+{
+    fn entry(&mut self, key: K) -> VecEntry<K, V> {
+        if let Some((i, _)) = self.iter().enumerate().find(|(i, (k, v))| k == &key) {
+            VecEntry::Occupied(OccupiedVecEntry {
+                index: i,
+                vec: self,
+                _marker: PhantomData,
+            })
+        } else {
+            VecEntry::Vacant(VacantVecEntry {
+                key: key,
+                vec: self,
+                _marker: PhantomData,
+            })
+        }
+    }
+}
+
 pub trait VecEntryMethods<'a, K, V>: Sized {
     fn key(&self) -> &K;
 
@@ -172,36 +197,3 @@ impl<'a, K, V> VecEntryMethods<'a, K, V> for VacantVecEntry<'a, K, V> {
         self.insert_entry(res).into_mut_ref()
     }
 }
-
-pub trait VecEntryExt<K, V>: Sized {
-    fn entry(&mut self, key: K) -> VecEntry<K, V>;
-}
-
-impl<K, V> VecEntryExt<K, V> for Vec<(K, V)>
-where
-    K: PartialEq,
-{
-    fn entry(&mut self, key: K) -> VecEntry<K, V> {
-        if let Some((i, _)) = self.iter().enumerate().find(|(i, (k, v))| k == &key) {
-            VecEntry::Occupied(OccupiedVecEntry {
-                index: i,
-                vec: self,
-                _marker: PhantomData,
-            })
-        } else {
-            VecEntry::Vacant(VacantVecEntry {
-                key: key,
-                vec: self,
-                _marker: PhantomData,
-            })
-        }
-    }
-}
-
-pub trait IterExt: Iterator + Sized {
-    fn collvect(self) -> Vec<Self::Item> {
-        self.collect::<Vec<Self::Item>>()
-    }
-}
-
-impl<IT: Iterator> IterExt for IT {}

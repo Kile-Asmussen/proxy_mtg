@@ -12,7 +12,7 @@ use std::{
 use serde::{Deserialize, Serialize};
 use serde_json::map::IntoIter;
 
-use crate::utils::vec_entry::IterExt;
+use crate::utils::iter::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AtomicCardsFile {
@@ -24,6 +24,10 @@ impl AtomicCardsFile {
     pub fn load() -> Result<Self, Box<dyn Error>> {
         let atomic_cards_file_json = std::fs::read("AtomicCards.json")?;
         let atomic_cards: AtomicCardsFile = serde_json::from_slice(&atomic_cards_file_json[..])?;
+
+        for () is &atomic_cards.data {
+
+        }
 
         return Ok(atomic_cards);
     }
