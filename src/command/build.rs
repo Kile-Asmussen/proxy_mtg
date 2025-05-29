@@ -1,4 +1,3 @@
-use build_html::Html;
 use clap::Parser;
 use std::path::PathBuf;
 
