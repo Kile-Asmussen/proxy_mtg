@@ -1,9 +1,12 @@
-use std::{marker::PhantomData, ops::IndexMut};
+use std::{marker::PhantomData, mem, ops::IndexMut};
 
 use build_html::HtmlElement;
 use clap::builder::Str;
 
-use crate::atomic_cards::{Card, CardType, WUBRG};
+use crate::{
+    atomic_cards::{Card, CardType, WUBRG},
+    vec_entry::{IterExt, VecEntryExt, VecEntryMethods},
+};
 
 pub fn card_css_class(card: &Card) -> Vec<&str> {
     let (colors, extra) = if card.types.contains(&CardType::Land) {
@@ -40,12 +43,14 @@ impl HtmlElementExt for HtmlElement {
         SS: IntoIterator<Item = S>,
         S: ToString,
     {
-        let strings = ss.into_iter().map(|s| s.to_string());
+        let mut strings = ss.into_iter().map(|s| s.to_string()).collvect();
 
-        if let Some((_, v)) = self.attributes.iter().find(|(k, v)| k == "class") {
-            self.attributes.
-        } else {
-            self.add_attribute("class", strings.collect::<Vec<_>>().join(" "));
+        let class = self.attributes.entry("class".to_string()).or_default();
+
+        if !class.is_empty() {
+            strings.push(mem::replace(class, String::new()))
         }
+
+        *class = strings.join(" ");
     }
 }

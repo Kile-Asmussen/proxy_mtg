@@ -14,6 +14,7 @@ use regex::Regex;
 use crate::atomic_cards::CardType::{self, Land};
 use crate::atomic_cards::{Cardoid, Supertype, WUBRG};
 use crate::decklist::{self, Artoid};
+use crate::vec_entry::IterExt;
 use crate::{atomic_cards::AtomicCards, decklist::DeckList};
 
 #[derive(Parser, Debug)]
@@ -256,7 +257,7 @@ impl List {
         let mut names = decklist
             .iter()
             .flat_map(|x| vec![x.name.clone(); x.repeats])
-            .collect::<Vec<_>>();
+            .collvect();
 
         let mut rng = rand::rngs::SmallRng::from_os_rng();
         names.shuffle(&mut rng);
