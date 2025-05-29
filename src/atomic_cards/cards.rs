@@ -1,13 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::{
-    metadata::{self, ForeignData, Identifiers, Legalities, PurchaseUrls, RelatedCards, Ruling},
-    types::Layout,
-    types::LeadershipSkills,
-    types::Supertype,
-    types::Type,
-    types::WUBRG,
-};
+use super::{metadata::*, types::*};
 
 use std::{collections::BTreeSet, fmt::Display};
 
@@ -108,12 +101,12 @@ pub struct Card {
     #[serde(default, rename = "firstPrinting")]
     pub first_printing: String,
     #[serde(default, rename = "foreignData")]
-    pub foreign_data: Vec<metadata::ForeignData>,
+    pub foreign_data: Vec<ForeignData>,
     #[serde(default)]
     pub hand: String,
     #[serde(default, rename = "hasAlternativeDeckLimit")]
     pub has_alternative_deck_limit: bool,
-    pub identifiers: metadata::Identifiers,
+    pub identifiers: Identifiers,
     #[serde(default, rename = "isFunny")]
     pub is_funny: bool,
     #[serde(default, rename = "isReserved")]
@@ -123,7 +116,7 @@ pub struct Card {
     pub layout: Layout,
     #[serde(default, rename = "leadershipSkills")]
     pub leadership_skills: LeadershipSkills,
-    pub legalities: metadata::Legalities,
+    pub legalities: Legalities,
     #[serde(default)]
     pub life: String,
     #[serde(default)]

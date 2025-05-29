@@ -14,10 +14,10 @@ use rand::seq::SliceRandom;
 use rand::{Rng, SeedableRng};
 use regex::Regex;
 
-use crate::atomic_cards::{cards::Cardoid, types::Type, types::WUBRG};
-use crate::decklist::{self, Proxy};
+use crate::atomic_cards::{cards::Cardoid, types::*};
+use crate::proxy::{self, Proxy};
 use crate::vec_entry::IterExt;
-use crate::{atomic_cards::AtomicCardsFile, decklist::DeckList};
+use crate::{atomic_cards::AtomicCardsFile, proxy::DeckList};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]

@@ -4,7 +4,7 @@ use build_html::{Html, HtmlChild, HtmlElement, HtmlTag};
 
 use crate::{
     atomic_cards::cards::{Card, Cardoid},
-    decklist::Proxy,
+    proxy::Proxy,
 };
 
 use super::{

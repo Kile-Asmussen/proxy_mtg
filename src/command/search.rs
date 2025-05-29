@@ -1,7 +1,7 @@
 use clap::Parser;
 use regex::Regex;
 
-use crate::{atomic_cards::AtomicCardsFile, decklist::DeckList};
+use crate::{atomic_cards::AtomicCardsFile, proxy::DeckList};
 
 #[derive(Parser, Debug, Clone)]
 pub struct Search {

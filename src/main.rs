@@ -2,8 +2,8 @@
 
 mod atomic_cards;
 mod command;
-mod decklist;
 mod html;
+mod proxy;
 mod vec_entry;
 
 use std::{error::Error, ffi::OsStr, time::Instant};
@@ -12,7 +12,7 @@ use atomic_cards::*;
 use clap::Parser;
 use command::*;
 
-use crate::decklist::DeckList;
+use crate::proxy::DeckList;
 
 fn main() {
     if let Err(e) = run() {

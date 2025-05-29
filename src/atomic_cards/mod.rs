@@ -3,9 +3,8 @@ pub mod metadata;
 pub mod types;
 
 use std::{
-    collections::{HashMap},
+    collections::HashMap,
     error::Error,
-    fmt::{},
     fs::File,
     io::{BufReader, BufWriter, Write},
 };
@@ -29,4 +28,3 @@ impl AtomicCardsFile {
         return Ok(atomic_cards);
     }
 }
-
