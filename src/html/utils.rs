@@ -5,7 +5,7 @@ use clap::builder::Str;
 
 use crate::{
     atomic_cards::{cards::Card, types::*},
-    vec_entry::{IterExt, VecEntryExt, VecEntryMethods},
+    utils::vec_entry::{IterExt, VecEntryExt, VecEntryMethods},
 };
 
 pub fn card_css_class(card: &Card) -> Vec<&str> {

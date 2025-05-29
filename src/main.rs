@@ -4,7 +4,7 @@ mod atomic_cards;
 mod command;
 mod html;
 mod proxy;
-mod vec_entry;
+mod utils;
 
 use std::{error::Error, ffi::OsStr, time::Instant};
 

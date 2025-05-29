@@ -1,4 +1,4 @@
-use crate::vec_entry::IterExt;
+use crate::utils::vec_entry::IterExt;
 use serde::{Deserialize, Serialize};
 use std::{
     collections::BTreeSet,

@@ -12,7 +12,7 @@ use std::{
 use serde::{Deserialize, Serialize};
 use serde_json::map::IntoIter;
 
-use crate::vec_entry::IterExt;
+use crate::utils::vec_entry::IterExt;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AtomicCardsFile {
