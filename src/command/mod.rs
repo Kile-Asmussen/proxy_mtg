@@ -15,7 +15,7 @@ use rand::{Rng, SeedableRng};
 use regex::Regex;
 
 use crate::atomic_cards::{cards::Cardoid, types::Type, types::WUBRG};
-use crate::decklist::{self, Artoid};
+use crate::decklist::{self, Proxy};
 use crate::vec_entry::IterExt;
 use crate::{atomic_cards::AtomicCardsFile, decklist::DeckList};
 

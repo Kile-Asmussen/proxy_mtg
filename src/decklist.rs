@@ -16,7 +16,7 @@ use crate::atomic_cards::{
 };
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
-pub struct Artoid {
+pub struct Proxy {
     pub name: String,
     #[serde(default, rename = "artFile")]
     pub art_file: Vec<PathBuf>,
@@ -48,12 +48,12 @@ fn repeats_default() -> usize {
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(transparent)]
-pub struct DeckList(Vec<Artoid>);
+pub struct DeckList(Vec<Proxy>);
 
 impl DeckList {
     pub fn load(path: &Path, atomics: &AtomicCardsFile) -> Result<DeckList, Box<dyn Error>> {
         let decklist_file = std::fs::read_to_string(path)?;
-        let decklist_structure: BTreeMap<String, Vec<Artoid>> =
+        let decklist_structure: BTreeMap<String, Vec<Proxy>> =
             serde_json::from_str(&decklist_file)?;
         let mut res = Self(vec![]);
 
@@ -103,7 +103,7 @@ impl DeckList {
 
     pub fn count_cards_raw<'a, I>(artoids: I) -> usize
     where
-        I: IntoIterator<Item = &'a Artoid>,
+        I: IntoIterator<Item = &'a Proxy>,
     {
         artoids.into_iter().map(|a| a.repeats).sum()
     }
@@ -207,19 +207,19 @@ impl DeckList {
         return res;
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = &Artoid> {
+    pub fn iter(&self) -> impl Iterator<Item = &Proxy> {
         self.into_iter()
     }
 
-    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Artoid> {
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Proxy> {
         self.into_iter()
     }
 }
 
 impl IntoIterator for DeckList {
-    type Item = Artoid;
+    type Item = Proxy;
 
-    type IntoIter = <Vec<Artoid> as IntoIterator>::IntoIter;
+    type IntoIter = <Vec<Proxy> as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
         self.0.into_iter()
@@ -227,9 +227,9 @@ impl IntoIterator for DeckList {
 }
 
 impl<'a> IntoIterator for &'a DeckList {
-    type Item = &'a Artoid;
+    type Item = &'a Proxy;
 
-    type IntoIter = <&'a Vec<Artoid> as IntoIterator>::IntoIter;
+    type IntoIter = <&'a Vec<Proxy> as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
         (&self.0).into_iter()
@@ -237,9 +237,9 @@ impl<'a> IntoIterator for &'a DeckList {
 }
 
 impl<'a> IntoIterator for &'a mut DeckList {
-    type Item = &'a mut Artoid;
+    type Item = &'a mut Proxy;
 
-    type IntoIter = <&'a mut Vec<Artoid> as IntoIterator>::IntoIter;
+    type IntoIter = <&'a mut Vec<Proxy> as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
         (&mut self.0).into_iter()
@@ -265,7 +265,7 @@ impl Display for DeckListBuildError {
 
 impl Error for DeckListBuildError {}
 
-impl Display for Artoid {
+impl Display for Proxy {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let Some(cardoid) = &self.cardoid else {
             return f.write_str("> ERROR: no such card");
