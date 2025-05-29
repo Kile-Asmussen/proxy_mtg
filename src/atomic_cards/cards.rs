@@ -9,6 +9,8 @@ use std::{collections::BTreeSet, fmt::Display};
 pub struct Cardoid(Vec<Card>);
 
 impl Cardoid {
+    pub fn is_empty() {}
+
     pub fn iter(&self) -> <&Vec<Card> as IntoIterator>::IntoIter {
         self.0.iter()
     }
