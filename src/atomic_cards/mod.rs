@@ -26,18 +26,18 @@ impl AtomicCardsFile {
         let atomic_cards_file_json = std::fs::read("AtomicCards.json")?;
         let atomic_cards: AtomicCardsFile = serde_json::from_slice(&atomic_cards_file_json[..])?;
 
-        let mut missing_cards = vec![];
+        let mut malformed_cards = vec![];
 
         for (name, cardoid) in &atomic_cards.data {
-            if cardoid.sides().len() < 1 {
-                missing_cards.push(name.clone())
+            if cardoid.sides().len() < 1 || !cardoid.sides().is_sorted() {
+                malformed_cards.push(name.clone())
             }
         }
 
-        if missing_cards.is_empty() {
+        if malformed_cards.is_empty() {
             Ok(atomic_cards)
         } else {
-            Err(Box::new(AtomicCardsBuildError(missing_cards)))
+            Err(Box::new(AtomicCardsBuildError(malformed_cards)))
         }
     }
 }
@@ -47,7 +47,7 @@ pub struct AtomicCardsBuildError(pub Vec<String>);
 
 impl Display for AtomicCardsBuildError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str("The following cards were not found:\n")?;
+        f.write_str("The following atomic cards were malformed:\n")?;
 
         for name in &self.0 {
             f.write_fmt(format_args!("  {}\n", name))?;

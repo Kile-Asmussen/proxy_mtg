@@ -23,27 +23,27 @@ impl Cardoid {
         self.0.iter().map(|c| c.side.clone()).collvect()
     }
 
-    pub fn front(&self) -> &Card {
-        &self.0[0]
+    pub fn side(&self, side: Side) -> Option<&Card> {
+        self.0.iter().find(|c| c.side == side)
     }
 
-    pub fn back(&self) -> Option<&Card> {
-        self.0.get(1)
+    pub fn face(&self) -> &Card {
+        &self.0[0]
     }
 }
 
 impl Display for Cardoid {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let front = self.front();
-        if let Some(back) = self.back() {
-            f.write_fmt(format_args!("> {}", front.name));
+        let face = self.face();
+        if let Some(b_side) = self.side(Side::B) {
+            f.write_fmt(format_args!("> {}", face.name));
 
-            f.write_str("\n> OBVERSE:\n")?;
-            Display::fmt(&(&front), f)?;
-            f.write_str("\n> REVERSE:\n")?;
-            Display::fmt(&back, f)?;
+            f.write_str("\n> SIDE A:\n")?;
+            Display::fmt(&(&face), f)?;
+            f.write_str("\n> SIDE B:\n")?;
+            Display::fmt(&b_side, f)?;
         } else {
-            Display::fmt(&front, f)?;
+            Display::fmt(&face, f)?;
         }
         return Ok(());
     }

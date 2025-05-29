@@ -54,7 +54,7 @@ impl Search {
             }
 
             let cardoid = artoid
-                .and_then(|a| a.cardoid.as_ref())
+                .map(|a| &a.cardoid)
                 .or_else(|| atomics.data.get(card));
 
             if let Some(cardoid) = cardoid {

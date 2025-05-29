@@ -146,13 +146,17 @@ pub struct LeadershipSkills {
     pub oathbreaker: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Side {
     #[serde(rename = "a")]
     #[default]
     A,
     #[serde(rename = "b")]
     B,
-    #[serde(untagged)]
-    O(String),
+    #[serde(rename = "c")]
+    C,
+    #[serde(rename = "d")]
+    D,
+    #[serde(rename = "e")]
+    E,
 }

@@ -117,10 +117,7 @@ impl List {
         let names = decklist.card_names();
         let mut creatures = BTreeMap::new();
         for artoid in decklist {
-            let Some(cardoid) = &artoid.cardoid else {
-                continue;
-            };
-            for card in cardoid {
+            for card in &artoid.cardoid {
                 if !card.types.contains(&Type::Creature) {
                     continue;
                 }
@@ -143,10 +140,7 @@ impl List {
     pub fn print_power_curve(decklist: &DeckList, power: bool) {
         let mut pt_count = BTreeMap::new();
         for artoid in decklist {
-            let Some(cardoid) = &artoid.cardoid else {
-                continue;
-            };
-            for card in cardoid {
+            for card in &artoid.cardoid {
                 if !card.types.contains(&Type::Creature) {
                     continue;
                 }
@@ -243,11 +237,7 @@ impl List {
         let mut nonmana_names = BTreeSet::new();
         let mut total = 0usize;
         for artoid in decklist {
-            let Some(cardoid) = &artoid.cardoid else {
-                continue;
-            };
-
-            for land in cardoid {
+            for land in &artoid.cardoid {
                 if !land.types.contains(&Type::Land) {
                     continue;
                 }
@@ -289,10 +279,7 @@ impl List {
     pub fn print_creature_types(decklist: &DeckList) {
         let mut types = BTreeMap::new();
         for artoid in decklist {
-            let Some(cardoid) = &artoid.cardoid else {
-                continue;
-            };
-            for card in cardoid {
+            for card in &artoid.cardoid {
                 if !card.types.contains(&Type::Creature) {
                     continue;
                 }
