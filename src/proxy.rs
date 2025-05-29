@@ -285,9 +285,7 @@ impl Display for DeckListBuildError {
         f.write_str("The following cards were not found:\n")?;
 
         for name in &self.0 {
-            f.write_str("  ")?;
-            f.write_str(name)?;
-            f.write_str("\n")?;
+            f.write_fmt(format_args!("  {}\n", name))?;
         }
 
         Ok(())
