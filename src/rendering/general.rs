@@ -78,7 +78,7 @@ pub fn rules_text_div(card: &Card, settings: &RenderSettings) -> HtmlElement {
         && card.supertypes.contains(&Supertype::Basic)
         && card.types.contains(&Type::Land)
     {
-        res.add_element(HtmlElement::new(HtmlTag::ParagraphText).with_classes(["rules-text"]).with_element(HtmlElement::new(HtmlTag::)));
+        res.add_element(HtmlElement::new(HtmlTag::ParagraphText).with_classes(["rules-text"]));
     } else {
         for line in text.lines() {
             res.add_element(
