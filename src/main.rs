@@ -2,6 +2,7 @@
 
 mod atomic_cards;
 mod command;
+mod html;
 mod proxy;
 mod rendering;
 mod utils;

@@ -7,7 +7,7 @@ use crate::{
     proxy::Proxy,
 };
 
-use super::{general::*, utils::HtmlExt, RenderSettings};
+use super::{fragments::HtmlExt, general::*, RenderSettings};
 
 pub fn normal_card(proxy: &Proxy, settings: &RenderSettings) -> HtmlElement {
     let card = proxy.cardoid.face();

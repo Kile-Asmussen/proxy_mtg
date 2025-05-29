@@ -9,7 +9,7 @@ use crate::{
     utils::iter::IterExt,
 };
 
-use super::{utils::HtmlExt, RenderSettings};
+use super::{fragments::HtmlExt, RenderSettings};
 
 pub fn empty_card(card: &Card) -> HtmlElement {
     HtmlElement::new(HtmlTag::Div).with_classes(card_css_class(card))

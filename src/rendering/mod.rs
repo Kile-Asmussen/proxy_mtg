@@ -4,14 +4,14 @@ use std::{
 };
 
 use build_html::{HtmlContainer, HtmlElement, HtmlPage, HtmlTag};
+use fragments::HtmlExt;
 use normal::normal_card;
-use utils::HtmlExt;
 
 use crate::{atomic_cards::types::Layout, proxy::Proxy};
 
+pub mod fragments;
 pub mod general;
 pub mod normal;
-pub mod utils;
 
 pub struct RenderSettings {
     pub color: bool,
