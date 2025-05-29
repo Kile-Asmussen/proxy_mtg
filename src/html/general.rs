@@ -1,6 +1,7 @@
 use std::collections::BTreeSet;
 
 use build_html::{HtmlChild, HtmlContainer, HtmlElement, HtmlTag};
+use lazy_regex::regex;
 
 use crate::{
     atomic_cards::{cards::Card, types::*},
@@ -8,7 +9,7 @@ use crate::{
     utils::iter::IterExt,
 };
 
-use super::utils::HtmlExt;
+use super::{utils::HtmlExt, RenderSettings};
 
 pub fn empty_card(card: &Card) -> HtmlElement {
     HtmlElement::new(HtmlTag::Div).with_classes(card_css_class(card))
@@ -51,11 +52,41 @@ pub fn type_line_span(card: &Card) -> HtmlElement {
         .with_child(HtmlChild::Raw(card.type_line.clone()))
 }
 
-pub fn rules_text_div(card: &Card) -> HtmlElement {
-    let mut res = HtmlElement::new(HtmlTag::Div).with_classes(["text-box"]);
+pub fn rules_text_div(card: &Card, settings: &RenderSettings) -> HtmlElement {
+    let mut text = card.text.clone();
 
-    for line in card.text.lines() {
-        res.add_paragraph(line);
+    if !settings.reminder_text {
+        text = regex!(r"\([^\n]+\)").replace_all(&text, "").into_owned();
+    }
+    println!("{} {}", text, settings.reminder_text);
+
+    let text_len = text.len();
+
+    let paragraphs = text.lines().map(ToOwned::to_owned).collvect();
+
+    let class: &[&str] = if paragraphs.len() == 1 && text_len < 50 {
+        &["text-box", "sparse"]
+    } else if paragraphs.len() >= 3 || text_len >= 200 {
+        &["text-box", "dense"]
+    } else {
+        &["text-box"]
+    };
+
+    let mut res = HtmlElement::new(HtmlTag::Div).with_classes(class);
+
+    if text.is_empty()
+        && card.supertypes.contains(&Supertype::Basic)
+        && card.types.contains(&Type::Land)
+    {
+        res.add_element(HtmlElement::new(HtmlTag::ParagraphText).with_classes(["rules-text"]).with_element(HtmlElement::new(HtmlTag::)));
+    } else {
+        for line in text.lines() {
+            res.add_element(
+                HtmlElement::new(HtmlTag::ParagraphText)
+                    .with_classes(["rules-text"])
+                    .with_text(line.to_string()),
+            );
+        }
     }
 
     res

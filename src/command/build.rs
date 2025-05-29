@@ -9,15 +9,19 @@ use crate::{
 
 #[derive(Parser, Debug, Clone)]
 pub struct Build {
-    #[arg(short, long, value_name = "FILE")]
+    #[arg(value_name = "FILE")]
     pub output: PathBuf,
+    #[arg(long)]
+    pub reminders: bool,
+    #[arg(long)]
+    pub color: bool,
 }
 
 impl Build {
     pub fn dispatch(&self, decklist: &DeckList) -> anyhow::Result<()> {
         let mut render = RenderContext::new(RenderSettings {
-            color: true,
-            reminder_text: true,
+            color: self.color,
+            reminder_text: self.reminders,
         });
 
         for proxy in decklist {

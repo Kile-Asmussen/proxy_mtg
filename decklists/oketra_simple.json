@@ -1,0 +1,16 @@
+{
+    "Block 0 - Commander": [
+        {
+            "name": "God-Eternal Oketra",
+            "tags": [
+                "zombie beatdown"
+            ]
+        }
+    ],
+    "Block A - Manabase": [
+        {
+            "name": "Snow-Covered Plains",
+            "repeats": 1
+        }
+    ]
+}

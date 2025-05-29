@@ -33,7 +33,7 @@ impl RenderContext {
 
     pub fn add_proxy(&mut self, proxy: &Proxy) {
         use Layout::*;
-        self.cards.push(match proxy.layout() {
+        let card = match proxy.layout() {
             Adventure => todo!(),
             Aftermath => todo!(),
             ArtSeries => todo!(),
@@ -48,7 +48,7 @@ impl RenderContext {
             Meld => todo!(),
             ModalDfc => todo!(),
             Mutate => todo!(),
-            Normal => normal_card(proxy),
+            Normal => normal_card(proxy, &self.settings),
             Planar => todo!(),
             Prototype => todo!(),
             ReversibleCard => todo!(),
@@ -58,7 +58,11 @@ impl RenderContext {
             Token => todo!(),
             Transform => todo!(),
             Vanguard => todo!(),
-        })
+        };
+
+        for _ in 0..proxy.repeats {
+            self.cards.push(card.clone())
+        }
     }
 
     pub fn into_file(self) -> HtmlPage {

@@ -9,12 +9,13 @@ use crate::{
 
 use super::{general::*, utils::HtmlExt, RenderSettings};
 
-pub fn normal_card(proxy: &Proxy) -> HtmlElement {
+pub fn normal_card(proxy: &Proxy, settings: &RenderSettings) -> HtmlElement {
     let card = proxy.cardoid.face();
 
     empty_card(card)
+        .with_element(title_bar_div(&card.name, &card.mana_cost))
         .with_element(type_line_div(card))
         .with_element(card_art_img(proxy))
         .with_element(type_line_div(card))
-        .with_element(rules_text_div(card))
+        .with_element(rules_text_div(card, settings))
 }
