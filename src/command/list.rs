@@ -34,7 +34,7 @@ pub struct List {
 }
 
 impl List {
-    pub fn dispatch(&self, decklist: &DeckList) {
+    pub fn dispatch(&self, decklist: &DeckList) -> anyhow::Result<()> {
         if self.id {
             println!();
             Self::print_color_id(decklist);
@@ -96,6 +96,8 @@ impl List {
         }
 
         println!();
+
+        Ok(())
     }
 
     pub fn print_cards(list: &DeckList) {

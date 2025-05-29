@@ -27,7 +27,7 @@ pub enum ListBuildSearch {
 }
 
 impl ListBuildSearch {
-    pub fn dispatch(&self, atomics: &AtomicCardsFile, decklist: &DeckList) {
+    pub fn dispatch(&self, atomics: &AtomicCardsFile, decklist: &DeckList) -> anyhow::Result<()> {
         match self {
             Self::List(l) => l.dispatch(decklist),
             Self::Build(b) => b.dispatch(decklist),

@@ -1,9 +1,13 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    mem,
+};
 
-use build_html::HtmlElement;
+use build_html::{HtmlContainer, HtmlElement, HtmlPage, HtmlTag};
+use normal::normal_card;
 use utils::HtmlExt;
 
-use crate::proxy::Proxy;
+use crate::{atomic_cards::types::Layout, proxy::Proxy};
 
 pub mod general;
 pub mod normal;
@@ -20,5 +24,97 @@ pub struct RenderContext {
 }
 
 impl RenderContext {
-    pub fn add_proxy(&mut self, proxy: &Proxy) {}
+    pub fn new(settings: RenderSettings) -> Self {
+        Self {
+            settings,
+            cards: vec![],
+        }
+    }
+
+    pub fn add_proxy(&mut self, proxy: &Proxy) {
+        use Layout::*;
+        self.cards.push(match proxy.layout() {
+            Adventure => todo!(),
+            Aftermath => todo!(),
+            ArtSeries => todo!(),
+            Augment => todo!(),
+            Case => todo!(),
+            Class => todo!(),
+            DoubleFacedToken => todo!(),
+            Emblem => todo!(),
+            Flip => todo!(),
+            Host => todo!(),
+            Leveler => todo!(),
+            Meld => todo!(),
+            ModalDfc => todo!(),
+            Mutate => todo!(),
+            Normal => normal_card(proxy),
+            Planar => todo!(),
+            Prototype => todo!(),
+            ReversibleCard => todo!(),
+            Saga => todo!(),
+            Scheme => todo!(),
+            Split => todo!(),
+            Token => todo!(),
+            Transform => todo!(),
+            Vanguard => todo!(),
+        })
+    }
+
+    pub fn into_file(self) -> HtmlPage {
+        let mut html_pages = HtmlPage::new()
+            .with_title("PROXIES")
+            .with_head_link("https://fonts.googleapis.com", "preconnect")
+            .with_head_link_attr(
+                "https://fonts.gstatic.com",
+                "preconnect",
+                [("crossorigin", "crossorigin")],
+            )
+            .with_stylesheet("https://fonts.googleapis.com/css2?family=Amarante&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inconsolata:wght@200..900&display=swap")
+            .with_stylesheet("../css/colors.css")
+            .with_stylesheet("../css/dimensions.css")
+            .with_stylesheet("../css/fonts.css")
+            .with_stylesheet("../css/page.css")
+            .with_stylesheet("../css/card.css")
+            .with_stylesheet("../css/magic-font.css");
+
+        let mut pages = vec![];
+        {
+            let mut page = vec![];
+            let mut row = vec![];
+            for card in self.cards {
+                if page.len() >= 3 {
+                    pages.push(mem::replace(&mut page, vec![]))
+                }
+                if row.len() >= 3 {
+                    page.push(mem::replace(&mut row, vec![]))
+                }
+                row.push(card);
+            }
+            if !row.is_empty() {
+                page.push(row);
+            }
+            if !page.is_empty() {
+                pages.push(page);
+            }
+        }
+
+        for page in pages {
+            let mut html_page = HtmlElement::new(HtmlTag::Div).with_classes(["page"]);
+
+            for row in page {
+                let mut html_row = HtmlElement::new(HtmlTag::Div).with_classes(["card-row"]);
+
+                for card in row {
+                    html_row.add_element(card);
+                }
+
+                html_page.add_element(html_row);
+            }
+
+            html_pages.add_html(html_page);
+        }
+
+        html_pages
+    }
 }

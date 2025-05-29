@@ -3,7 +3,8 @@ pub mod metadata;
 pub mod types;
 
 use std::{
-    collections::HashMap,
+    alloc::Layout,
+    collections::{BTreeSet, HashMap},
     error::Error,
     fmt::Display,
     fs::{self, File},
@@ -36,18 +37,24 @@ impl AtomicCardsFile {
             start.elapsed().as_millis()
         );
 
-        let mut malformed_cards = vec![];
+        let mut malformed_cards = BTreeSet::new();
 
         for (name, cardoid) in &atomic_cards.data {
             if cardoid.sides().len() < 1 || !cardoid.sides().is_sorted() {
-                malformed_cards.push(name.clone())
+                malformed_cards.insert(name.clone());
+            }
+
+            let layouts = BTreeSet::from_iter(cardoid.iter().map(|c| c.layout));
+
+            if layouts.len() > 1 {
+                malformed_cards.insert(name.clone());
             }
         }
 
         if malformed_cards.is_empty() {
             Ok(atomic_cards)
         } else {
-            Err(AtomicCardsBuildError(malformed_cards).into())
+            Err(AtomicCardsBuildError(malformed_cards.into_iter().collvect()).into())
         }
     }
 

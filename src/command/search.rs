@@ -1,6 +1,8 @@
 use clap::Parser;
 use regex::Regex;
 
+use anyhow::anyhow;
+
 use crate::{atomic_cards::AtomicCardsFile, proxy::decklist::DeckList};
 
 #[derive(Parser, Debug, Clone)]
@@ -18,23 +20,15 @@ pub struct Search {
 }
 
 impl Search {
-    pub fn dispatch(&self, atomics: &AtomicCardsFile, decklist: &DeckList) {
+    pub fn dispatch(&self, atomics: &AtomicCardsFile, decklist: &DeckList) -> anyhow::Result<()> {
         let mut exp = vec![];
         for pat in &self.exp {
-            let Ok(pat) = Regex::new(pat) else {
-                println!("Invalid regex: {}", pat);
-                return;
-            };
-            exp.push(pat);
+            exp.push(Regex::new(pat)?);
         }
 
         let mut nexp = vec![];
         for pat in &self.nexp {
-            let Ok(pat) = Regex::new(pat) else {
-                println!("Invalid regex: {}", pat);
-                return;
-            };
-            nexp.push(pat);
+            nexp.push(Regex::new(pat)?);
         }
 
         let mut cards = self.cards.clone();
@@ -70,8 +64,10 @@ impl Search {
                     }
                 }
             } else {
-                println!("No such card as `{}'", card);
+                return Err(anyhow!("No such card as `{}'", card));
             }
         }
+
+        Ok(())
     }
 }

@@ -6,3 +6,4 @@ AtomicCards.*
 *.html
 !/examples/*.html
 /target
+/output

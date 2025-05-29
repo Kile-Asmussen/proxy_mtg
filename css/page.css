@@ -10,7 +10,7 @@ body {
     margin: 0;
 }
 
-page {
+div.page {
     page-break-after: always;
 }
 
@@ -20,6 +20,6 @@ div.card-row {
     flex-direction: row;
 }
 
-page>div.card-row:first-child {
+div.page>div.card-row:first-child {
     padding-top: 11mm;
 }

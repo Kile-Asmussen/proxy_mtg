@@ -4,6 +4,7 @@ use std::{
     collections::{BTreeMap, BTreeSet},
     error::Error,
     fmt::Display,
+    marker::PhantomData,
     path::{Path, PathBuf},
     sync::atomic,
 };
@@ -28,7 +29,7 @@ pub struct Proxy {
     pub copies: usize,
     #[serde(default, rename = "reminderText")]
     pub reminder_text: bool,
-    #[serde(default = "repeats_default")]
+    #[serde(default = "Proxy::repeats_default")]
     pub repeats: usize,
     #[serde(default)]
     pub category: String,
@@ -38,6 +39,18 @@ pub struct Proxy {
     pub notes: String,
     #[serde(default, skip_serializing, skip_deserializing)]
     pub cardoid: Cardoid,
+    #[serde(default)]
+    __: PhantomData<()>,
+}
+
+impl Proxy {
+    pub fn layout(&self) -> Layout {
+        self.cardoid.face().layout
+    }
+
+    fn repeats_default() -> usize {
+        1
+    }
 }
 
 impl Display for Proxy {
@@ -65,8 +78,4 @@ impl Display for Proxy {
 
         return Ok(());
     }
-}
-
-fn repeats_default() -> usize {
-    1
 }
