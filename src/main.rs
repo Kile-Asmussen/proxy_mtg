@@ -12,7 +12,7 @@ use atomic_cards::*;
 use clap::Parser;
 use command::*;
 
-use crate::proxy::DeckList;
+use crate::proxy::decklist::DeckList;
 
 fn main() {
     if let Err(e) = run() {

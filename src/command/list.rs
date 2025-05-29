@@ -3,7 +3,7 @@ use rand::{seq::SliceRandom, SeedableRng};
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::{atomic_cards::types::*, proxy::DeckList, vec_entry::IterExt};
+use crate::{atomic_cards::types::*, proxy::decklist::DeckList, vec_entry::IterExt};
 
 #[derive(Parser, Debug, Clone)]
 pub struct List {

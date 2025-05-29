@@ -17,7 +17,7 @@ use regex::Regex;
 use crate::atomic_cards::{cards::Cardoid, types::*};
 use crate::proxy::{self, Proxy};
 use crate::vec_entry::IterExt;
-use crate::{atomic_cards::AtomicCardsFile, proxy::DeckList};
+use crate::{atomic_cards::AtomicCardsFile, proxy::decklist::DeckList};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]

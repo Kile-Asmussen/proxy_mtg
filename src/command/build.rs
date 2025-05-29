@@ -1,7 +1,7 @@
 use clap::Parser;
 use std::path::PathBuf;
 
-use crate::proxy::DeckList;
+use crate::proxy::decklist::DeckList;
 
 #[derive(Parser, Debug, Clone)]
 pub struct Build {

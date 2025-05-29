@@ -15,36 +15,7 @@ use crate::atomic_cards::{
     AtomicCardsFile,
 };
 
-#[derive(Clone, Debug, Default, Serialize, Deserialize)]
-pub struct Proxy {
-    pub name: String,
-    #[serde(default, rename = "artFile")]
-    pub art_file: Vec<PathBuf>,
-    #[serde(default, rename = "artCredit")]
-    pub art_credit: Vec<String>,
-    #[serde(default, rename = "fullArt")]
-    pub full_art: bool,
-    #[serde(default, rename = "flavorText")]
-    pub flavor_text: Vec<String>,
-    #[serde(default)]
-    pub copies: usize,
-    #[serde(default, rename = "reminderText")]
-    pub reminder_text: bool,
-    #[serde(default = "repeats_default")]
-    pub repeats: usize,
-    #[serde(default)]
-    pub category: String,
-    #[serde(default)]
-    pub tags: BTreeSet<String>,
-    #[serde(default)]
-    pub notes: String,
-    #[serde(default, skip_serializing, skip_deserializing)]
-    pub cardoid: Option<Cardoid>,
-}
-
-fn repeats_default() -> usize {
-    1
-}
+use super::Proxy;
 
 impl Display for Proxy {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
