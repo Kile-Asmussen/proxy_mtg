@@ -116,12 +116,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1b8e56985ec62d17e9c1001dc89c88ecd7dc08e47eba5ec7c29c7b5eeecde967"
 
 [[package]]
-name = "build_html"
-version = "2.6.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "01b01f54cbdd56298a506b086691594ded3b68dcbc9437adc87c616a35e7fc89"
-
-[[package]]
 name = "bumpalo"
 version = "3.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -710,7 +704,6 @@ name = "proxy_mtg"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "build_html",
  "clap",
  "lazy-regex",
  "rand",

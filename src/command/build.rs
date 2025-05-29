@@ -28,7 +28,7 @@ impl Build {
             render.add_proxy(proxy);
         }
 
-        std::fs::write(&self.output, render.into_file().to_html_string())?;
+        std::fs::write(&self.output, format!("{}", render.into_file()))?;
 
         Ok(())
     }

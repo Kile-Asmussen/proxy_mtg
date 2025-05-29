@@ -1,64 +1,57 @@
 use std::collections::BTreeSet;
 
-use build_html::{HtmlChild, HtmlContainer, HtmlElement, HtmlTag};
 use lazy_regex::regex;
 
 use crate::{
     atomic_cards::{cards::Card, types::*},
+    html::{Element, Tag},
     proxy::Proxy,
     utils::iter::IterExt,
 };
 
-use super::{fragments::HtmlExt, RenderSettings};
+use super::RenderSettings;
 
-pub fn empty_card(card: &Card) -> HtmlElement {
-    HtmlElement::new(HtmlTag::Div).with_classes(card_css_class(card))
+pub fn empty_card(card: &Card) -> Element {
+    Element::new(Tag::div).class(card_css_class(card))
 }
 
-pub fn title_bar_div(name: &str, cost: &str) -> HtmlElement {
-    HtmlElement::new(HtmlTag::Div)
-        .with_classes(["title bar"])
-        .with_element(card_name_span(name))
-        .with_element(mana_cost_span(cost))
+pub fn title_bar_div(name: &str, cost: &str) -> Element {
+    Element::new(Tag::div)
+        .class(["title bar"])
+        .elem(card_name_span(name))
+        .elem(mana_cost_span(cost))
 }
 
-pub fn mana_cost_span(mana_cost: &str) -> HtmlElement {
-    HtmlElement::new(HtmlTag::Span)
-        .with_classes(["name"])
-        .with_child(HtmlChild::Raw(mana_cost.to_string()))
+pub fn mana_cost_span(mana_cost: &str) -> Element {
+    Element::new(Tag::span).class(["name"]).text(mana_cost)
 }
 
-pub fn card_name_span(name: &str) -> HtmlElement {
-    HtmlElement::new(HtmlTag::Span)
-        .with_classes(["name"])
-        .with_child(HtmlChild::Raw(name.to_string()))
+pub fn card_name_span(name: &str) -> Element {
+    Element::new(Tag::span).class(["name"]).text(name)
 }
 
-pub fn card_art_img(proxy: &Proxy) -> HtmlElement {
-    HtmlElement::new(HtmlTag::Image)
-        .with_classes(["art"])
-        .with_attribute("src", "")
+pub fn card_art_img(proxy: &Proxy) -> Element {
+    Element::new(Tag::img).class(["art"]).attr("src", "")
 }
 
-pub fn type_line_div(card: &Card) -> HtmlElement {
-    HtmlElement::new(HtmlTag::Div)
-        .with_classes(["type-line", "bar"])
-        .with_element(type_line_span(card))
+pub fn type_line_div(card: &Card) -> Element {
+    Element::new(Tag::div)
+        .class(["type-line", "bar"])
+        .elem(type_line_span(card))
 }
 
-pub fn type_line_span(card: &Card) -> HtmlElement {
-    HtmlElement::new(HtmlTag::Span)
-        .with_classes(["type"])
-        .with_child(HtmlChild::Raw(card.type_line.clone()))
+pub fn type_line_span(card: &Card) -> Element {
+    Element::new(Tag::span)
+        .class(["type"])
+        .text(&card.type_line)
 }
 
-pub fn rules_text_div(card: &Card, settings: &RenderSettings) -> HtmlElement {
+pub fn rules_text_div(card: &Card, settings: &RenderSettings) -> Element {
     let mut text = card.text.clone();
 
     if !settings.reminder_text {
         text = regex!(r"\([^\n]+\)").replace_all(&text, "").into_owned();
     }
-    println!("{} {}", text, settings.reminder_text);
 
     let text_len = text.len();
 
@@ -72,19 +65,23 @@ pub fn rules_text_div(card: &Card, settings: &RenderSettings) -> HtmlElement {
         &["text-box"]
     };
 
-    let mut res = HtmlElement::new(HtmlTag::Div).with_classes(class);
+    let mut res = Element::new(Tag::div).class(class);
 
     if text.is_empty()
         && card.supertypes.contains(&Supertype::Basic)
         && card.types.contains(&Type::Land)
     {
-        res.add_element(HtmlElement::new(HtmlTag::ParagraphText).with_classes(["rules-text"]));
+        res = res.elem(
+            Element::new(Tag::p)
+                .class(["rules-text"])
+                .text(WUBRG::wubrg(&card.color_identity)),
+        );
     } else {
         for line in text.lines() {
-            res.add_element(
-                HtmlElement::new(HtmlTag::ParagraphText)
-                    .with_classes(["rules-text"])
-                    .with_text(line.to_string()),
+            res = res.elem(
+                Element::new(Tag::p)
+                    .class(["rules-text"])
+                    .text(line.to_string()),
             );
         }
     }

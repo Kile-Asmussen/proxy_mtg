@@ -1,7 +1,9 @@
 mod elements;
+mod node;
 mod tags;
 mod tests;
 pub use elements::*;
+pub use node::*;
 use std::{collections::BTreeMap, fmt::Display};
 pub use tags::*;
 
@@ -26,6 +28,20 @@ impl Document {
         self
     }
 
+    pub fn title<S>(mut self, title: S) -> Self
+    where
+        S: ToString,
+    {
+        self.head(Element::new(Tag::title).text(title))
+    }
+
+    pub fn head_link<S>(mut self, rel: &'static str, href: S) -> Self
+    where
+        S: ToString,
+    {
+        self.head(Element::new(Tag::link).attr("rel", rel).attr("href", href))
+    }
+
     pub fn body(mut self, node: Node) -> Self {
         self.body.push(node);
         self
@@ -42,20 +58,5 @@ impl Display for Document {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str("<!DOCTYPE html>")?;
         self.clone().into_element().fmt(f)
-    }
-}
-
-#[derive(Clone)]
-pub enum Node {
-    Element(Element),
-    Text(String),
-}
-
-impl Display for Node {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Node::Element(element) => element.fmt(f),
-            Node::Text(text) => f.write_str(text),
-        }
     }
 }

@@ -3,13 +3,14 @@ use std::{
     mem,
 };
 
-use build_html::{HtmlContainer, HtmlElement, HtmlPage, HtmlTag};
-use fragments::HtmlExt;
 use normal::normal_card;
 
-use crate::{atomic_cards::types::Layout, proxy::Proxy};
+use crate::{
+    atomic_cards::types::Layout,
+    html::{Document, Element, Node, Tag},
+    proxy::Proxy,
+};
 
-pub mod fragments;
 pub mod general;
 pub mod normal;
 
@@ -20,7 +21,7 @@ pub struct RenderSettings {
 
 pub struct RenderContext {
     pub settings: RenderSettings,
-    pub cards: Vec<HtmlElement>,
+    pub cards: Vec<Element>,
 }
 
 impl RenderContext {
@@ -65,22 +66,18 @@ impl RenderContext {
         }
     }
 
-    pub fn into_file(self) -> HtmlPage {
-        let mut html_pages = HtmlPage::new()
-            .with_title("PROXIES")
-            .with_head_link("https://fonts.googleapis.com", "preconnect")
-            .with_head_link_attr(
-                "https://fonts.gstatic.com",
-                "preconnect",
-                [("crossorigin", "crossorigin")],
-            )
-            .with_stylesheet("https://fonts.googleapis.com/css2?family=Amarante&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inconsolata:wght@200..900&display=swap")
-            .with_stylesheet("../css/colors.css")
-            .with_stylesheet("../css/dimensions.css")
-            .with_stylesheet("../css/fonts.css")
-            .with_stylesheet("../css/page.css")
-            .with_stylesheet("../css/card.css")
-            .with_stylesheet("../css/magic-font.css");
+    pub fn into_file(self) -> Document {
+        let mut html_pages = Document::new()
+            .head(Element::new(Tag::title).text("PROXIES"))
+            .head_link("preconnect", "https://fonts.googleapis.com")
+            .head(Element::new(Tag::link).attr("rel", "preconnect").attr("href", "https://fonts.gstatic.com").flag("crossorigin"))
+            .head_link("stylesheet", "https://fonts.googleapis.com/css2?family=Amarante&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inconsolata:wght@200..900&display=swap")
+            .head_link("stylesheet", "../css/colors.css")
+            .head_link("stylesheet", "../css/dimensions.css")
+            .head_link("stylesheet", "../css/fonts.css")
+            .head_link("stylesheet", "../css/page.css")
+            .head_link("stylesheet", "../css/card.css")
+            .head_link("stylesheet", "../css/magic-font.css");
 
         let mut pages = vec![];
         {
@@ -104,19 +101,19 @@ impl RenderContext {
         }
 
         for page in pages {
-            let mut html_page = HtmlElement::new(HtmlTag::Div).with_classes(["page"]);
+            let mut html_page = Element::new(Tag::div).class(["page"]);
 
             for row in page {
-                let mut html_row = HtmlElement::new(HtmlTag::Div).with_classes(["card-row"]);
+                let mut html_row = Element::new(Tag::div).class(["card-row"]);
 
                 for card in row {
-                    html_row.add_element(card);
+                    html_row = html_row.elem(card);
                 }
 
-                html_page.add_element(html_row);
+                html_page = html_page.elem(html_row);
             }
 
-            html_pages.add_html(html_page);
+            html_pages = html_pages.body(Node::Element(html_page));
         }
 
         html_pages
