@@ -37,16 +37,12 @@ pub struct Proxy {
     #[serde(default)]
     pub notes: String,
     #[serde(default, skip_serializing, skip_deserializing)]
-    pub cardoid: Option<Cardoid>,
+    pub cardoid: Cardoid,
 }
 
 impl Display for Proxy {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let Some(cardoid) = &self.cardoid else {
-            return f.write_str("> ERROR: no such card");
-        };
-
-        cardoid.fmt(f);
+        self.cardoid.fmt(f);
 
         f.write_str("\n> # # #")?;
 

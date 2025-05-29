@@ -29,11 +29,11 @@ impl DeckList {
             vec.sort_by_key(|a| a.name.clone());
             for mut artoid in vec {
                 artoid.category = category.clone();
-                artoid.cardoid = atomics.data.get(&artoid.name).map(Clone::clone);
-                if artoid.cardoid.is_none() {
-                    failed_to_find.push(artoid.name);
-                } else {
+                if let Some(cardoid) = atomics.data.get(&artoid.name).map(Clone::clone) {
+                    artoid.cardoid = cardoid;
                     res.0.push(artoid);
+                } else {
+                    failed_to_find.push(artoid.name);
                 }
             }
         }

@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
 use build_html::{HtmlChild, HtmlElement, HtmlTag};
 
@@ -9,7 +9,7 @@ use crate::{
 
 use super::utils::HtmlExt;
 
-pub fn empty_card(color: &BTreeMap<WUBRG>, types: &[Type]) -> HtmlElement {
+pub fn empty_card(color: &BTreeSet<WUBRG>, types: &[Type]) -> HtmlElement {
     HtmlElement::new(HtmlTag::Div).with_classes(card_css_class(color, types))
 }
 
@@ -32,7 +32,7 @@ pub fn card_name_span(name: &str) -> HtmlElement {
         .with_child(HtmlChild::Raw(name.to_string()))
 }
 
-pub fn card_css_class(color: &BTreeSet<WUBRG>, types: &[Type]) -> Vec<&str> {
+pub fn card_css_class(color: &BTreeSet<WUBRG>, types: &[Type]) -> Vec<&'static str> {
     let (colors, extra) = if types.contains(&Type::Land) {
         (color, vec!["colorless", "card"])
     } else {

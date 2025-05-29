@@ -22,9 +22,10 @@ pub struct RenderContext {
 
 impl RenderContext {
     pub fn add_proxy(&mut self, proxy: &Proxy) {
-        if proxy.cardoid.is_none() {
+        if proxy.cardoid.sides() {
             self.cards.push(
-                empty_card(BTreeSet::new(), &[]).with_child_element(title_bar_div(&proxy.name, "")),
+                empty_card(&BTreeSet::new(), &[])
+                    .with_child_element(title_bar_div(&proxy.name, "")),
             );
         }
     }

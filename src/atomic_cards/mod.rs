@@ -5,6 +5,7 @@ pub mod types;
 use std::{
     collections::HashMap,
     error::Error,
+    fmt::Display,
     fs::File,
     io::{BufReader, BufWriter, Write},
 };
@@ -25,10 +26,35 @@ impl AtomicCardsFile {
         let atomic_cards_file_json = std::fs::read("AtomicCards.json")?;
         let atomic_cards: AtomicCardsFile = serde_json::from_slice(&atomic_cards_file_json[..])?;
 
-        for () is &atomic_cards.data {
+        let mut missing_cards = vec![];
 
+        for (name, cardoid) in &atomic_cards.data {
+            if cardoid.sides().len() < 1 {
+                missing_cards.push(name.clone())
+            }
         }
 
-        return Ok(atomic_cards);
+        if missing_cards.is_empty() {
+            Ok(atomic_cards)
+        } else {
+            Err(Box::new(AtomicCardsBuildError(missing_cards)))
+        }
     }
 }
+
+#[derive(Debug)]
+pub struct AtomicCardsBuildError(pub Vec<String>);
+
+impl Display for AtomicCardsBuildError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("The following cards were not found:\n")?;
+
+        for name in &self.0 {
+            f.write_fmt(format_args!("  {}\n", name))?;
+        }
+
+        Ok(())
+    }
+}
+
+impl Error for AtomicCardsBuildError {}

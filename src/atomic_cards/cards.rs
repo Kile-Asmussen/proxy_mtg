@@ -1,22 +1,26 @@
 use serde::{Deserialize, Serialize};
 
+use crate::utils::iter::IterExt;
+
 use super::{metadata::*, types::*};
 
-use std::{collections::BTreeSet, fmt::Display};
+use std::{collections::BTreeSet, fmt::Display, marker::PhantomData};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 #[serde(transparent)]
 pub struct Cardoid(Vec<Card>);
 
 impl Cardoid {
-    pub fn is_empty() {}
-
     pub fn iter(&self) -> <&Vec<Card> as IntoIterator>::IntoIter {
         self.0.iter()
     }
 
     pub fn iter_mut(&mut self) -> <&mut Vec<Card> as IntoIterator>::IntoIter {
         self.0.iter_mut()
+    }
+
+    pub fn sides(&self) -> Vec<Side> {
+        self.0.iter().map(|c| c.side.clone()).collvect()
     }
 
     pub fn front(&self) -> &Card {
@@ -34,9 +38,9 @@ impl Display for Cardoid {
         if let Some(back) = self.back() {
             f.write_fmt(format_args!("> {}", front.name));
 
-            f.write_str("\n> FRONT:\n")?;
+            f.write_str("\n> OBVERSE:\n")?;
             Display::fmt(&(&front), f)?;
-            f.write_str("\n> BACK:\n")?;
+            f.write_str("\n> REVERSE:\n")?;
             Display::fmt(&back, f)?;
         } else {
             Display::fmt(&front, f)?;
@@ -75,7 +79,7 @@ impl<'a> IntoIterator for &'a mut Cardoid {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct Card {
     #[serde(default, rename = "asciiName")]
     pub ascii_name: String,
@@ -139,7 +143,7 @@ pub struct Card {
     #[serde(default)]
     pub rulings: Vec<Ruling>,
     #[serde(default)]
-    pub side: String,
+    pub side: Side,
     #[serde(default)]
     pub subsets: Vec<String>,
     pub subtypes: Vec<String>,
@@ -151,6 +155,8 @@ pub struct Card {
     #[serde(rename = "type")]
     pub type_line: String,
     pub types: Vec<Type>,
+    #[serde(default, skip_serializing, skip_deserializing)]
+    __: PhantomData<()>,
 }
 
 impl Display for Card {

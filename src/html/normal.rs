@@ -13,9 +13,7 @@ use crate::{
 use super::{general::*, utils::HtmlExt, RenderSettings};
 
 fn normal_card(proxy: &Proxy, settings: &RenderSettings) -> HtmlElement {
-    let Some(cardoid) = proxy.cardoid else {
-        return empty_card(BTreeSet::new(), &[]);
-    };
+    let card = proxy.cardoid.front();
 
-    let card = cardoid.front();
+    todo!()
 }

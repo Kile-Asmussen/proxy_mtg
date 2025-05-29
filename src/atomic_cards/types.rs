@@ -84,7 +84,9 @@ impl WUBRG {
     }
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(
+    Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash, Default,
+)]
 pub enum Layout {
     #[serde(rename = "adventure")]
     Adventure,
@@ -115,6 +117,7 @@ pub enum Layout {
     #[serde(rename = "mutate")]
     Mutate,
     #[serde(rename = "normal")]
+    #[default]
     Normal,
     #[serde(rename = "planar")]
     Planar,
@@ -141,4 +144,15 @@ pub struct LeadershipSkills {
     pub brawl: bool,
     pub commander: bool,
     pub oathbreaker: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub enum Side {
+    #[serde(rename = "a")]
+    #[default]
+    A,
+    #[serde(rename = "b")]
+    B,
+    #[serde(untagged)]
+    O(String),
 }

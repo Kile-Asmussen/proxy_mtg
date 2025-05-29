@@ -1,3 +1,5 @@
+use std::default;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -14,7 +16,7 @@ pub struct RelatedCards {
     pub spellbook: Vec<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PurchaseUrls {
     #[serde(default, rename = "cardKingdom")]
     pub card_kingdom: String,
@@ -53,7 +55,7 @@ pub struct ForeignData {
     pub type_line: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct Identifiers {
     #[serde(default, rename = "cardKingdomEtchedId")]
     pub card_kingdom_etched_id: String,
@@ -93,7 +95,7 @@ pub struct Identifiers {
     pub tcgplayer_etched_product_id: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct Legalities {
     #[serde(default)]
     pub alchemy: String,
