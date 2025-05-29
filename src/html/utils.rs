@@ -26,12 +26,19 @@ pub trait HtmlExt: Sized {
         SS: IntoIterator<Item = S>,
         S: ToString;
 
-    fn with_child_element(mut self, ele: HtmlElement) -> Self {
-        self.add_child_element(ele);
+    fn with_element(mut self, ele: HtmlElement) -> Self {
+        self.add_element(ele);
         self
     }
 
-    fn add_child_element(&mut self, ele: HtmlElement);
+    fn add_element(&mut self, ele: HtmlElement);
+
+    fn with_text(mut self, ele: String) -> Self {
+        self.add_text(ele);
+        self
+    }
+
+    fn add_text(&mut self, ele: String);
 }
 
 impl HtmlExt for HtmlElement {
@@ -55,7 +62,11 @@ impl HtmlExt for HtmlElement {
         *class = strings.join(" ");
     }
 
-    fn add_child_element(&mut self, ele: HtmlElement) {
+    fn add_element(&mut self, ele: HtmlElement) {
         self.add_child(HtmlChild::Element(ele));
+    }
+
+    fn add_text(&mut self, ele: String) {
+        self.add_child(HtmlChild::Raw(ele));
     }
 }
