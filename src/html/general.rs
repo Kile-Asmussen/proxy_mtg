@@ -9,10 +9,6 @@ use crate::{
 
 use super::utils::HtmlExt;
 
-pub fn empty_card(color: &BTreeSet<WUBRG>, types: &[Type]) -> HtmlElement {
-    HtmlElement::new(HtmlTag::Div).with_classes(card_css_class(color, types))
-}
-
 pub fn title_bar_div(name: &str, cost: &str) -> HtmlElement {
     HtmlElement::new(HtmlTag::Div)
         .with_classes(["title bar"])
@@ -32,11 +28,11 @@ pub fn card_name_span(name: &str) -> HtmlElement {
         .with_child(HtmlChild::Raw(name.to_string()))
 }
 
-pub fn card_css_class(color: &BTreeSet<WUBRG>, types: &[Type]) -> Vec<&'static str> {
-    let (colors, extra) = if types.contains(&Type::Land) {
-        (color, vec!["colorless", "card"])
+pub fn card_css_class(card: &Card) -> Vec<&'static str> {
+    let (colors, extra) = if card.types.contains(&Type::Land) {
+        (&card.color_identity, vec!["colorless", "card"])
     } else {
-        (color, vec!["card"])
+        (&card.colors, vec!["card"])
     };
 
     return colors

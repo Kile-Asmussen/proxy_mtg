@@ -18,7 +18,7 @@ use super::Proxy;
 pub struct DeckList(Vec<Proxy>);
 
 impl DeckList {
-    pub fn load(path: &Path, atomics: &AtomicCardsFile) -> Result<DeckList, Box<dyn Error>> {
+    pub fn load(path: &Path, atomics: &AtomicCardsFile) -> anyhow::Result<DeckList> {
         let decklist_file = std::fs::read_to_string(path)?;
         let decklist_structure: BTreeMap<String, Vec<Proxy>> =
             serde_json::from_str(&decklist_file)?;
@@ -41,7 +41,7 @@ impl DeckList {
         if failed_to_find.is_empty() {
             Ok(res)
         } else {
-            Err(Box::new(DeckListBuildError(failed_to_find)))
+            Err(DeckListBuildError(failed_to_find).into())
         }
     }
 
@@ -82,10 +82,7 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for artoid in &self.0 {
-            let Some(cardoid) = &artoid.cardoid else {
-                continue;
-            };
-            for card in cardoid {
+            for card in &artoid.cardoid {
                 if card.types.contains(&Type::Land) {
                     continue;
                 }
@@ -100,10 +97,7 @@ impl DeckList {
         let mut res = BTreeSet::new();
 
         for artoid in &self.0 {
-            let Some(cardoid) = &artoid.cardoid else {
-                continue;
-            };
-            for card in cardoid {
+            for card in &artoid.cardoid {
                 res.append(&mut card.color_identity.clone())
             }
         }
@@ -115,10 +109,7 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for artoid in &self.0 {
-            let Some(cardoid) = &artoid.cardoid else {
-                continue;
-            };
-            for card in cardoid {
+            for card in &artoid.cardoid {
                 if card.types.contains(&Type::Land) {
                     continue;
                 }
@@ -145,10 +136,7 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for artoid in &self.0 {
-            let Some(cardoid) = &artoid.cardoid else {
-                continue;
-            };
-            for card in cardoid {
+            for card in &artoid.cardoid {
                 let typeline = card
                     .supertypes
                     .iter()

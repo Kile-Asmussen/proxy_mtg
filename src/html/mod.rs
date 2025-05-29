@@ -1,7 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use build_html::HtmlElement;
-use general::{empty_card, title_bar_div};
 use utils::HtmlExt;
 
 use crate::proxy::Proxy;
