@@ -1,3 +1,4 @@
+pub mod cardoids;
 pub mod cards;
 pub mod metadata;
 pub mod types;
@@ -22,7 +23,7 @@ use crate::utils::iter::*;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AtomicCardsFile {
     pub meta: metadata::MetaData,
-    pub data: HashMap<String, cards::Cardoid>,
+    pub data: HashMap<String, cardoids::Cardoid>,
 }
 
 impl AtomicCardsFile {

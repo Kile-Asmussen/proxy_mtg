@@ -72,6 +72,7 @@ impl RenderContext {
             .head_link("preconnect", "https://fonts.googleapis.com")
             .head(Element::new(Tag::link).attr("rel", "preconnect").attr("href", "https://fonts.gstatic.com").flag("crossorigin"))
             .head_link("stylesheet", "https://fonts.googleapis.com/css2?family=Amarante&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inconsolata:wght@200..900&display=swap")
+            .head_link("stylesheet", "https://cdn.jsdelivr.net/npm/mana-font@latest/css/mana.css")
             .head_link("stylesheet", "../css/colors.css")
             .head_link("stylesheet", "../css/dimensions.css")
             .head_link("stylesheet", "../css/fonts.css")

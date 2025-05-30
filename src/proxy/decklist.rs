@@ -9,7 +9,7 @@ use std::{
 use rand::rand_core::block;
 use serde::{Deserialize, Serialize};
 
-use crate::atomic_cards::{cards::Cardoid, types::*, AtomicCardsFile};
+use crate::atomic_cards::{cardoids::Cardoid, types::*, AtomicCardsFile};
 
 use super::Proxy;
 

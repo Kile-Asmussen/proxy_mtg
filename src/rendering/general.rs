@@ -4,7 +4,7 @@ use lazy_regex::regex;
 
 use crate::{
     atomic_cards::{cards::Card, types::*},
-    html::{Element, Tag},
+    html::*,
     proxy::Proxy,
     utils::iter::IterExt,
 };
@@ -46,49 +46,6 @@ pub fn type_line_span(card: &Card) -> Element {
         .text(&card.type_line)
 }
 
-pub fn rules_text_div(card: &Card, settings: &RenderSettings) -> Element {
-    let mut text = card.text.clone();
-
-    if !settings.reminder_text {
-        text = regex!(r"\([^\n]+\)").replace_all(&text, "").into_owned();
-    }
-
-    let text_len = text.len();
-
-    let paragraphs = text.lines().map(ToOwned::to_owned).collvect();
-
-    let class: &[&str] = if paragraphs.len() == 1 && text_len < 50 {
-        &["text-box", "sparse"]
-    } else if paragraphs.len() >= 3 || text_len >= 200 {
-        &["text-box", "dense"]
-    } else {
-        &["text-box"]
-    };
-
-    let mut res = Element::new(Tag::div).class(class);
-
-    if text.is_empty()
-        && card.supertypes.contains(&Supertype::Basic)
-        && card.types.contains(&Type::Land)
-    {
-        res = res.elem(
-            Element::new(Tag::p)
-                .class(["rules-text"])
-                .text(WUBRG::wubrg(&card.color_identity)),
-        );
-    } else {
-        for line in text.lines() {
-            res = res.elem(
-                Element::new(Tag::p)
-                    .class(["rules-text"])
-                    .text(line.to_string()),
-            );
-        }
-    }
-
-    res
-}
-
 pub fn card_css_class(card: &Card) -> Vec<&'static str> {
     let (colors, extra) = if card.types.contains(&Type::Land) {
         (&card.color_identity, vec!["colorless", "card"])
@@ -101,4 +58,19 @@ pub fn card_css_class(card: &Card) -> Vec<&'static str> {
         .map(WUBRG::name)
         .chain(extra.into_iter())
         .collvect();
+}
+
+pub fn format_rules_text(text: String, settings: &RenderSettings) -> String {
+    if settings.reminder_text {
+        text
+    } else {
+        regex!(r"\([^\n]+?\)").replace_all(&text, "").into_owned()
+    }
+}
+
+pub fn replace_mana_symbols(text: String) -> Vec<Node> {
+    let pat = regex!(r"\{.*?\}|[^\{\}]*?");
+    pat;
+
+    todo!()
 }

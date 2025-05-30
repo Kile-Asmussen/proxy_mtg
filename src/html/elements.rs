@@ -53,6 +53,14 @@ impl Element {
         }
     }
 
+    pub fn children(&self) -> &[Node] {
+        &self.nodes[..]
+    }
+
+    pub fn atttributes(&self) -> &[(&'static str, String)] {
+        &self.attributes[..]
+    }
+
     pub fn attr<S>(mut self, k: &'static str, v: S) -> Self
     where
         S: ToString,
