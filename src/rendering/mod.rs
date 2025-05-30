@@ -33,15 +33,7 @@ impl RenderContext {
     }
 
     pub fn add_proxy(&mut self, proxy: &Proxy) {
-        use Layout::*;
-        let card: Element = match proxy.layout() {
-            Normal => normal_card(proxy, &self.settings),
-            _ => panic!(),
-        };
-
-        for _ in 0..proxy.repeats {
-            self.cards.push(card.clone())
-        }
+        todo!()
     }
 
     pub fn into_file(self) -> Document {

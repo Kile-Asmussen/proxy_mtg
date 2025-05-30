@@ -88,22 +88,31 @@ pub struct Card {
 
 impl Card {
     pub fn is_land(&self) -> bool {
-        self.types.contains(&Type::Land)
+        self.is_type(Type::Land)
     }
     pub fn is_basic(&self) -> bool {
-        self.supertypes.contains(&Supertype::Basic) && self.is_land()
+        self.is_supertype(Supertype::Basic) && self.is_land()
     }
     pub fn is_spell(&self) -> bool {
-        !self.types.contains(&Type::Land) && self.layout != Layout::Token
+        !self.is_type(Type::Land) && self.layout != Layout::Token
     }
     pub fn is_permanent(&self) -> bool {
         !self.is_instant() && !self.is_sorcery()
     }
     pub fn is_instant(&self) -> bool {
-        self.types.contains(&Type::Instant)
+        self.is_type(Type::Instant)
     }
     pub fn is_sorcery(&self) -> bool {
-        self.types.contains(&Type::Sorcery)
+        self.is_type(Type::Sorcery)
+    }
+    pub fn is_type(&self, t: Type) -> bool {
+        self.types.contains(&t)
+    }
+    pub fn is_supertype(&self, t: Supertype) -> bool {
+        self.supertypes.contains(&t)
+    }
+    pub fn is_subtype(&self, t: &str) -> bool {
+        self.subtypes.iter().any(|s| s == t)
     }
 
     pub fn face_layouts(&self) -> FaceLayout {
@@ -120,7 +129,9 @@ impl Card {
             Layout::Normal => self.guess_face_layout(),
             Layout::Prototype => FaceLayout::Prototype,
             Layout::ReversibleCard => self.guess_face_layout(),
+            Layout::Saga if self.is_type(Type::Creature) => FaceLayout::SagaCreature,
             Layout::Saga => FaceLayout::Saga,
+            Layout::Split if self.text.contains("Fuse") => FaceLayout::Fuse,
             Layout::Split => FaceLayout::Split,
             Layout::Token => self.guess_face_layout(),
             Layout::Transform => self.guess_face_layout(),
@@ -131,12 +142,18 @@ impl Card {
     pub fn guess_face_layout(&self) -> FaceLayout {
         if self.is_basic() {
             FaceLayout::Basic
-        } else if self.types.contains(&Type::Creature) {
+        } else if self.is_type(Type::Creature) && self.is_subtype("Saga") {
+            FaceLayout::SagaCreature
+        } else if self.is_type(Type::Creature) {
             FaceLayout::Creature
-        } else if self.types.contains(&Type::Planeswalker) {
-            FaceLayout::Creature
+        } else if self.is_subtype("Saga") {
+            FaceLayout::Saga
+        } else if self.is_type(Type::Planeswalker) {
+            FaceLayout::Planeswalker
+        } else if self.is_type(Type::Battle) {
+            FaceLayout::Battle
         } else {
-            FaceLayout::Unsupported
+            FaceLayout::Unadorned
         }
     }
 }

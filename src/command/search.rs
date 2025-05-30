@@ -35,7 +35,11 @@ impl Search {
         if cards.is_empty() && self.search_all {
             cards.append(&mut atomics.data.keys().map(Clone::clone).collect());
         } else if cards.is_empty() {
-            cards.append(&mut decklist.card_names().keys().map(Clone::clone).collect());
+            for proxy in decklist {
+                if !proxy.token {
+                    cards.push(proxy.name.clone());
+                }
+            }
         }
 
         for card in &cards {

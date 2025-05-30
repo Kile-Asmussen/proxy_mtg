@@ -34,6 +34,13 @@ impl Cardoid {
     pub fn layout(&self) -> &Layout {
         &self.face().layout
     }
+
+    pub fn printed_cards(&self) -> usize {
+        match self.layout() {
+            Layout::ModalDfc | Layout::Transform => 2,
+            _ => 1,
+        }
+    }
 }
 
 impl Display for Cardoid {

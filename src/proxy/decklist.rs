@@ -45,11 +45,14 @@ impl DeckList {
         }
     }
 
-    pub fn card_names(&self) -> BTreeMap<String, usize> {
+    pub fn card_names(&self, all: bool) -> BTreeMap<String, usize> {
         let mut res = BTreeMap::new();
 
-        for artoid in self {
-            *res.entry(artoid.name.clone()).or_insert(0) += artoid.repeats;
+        for proxy in self {
+            let count = res.entry(proxy.name.clone()).or_insert(0);
+            if (!proxy.sideboard && !proxy.token) || all {
+                *count += proxy.repeats;
+            }
         }
 
         res

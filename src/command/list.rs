@@ -102,7 +102,7 @@ impl List {
 
     pub fn print_cards(list: &DeckList) {
         let cats = list.categories();
-        let mut cards = list.card_names();
+        let mut cards = list.card_names(true);
 
         println!("Cards ({}):", list.count_cards());
         for (cat, names) in &cats {
@@ -116,7 +116,7 @@ impl List {
     }
 
     pub fn print_creatures(decklist: &DeckList) {
-        let names = decklist.card_names();
+        let names = decklist.card_names(false);
         let mut creatures = BTreeMap::new();
         for artoid in decklist {
             for card in &artoid.cardoid {

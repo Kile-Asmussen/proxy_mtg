@@ -32,6 +32,10 @@ pub struct Proxy {
     #[serde(default = "Proxy::repeats_default")]
     pub repeats: usize,
     #[serde(default)]
+    pub sideboard: bool,
+    #[serde(default)]
+    pub token: bool,
+    #[serde(default)]
     pub category: String,
     #[serde(default)]
     pub tags: BTreeSet<String>,
