@@ -84,30 +84,18 @@ impl WUBRG {
     }
 }
 
-#[derive(
-    Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash, Default,
-)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub enum Layout {
     #[serde(rename = "adventure")]
     Adventure,
     #[serde(rename = "aftermath")]
     Aftermath,
-    #[serde(rename = "art_series")]
-    ArtSeries,
-    #[serde(rename = "augment")]
-    Augment,
     #[serde(rename = "case")]
     Case,
     #[serde(rename = "class")]
     Class,
-    #[serde(rename = "double_faced_token")]
-    DoubleFacedToken,
-    #[serde(rename = "emblem")]
-    Emblem,
     #[serde(rename = "flip")]
     Flip,
-    #[serde(rename = "host")]
-    Host,
     #[serde(rename = "leveler")]
     Leveler,
     #[serde(rename = "meld")]
@@ -119,24 +107,20 @@ pub enum Layout {
     #[serde(rename = "normal")]
     #[default]
     Normal,
-    #[serde(rename = "planar")]
-    Planar,
     #[serde(rename = "prototype")]
     Prototype,
     #[serde(rename = "reversible_card")]
     ReversibleCard,
     #[serde(rename = "saga")]
     Saga,
-    #[serde(rename = "scheme")]
-    Scheme,
     #[serde(rename = "split")]
     Split,
     #[serde(rename = "token")]
     Token,
     #[serde(rename = "transform")]
     Transform,
-    #[serde(rename = "vanguard")]
-    Vanguard,
+    #[serde(untagged)]
+    Other(String),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

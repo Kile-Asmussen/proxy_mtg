@@ -30,6 +30,10 @@ impl Cardoid {
     pub fn face(&self) -> &Card {
         &self.0[0]
     }
+
+    pub fn layout(&self) -> &Layout {
+        &self.face().layout
+    }
 }
 
 impl Display for Cardoid {

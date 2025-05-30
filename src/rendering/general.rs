@@ -70,7 +70,7 @@ pub fn format_rules_text(text: String, settings: &RenderSettings) -> String {
 
 pub fn replace_mana_symbols(text: String) -> Vec<Node> {
     let pat = regex!(r"\{.*?\}|[^\{\}]*?");
-    pat;
-
-    todo!()
+    let res = pat.split("test");
+    println!("{:?}", res);
+    vec![]
 }

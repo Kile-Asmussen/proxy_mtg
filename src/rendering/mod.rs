@@ -34,31 +34,9 @@ impl RenderContext {
 
     pub fn add_proxy(&mut self, proxy: &Proxy) {
         use Layout::*;
-        let card = match proxy.layout() {
-            Adventure => todo!(),
-            Aftermath => todo!(),
-            ArtSeries => todo!(),
-            Augment => todo!(),
-            Case => todo!(),
-            Class => todo!(),
-            DoubleFacedToken => todo!(),
-            Emblem => todo!(),
-            Flip => todo!(),
-            Host => todo!(),
-            Leveler => todo!(),
-            Meld => todo!(),
-            ModalDfc => todo!(),
-            Mutate => todo!(),
+        let card: Element = match proxy.layout() {
             Normal => normal_card(proxy, &self.settings),
-            Planar => todo!(),
-            Prototype => todo!(),
-            ReversibleCard => todo!(),
-            Saga => todo!(),
-            Scheme => todo!(),
-            Split => todo!(),
-            Token => todo!(),
-            Transform => todo!(),
-            Vanguard => todo!(),
+            _ => panic!(),
         };
 
         for _ in 0..proxy.repeats {

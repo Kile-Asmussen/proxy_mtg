@@ -45,7 +45,7 @@ impl AtomicCardsFile {
                 malformed_cards.insert(name.clone());
             }
 
-            let layouts = BTreeSet::from_iter(cardoid.iter().map(|c| c.layout));
+            let layouts = BTreeSet::from_iter(cardoid.iter().map(|c| c.layout.clone()));
 
             if layouts.len() > 1 {
                 malformed_cards.insert(name.clone());

@@ -1,5 +1,7 @@
 use std::{collections::BTreeSet, ops::Div};
 
+use lazy_regex::regex;
+
 use crate::{
     atomic_cards::{cards::*, types::*},
     html::*,
@@ -20,7 +22,15 @@ pub fn normal_card(proxy: &Proxy, settings: &RenderSettings) -> Element {
         .elem(rules_text_div(card, settings))
 }
 
-pub fn rules_text_land_div(card: &Card, settings: &RenderSettings) -> Element {
+pub fn rules_text_div(card: &Card, settings: &RenderSettings) -> Element {
+    if card.is_basic() {
+        rules_text_basic_div(card, settings)
+    } else {
+        rules_text_nonland_div(card, settings)
+    }
+}
+
+pub fn rules_text_basic_div(card: &Card, settings: &RenderSettings) -> Element {
     todo!()
 }
 

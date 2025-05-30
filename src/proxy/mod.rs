@@ -44,8 +44,8 @@ pub struct Proxy {
 }
 
 impl Proxy {
-    pub fn layout(&self) -> Layout {
-        self.cardoid.face().layout
+    pub fn layout(&self) -> &Layout {
+        (&self.cardoid).layout()
     }
 
     fn repeats_default() -> usize {
