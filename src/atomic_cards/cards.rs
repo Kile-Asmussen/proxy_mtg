@@ -86,6 +86,85 @@ pub struct Card {
     __: PhantomData<()>,
 }
 
+impl Card {
+    pub fn is_land(&self) -> bool {
+        self.types.contains(&Type::Land)
+    }
+    pub fn is_basic(&self) -> bool {
+        self.supertypes.contains(&Supertype::Basic) && self.is_land()
+    }
+    pub fn is_spell(&self) -> bool {
+        !self.types.contains(&Type::Land) && self.layout != Layout::Token
+    }
+    pub fn is_permanent(&self) -> bool {
+        !self.is_instant() && !self.is_sorcery()
+    }
+    pub fn is_instant(&self) -> bool {
+        self.types.contains(&Type::Instant)
+    }
+    pub fn is_sorcery(&self) -> bool {
+        self.types.contains(&Type::Sorcery)
+    }
+
+    pub fn face_layouts(&self) -> FaceLayout {
+        match &self.layout {
+            Layout::Adventure => FaceLayout::Omenventure,
+            Layout::Aftermath => FaceLayout::Aftermath,
+            Layout::Case => FaceLayout::Case,
+            Layout::Class => FaceLayout::Class,
+            Layout::Flip => FaceLayout::Flip,
+            Layout::Leveler => FaceLayout::Leveler,
+            Layout::Meld => self.guess_face_layout(),
+            Layout::ModalDfc => self.guess_face_layout(),
+            Layout::Mutate => FaceLayout::Mutate,
+            Layout::Normal => self.guess_face_layout(),
+            Layout::Prototype => FaceLayout::Prototype,
+            Layout::ReversibleCard => self.guess_face_layout(),
+            Layout::Saga => FaceLayout::Saga,
+            Layout::Split => FaceLayout::Split,
+            Layout::Token => self.guess_face_layout(),
+            Layout::Transform => self.guess_face_layout(),
+            Layout::Other(s) => FaceLayout::Unsupported,
+        }
+    }
+
+    pub fn guess_face_layout(&self) -> FaceLayout {
+        if self.is_basic() {
+            FaceLayout::Basic
+        } else if self.types.contains(&Type::Creature) {
+            FaceLayout::Creature
+        } else if self.types.contains(&Type::Planeswalker) {
+            FaceLayout::Creature
+        } else {
+            FaceLayout::Unsupported
+        }
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum FaceLayout {
+    Aftermath,
+    Basic,
+    Battle,
+    Case,
+    Class,
+    Creature,
+    Emblem,
+    Flip,
+    Fuse,
+    Leveler,
+    Mutate,
+    Omenventure,
+    Planeswalker,
+    Prototype,
+    Room,
+    Saga,
+    SagaCreature,
+    Split,
+    Unadorned,
+    Unsupported,
+}
+
 impl Display for Card {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut name = &self.face_name;
