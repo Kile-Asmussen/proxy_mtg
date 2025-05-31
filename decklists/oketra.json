@@ -192,7 +192,7 @@
             ]
         },
         {
-            "name": "Make a Stand",
+            "name": "Flawless Maneuver",
             "tags": [
                 "board protection"
             ]
@@ -205,30 +205,28 @@
             ]
         },
         {
-            "name": "Mother of Runes",
-            "tags": [
-                "single target protection",
-                "oketra fodder"
-            ]
-        },
-        {
-            "name": "Giver of Runes",
-            "tags": [
-                "single target protection",
-                "oketra fodder"
-            ]
-        },
-        {
-            "name": "Selfless Spirit",
+            "name": "Dedicated Dollmaker",
             "tags": [
                 "board protection",
                 "oketra fodder"
             ]
         },
         {
+            "name": "Duty Beyond Death",
+            "tags": [
+                "board protection"
+            ]
+        },
+        {
+            "name": "Basilisk Collar",
+            "tags": [
+                "commander protection"
+            ]
+        },
+        {
             "name": "Lightning Greaves",
             "tags": [
-                "single target protection"
+                "commander protection"
             ]
         }
     ],

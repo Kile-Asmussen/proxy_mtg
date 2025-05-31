@@ -53,9 +53,9 @@ impl Display for Cardoid {
         if let Some(b_side) = self.side(Side::B) {
             f.write_fmt(format_args!("> {}", face.name));
 
-            f.write_str("\n> SIDE A:\n")?;
+            f.write_str("\n> **SIDE A**\n")?;
             Display::fmt(&(&face), f)?;
-            f.write_str("\n> SIDE B:\n")?;
+            f.write_str("\n> **SIDE B**\n")?;
             Display::fmt(&b_side, f)?;
         } else {
             Display::fmt(&face, f)?;

@@ -23,12 +23,12 @@ impl Search {
     pub fn dispatch(&self, atomics: &AtomicCardsFile, decklist: &DeckList) -> anyhow::Result<()> {
         let mut exp = vec![];
         for pat in &self.exp {
-            exp.push(Regex::new(pat)?);
+            exp.push(Regex::new(&("(?i)".to_string() + pat))?);
         }
 
         let mut nexp = vec![];
         for pat in &self.nexp {
-            nexp.push(Regex::new(pat)?);
+            nexp.push(Regex::new(&("(?i)".to_string() + pat))?);
         }
 
         let mut cards = self.cards.clone();

@@ -44,6 +44,7 @@ pub struct ForeignData {
     pub face_name: String,
     #[serde(default, rename = "flavorText")]
     pub flavor_text: String,
+    #[serde(default)]
     pub language: String,
     #[serde(default, rename = "multiverseId")]
     pub multiverse_id: f64,
