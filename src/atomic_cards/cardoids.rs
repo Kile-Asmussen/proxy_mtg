@@ -4,7 +4,7 @@ use crate::utils::iter::IterExt;
 
 use super::{cards::*, metadata::*, types::*};
 
-use std::{collections::BTreeSet, fmt::Display, marker::PhantomData};
+use std::{collections::BTreeSet, fmt::Display};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 #[serde(transparent)]
@@ -25,6 +25,10 @@ impl Cardoid {
 
     pub fn side(&self, side: Side) -> Option<&Card> {
         self.0.iter().find(|c| c.side == side)
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
     }
 
     pub fn face(&self) -> &Card {

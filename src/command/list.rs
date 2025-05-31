@@ -104,7 +104,7 @@ impl List {
         let cats = list.categories();
         let mut cards = list.card_names(true);
 
-        println!("Cards ({}):", list.count_cards());
+        println!("Cards ({}):", list.count_cards(false));
         for (cat, names) in &cats {
             let count: usize = names.iter().map(|s| cards.get(s).unwrap_or(&0usize)).sum();
             println!("  {} ({}):", cat, count);

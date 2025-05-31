@@ -4,7 +4,7 @@ use crate::utils::iter::IterExt;
 
 use super::{metadata::*, types::*};
 
-use std::{collections::BTreeSet, fmt::Display, marker::PhantomData};
+use std::{collections::BTreeSet, fmt::Display};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct Card {
@@ -82,8 +82,6 @@ pub struct Card {
     #[serde(rename = "type")]
     pub type_line: String,
     pub types: Vec<Type>,
-    #[serde(default, skip_serializing, skip_deserializing)]
-    __: PhantomData<()>,
 }
 
 impl Card {
@@ -156,6 +154,8 @@ impl Card {
             FaceLayout::Unadorned
         }
     }
+
+    pub fn translation() {}
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -168,6 +168,7 @@ pub enum FaceLayout {
     Creature,
     Emblem,
     Flip,
+    FullArt,
     Fuse,
     Leveler,
     Mutate,

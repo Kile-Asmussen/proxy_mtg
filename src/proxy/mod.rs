@@ -4,7 +4,6 @@ use std::{
     collections::{BTreeMap, BTreeSet},
     error::Error,
     fmt::Display,
-    marker::PhantomData,
     path::{Path, PathBuf},
     sync::atomic,
 };
@@ -12,17 +11,17 @@ use std::{
 use rand::rand_core::block;
 use serde::{Deserialize, Serialize};
 
-use crate::atomic_cards::{cardoids::Cardoid, types::*, AtomicCardsFile};
+use crate::atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::*, AtomicCardsFile};
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Proxy {
     pub name: String,
     #[serde(default, rename = "artFile")]
-    pub art_file: Vec<PathBuf>,
+    pub art_urls: Vec<String>,
     #[serde(default, rename = "artCredit")]
-    pub art_credit: Vec<String>,
+    pub art_credits: Vec<String>,
     #[serde(default, rename = "fullArt")]
-    pub full_art: bool,
+    pub full_art: Vec<bool>,
     #[serde(default, rename = "flavorText")]
     pub flavor_text: Vec<String>,
     #[serde(default)]
@@ -41,15 +40,19 @@ pub struct Proxy {
     pub tags: BTreeSet<String>,
     #[serde(default)]
     pub notes: String,
-    #[serde(default, skip_serializing, skip_deserializing)]
-    pub cardoid: Cardoid,
     #[serde(default)]
-    __: PhantomData<()>,
+    pub customize: Vec<ForeignData>,
+    #[serde(default)]
+    pub cardoid: Cardoid,
 }
 
 impl Proxy {
     pub fn layout(&self) -> &Layout {
         (&self.cardoid).layout()
+    }
+
+    pub fn in_deck(&self) -> bool {
+        !(self.sideboard || self.layout() == &Layout::Token)
     }
 
     fn repeats_default() -> usize {

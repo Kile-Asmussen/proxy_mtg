@@ -9,7 +9,10 @@ use std::{
 use rand::rand_core::block;
 use serde::{Deserialize, Serialize};
 
-use crate::atomic_cards::{cardoids::Cardoid, types::*, AtomicCardsFile};
+use crate::{
+    atomic_cards::{cardoids::Cardoid, types::*, AtomicCardsFile},
+    utils::iter::IterExt,
+};
 
 use super::Proxy;
 
@@ -23,50 +26,60 @@ impl DeckList {
         let decklist_structure: BTreeMap<String, Vec<Proxy>> =
             serde_json::from_str(&decklist_file)?;
         let mut res = Self(vec![]);
-        let mut failed_to_find = vec![];
+        let mut errors = vec![];
 
         for (mut category, mut vec) in decklist_structure {
             vec.sort_by_key(|a| a.name.clone());
-            for mut artoid in vec {
-                artoid.category = category.clone();
-                if let Some(cardoid) = atomics.data.get(&artoid.name).map(Clone::clone) {
-                    artoid.cardoid = cardoid;
-                    res.0.push(artoid);
-                } else {
-                    failed_to_find.push(artoid.name);
+            for mut proxy in vec {
+                proxy.category = category.clone();
+
+                if proxy.cardoid.is_empty() {
+                    let Some(cardoid) = atomics.data.get(&proxy.name).map(Clone::clone) else {
+                        errors.push("Failed to find: ".to_string() + &proxy.name);
+                        continue;
+                    };
+                    proxy.cardoid = cardoid;
                 }
+
+                let num_arts = proxy.art_urls.len();
+                let num_credits = proxy.art_urls.len();
+
+                if num_arts != num_credits {
+                    errors.push("Missing art credits: ".to_string() + &proxy.name);
+                    continue;
+                }
+
+                res.0.push(proxy);
             }
         }
 
-        if failed_to_find.is_empty() {
+        if errors.is_empty() {
             Ok(res)
         } else {
-            Err(DeckListBuildError(failed_to_find).into())
+            Err(DeckListBuildError(errors).into())
         }
     }
 
-    pub fn card_names(&self, all: bool) -> BTreeMap<String, usize> {
+    pub fn card_names(&self) -> BTreeMap<String, usize> {
         let mut res = BTreeMap::new();
 
         for proxy in self {
-            let count = res.entry(proxy.name.clone()).or_insert(0);
-            if (!proxy.sideboard && !proxy.token) || all {
-                *count += proxy.repeats;
+            if proxy.in_deck() {
+                *res.entry(proxy.name.clone()).or_insert(0) += proxy.repeats;
             }
         }
 
         res
     }
 
-    pub fn count_cards(&self) -> usize {
-        Self::count_cards_raw(self)
+    pub fn extras(&self) -> Vec<&Proxy> {
+        self.iter().filter(|p| !p.in_deck()).collvect()
     }
 
-    pub fn count_cards_raw<'a, I>(artoids: I) -> usize
-    where
-        I: IntoIterator<Item = &'a Proxy>,
-    {
-        artoids.into_iter().map(|a| a.repeats).sum()
+    pub fn count_cards(&self) -> usize {
+        self.iter()
+            .map(|p| if p.in_deck() { p.repeats } else { 0 })
+            .sum()
     }
 
     pub fn categories(&self) -> BTreeMap<String, BTreeSet<String>> {
@@ -200,7 +213,7 @@ pub struct DeckListBuildError(pub Vec<String>);
 
 impl Display for DeckListBuildError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str("The following cards were not found:\n")?;
+        f.write_str("The following errors occurred while reading decklist:\n")?;
 
         for name in &self.0 {
             f.write_fmt(format_args!("  {}\n", name))?;
