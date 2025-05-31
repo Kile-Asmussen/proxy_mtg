@@ -46,7 +46,7 @@ pub struct Card {
     pub is_reserved: bool,
     #[serde(default)]
     pub keywords: Vec<String>,
-    pub layout: Layout,
+    pub layout: CardLayout,
     #[serde(default, rename = "leadershipSkills")]
     pub leadership_skills: LeadershipSkills,
     pub legalities: Legalities,
@@ -92,7 +92,7 @@ impl Card {
         self.is_supertype(Supertype::Basic) && self.is_land()
     }
     pub fn is_spell(&self) -> bool {
-        !self.is_type(Type::Land) && self.layout != Layout::Token
+        !self.is_type(Type::Land) && self.layout != CardLayout::Token
     }
     pub fn is_permanent(&self) -> bool {
         !self.is_instant() && !self.is_sorcery()
@@ -115,25 +115,25 @@ impl Card {
 
     pub fn face_layouts(&self) -> FaceLayout {
         match &self.layout {
-            Layout::Adventure => FaceLayout::Omenventure,
-            Layout::Aftermath => FaceLayout::Aftermath,
-            Layout::Case => FaceLayout::Case,
-            Layout::Class => FaceLayout::Class,
-            Layout::Flip => FaceLayout::Flip,
-            Layout::Leveler => FaceLayout::Leveler,
-            Layout::Meld => self.guess_face_layout(),
-            Layout::ModalDfc => self.guess_face_layout(),
-            Layout::Mutate => FaceLayout::Mutate,
-            Layout::Normal => self.guess_face_layout(),
-            Layout::Prototype => FaceLayout::Prototype,
-            Layout::ReversibleCard => self.guess_face_layout(),
-            Layout::Saga if self.is_type(Type::Creature) => FaceLayout::SagaCreature,
-            Layout::Saga => FaceLayout::Saga,
-            Layout::Split if self.text.contains("Fuse") => FaceLayout::Fuse,
-            Layout::Split => FaceLayout::Split,
-            Layout::Token => self.guess_face_layout(),
-            Layout::Transform => self.guess_face_layout(),
-            Layout::Other(s) => FaceLayout::Unsupported,
+            CardLayout::Adventure => FaceLayout::Omenventure,
+            CardLayout::Aftermath => FaceLayout::Aftermath,
+            CardLayout::Case => FaceLayout::Case,
+            CardLayout::Class => FaceLayout::Class,
+            CardLayout::Flip => FaceLayout::Flip,
+            CardLayout::Leveler => FaceLayout::Leveler,
+            CardLayout::Meld => self.guess_face_layout(),
+            CardLayout::ModalDfc => self.guess_face_layout(),
+            CardLayout::Mutate => FaceLayout::Mutate,
+            CardLayout::Normal => self.guess_face_layout(),
+            CardLayout::Prototype => FaceLayout::Prototype,
+            CardLayout::ReversibleCard => self.guess_face_layout(),
+            CardLayout::Saga if self.is_type(Type::Creature) => FaceLayout::SagaCreature,
+            CardLayout::Saga => FaceLayout::Saga,
+            CardLayout::Split if self.text.contains("Fuse") => FaceLayout::Fuse,
+            CardLayout::Split => FaceLayout::Split,
+            CardLayout::Token => self.guess_face_layout(),
+            CardLayout::Transform => self.guess_face_layout(),
+            CardLayout::Other(s) => FaceLayout::Unsupported,
         }
     }
 

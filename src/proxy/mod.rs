@@ -11,7 +11,7 @@ use std::{
 use rand::rand_core::block;
 use serde::{Deserialize, Serialize};
 
-use crate::atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::*, AtomicCardsFile};
+use crate::atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::CardLayout};
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Proxy {
@@ -47,12 +47,12 @@ pub struct Proxy {
 }
 
 impl Proxy {
-    pub fn layout(&self) -> &Layout {
+    pub fn layout(&self) -> &CardLayout {
         (&self.cardoid).layout()
     }
 
     pub fn in_deck(&self) -> bool {
-        !(self.sideboard || self.layout() == &Layout::Token)
+        !(self.sideboard || self.layout() == &CardLayout::Token)
     }
 
     fn repeats_default() -> usize {

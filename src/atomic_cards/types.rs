@@ -85,7 +85,7 @@ impl WUBRG {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-pub enum Layout {
+pub enum CardLayout {
     #[serde(rename = "adventure")]
     Adventure,
     #[serde(rename = "aftermath")]

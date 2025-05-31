@@ -6,7 +6,7 @@ use std::{
 use normal::normal_card;
 
 use crate::{
-    atomic_cards::types::Layout,
+    atomic_cards::types::CardLayout,
     html::{Document, Element, Node, Tag},
     proxy::Proxy,
 };
