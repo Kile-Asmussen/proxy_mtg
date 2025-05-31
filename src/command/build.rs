@@ -2,7 +2,7 @@ use clap::Parser;
 use std::path::PathBuf;
 
 use crate::{
-    proxy::decklist::DeckList,
+    proxy::decklists::DeckList,
     rendering::{RenderContext, RenderSettings},
 };
 

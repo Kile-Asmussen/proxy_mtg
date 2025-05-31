@@ -8,7 +8,7 @@ use clap::{builder::Str, Parser, Subcommand};
 use rand::seq::SliceRandom;
 use regex::Regex;
 
-use crate::{atomic_cards::AtomicCardsFile, proxy::decklist::DeckList};
+use crate::{atomic_cards::AtomicCardsFile, proxy::decklists::DeckList};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]

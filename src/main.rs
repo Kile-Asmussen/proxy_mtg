@@ -13,7 +13,7 @@ use atomic_cards::*;
 use clap::Parser;
 use command::*;
 
-use crate::proxy::decklist::DeckList;
+use crate::proxy::decklists::DeckList;
 
 fn main() -> anyhow::Result<()> {
     let command = Command::parse();

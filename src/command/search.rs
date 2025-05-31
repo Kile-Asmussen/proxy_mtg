@@ -3,7 +3,7 @@ use regex::Regex;
 
 use anyhow::anyhow;
 
-use crate::{atomic_cards::AtomicCardsFile, proxy::decklist::DeckList};
+use crate::{atomic_cards::AtomicCardsFile, proxy::decklists::DeckList};
 
 #[derive(Parser, Debug, Clone)]
 pub struct Search {

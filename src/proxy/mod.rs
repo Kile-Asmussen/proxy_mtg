@@ -1,4 +1,4 @@
-pub mod decklist;
+pub mod decklists;
 
 use std::{
     collections::{BTreeMap, BTreeSet},

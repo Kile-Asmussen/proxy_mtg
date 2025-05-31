@@ -3,7 +3,7 @@ use rand::{seq::SliceRandom, SeedableRng};
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::{atomic_cards::types::*, proxy::decklist::DeckList, utils::iter::*};
+use crate::{atomic_cards::types::*, proxy::decklists::DeckList, utils::iter::*};
 
 #[derive(Parser, Debug, Clone)]
 pub struct List {
@@ -102,9 +102,9 @@ impl List {
 
     pub fn print_cards(list: &DeckList) {
         let cats = list.categories();
-        let mut cards = list.card_names(true);
+        let mut cards = list.card_names();
 
-        println!("Cards ({}):", list.count_cards(false));
+        println!("Cards ({}):", list.count_cards());
         for (cat, names) in &cats {
             let count: usize = names.iter().map(|s| cards.get(s).unwrap_or(&0usize)).sum();
             println!("  {} ({}):", cat, count);
@@ -116,7 +116,7 @@ impl List {
     }
 
     pub fn print_creatures(decklist: &DeckList) {
-        let names = decklist.card_names(false);
+        let names = decklist.card_names();
         let mut creatures = BTreeMap::new();
         for artoid in decklist {
             for card in &artoid.cardoid {
