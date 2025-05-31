@@ -5,7 +5,6 @@ use std::{
     error::Error,
     fmt::Display,
     path::{Path, PathBuf},
-    sync::atomic,
 };
 
 use rand::rand_core::block;
@@ -20,10 +19,8 @@ pub struct Proxy {
     pub art_urls: Vec<String>,
     #[serde(default, rename = "artCredit")]
     pub art_credits: Vec<String>,
-    #[serde(default, rename = "fullArt")]
+    #[serde(default, rename = "artCredit")]
     pub full_art: Vec<bool>,
-    #[serde(default, rename = "flavorText")]
-    pub flavor_text: Vec<String>,
     #[serde(default)]
     pub copies: usize,
     #[serde(default, rename = "reminderText")]
