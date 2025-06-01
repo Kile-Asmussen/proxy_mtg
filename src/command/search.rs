@@ -98,6 +98,7 @@ impl Searcher {
     where
         D: Display,
     {
+        println!();
         if self.discord {
             println!("{d:#}")
         } else {
