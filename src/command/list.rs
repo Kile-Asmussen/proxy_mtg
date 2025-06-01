@@ -103,9 +103,13 @@ impl List {
     pub fn print_cards(list: &DeckList) {
         let cats = list.categories();
         let mut cards = list.card_names();
+        let no_cat = "<uncategorized>".to_string();
 
         println!("Cards ({}):", list.count_cards());
-        for (cat, names) in &cats {
+        for (mut cat, names) in &cats {
+            if cat.is_empty() {
+                cat = &no_cat;
+            }
             let count: usize = names.iter().map(|s| cards.get(s).unwrap_or(&0usize)).sum();
             println!("  {} ({}):", cat, count);
             for name in names {
@@ -118,8 +122,8 @@ impl List {
     pub fn print_creatures(decklist: &DeckList) {
         let names = decklist.card_names();
         let mut creatures = BTreeMap::new();
-        for artoid in decklist {
-            for card in &artoid.cardoid {
+        for proxy in decklist {
+            for card in &proxy.cardoid {
                 if !card.types.contains(&Type::Creature) {
                     continue;
                 }
@@ -141,8 +145,8 @@ impl List {
 
     pub fn print_power_curve(decklist: &DeckList, power: bool) {
         let mut pt_count = BTreeMap::new();
-        for artoid in decklist {
-            for card in &artoid.cardoid {
+        for proxy in decklist {
+            for card in &proxy.cardoid {
                 if !card.types.contains(&Type::Creature) {
                     continue;
                 }
@@ -151,7 +155,7 @@ impl List {
                 } else {
                     (card.toughness.clone(), card.power.clone())
                 };
-                *pt_count.entry(pt).or_insert(0) += artoid.repeats;
+                *pt_count.entry(pt).or_insert(0) += proxy.repeats;
             }
         }
 
@@ -168,18 +172,18 @@ impl List {
     pub fn print_colors(decklist: &DeckList) {
         println!("Colors:");
         for (color, n) in decklist.color_hist() {
-            print!("  {} x {}", n, WUBRG::wubrg(&color))
+            print!("  {} x {}", n, WUBRG::render(&color))
         }
     }
 
     pub fn print_color_id(decklist: &DeckList) {
-        println!("Color Identity: {}", WUBRG::wubrg(&decklist.color_id()))
+        println!("Color Identity: {}", WUBRG::render(&decklist.color_id()))
     }
 
     pub fn print_color_hist(decklist: &DeckList) {
         println!("Color Histogram:");
         for (color, n) in decklist.color_hist() {
-            println!("  {} x {}", n, WUBRG::wubrg(&color));
+            println!("  {} x {}", n, WUBRG::render(&color));
         }
     }
 
@@ -238,26 +242,26 @@ impl List {
         let mut nonmana = 0usize;
         let mut nonmana_names = BTreeSet::new();
         let mut total = 0usize;
-        for artoid in decklist {
-            for land in &artoid.cardoid {
+        for proxy in decklist {
+            for land in &proxy.cardoid {
                 if !land.types.contains(&Type::Land) {
                     continue;
                 }
 
-                total += artoid.repeats;
+                total += proxy.repeats;
 
                 if land.text.contains("enters tapped") {
-                    tapland += artoid.repeats;
+                    tapland += proxy.repeats;
                     tapland_names.insert(land.name.clone());
                 }
 
                 if land.supertypes.contains(&Supertype::Basic) {
-                    basic += artoid.repeats;
+                    basic += proxy.repeats;
                     basic_names.insert(land.name.clone());
                 }
 
                 if !land.text.contains("{T}: Add") {
-                    nonmana += artoid.repeats;
+                    nonmana += proxy.repeats;
                     nonmana_names.insert(land.name.clone());
                 }
             }
@@ -280,13 +284,13 @@ impl List {
 
     pub fn print_creature_types(decklist: &DeckList) {
         let mut types = BTreeMap::new();
-        for artoid in decklist {
-            for card in &artoid.cardoid {
+        for proxy in decklist {
+            for card in &proxy.cardoid {
                 if !card.types.contains(&Type::Creature) {
                     continue;
                 }
                 for subtypes in &card.subtypes {
-                    *types.entry(subtypes.clone()).or_insert(0) += artoid.repeats;
+                    *types.entry(subtypes.clone()).or_insert(0) += proxy.repeats;
                 }
             }
         }

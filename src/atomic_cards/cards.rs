@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::utils::iter::IterExt;
+use crate::utils::{
+    iter::IterExt,
+    manareplacers::{DiscordEmoji, ManaReplacer},
+};
 
 use super::{metadata::*, types::*};
 
@@ -185,27 +188,53 @@ pub enum FaceLayout {
 
 impl Display for Card {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut name = &self.face_name;
-        if name.is_empty() {
-            name = &self.name;
-        }
-        f.write_fmt(format_args!("> {} {}", name, self.mana_cost))?;
-        f.write_fmt(format_args!(
-            "\n> ({}) {}",
-            WUBRG::wubrg(&self.colors),
-            self.type_line
-        ))?;
-        for line in self.text.lines() {
-            f.write_fmt(format_args!("\n> {}", line))?;
-        }
-        if self.types.contains(&Type::Planeswalker) {
-            f.write_fmt(format_args!("\n> [{}]", self.loyalty))?;
-        }
-        if self.types.contains(&Type::Creature) {
-            f.write_fmt(format_args!("\n> {}/{}", self.power, self.toughness))?;
-        }
-        if self.types.contains(&Type::Battle) {
-            f.write_fmt(format_args!("\n> {{{}}}", self.defense))?;
+        if f.alternate() {
+            let mut name = &self.face_name;
+            if name.is_empty() {
+                name = &self.name;
+            }
+            write!(
+                f,
+                "> *{}* {}",
+                name,
+                (&DiscordEmoji).replace(&self.mana_cost).join(" ")
+            )?;
+            f.write_fmt(format_args!(
+                "\n> ({}) {}",
+                DiscordEmoji::colored_circles(&self.colors),
+                self.type_line
+            ))?;
+            for line in self.text.lines() {
+                write!(f, "\n> {}", (&DiscordEmoji).replace(line).join(" "))?;
+            }
+            if self.types.contains(&Type::Planeswalker) {
+                write!(f, "\n> [{}]", self.loyalty)?;
+            }
+            if self.types.contains(&Type::Creature) {
+                write!(f, "\n> {}/{}", self.power, self.toughness)?;
+            }
+            if self.types.contains(&Type::Battle) {
+                write!(f, "\n> [{}]", self.defense)?;
+            }
+        } else {
+            let mut name = &self.face_name;
+            if name.is_empty() {
+                name = &self.name;
+            }
+            write!(f, "{} {}", name, &self.mana_cost)?;
+            write!(f, "\n({}) {}", WUBRG::render(&self.colors), self.type_line)?;
+            for line in self.text.lines() {
+                write!(f, "\n{}", line)?;
+            }
+            if self.types.contains(&Type::Planeswalker) {
+                write!(f, "\n[{}]", self.loyalty)?;
+            }
+            if self.types.contains(&Type::Creature) {
+                write!(f, "\n{}/{}", self.power, self.toughness)?;
+            }
+            if self.types.contains(&Type::Battle) {
+                write!(f, "\n[{}]", self.defense)?;
+            }
         }
         Ok(())
     }

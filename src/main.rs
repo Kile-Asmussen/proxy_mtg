@@ -7,7 +7,7 @@ mod proxy;
 mod rendering;
 mod utils;
 
-use std::{error::Error, ffi::OsStr, time::Instant};
+use std::{error::Error, ffi::OsStr, path::Path, time::Instant};
 
 use atomic_cards::*;
 use clap::Parser;
@@ -20,7 +20,11 @@ fn main() -> anyhow::Result<()> {
 
     let atomic_cards = AtomicCardsFile::load()?;
 
-    let decklist = DeckList::load(&command.decklist, &atomic_cards)?;
+    let decklist = if &command.decklist == Path::new("--") {
+        DeckList::new()
+    } else {
+        DeckList::load(&command.decklist, &atomic_cards)?
+    };
 
     command.subcommand.dispatch(&atomic_cards, &decklist);
 

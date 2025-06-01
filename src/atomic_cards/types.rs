@@ -59,7 +59,7 @@ pub enum WUBRG {
 }
 
 impl WUBRG {
-    pub fn wubrg(colors: &BTreeSet<WUBRG>) -> String {
+    pub fn render(colors: &BTreeSet<WUBRG>) -> String {
         let res = colors
             .into_iter()
             .map(|c| format!("{:?}", c))
@@ -71,6 +71,15 @@ impl WUBRG {
         } else {
             res
         }
+    }
+
+    pub fn wubrg() -> BTreeSet<WUBRG> {
+        use WUBRG::*;
+        BTreeSet::from_iter([W, U, B, R, G])
+    }
+
+    pub fn colorless() -> BTreeSet<WUBRG> {
+        BTreeSet::new()
     }
 
     pub fn name(&self) -> &'static str {

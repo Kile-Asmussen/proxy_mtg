@@ -25,43 +25,23 @@ use super::Proxy;
 pub struct DeckList(Vec<Proxy>);
 
 impl DeckList {
+    pub fn new() -> DeckList {
+        Self(vec![])
+    }
+
+    pub fn add_card(&mut self, proxy: Proxy) {
+        self.0.push(proxy)
+    }
+
+    pub fn load_str(data: &str, atomics: &AtomicCardsFile) -> anyhow::Result<DeckList> {
+        let structure: DeckListFile = serde_json::from_str(&data)?;
+
+        Ok(DeckList(structure.build(atomics)?))
+    }
+
     pub fn load(path: &Path, atomics: &AtomicCardsFile) -> anyhow::Result<DeckList> {
-        let decklist_file = std::fs::read_to_string(path)?;
-        let decklist_structure: BTreeMap<String, Vec<Proxy>> =
-            serde_json::from_str(&decklist_file)?;
-        let mut res = Self(vec![]);
-        let mut errors = vec![];
-
-        for (mut category, mut vec) in decklist_structure {
-            vec.sort_by_key(|a| a.name.clone());
-            for mut proxy in vec {
-                proxy.category = category.clone();
-
-                if proxy.cardoid.is_empty() {
-                    let Some(cardoid) = atomics.data.get(&proxy.name).map(Clone::clone) else {
-                        errors.push("Failed to find: ".to_string() + &proxy.name);
-                        continue;
-                    };
-                    proxy.cardoid = cardoid;
-                }
-
-                let num_arts = proxy.art_urls.len();
-                let num_credits = proxy.art_urls.len();
-
-                if num_arts != num_credits {
-                    errors.push("Missing art credits: ".to_string() + &proxy.name);
-                    continue;
-                }
-
-                res.0.push(proxy);
-            }
-        }
-
-        if errors.is_empty() {
-            Ok(res)
-        } else {
-            Err(DeckListBuildError(errors).into())
-        }
+        let data = std::fs::read_to_string(path)?;
+        Self::load_str(&data, atomics)
     }
 
     pub fn card_names(&self) -> BTreeMap<String, usize> {
@@ -89,10 +69,10 @@ impl DeckList {
     pub fn categories(&self) -> BTreeMap<String, BTreeSet<String>> {
         let mut res = BTreeMap::new();
 
-        for artoid in &self.0 {
-            res.entry(artoid.category.clone())
+        for proxy in &self.0 {
+            res.entry(proxy.category.clone())
                 .or_insert_with(BTreeSet::new)
-                .insert(artoid.name.clone());
+                .insert(proxy.name.clone());
         }
 
         res
@@ -101,12 +81,12 @@ impl DeckList {
     pub fn color_hist(&self) -> BTreeMap<BTreeSet<WUBRG>, usize> {
         let mut res = BTreeMap::new();
 
-        for artoid in &self.0 {
-            for card in &artoid.cardoid {
+        for proxy in &self.0 {
+            for card in &proxy.cardoid {
                 if card.types.contains(&Type::Land) {
                     continue;
                 }
-                *res.entry(card.colors.clone()).or_insert(0) += artoid.repeats;
+                *res.entry(card.colors.clone()).or_insert(0) += proxy.repeats;
             }
         }
 
@@ -116,8 +96,8 @@ impl DeckList {
     pub fn color_id(&self) -> BTreeSet<WUBRG> {
         let mut res = BTreeSet::new();
 
-        for artoid in &self.0 {
-            for card in &artoid.cardoid {
+        for proxy in &self.0 {
+            for card in &proxy.cardoid {
                 res.append(&mut card.color_identity.clone())
             }
         }
@@ -128,12 +108,12 @@ impl DeckList {
     pub fn curve(&self) -> BTreeMap<usize, usize> {
         let mut res = BTreeMap::new();
 
-        for artoid in &self.0 {
-            for card in &artoid.cardoid {
+        for proxy in &self.0 {
+            for card in &proxy.cardoid {
                 if card.types.contains(&Type::Land) {
                     continue;
                 }
-                *res.entry(card.mana_value as usize).or_insert(0) += artoid.repeats;
+                *res.entry(card.mana_value as usize).or_insert(0) += proxy.repeats;
             }
         }
 
@@ -143,10 +123,22 @@ impl DeckList {
     pub fn tag_hist(&self) -> BTreeMap<String, usize> {
         let mut res = BTreeMap::new();
 
-        for artoid in &self.0 {
-            for tag in &artoid.tags {
-                *res.entry(tag.clone()).or_insert(0) += artoid.repeats;
+        for proxy in &self.0 {
+            for tag in &proxy.tags {
+                *res.entry(tag.clone()).or_insert(0) += proxy.repeats;
             }
+        }
+
+        return res;
+    }
+
+    pub fn tags(&self) -> BTreeMap<String, BTreeSet<String>> {
+        let mut res = BTreeMap::new();
+
+        for proxy in &self.0 {
+            res.entry(proxy.name.clone())
+                .or_insert(BTreeSet::new())
+                .append(&mut proxy.tags.clone())
         }
 
         return res;
@@ -155,8 +147,8 @@ impl DeckList {
     pub fn type_hist(&self) -> BTreeMap<String, usize> {
         let mut res = BTreeMap::new();
 
-        for artoid in &self.0 {
-            for card in &artoid.cardoid {
+        for proxy in &self.0 {
+            for card in &proxy.cardoid {
                 let typeline = card
                     .supertypes
                     .iter()
@@ -166,7 +158,7 @@ impl DeckList {
                     .join(" ");
 
                 let count = res.entry(typeline).or_insert(0);
-                *count += artoid.repeats;
+                *count += proxy.repeats;
             }
         }
 
@@ -179,6 +171,10 @@ impl DeckList {
 
     pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Proxy> {
         self.into_iter()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
     }
 }
 
@@ -209,6 +205,75 @@ impl<'a> IntoIterator for &'a mut DeckList {
 
     fn into_iter(self) -> Self::IntoIter {
         (&mut self.0).into_iter()
+    }
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+enum DeckListFile {
+    #[serde(untagged)]
+    Categorized(BTreeMap<String, Vec<Proxy>>),
+    #[serde(untagged)]
+    Uncategorized(Vec<Proxy>),
+}
+
+impl DeckListFile {
+    fn build(self, atomics: &AtomicCardsFile) -> anyhow::Result<Vec<Proxy>> {
+        let mut res = vec![];
+        let mut errors = vec![];
+
+        match self {
+            DeckListFile::Categorized(categories) => {
+                Self::build_categorized(categories, atomics, &mut res, &mut errors)
+            }
+            DeckListFile::Uncategorized(flat) => {
+                Self::build_uncategorized(flat, atomics, &mut res, &mut errors)
+            }
+        }
+
+        if errors.is_empty() {
+            Ok(res)
+        } else {
+            Err(DeckListBuildError(errors).into())
+        }
+    }
+
+    fn build_categorized(
+        categories: BTreeMap<String, Vec<Proxy>>,
+        atomics: &AtomicCardsFile,
+        res: &mut Vec<Proxy>,
+        errors: &mut Vec<String>,
+    ) {
+        for (mut category, mut vec) in categories {
+            vec.sort_by_key(|a| a.name.clone());
+            vec.iter_mut().for_each(|a| a.category = category.clone());
+            Self::build_uncategorized(vec, atomics, res, errors);
+        }
+    }
+
+    fn build_uncategorized(
+        vec: Vec<Proxy>,
+        atomics: &AtomicCardsFile,
+        res: &mut Vec<Proxy>,
+        errors: &mut Vec<String>,
+    ) {
+        for mut proxy in vec {
+            if proxy.cardoid.is_empty() {
+                let Some(cardoid) = atomics.data.get(&proxy.name).map(Clone::clone) else {
+                    errors.push("Failed to find: ".to_string() + &proxy.name);
+                    continue;
+                };
+                proxy.cardoid = cardoid;
+            }
+
+            let num_arts = proxy.art_urls.len();
+            let num_credits = proxy.art_urls.len();
+
+            if num_arts != num_credits {
+                errors.push("Missing art credits: ".to_string() + &proxy.name);
+                continue;
+            }
+            res.push(proxy);
+        }
     }
 }
 

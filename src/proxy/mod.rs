@@ -10,7 +10,10 @@ use std::{
 use rand::rand_core::block;
 use serde::{Deserialize, Serialize};
 
-use crate::atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::CardLayout};
+use crate::{
+    atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::CardLayout},
+    utils::iter::IterExt,
+};
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Proxy {
@@ -29,8 +32,6 @@ pub struct Proxy {
     pub repeats: usize,
     #[serde(default)]
     pub sideboard: bool,
-    #[serde(default)]
-    pub token: bool,
     #[serde(default)]
     pub category: String,
     #[serde(default)]
@@ -61,23 +62,42 @@ impl Display for Proxy {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         self.cardoid.fmt(f);
 
-        f.write_str("\n> # # #")?;
+        if f.alternate() {
+            write!(f, "\n>")?;
 
-        f.write_fmt(format_args!("\n> category: {}", self.category))?;
-        if !self.tags.is_empty() {
-            f.write_str("\n> tags: ");
-            f.write_str(
-                &self
-                    .tags
-                    .iter()
-                    .map(Clone::clone)
-                    .collect::<Vec<_>>()
-                    .join(", "),
-            )?;
-        }
+            if !self.category.is_empty() {
+                write!(f, "\n> category: {}", self.category)?;
+            }
 
-        if self.repeats > 1 {
-            f.write_fmt(format_args!("> copies: {}", self.repeats))?;
+            if !self.tags.is_empty() {
+                write!(
+                    f,
+                    "\n> tags: {}",
+                    &self.tags.iter().map(Clone::clone).collvect().join(", ")
+                )?;
+            }
+
+            if self.repeats > 1 {
+                write!(f, "> copies: {}", self.repeats)?;
+            }
+        } else {
+            write!(f, "###")?;
+
+            if !self.category.is_empty() {
+                write!(f, "\ncategory: {}", self.category)?;
+            }
+
+            if !self.tags.is_empty() {
+                write!(
+                    f,
+                    "\ntags: {}",
+                    &self.tags.iter().map(Clone::clone).collvect().join(", ")
+                )?;
+            }
+
+            if self.repeats > 1 {
+                write!(f, "copies: {}", self.repeats)?;
+            }
         }
 
         return Ok(());
