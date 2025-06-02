@@ -1,3 +1,7 @@
+pub mod general;
+pub mod manafont;
+pub mod normal;
+
 use std::{
     collections::{BTreeMap, BTreeSet},
     mem,
@@ -9,13 +13,11 @@ use crate::{
     atomic_cards::types::CardLayout,
     html::{Document, Element, Node, Tag},
     proxy::Proxy,
+    rendering::general::empty_card,
 };
 
-pub mod general;
-pub mod normal;
-
 pub struct RenderSettings {
-    pub color: bool,
+    pub in_color: bool,
     pub reminder_text: bool,
 }
 
@@ -33,7 +35,12 @@ impl RenderContext {
     }
 
     pub fn add_proxy(&mut self, proxy: &Proxy) {
-        todo!()
+        for _ in 1..=proxy.repeats {
+            self.cards.append(&mut match proxy.layout() {
+                CardLayout::Normal => normal_card(proxy, &self.settings),
+                _ => vec![empty_card(proxy.cardoid.face())],
+            })
+        }
     }
 
     pub fn into_file(self) -> Document {

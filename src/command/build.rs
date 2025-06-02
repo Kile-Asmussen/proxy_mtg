@@ -25,7 +25,7 @@ impl Build {
 
     pub fn dispatch(&self, decklist: &DeckList) -> anyhow::Result<()> {
         let mut render = RenderContext::new(RenderSettings {
-            color: self.color,
+            in_color: self.color,
             reminder_text: self.reminders,
         });
 

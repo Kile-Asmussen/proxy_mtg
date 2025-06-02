@@ -2,6 +2,7 @@ use std::collections::BTreeSet;
 
 use clap::builder::Str;
 use lazy_regex::regex;
+use regex::Regex;
 
 use crate::atomic_cards::types::WUBRG;
 
@@ -11,7 +12,7 @@ pub fn replace_symbols<R>(replacer: &R, mut haystack: &str) -> Vec<R::Item>
 where
     R: RulesTextSymbolReplacer,
 {
-    let matcher = regex!(r"\{.*?\}");
+    let matcher = replacer.matcher();
 
     let mut vec = vec![];
 
@@ -19,11 +20,11 @@ where
         if let Some(matched) = matcher.find(haystack) {
             if matched.start() != 0 {
                 vec.push(replacer.intermediate_text(&haystack[..matched.start()]));
-                vec.push(replacer.joiner());
+                replacer.joiner().map(|i| vec.push(i));
             }
             vec.push(replacer.map_symbol(matched.as_str()));
             haystack = &haystack[matched.end()..];
-            vec.push(replacer.joiner());
+            replacer.joiner().map(|i| vec.push(i));
         } else {
             vec.push(replacer.intermediate_text(haystack));
             haystack = "";
@@ -36,11 +37,15 @@ where
 pub trait RulesTextSymbolReplacer {
     type Item;
 
+    fn matcher(&self) -> Regex {
+        Regex::new(r"\{.*?\}").unwrap()
+    }
+
     fn map_symbol(&self, matched: &str) -> Self::Item;
 
     fn intermediate_text(&self, non_matched: &str) -> Self::Item;
 
-    fn joiner(&self) -> Self::Item;
+    fn joiner(&self) -> Option<Self::Item>;
 
     fn indicator(&self, indicate: &BTreeSet<WUBRG>) -> Self::Item;
 }
@@ -58,8 +63,8 @@ impl RulesTextSymbolReplacer for NothingReplacer {
         non_matched.to_string()
     }
 
-    fn joiner(&self) -> Self::Item {
-        "".to_string()
+    fn joiner(&self) -> Option<Self::Item> {
+        None
     }
 
     fn indicator(&self, indicate: &BTreeSet<WUBRG>) -> Self::Item {
@@ -80,8 +85,8 @@ impl RulesTextSymbolReplacer for DiscordEmoji {
         non_matched.to_string()
     }
 
-    fn joiner(&self) -> Self::Item {
-        " ".to_string()
+    fn joiner(&self) -> Option<Self::Item> {
+        Some(" ".to_string())
     }
 
     fn indicator(&self, indicate: &BTreeSet<WUBRG>) -> Self::Item {
@@ -110,6 +115,7 @@ impl DiscordEmoji {
             "{B}" => ":skull:",
             "{R}" => ":fire:",
             "{G}" => ":deciduous_tree:",
+            "{S}" => ":snowflake:",
             "{1}" => ":one:",
             "{2}" => ":two:",
             "{3}" => ":three:",
