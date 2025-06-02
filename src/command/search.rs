@@ -28,8 +28,6 @@ use crate::{
 pub struct Search {
     #[arg(long)]
     pub tag: Vec<String>,
-    #[arg(long)]
-    pub keyword: Vec<String>,
     #[arg(long = "name")]
     pub name: Vec<String>,
     #[arg(long)]
@@ -88,7 +86,6 @@ impl Search {
 
 struct Searcher {
     tags: BTreeSet<String>,
-    keywords: BTreeSet<String>,
     color: BTreeSet<WUBRG>,
     commander: BTreeSet<WUBRG>,
     name: Vec<Regex>,
@@ -104,7 +101,6 @@ impl Searcher {
     fn new(it: Search) -> anyhow::Result<Self> {
         Ok(Self {
             tags: BTreeSet::from_iter(it.tag.into_iter()),
-            keywords: BTreeSet::from_iter(it.keyword.into_iter()),
             name: Self::build_regexes(it.case_sensitive, it.name)?,
             vname: Self::build_regexes(it.case_sensitive, it.vname)?,
             color: Self::build_color(it.color, WUBRG::colorless())?,
@@ -147,7 +143,6 @@ impl Searcher {
 
     fn matches_card(&self, card: &Card) -> bool {
         self.color < card.colors
-            && self.keywords < card.keywords
             && Self::regex_match(&self.r#type, &self.vtype, &card.type_line)
             && Self::regex_match(&self.grep, &self.vgrep, &card.text)
     }
