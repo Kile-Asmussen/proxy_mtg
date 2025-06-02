@@ -1,12 +1,19 @@
 use lazy_regex::regex;
-use std::{collections::BTreeSet, ops::Div};
+use reqwest::blocking::get;
+use std::{
+    collections::BTreeSet,
+    ops::{Div, Rem},
+};
 
 use crate::{
     atomic_cards::{cards::*, types::*},
     html::*,
     proxy::Proxy,
     rendering::manafont::ManaFontSymbolics,
-    utils::{iter::IterExt, symbolics::replace_symbols},
+    utils::{
+        iter::IterExt,
+        symbolics::{replace_symbols, RulesTextSymbolReplacer},
+    },
 };
 
 use super::{general::*, RenderSettings};
@@ -75,10 +82,17 @@ pub fn rules_text_basic_div(card: &Card) -> Element {
 
 pub fn rules_text_div(card: &Card, settings: &RenderSettings) -> Element {
     let mut text = card.text.clone();
+    let remindex = regex!(r"\([^\n]+\)");
 
-    if !settings.reminder_text {
-        text = regex!(r"\([^\n]+\)").replace_all(&text, "").into_owned();
-    }
+    text = if settings.reminder_text {
+        remindex
+            .replace_all(&text, |s: &regex::Captures<'_>| {
+                "<em>".to_string() + s.get(0).unwrap().as_str() + "</em>"
+            })
+            .into_owned()
+    } else {
+        remindex.replace_all(&text, "").into_owned()
+    };
 
     let text_len = text.len();
 

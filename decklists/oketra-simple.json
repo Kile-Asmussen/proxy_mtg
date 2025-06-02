@@ -1,22 +1,23 @@
 {
-    "Block 0 - Commander": [
+    "uncategorized": [
         {
             "name": "God-Eternal Oketra",
-            "tags": [
-                "zombie beatdown"
-            ],
             "artUrls": [
                 "https://i.imgur.com/70qjbcs.png"
             ],
             "artCredits": [
                 "u/Ishton"
             ]
-        }
-    ],
-    "Block A - Manabase": [
+        },
         {
             "name": "Snow-Covered Plains",
             "repeats": 2
+        },
+        {
+            "name": "Mountain"
+        },
+        {
+            "name": "Cyclonic Rift"
         }
     ]
 }
