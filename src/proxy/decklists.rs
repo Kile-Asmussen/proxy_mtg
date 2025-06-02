@@ -34,11 +34,9 @@ impl DeckList {
     }
 
     pub fn load_str(data: &str, atomics: &AtomicCardsFile) -> anyhow::Result<DeckList> {
-        let structure: BTreeMap<String, Vec<Proxy>> = serde_json::from_str(&data)?;
+        let structure: DeckListFile = serde_json::from_str(&data)?;
 
-        Ok(DeckList(
-            DeckListFile::Categorized(structure).build(atomics)?,
-        ))
+        Ok(DeckList(structure.build(atomics)?))
     }
 
     pub fn load(path: &Path, atomics: &AtomicCardsFile) -> anyhow::Result<DeckList> {
@@ -50,9 +48,9 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for proxy in self {
-            //if proxy.in_deck() {
-            *res.entry(proxy.name.clone()).or_insert(0) += proxy.repeats;
-            //}
+            if proxy.in_deck() {
+                *res.entry(proxy.name.clone()).or_insert(0) += proxy.repeats;
+            }
         }
 
         res
@@ -211,26 +209,15 @@ impl<'a> IntoIterator for &'a mut DeckList {
 }
 
 #[derive(Serialize, Deserialize, Clone)]
-enum DeckListFile {
-    #[serde(untagged)]
-    Categorized(BTreeMap<String, Vec<Proxy>>),
-    #[serde(untagged)]
-    Uncategorized(Vec<Proxy>),
-}
+#[serde(transparent)]
+struct DeckListFile(BTreeMap<String, Vec<Proxy>>);
 
 impl DeckListFile {
     fn build(self, atomics: &AtomicCardsFile) -> anyhow::Result<Vec<Proxy>> {
         let mut res = vec![];
         let mut errors = vec![];
 
-        match self {
-            DeckListFile::Categorized(categories) => {
-                Self::build_categorized(categories, atomics, &mut res, &mut errors)
-            }
-            DeckListFile::Uncategorized(flat) => {
-                Self::build_uncategorized(flat, atomics, &mut res, &mut errors)
-            }
-        }
+        Self::build_categorized(self.0, atomics, &mut res, &mut errors);
 
         if errors.is_empty() {
             Ok(res)

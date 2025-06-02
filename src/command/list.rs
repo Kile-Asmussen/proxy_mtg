@@ -114,13 +114,9 @@ impl List {
     pub fn print_cards(list: &DeckList) {
         let cats = list.categories();
         let mut cards = list.card_names();
-        let no_cat = "<uncategorized>".to_string();
 
         println!("Cards ({}):", list.count_cards());
-        for (mut cat, names) in &cats {
-            if cat.is_empty() {
-                cat = &no_cat;
-            }
+        for (cat, names) in &cats {
             let count: usize = names.iter().map(|s| cards.get(s).unwrap_or(&0usize)).sum();
             println!("  {} ({}):", cat, count);
             for name in names {
