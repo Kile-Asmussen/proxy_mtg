@@ -18,12 +18,12 @@ use crate::{
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Proxy {
     pub name: String,
-    #[serde(default, rename = "artFile")]
+    #[serde(default, rename = "artUrls")]
     pub art_urls: Vec<String>,
-    #[serde(default, rename = "artCredit")]
+    #[serde(default, rename = "artCredits")]
     pub art_credits: Vec<String>,
-    #[serde(default, rename = "artCredit")]
-    pub full_art: Vec<bool>,
+    #[serde(default, rename = "fullArts")]
+    pub full_arts: Vec<bool>,
     #[serde(default)]
     pub copies: usize,
     #[serde(default, rename = "reminderText")]

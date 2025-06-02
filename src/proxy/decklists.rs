@@ -34,9 +34,11 @@ impl DeckList {
     }
 
     pub fn load_str(data: &str, atomics: &AtomicCardsFile) -> anyhow::Result<DeckList> {
-        let structure: DeckListFile = serde_json::from_str(&data)?;
+        let structure: BTreeMap<String, Vec<Proxy>> = serde_json::from_str(&data)?;
 
-        Ok(DeckList(structure.build(atomics)?))
+        Ok(DeckList(
+            DeckListFile::Categorized(structure).build(atomics)?,
+        ))
     }
 
     pub fn load(path: &Path, atomics: &AtomicCardsFile) -> anyhow::Result<DeckList> {
@@ -48,9 +50,9 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for proxy in self {
-            if proxy.in_deck() {
-                *res.entry(proxy.name.clone()).or_insert(0) += proxy.repeats;
-            }
+            //if proxy.in_deck() {
+            *res.entry(proxy.name.clone()).or_insert(0) += proxy.repeats;
+            //}
         }
 
         res

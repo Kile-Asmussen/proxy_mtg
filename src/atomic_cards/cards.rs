@@ -15,7 +15,7 @@ pub struct Card {
     pub ascii_name: String,
     #[serde(default, rename = "attractionLights")]
     pub attraction_lights: Vec<String>,
-    #[serde(rename = "colorIdentity")]
+    #[serde(default, rename = "colorIdentity")]
     pub color_identity: BTreeSet<WUBRG>,
     #[serde(default, rename = "colorIndicator")]
     pub color_indicator: BTreeSet<WUBRG>,
@@ -42,6 +42,7 @@ pub struct Card {
     pub hand: String,
     #[serde(default, rename = "hasAlternativeDeckLimit")]
     pub has_alternative_deck_limit: bool,
+    #[serde(default)]
     pub identifiers: Identifiers,
     #[serde(default, rename = "isFunny")]
     pub is_funny: bool,
@@ -52,6 +53,7 @@ pub struct Card {
     pub layout: CardLayout,
     #[serde(default, rename = "leadershipSkills")]
     pub leadership_skills: LeadershipSkills,
+    #[serde(default)]
     pub legalities: Legalities,
     #[serde(default)]
     pub life: String,
@@ -66,7 +68,7 @@ pub struct Card {
     pub power: String,
     #[serde(default)]
     pub printings: Vec<String>,
-    #[serde(rename = "purchaseUrls")]
+    #[serde(default, rename = "purchaseUrls")]
     pub purchase_urls: PurchaseUrls,
     #[serde(default, rename = "relatedCards")]
     pub related_cards: RelatedCards,
@@ -76,7 +78,9 @@ pub struct Card {
     pub side: Side,
     #[serde(default)]
     pub subsets: Vec<String>,
+    #[serde(default)]
     pub subtypes: Vec<String>,
+    #[serde(default)]
     pub supertypes: Vec<Supertype>,
     #[serde(default)]
     pub text: String,

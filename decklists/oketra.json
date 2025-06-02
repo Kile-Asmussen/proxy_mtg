@@ -567,5 +567,31 @@
             "name": "Snow-Covered Plains",
             "repeats": 20
         }
+    ],
+    "Bock B - Sideboard": [
+        {
+            "name": "Zombie Warrior",
+            "repeats": 3,
+            "cardoid": [
+                {
+                    "layout": "token",
+                    "name": "Zombie Warrior",
+                    "colors": [
+                        "B"
+                    ],
+                    "power": "4",
+                    "tougness": "4",
+                    "text": "Vigilance",
+                    "type": "Token Creature - Zombie Warrior",
+                    "types": [
+                        "Creature"
+                    ],
+                    "subtypes": [
+                        "Zombie",
+                        "Warrior"
+                    ]
+                }
+            ]
+        }
     ]
 }
