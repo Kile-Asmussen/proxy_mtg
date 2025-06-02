@@ -1,12 +1,17 @@
 use clap::Parser;
 use rand::{seq::SliceRandom, SeedableRng};
 
-use std::collections::{BTreeMap, BTreeSet};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    path::{Path, PathBuf},
+};
 
 use crate::{atomic_cards::types::*, proxy::decklists::DeckList, utils::iter::*};
 
 #[derive(Parser, Debug, Clone)]
 pub struct List {
+    #[arg(value_name = "FILE")]
+    pub decklist: PathBuf,
     #[arg(long)]
     pub id: bool,
     #[arg(long)]
@@ -34,7 +39,13 @@ pub struct List {
 }
 
 impl List {
+    pub fn decklist_file(&self) -> &Path {
+        &self.decklist
+    }
+
     pub fn dispatch(&self, decklist: &DeckList) -> anyhow::Result<()> {
+        if decklist.is_empty() {}
+
         if self.id {
             println!();
             Self::print_color_id(decklist);

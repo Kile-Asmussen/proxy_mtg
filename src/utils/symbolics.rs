@@ -1,58 +1,93 @@
 use std::collections::BTreeSet;
 
+use clap::builder::Str;
 use lazy_regex::regex;
-use regex::{Match, Regex};
 
 use crate::atomic_cards::types::WUBRG;
 
 use super::iter::IterExt;
 
-pub trait ManaReplacer {
-    type Item;
-    fn dispatch(&self, matched: &str) -> Self::Item;
-    fn scratch(&self, non_matched: &str) -> Self::Item;
+pub fn replace_symbols<R>(replacer: &R, mut haystack: &str) -> Vec<R::Item>
+where
+    R: RulesTextSymbolReplacer,
+{
+    let matcher = regex!(r"\{.*?\}");
 
-    fn replace(&self, mut haystack: &str) -> Vec<Self::Item> {
-        let matcher = regex!(r"\{.*?\}");
+    let mut vec = vec![];
 
-        let mut vec = vec![];
-
-        while !haystack.is_empty() {
-            if let Some(matched) = matcher.find(haystack) {
-                if matched.start() != 0 {
-                    vec.push(self.scratch(&haystack[..matched.start()]));
-                }
-                vec.push(self.dispatch(matched.as_str()));
-                haystack = &haystack[matched.end()..];
-            } else {
-                vec.push(self.scratch(haystack));
-                haystack = "";
+    while !haystack.is_empty() {
+        if let Some(matched) = matcher.find(haystack) {
+            if matched.start() != 0 {
+                vec.push(replacer.intermediate_text(&haystack[..matched.start()]));
+                vec.push(replacer.joiner());
             }
+            vec.push(replacer.map_symbol(matched.as_str()));
+            haystack = &haystack[matched.end()..];
+            vec.push(replacer.joiner());
+        } else {
+            vec.push(replacer.intermediate_text(haystack));
+            haystack = "";
         }
+    }
 
-        vec
+    vec
+}
+
+pub trait RulesTextSymbolReplacer {
+    type Item;
+
+    fn map_symbol(&self, matched: &str) -> Self::Item;
+
+    fn intermediate_text(&self, non_matched: &str) -> Self::Item;
+
+    fn joiner(&self) -> Self::Item;
+
+    fn indicator(&self, indicate: &BTreeSet<WUBRG>) -> Self::Item;
+}
+
+pub struct NothingReplacer;
+
+impl RulesTextSymbolReplacer for NothingReplacer {
+    type Item = String;
+
+    fn map_symbol(&self, matched: &str) -> Self::Item {
+        matched.to_string()
+    }
+
+    fn intermediate_text(&self, non_matched: &str) -> Self::Item {
+        non_matched.to_string()
+    }
+
+    fn joiner(&self) -> Self::Item {
+        "".to_string()
+    }
+
+    fn indicator(&self, indicate: &BTreeSet<WUBRG>) -> Self::Item {
+        WUBRG::render(indicate)
     }
 }
 
 pub struct DiscordEmoji;
 
-impl ManaReplacer for DiscordEmoji {
+impl RulesTextSymbolReplacer for DiscordEmoji {
     type Item = String;
 
-    fn dispatch(&self, matched: &str) -> Self::Item {
+    fn map_symbol(&self, matched: &str) -> Self::Item {
         Self::symbols(matched).to_string()
     }
 
-    fn scratch(&self, non_matched: &str) -> Self::Item {
+    fn intermediate_text(&self, non_matched: &str) -> Self::Item {
         non_matched.to_string()
     }
-}
 
-impl DiscordEmoji {
-    pub fn colored_circles(colors: &BTreeSet<WUBRG>) -> String {
+    fn joiner(&self) -> Self::Item {
+        " ".to_string()
+    }
+
+    fn indicator(&self, indicate: &BTreeSet<WUBRG>) -> Self::Item {
         let mut res = "".to_string();
 
-        for c in colors {
+        for c in indicate {
             res += match c {
                 WUBRG::W => ":yellow_circle:",
                 WUBRG::U => ":blue_circle:",
@@ -64,7 +99,9 @@ impl DiscordEmoji {
 
         res
     }
+}
 
+impl DiscordEmoji {
     fn symbols(matched: &str) -> &str {
         match matched {
             "{C}" => ":diamond_shape_with_a_dot_inside:",

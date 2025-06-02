@@ -55,36 +55,6 @@ impl Cardoid {
     }
 }
 
-impl Display for Cardoid {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if f.alternate() {
-            let face = self.face();
-            if let Some(b_side) = self.side(Side::B) {
-                write!(f, "> *{}*", face.name)?;
-                write!(f, "\n> **SIDE A**\n")?;
-                face.fmt(f)?;
-                f.write_str("\n> **SIDE B**\n")?;
-                b_side.fmt(f)?;
-            } else {
-                face.fmt(f)?;
-            }
-        } else {
-            let face = self.face();
-            if let Some(b_side) = self.side(Side::B) {
-                write!(f, "{}", face.name)?;
-                write!(f, "\nSIDE A\n")?;
-                face.fmt(f)?;
-                f.write_str("\nSIDE B\n")?;
-                b_side.fmt(f)?;
-            } else {
-                face.fmt(f)?;
-            }
-        }
-
-        return Ok(());
-    }
-}
-
 impl IntoIterator for Cardoid {
     type Item = Card;
 

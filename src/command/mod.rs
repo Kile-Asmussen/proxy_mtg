@@ -2,7 +2,10 @@ pub mod build;
 pub mod list;
 pub mod search;
 
-use std::{fmt::Debug, path::PathBuf};
+use std::{
+    fmt::Debug,
+    path::{Path, PathBuf},
+};
 
 use clap::{builder::Str, Parser, Subcommand};
 use rand::seq::SliceRandom;
@@ -13,8 +16,6 @@ use crate::{atomic_cards::AtomicCardsFile, proxy::decklists::DeckList};
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Command {
-    #[arg(value_name = "FILE")]
-    pub decklist: PathBuf,
     #[command(subcommand)]
     pub subcommand: ListBuildSearch,
 }
@@ -27,6 +28,14 @@ pub enum ListBuildSearch {
 }
 
 impl ListBuildSearch {
+    pub fn decklist_file(&self) -> &Path {
+        match self {
+            ListBuildSearch::List(list) => list.decklist_file(),
+            ListBuildSearch::Build(build) => build.decklist_file(),
+            ListBuildSearch::Search(search) => search.decklist_file(),
+        }
+    }
+
     pub fn dispatch(self, atomics: &AtomicCardsFile, decklist: &DeckList) -> anyhow::Result<()> {
         match self {
             Self::List(l) => l.dispatch(decklist),

@@ -1,5 +1,5 @@
 use clap::Parser;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use crate::{
     proxy::decklists::DeckList,
@@ -8,8 +8,10 @@ use crate::{
 
 #[derive(Parser, Debug, Clone)]
 pub struct Build {
+    #[arg(short, long, value_name = "FILE")]
+    pub output: Option<PathBuf>,
     #[arg(value_name = "FILE")]
-    pub output: PathBuf,
+    pub decklist: PathBuf,
     #[arg(long)]
     pub reminders: bool,
     #[arg(long)]
@@ -17,6 +19,10 @@ pub struct Build {
 }
 
 impl Build {
+    pub fn decklist_file(&self) -> &Path {
+        &self.decklist
+    }
+
     pub fn dispatch(&self, decklist: &DeckList) -> anyhow::Result<()> {
         let mut render = RenderContext::new(RenderSettings {
             color: self.color,
@@ -27,7 +33,11 @@ impl Build {
             render.add_proxy(proxy);
         }
 
-        std::fs::write(&self.output, format!("{}", render.into_file()))?;
+        if let Some(output) = &self.output {
+            std::fs::write(&output, format!("{}", render.into_file()))?;
+        } else {
+            println!("{}", render.into_file());
+        }
 
         Ok(())
     }

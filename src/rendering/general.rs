@@ -67,10 +67,3 @@ pub fn format_rules_text(text: String, settings: &RenderSettings) -> String {
         regex!(r"\([^\n]+?\)").replace_all(&text, "").into_owned()
     }
 }
-
-pub fn replace_mana_symbols(text: String) -> Vec<Node> {
-    let pat = regex!(r"\{.*?\}|[^\{\}]*?");
-    let res = pat.split("test");
-    println!("{:?}", res);
-    vec![]
-}

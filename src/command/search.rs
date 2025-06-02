@@ -1,4 +1,8 @@
-use std::{collections::BTreeSet, fmt::Display};
+use std::{
+    collections::BTreeSet,
+    fmt::Display,
+    path::{Path, PathBuf},
+};
 
 use clap::Parser;
 use regex::Regex;
@@ -13,7 +17,11 @@ use crate::{
         AtomicCardsFile,
     },
     proxy::{decklists::DeckList, Proxy},
-    utils::iter::IterExt,
+    utils::{
+        iter::IterExt,
+        printers::{TextPrinter, ToText},
+        symbolics::DiscordEmoji,
+    },
 };
 
 #[derive(Parser, Debug, Clone)]
@@ -38,9 +46,18 @@ pub struct Search {
     pub vgrep: Vec<String>,
     #[arg(long)]
     pub discord: bool,
+    #[arg(value_name = "OFILE")]
+    pub decklist: Option<PathBuf>,
 }
 
 impl Search {
+    pub fn decklist_file(&self) -> &Path {
+        self.decklist
+            .as_ref()
+            .map(|p| p.as_ref())
+            .unwrap_or(Path::new(""))
+    }
+
     pub fn dispatch(self, atomics: &AtomicCardsFile, decklist: &DeckList) -> anyhow::Result<()> {
         let searcher = Searcher::new(self)?;
 
@@ -51,14 +68,14 @@ impl Search {
                 .filter(|c| searcher.matches_cardoid(c))
                 .collvect();
             hits.sort_by_key(|c| c.name());
-            hits.iter().for_each(|c| searcher.print(*c));
+            hits.iter().for_each(|c| searcher.print_cardoid(*c));
         } else {
             let mut hits = decklist
                 .iter()
                 .filter(|p| searcher.matches_proxy(p))
                 .collvect();
             hits.sort_by_key(|p| &p.name);
-            hits.iter().for_each(|p| searcher.print(*p));
+            hits.iter().for_each(|p| searcher.print_proxy(*p));
         }
 
         Ok(())
@@ -94,15 +111,21 @@ impl Searcher {
         })
     }
 
-    fn print<D>(&self, d: &D)
-    where
-        D: Display,
-    {
+    fn print_cardoid(&self, c: &Cardoid) {
         println!();
         if self.discord {
-            println!("{d:#}")
+            println!("{}", TextPrinter(&DiscordEmoji, ToText::Cardoid(c)))
         } else {
-            println!("{d}")
+            println!("")
+        }
+    }
+
+    fn print_proxy(&self, p: &Proxy) {
+        println!();
+        if self.discord {
+            println!("{}", TextPrinter(&DiscordEmoji, ToText::Proxy(p)))
+        } else {
+            println!("")
         }
     }
 
@@ -114,11 +137,12 @@ impl Searcher {
         cardoid.color_identity() < &self.commander
             && Self::regex_match(&self.name, &self.vname, cardoid.name())
             && cardoid.iter().any(|card| self.matches_card(card))
-            && Self::regex_match(&self.grep, &self.vgrep, &format!("{cardoid}"))
     }
 
     fn matches_card(&self, card: &Card) -> bool {
-        self.color < card.colors && Self::regex_match(&self.r#type, &self.vtype, &card.type_line)
+        self.color < card.colors
+            && Self::regex_match(&self.r#type, &self.vtype, &card.type_line)
+            && Self::regex_match(&self.grep, &self.vgrep, &card.text)
     }
 
     fn build_color(it: Option<String>, or: BTreeSet<WUBRG>) -> anyhow::Result<BTreeSet<WUBRG>> {

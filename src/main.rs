@@ -20,10 +20,11 @@ fn main() -> anyhow::Result<()> {
 
     let atomic_cards = AtomicCardsFile::load()?;
 
-    let decklist = if &command.decklist == Path::new("-") {
+    let decklist_file = command.subcommand.decklist_file();
+    let decklist = if decklist_file == Path::new("") {
         DeckList::new()
     } else {
-        DeckList::load(&command.decklist, &atomic_cards)?
+        DeckList::load(decklist_file, &atomic_cards)?
     };
 
     command.subcommand.dispatch(&atomic_cards, &decklist);
