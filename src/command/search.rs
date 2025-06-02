@@ -26,8 +26,10 @@ use crate::{
 
 #[derive(Parser, Debug, Clone)]
 pub struct Search {
-    #[arg(long, short)]
+    #[arg(long)]
     pub tag: Vec<String>,
+    #[arg(long)]
+    pub keyword: Vec<String>,
     #[arg(long = "name")]
     pub name: Vec<String>,
     #[arg(long)]
@@ -46,8 +48,8 @@ pub struct Search {
     pub vgrep: Vec<String>,
     #[arg(long)]
     pub discord: bool,
-    #[arg(short, long)]
-    pub case: bool,
+    #[arg(long)]
+    pub case_sensitive: bool,
     #[arg(value_name = "OFILE")]
     pub decklist: Option<PathBuf>,
 }
@@ -76,7 +78,7 @@ impl Search {
                 .iter()
                 .filter(|p| searcher.matches_proxy(p))
                 .collvect();
-            hits.sort_by_key(|p| &p.name);
+            hits.sort_by_key(|p| (&p.category, &p.name));
             hits.iter().for_each(|p| searcher.print_proxy(*p));
         }
 
@@ -86,6 +88,7 @@ impl Search {
 
 struct Searcher {
     tags: BTreeSet<String>,
+    keywords: BTreeSet<String>,
     color: BTreeSet<WUBRG>,
     commander: BTreeSet<WUBRG>,
     name: Vec<Regex>,
@@ -101,14 +104,15 @@ impl Searcher {
     fn new(it: Search) -> anyhow::Result<Self> {
         Ok(Self {
             tags: BTreeSet::from_iter(it.tag.into_iter()),
-            name: Self::build_regexes(it.case, it.name)?,
-            vname: Self::build_regexes(it.case, it.vname)?,
+            keywords: BTreeSet::from_iter(it.keyword.into_iter()),
+            name: Self::build_regexes(it.case_sensitive, it.name)?,
+            vname: Self::build_regexes(it.case_sensitive, it.vname)?,
             color: Self::build_color(it.color, WUBRG::colorless())?,
             commander: Self::build_color(it.commander, WUBRG::wubrg())?,
-            r#type: Self::build_regexes(it.case, it.r#type)?,
-            vtype: Self::build_regexes(it.case, it.vtype)?,
-            grep: Self::build_regexes(it.case, it.grep)?,
-            vgrep: Self::build_regexes(it.case, it.vgrep)?,
+            r#type: Self::build_regexes(it.case_sensitive, it.r#type)?,
+            vtype: Self::build_regexes(it.case_sensitive, it.vtype)?,
+            grep: Self::build_regexes(it.case_sensitive, it.grep)?,
+            vgrep: Self::build_regexes(it.case_sensitive, it.vgrep)?,
             discord: it.discord,
         })
     }
@@ -143,6 +147,7 @@ impl Searcher {
 
     fn matches_card(&self, card: &Card) -> bool {
         self.color < card.colors
+            && self.keywords < card.keywords
             && Self::regex_match(&self.r#type, &self.vtype, &card.type_line)
             && Self::regex_match(&self.grep, &self.vgrep, &card.text)
     }

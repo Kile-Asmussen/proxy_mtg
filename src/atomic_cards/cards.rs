@@ -48,7 +48,7 @@ pub struct Card {
     #[serde(default, rename = "isReserved")]
     pub is_reserved: bool,
     #[serde(default)]
-    pub keywords: Vec<String>,
+    pub keywords: BTreeSet<String>,
     pub layout: CardLayout,
     #[serde(default, rename = "leadershipSkills")]
     pub leadership_skills: LeadershipSkills,
@@ -159,29 +159,4 @@ impl Card {
     }
 
     pub fn translation() {}
-}
-
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub enum FaceLayout {
-    Aftermath,
-    Basic,
-    Battle,
-    Case,
-    Class,
-    Creature,
-    Emblem,
-    Flip,
-    FullArt,
-    Fuse,
-    Leveler,
-    Mutate,
-    Omenventure,
-    Planeswalker,
-    Prototype,
-    Room,
-    Saga,
-    SagaCreature,
-    Split,
-    Unadorned,
-    Unsupported,
 }

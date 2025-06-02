@@ -132,6 +132,31 @@ pub enum CardLayout {
     Other(String),
 }
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum FaceLayout {
+    Aftermath,
+    Basic,
+    Battle,
+    Case,
+    Class,
+    Creature,
+    Emblem,
+    Flip,
+    FullArt,
+    Fuse,
+    Leveler,
+    Mutate,
+    Omenventure,
+    Planeswalker,
+    Prototype,
+    Room,
+    Saga,
+    SagaCreature,
+    Split,
+    Unadorned,
+    Unsupported,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct LeadershipSkills {
     pub brawl: bool,
