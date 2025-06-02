@@ -47,7 +47,7 @@ div.card::before {
 /* COLOR INDICATOR - COLORLESS AND MONO */
 
 div.card::before {
-    content: "Ø"
+    content: "C"
 }
 
 div.card.white::before {
@@ -185,7 +185,7 @@ div.card.white.blue.black.red.green::before {
 }
 
 div.card.colorless::before {
-    content: "Ø"
+    content: "C"
 }
 
 /* CARD PARTS */
@@ -252,22 +252,23 @@ div.type-line.bar>span.type {
 
 /* ART */
 
-div.art,
 img.art {
     border-width: 0 var(--pin-line-width);
     left: var(--fullwidth-margin);
     top: calc(var(--bar-height) + var(--upper-margin));
     width: var(--fullwidth-box);
     height: var(--art-height);
-}
-
-div.art {
-    background-image: url("./Lenna.png");
-    background-position: center;
-    background-size: cover;
+    object-fit: contain;
 }
 
 /* TEXT BOXES AND ART */
+
+img.art.full-art {
+    width: var(--fullwidth-box);
+    height: var(--fullheight-box);
+    left: var(--fullwidth-margin);
+    top: calc(var(--bar-height) + var(--upper-margin));
+}
 
 div.text-box {
     width: var(--fullwidth-box);
@@ -277,7 +278,6 @@ div.text-box {
     border-width: 0 var(--pin-line-width) var(--pin-line-width);
 }
 
-div.art.vertical,
 img.art.vertical,
 div.text-box.vertical {
     top: calc(var(--bar-height) + var(--upper-margin));
@@ -286,7 +286,6 @@ div.text-box.vertical {
     width: var(--halfwidth-box);
 }
 
-div.art.vertical.left,
 img.art.vertical.left,
 div.text-box.vertical.left {
     border-right-width: 0;
@@ -294,18 +293,15 @@ div.text-box.vertical.left {
     right: auto;
 }
 
-div.art.vertical.right,
 img.art.vertical.right {
     border-left-width: 0;
 }
 
-div.art.vertical.right,
 img.art.vertical.right,
 div.text-box.vertical.right {
     left: calc(var(--fullwidth-margin) + var(--halfwidth-box));
 }
 
-div.art.vertical.right,
 img.art.vertical.right {
     border-right-width: 0;
 }

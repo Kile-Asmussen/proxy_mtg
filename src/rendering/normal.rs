@@ -28,7 +28,7 @@ pub fn raw_card(proxy: &Proxy, settings: &RenderSettings) -> Element {
     empty_card(card)
         .elem(title_bar_div(&card.name, &card.mana_cost))
         .elem(type_line_div(card))
-        .elem(card_art_img(proxy))
+        .nodes(card_art_img(proxy, Side::A))
         .elem(type_line_div(card))
 }
 
@@ -56,15 +56,21 @@ pub fn power_toughness(card: &Card) -> Element {
 }
 
 pub fn rules_text_basic_div(card: &Card) -> Element {
-    Element::new(Tag::div).class(["text-box", "sparse"]).elem(
-        Element::new(Tag::p)
-            .class(["rules-text"])
-            .elem(Element::new(Tag::i).class([
-                format!("ms"),
-                format!("ms-{}", WUBRG::render(&card.color_identity).to_lowercase()),
-                format!("ms-6x"),
-            ])),
-    )
+    let mut text = Element::new(Tag::p)
+        .class(["rules-text"])
+        .elem(Element::new(Tag::i).class([
+            format!("ms"),
+            format!("ms-{}", WUBRG::render(&card.color_identity).to_lowercase()),
+            format!("ms-6x"),
+        ]));
+
+    if card.is_supertype(Supertype::Snow) {
+        text = text.elem(Element::new(Tag::i).class(["ms", "ms-s", "ms-6x"]));
+    }
+
+    Element::new(Tag::div)
+        .class(["text-box", "sparse"])
+        .elem(text)
 }
 
 pub fn rules_text_div(card: &Card, settings: &RenderSettings) -> Element {

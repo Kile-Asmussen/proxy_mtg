@@ -32,6 +32,30 @@
     --proxy-mark-font-size: 1.5mm;
     --proxy-mark-nudge: 0.2mm;
 
-    --mana-symbol-size: 0.8em;
-    --mana-cost-adjustment: -0.2mm;
+    --mana-symbol-size: 0.7em;
+    --mana-cost-adjustment: -0.5mm;
+}
+
+i.ms {
+    font-size: var(--mana-symbol-size);
+}
+
+i.ms-2x {
+    font-size: calc(2*var(--mana-symbol-size));
+}
+
+i.ms-3x {
+    font-size: calc(3*var(--mana-symbol-size));
+}
+
+i.ms-4x {
+    font-size: calc(4*var(--mana-symbol-size));
+}
+
+i.ms-5x {
+    font-size: calc(5*var(--mana-symbol-size));
+}
+
+i.ms-6x {
+    font-size: calc(6*var(--mana-symbol-size));
 }

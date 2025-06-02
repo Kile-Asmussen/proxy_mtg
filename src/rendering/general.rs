@@ -25,7 +25,7 @@ pub fn title_bar_div(name: &str, cost: &str) -> Element {
 
 pub fn mana_cost_span(mana_cost: &str) -> Element {
     Element::new(Tag::span)
-        .class(["name"])
+        .class(["cost"])
         .nodes(replace_symbols(&ManaFontSymbolics, mana_cost))
 }
 
@@ -33,8 +33,27 @@ pub fn card_name_span(name: &str) -> Element {
     Element::new(Tag::span).class(["name"]).text(name)
 }
 
-pub fn card_art_img(proxy: &Proxy) -> Element {
-    Element::new(Tag::img).class(["art"]).attr("src", "")
+pub fn card_art_img(proxy: &Proxy, side: Side) -> Vec<Node> {
+    let art = match side {
+        Side::A => proxy.art_urls.get(0),
+        Side::B => proxy.art_urls.get(1),
+        _ => None,
+    };
+
+    let credit = match side {
+        Side::A => proxy.art_credits.get(0),
+        Side::B => proxy.art_credits.get(1),
+        _ => None,
+    };
+
+    if let (Some(art), Some(credit)) = (art, credit) {
+        vec![
+            Node::Element(Element::new(Tag::img).class(["art"]).attr("src", art)),
+            Node::Element(Element::new(Tag::span).class(["art-credits"]).text(credit)),
+        ]
+    } else {
+        vec![Node::Element(Element::new(Tag::img).class(["art"]))]
+    }
 }
 
 pub fn type_line_div(card: &Card) -> Element {
