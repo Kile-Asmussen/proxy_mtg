@@ -18,6 +18,8 @@ use crate::{atomic_cards::AtomicCardsFile, proxy::decklists::DeckList};
 pub struct Command {
     #[command(subcommand)]
     pub subcommand: ListBuildSearch,
+    #[arg(short, long)]
+    pub verbose: bool,
 }
 
 #[derive(Subcommand, Debug)]

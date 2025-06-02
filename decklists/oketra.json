@@ -123,16 +123,16 @@
     ],
     "Block 3 - Removal": [
         {
+            "name": "Winds of Abandon",
+            "tags": [
+                "removal"
+            ]
+        },
+        {
             "name": "Path to Exile",
             "tags": [
                 "removal",
                 "ramp"
-            ]
-        },
-        {
-            "name": "Swords to Plowshares",
-            "tags": [
-                "removal"
             ]
         },
         {
@@ -566,9 +566,14 @@
         {
             "name": "Snow-Covered Plains",
             "repeats": 20
+        },
+        {
+            "name": "Snow-Covered Swamp",
+            "repeats": 20,
+            "sideboard": true
         }
     ],
-    "Bock B - Sideboard": [
+    "Block B - Tokens": [
         {
             "name": "Zombie Warrior",
             "repeats": 3,
@@ -580,7 +585,7 @@
                         "B"
                     ],
                     "power": "4",
-                    "tougness": "4",
+                    "toughness": "4",
                     "text": "Vigilance",
                     "type": "Token Creature - Zombie Warrior",
                     "types": [

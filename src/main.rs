@@ -18,7 +18,7 @@ use crate::proxy::decklists::DeckList;
 fn main() -> anyhow::Result<()> {
     let command = Command::parse();
 
-    let atomic_cards = AtomicCardsFile::load()?;
+    let atomic_cards = AtomicCardsFile::load(command.verbose)?;
 
     let decklist_file = command.subcommand.decklist_file();
     let decklist = if decklist_file == Path::new("") {

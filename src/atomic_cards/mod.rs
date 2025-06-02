@@ -27,16 +27,18 @@ pub struct AtomicCardsFile {
 }
 
 impl AtomicCardsFile {
-    pub fn load() -> anyhow::Result<Self> {
-        let (atomic_cards_file_json, start) = Self::read_or_download()?;
+    pub fn load(verbose: bool) -> anyhow::Result<Self> {
+        let (atomic_cards_file_json, start) = Self::read_or_download(verbose)?;
 
         let atomic_cards: AtomicCardsFile = serde_json::from_slice(&atomic_cards_file_json[..])?;
 
-        println!(
-            "Loaded {} cards in {} milliseconds.",
-            atomic_cards.data.len(),
-            start.elapsed().as_millis()
-        );
+        if verbose {
+            println!(
+                "Loaded {} cards in {} milliseconds.",
+                atomic_cards.data.len(),
+                start.elapsed().as_millis()
+            );
+        }
 
         let mut malformed_cards = BTreeSet::new();
 
@@ -59,7 +61,7 @@ impl AtomicCardsFile {
         }
     }
 
-    fn read_or_download() -> anyhow::Result<(Vec<u8>, Instant)> {
+    fn read_or_download(verbose: bool) -> anyhow::Result<(Vec<u8>, Instant)> {
         const ATOMIC_CARDS_FILENAME: &'static str = "AtomicCards.json";
         const ATOMIC_CARDS_URL: &'static str = "https://mtgjson.com/api/v5/AtomicCards.json";
 
@@ -79,19 +81,23 @@ impl AtomicCardsFile {
 
             let downloaded = response.bytes()?.to_vec();
 
-            println!(
-                "Downloaded {} megabytes in {} seconds.",
-                downloaded.len() / 1024 / 1000,
-                start.elapsed().as_secs()
-            );
+            if verbose {
+                println!(
+                    "Downloaded {} megabytes in {} seconds.",
+                    downloaded.len() / 1024 / 1000,
+                    start.elapsed().as_secs()
+                );
 
-            println!("Loading cards database...");
+                println!("Loading cards database...");
+            }
             start = Instant::now();
             std::fs::write(ATOMIC_CARDS_FILENAME, &downloaded[..])?;
 
             Ok((downloaded, start))
         } else {
-            println!("Loading cards database...");
+            if verbose {
+                println!("Loading cards database...");
+            }
             start = Instant::now();
 
             Ok((std::fs::read(ATOMIC_CARDS_FILENAME)?, start))

@@ -6,7 +6,11 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use crate::{atomic_cards::types::*, proxy::decklists::DeckList, utils::iter::*};
+use crate::{
+    atomic_cards::types::*,
+    proxy::{decklists::DeckList, Proxy},
+    utils::iter::*,
+};
 
 #[derive(Parser, Debug, Clone)]
 pub struct List {
@@ -35,6 +39,10 @@ pub struct List {
     #[arg(long)]
     pub cards: bool,
     #[arg(long)]
+    pub sideboard: bool,
+    #[arg(long)]
+    pub tokens: bool,
+    #[arg(long)]
     pub lands: bool,
 }
 
@@ -53,7 +61,17 @@ impl List {
 
         if self.cards {
             println!();
-            Self::print_cards(decklist);
+            Self::print_cards(decklist, "Cards", |p| p.in_deck());
+        }
+
+        if self.sideboard {
+            println!();
+            Self::print_cards(decklist, "Sideboard", |p| p.sideboard);
+        }
+
+        if self.tokens {
+            println!();
+            Self::print_cards(decklist, "Tokens", |p| p.layout() == &CardLayout::Token);
         }
 
         if self.colors {
@@ -111,11 +129,15 @@ impl List {
         Ok(())
     }
 
-    pub fn print_cards(list: &DeckList) {
-        let cats = list.categories();
-        let mut cards = list.card_names();
+    pub fn print_cards<F>(list: &DeckList, listing: &str, filter: F)
+    where
+        F: Fn(&Proxy) -> bool,
+    {
+        let cats = list.categories(&filter);
+        let mut cards = list.card_names(&filter);
 
-        println!("Cards ({}):", list.count_cards());
+        println!("{} ({}):", listing, list.count_cards(&filter));
+
         for (cat, names) in &cats {
             let count: usize = names.iter().map(|s| cards.get(s).unwrap_or(&0usize)).sum();
             println!("  {} ({}):", cat, count);
@@ -127,7 +149,7 @@ impl List {
     }
 
     pub fn print_creatures(decklist: &DeckList) {
-        let names = decklist.card_names();
+        let names = decklist.card_names(Proxy::in_deck);
         let mut creatures = BTreeMap::new();
         for proxy in decklist {
             for card in &proxy.cardoid {

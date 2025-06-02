@@ -44,11 +44,14 @@ impl DeckList {
         Self::load_str(&data, atomics)
     }
 
-    pub fn card_names(&self) -> BTreeMap<String, usize> {
+    pub fn card_names<F>(&self, filter: F) -> BTreeMap<String, usize>
+    where
+        F: Fn(&Proxy) -> bool,
+    {
         let mut res = BTreeMap::new();
 
         for proxy in self {
-            if proxy.in_deck() {
+            if filter(proxy) {
                 *res.entry(proxy.name.clone()).or_insert(0) += proxy.repeats;
             }
         }
@@ -60,19 +63,27 @@ impl DeckList {
         self.iter().filter(|p| !p.in_deck()).collvect()
     }
 
-    pub fn count_cards(&self) -> usize {
+    pub fn count_cards<F>(&self, filter: F) -> usize
+    where
+        F: Fn(&Proxy) -> bool,
+    {
         self.iter()
-            .map(|p| if p.in_deck() { p.repeats } else { 0 })
+            .map(|p| if filter(p) { p.repeats } else { 0 })
             .sum()
     }
 
-    pub fn categories(&self) -> BTreeMap<String, BTreeSet<String>> {
+    pub fn categories<F>(&self, filter: F) -> BTreeMap<String, BTreeSet<String>>
+    where
+        F: Fn(&Proxy) -> bool,
+    {
         let mut res = BTreeMap::new();
 
         for proxy in &self.0 {
-            res.entry(proxy.category.clone())
-                .or_insert_with(BTreeSet::new)
-                .insert(proxy.name.clone());
+            if filter(proxy) {
+                res.entry(proxy.category.clone())
+                    .or_insert_with(BTreeSet::new)
+                    .insert(proxy.name.clone());
+            }
         }
 
         res
@@ -82,6 +93,9 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for proxy in &self.0 {
+            if !proxy.in_deck() {
+                continue;
+            }
             for card in &proxy.cardoid {
                 if card.types.contains(&Type::Land) {
                     continue;
@@ -97,6 +111,9 @@ impl DeckList {
         let mut res = BTreeSet::new();
 
         for proxy in &self.0 {
+            if !proxy.in_deck() {
+                continue;
+            }
             for card in &proxy.cardoid {
                 res.append(&mut card.color_identity.clone())
             }
@@ -109,6 +126,9 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for proxy in &self.0 {
+            if !proxy.in_deck() {
+                continue;
+            }
             for card in &proxy.cardoid {
                 if card.types.contains(&Type::Land) {
                     continue;
@@ -124,6 +144,9 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for proxy in &self.0 {
+            if !proxy.in_deck() {
+                continue;
+            }
             for tag in &proxy.tags {
                 *res.entry(tag.clone()).or_insert(0) += proxy.repeats;
             }
@@ -136,6 +159,9 @@ impl DeckList {
         let mut res = BTreeMap::new();
 
         for proxy in &self.0 {
+            if !proxy.in_deck() {
+                continue;
+            }
             res.entry(proxy.name.clone())
                 .or_insert(BTreeSet::new())
                 .append(&mut proxy.tags.clone())

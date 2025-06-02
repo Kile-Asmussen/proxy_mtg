@@ -47,6 +47,10 @@ pub struct Search {
     #[arg(long)]
     pub discord: bool,
     #[arg(long)]
+    pub sideboard: bool,
+    #[arg(long)]
+    pub funnies: bool,
+    #[arg(long)]
     pub case_sensitive: bool,
     #[arg(value_name = "OFILE")]
     pub decklist: Option<PathBuf>,
@@ -67,6 +71,11 @@ impl Search {
             let mut hits = atomics
                 .data
                 .values()
+                .filter(|c| c.face().is_funny <= searcher.funnies)
+                .filter(|c| match c.layout() {
+                    &CardLayout::Other(_) => searcher.funnies,
+                    _ => true,
+                })
                 .filter(|c| searcher.matches_cardoid(c))
                 .collvect();
             hits.sort_by_key(|c| c.name());
@@ -74,6 +83,7 @@ impl Search {
         } else {
             let mut hits = decklist
                 .iter()
+                .filter(|p| p.in_deck() != searcher.sideboard)
                 .filter(|p| searcher.matches_proxy(p))
                 .collvect();
             hits.sort_by_key(|p| (&p.category, &p.name));
@@ -95,6 +105,8 @@ struct Searcher {
     grep: Vec<Regex>,
     vgrep: Vec<Regex>,
     discord: bool,
+    sideboard: bool,
+    funnies: bool,
 }
 
 impl Searcher {
@@ -109,7 +121,9 @@ impl Searcher {
             vtype: Self::build_regexes(it.case_sensitive, it.vtype)?,
             grep: Self::build_regexes(it.case_sensitive, it.grep)?,
             vgrep: Self::build_regexes(it.case_sensitive, it.vgrep)?,
+            sideboard: it.sideboard,
             discord: it.discord,
+            funnies: it.funnies,
         })
     }
 
@@ -132,17 +146,17 @@ impl Searcher {
     }
 
     fn matches_proxy(&self, proxy: &Proxy) -> bool {
-        &self.tags < &proxy.tags && self.matches_cardoid(&proxy.cardoid)
+        &self.tags <= &proxy.tags && self.matches_cardoid(&proxy.cardoid)
     }
 
     fn matches_cardoid(&self, cardoid: &Cardoid) -> bool {
-        cardoid.color_identity() < &self.commander
+        cardoid.color_identity() <= &self.commander
             && Self::regex_match(&self.name, &self.vname, cardoid.name())
             && cardoid.iter().any(|card| self.matches_card(card))
     }
 
     fn matches_card(&self, card: &Card) -> bool {
-        self.color < card.colors
+        self.color <= card.colors
             && Self::regex_match(&self.r#type, &self.vtype, &card.type_line)
             && Self::regex_match(&self.grep, &self.vgrep, &card.text)
     }
