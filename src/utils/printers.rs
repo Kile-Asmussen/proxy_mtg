@@ -35,18 +35,18 @@ where
                 write!(f, "\n{}{}", self.0.line_start(), self.0.hr())?;
 
                 if !p.category.is_empty() {
-                    write!(f, "\n{} category: {}", self.0.line_start(), p.category)?;
+                    write!(f, "\n{}category: {}", self.0.line_start(), p.category)?;
                 }
                 if !p.tags.is_empty() {
                     write!(
                         f,
-                        "\n{} tags: {}",
+                        "\n{}tags: {}",
                         self.0.line_start(),
                         &p.tags.iter().map(Clone::clone).collvect().join(", ")
                     )?;
                 }
                 if p.repeats > 1 {
-                    write!(f, "\n{} copies: {}", self.0.line_start(), p.repeats)?;
+                    write!(f, "\n{}copies: {}", self.0.line_start(), p.repeats)?;
                 }
             }
             ToText::Cardoid(c) => {

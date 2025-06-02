@@ -20,7 +20,7 @@ use crate::{
     utils::{
         iter::IterExt,
         printers::{TextPrinter, ToText},
-        symbolics::DiscordEmoji,
+        symbolics::{DiscordEmoji, NothingReplacer},
     },
 };
 
@@ -46,6 +46,8 @@ pub struct Search {
     pub vgrep: Vec<String>,
     #[arg(long)]
     pub discord: bool,
+    #[arg(short, long)]
+    pub case: bool,
     #[arg(value_name = "OFILE")]
     pub decklist: Option<PathBuf>,
 }
@@ -99,14 +101,14 @@ impl Searcher {
     fn new(it: Search) -> anyhow::Result<Self> {
         Ok(Self {
             tags: BTreeSet::from_iter(it.tag.into_iter()),
-            name: Self::build_regexes(it.name)?,
-            vname: Self::build_regexes(it.vname)?,
+            name: Self::build_regexes(it.case, it.name)?,
+            vname: Self::build_regexes(it.case, it.vname)?,
             color: Self::build_color(it.color, WUBRG::colorless())?,
             commander: Self::build_color(it.commander, WUBRG::wubrg())?,
-            r#type: Self::build_regexes(it.r#type)?,
-            vtype: Self::build_regexes(it.vtype)?,
-            grep: Self::build_regexes(it.grep)?,
-            vgrep: Self::build_regexes(it.vgrep)?,
+            r#type: Self::build_regexes(it.case, it.r#type)?,
+            vtype: Self::build_regexes(it.case, it.vtype)?,
+            grep: Self::build_regexes(it.case, it.grep)?,
+            vgrep: Self::build_regexes(it.case, it.vgrep)?,
             discord: it.discord,
         })
     }
@@ -116,7 +118,7 @@ impl Searcher {
         if self.discord {
             println!("{}", TextPrinter(&DiscordEmoji, ToText::Cardoid(c)))
         } else {
-            println!("")
+            println!("{}", TextPrinter(&NothingReplacer, ToText::Cardoid(c)))
         }
     }
 
@@ -125,7 +127,7 @@ impl Searcher {
         if self.discord {
             println!("{}", TextPrinter(&DiscordEmoji, ToText::Proxy(p)))
         } else {
-            println!("")
+            println!("{}", TextPrinter(&NothingReplacer, ToText::Proxy(p)))
         }
     }
 
@@ -166,10 +168,15 @@ impl Searcher {
         return Ok(res);
     }
 
-    fn build_regexes(it: Vec<String>) -> anyhow::Result<Vec<Regex>> {
+    fn build_regexes(case: bool, it: Vec<String>) -> anyhow::Result<Vec<Regex>> {
         let mut res = vec![];
         for s in it {
-            res.push(Regex::new(&s)?)
+            let pref = if case {
+                "".to_string()
+            } else {
+                "(?i)".to_string()
+            };
+            res.push(Regex::new(&(pref + &s))?)
         }
         Ok(res)
     }
