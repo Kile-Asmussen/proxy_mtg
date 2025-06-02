@@ -60,9 +60,9 @@ pub fn rules_text_basic_div(card: &Card) -> Element {
         Element::new(Tag::p)
             .class(["rules-text"])
             .elem(Element::new(Tag::i).class([
-                format!("mi"),
-                format!("mi-{}", WUBRG::render(&card.colors).to_lowercase()),
-                format!("mi-6x"),
+                format!("ms"),
+                format!("ms-{}", WUBRG::render(&card.color_identity).to_lowercase()),
+                format!("ms-6x"),
             ])),
     )
 }

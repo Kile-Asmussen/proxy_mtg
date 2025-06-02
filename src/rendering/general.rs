@@ -6,7 +6,8 @@ use crate::{
     atomic_cards::{cards::Card, types::*},
     html::*,
     proxy::Proxy,
-    utils::iter::IterExt,
+    rendering::manafont::ManaFontSymbolics,
+    utils::{iter::IterExt, symbolics::replace_symbols},
 };
 
 use super::RenderSettings;
@@ -23,7 +24,9 @@ pub fn title_bar_div(name: &str, cost: &str) -> Element {
 }
 
 pub fn mana_cost_span(mana_cost: &str) -> Element {
-    Element::new(Tag::span).class(["name"]).text(mana_cost)
+    Element::new(Tag::span)
+        .class(["name"])
+        .nodes(replace_symbols(&ManaFontSymbolics, mana_cost))
 }
 
 pub fn card_name_span(name: &str) -> Element {

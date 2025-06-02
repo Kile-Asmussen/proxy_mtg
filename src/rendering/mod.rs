@@ -54,8 +54,7 @@ impl RenderContext {
             .head_link("stylesheet", "../css/dimensions.css")
             .head_link("stylesheet", "../css/fonts.css")
             .head_link("stylesheet", "../css/page.css")
-            .head_link("stylesheet", "../css/card.css")
-            .head_link("stylesheet", "../css/magic-font.css");
+            .head_link("stylesheet", "../css/card.css");
 
         let mut pages = vec![];
         {
