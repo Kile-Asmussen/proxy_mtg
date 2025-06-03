@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::{
     collections::BTreeSet,
     fmt::{Debug, Display},
+    ops::Sub,
 };
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -50,6 +51,7 @@ impl Display for Type {
 }
 
 #[derive(Clone, Copy, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[repr(u8)]
 pub enum WUBRG {
     W,
     U,
@@ -60,16 +62,38 @@ pub enum WUBRG {
 
 impl WUBRG {
     pub fn render(colors: &BTreeSet<WUBRG>) -> String {
-        let res = colors
-            .into_iter()
-            .map(|c| format!("{:?}", c))
-            .collvect()
-            .join("");
-
-        if res.is_empty() {
-            "C".to_string()
-        } else {
-            res
+        match &colors.iter().map(Clone::clone).collvect()[..] {
+            &[] => "C".to_string(),
+            &[a] => format!("{a}"),
+            &[a, b] => {
+                if a - b <= 2 {
+                    format!("{a}{b}")
+                } else {
+                    format!("{b}{a}")
+                }
+            }
+            &[a, b, c] => {
+                if a - b == 2 || c - a == 3 {
+                    format!("{a}{b}{c}")
+                } else if b - c == 2 || a - b == 3 {
+                    format!("{b}{c}{a}")
+                } else {
+                    format!("{c}{a}{b}")
+                }
+            }
+            &[a, b, c, d] => {
+                if d - a == 2 {
+                    format!("{a}{b}{c}{d}")
+                } else if a - b == 2 {
+                    format!("{b}{c}{d}{a}")
+                } else if b - c == 2 {
+                    format!("{c}{d}{a}{b}")
+                } else {
+                    format!("{d}{a}{b}{c}")
+                }
+            }
+            &[_, _, _, _, _] => "WUBRG".to_string(),
+            _ => "".to_string(),
         }
     }
 
@@ -90,6 +114,40 @@ impl WUBRG {
             WUBRG::R => "red",
             WUBRG::G => "green",
         }
+    }
+}
+
+impl Sub for WUBRG {
+    type Output = usize;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        if self == rhs {
+            0
+        } else if self < rhs {
+            (self as usize).abs_diff(rhs as usize)
+        } else {
+            (self as usize).abs_diff(rhs as usize + 5)
+        }
+    }
+}
+
+impl Sub for &WUBRG {
+    type Output = usize;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        *self - *rhs
+    }
+}
+
+impl Display for WUBRG {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(match self {
+            WUBRG::W => "W",
+            WUBRG::U => "U",
+            WUBRG::B => "B",
+            WUBRG::R => "R",
+            WUBRG::G => "G",
+        })
     }
 }
 
