@@ -1,0 +1,226 @@
+{
+    "A - Commander": [
+        {
+            "name": "God-Eternal Oketra"
+        }
+    ],
+    "B.1 - Card Advantage": [
+        {
+            "name": "Mentor of the Meek"
+        },
+        {
+            "name": "Caretaker's Talent"
+        },
+        {
+            "name": "Esper Sentinel"
+        },
+        {
+            "name": "Bennie Bracks, Zoologist"
+        },
+        {
+            "name": "Master of Ceremonies"
+        },
+        {
+            "name": "Skullclamp"
+        },
+        {
+            "name": "War Room"
+        },
+        {
+            "name": "Tocasia's Welcome"
+        },
+        {
+            "name": "Trouble in Pairs"
+        }
+    ],
+    "B.2 - Land Advantage": [
+        {
+            "name": "Archaeomancer's Map"
+        },
+        {
+            "name": "Land Tax"
+        },
+        {
+            "name": "Knight of the White Orchid"
+        },
+        {
+            "name": "Loyal Warhound"
+        },
+        {
+            "name": "Space Marine Scout"
+        },
+        {
+            "name": "Keeper of the Accord"
+        },
+        {
+            "name": "Claim Jumper"
+        },
+        {
+            "name": "Deep Gnome Terramancer"
+        },
+        {
+            "name": "Archaeomancer's Map"
+        },
+        {
+            "name": "Extraplanar Lens"
+        },
+        {
+            "name": "Lotus Field"
+        },
+        {
+            "name": "Lotus Vale"
+        },
+        {
+            "name": "Scorched Ruins"
+        },
+        {
+            "name": "Karoo"
+        },
+        {
+            "name": "Arid Archway"
+        },
+        {
+            "name": "Guildless Commons"
+        }
+    ],
+    "C.1 - Control": [
+        {
+            "name": "Winds of Abandon"
+        },
+        {
+            "name": "Dismantling Wave"
+        },
+        {
+            "name": "Parallax Wave"
+        },
+        {
+            "name": "Loran of the Third Path"
+        },
+        {
+            "name": "Generous Gift"
+        },
+        {
+            "name": "Generous Gift"
+        },
+        {
+            "name": "Slash the Ranks"
+        },
+        {
+            "name": "Return to Dust"
+        },
+        {
+            "name": "Reprieve"
+        }
+    ],
+    "C.2 - Stax": [
+        {
+            "name": "Ghostly Prison"
+        },
+        {
+            "name": "Clarion Conqueror"
+        }
+    ],
+    "D.1 - Commander Protection": [
+        {
+            "name": "Commander's Plate"
+        },
+        {
+            "name": "Dawn's Truce"
+        }
+    ],
+    "D.2 - Board Protection": [
+        {
+            "name": "Brought Back"
+        },
+        {
+            "name": "Second Sunrise"
+        },
+        {
+            "name": "Redemption Choir"
+        },
+        {
+            "name": "Dawn's Truce"
+        },
+        {
+            "name": "Flawless Maneuver"
+        },
+        {
+            "name": "Your Temple Is Under Attack"
+        },
+        {
+            "name": "Flare of Fortitude"
+        }
+    ],
+    "D.1 - Bounce Synergy": [
+        {
+            "name": "Whitemane Lion"
+        },
+        {
+            "name": "Aviary Mechanic"
+        },
+        {
+            "name": "Ambrosia Whiteheart"
+        },
+        {
+            "name": "Dust Elemental"
+        },
+        {
+            "name": "Jeskai Barricade"
+        },
+        {
+            "name": "Kor Skyfisher"
+        },
+        {
+            "name": "Sunpearl Kirin"
+        },
+        {
+            "name": "Emancipation Angel"
+        },
+        {
+            "name": "Stonecloaker"
+        },
+        {
+            "name": "Mischievous Pup"
+        }
+    ],
+    "D.2 - Wincon Enabler": [
+        {
+            "name": "Oketra's Monument"
+        },
+        {
+            "name": "Pearl Medallion"
+        },
+        {
+            "name": "Defiler of Faith"
+        },
+        {
+            "name": "Anointed Procession"
+        },
+        {
+            "name": "Mondrak, Glory Dominus"
+        },
+        {
+            "name": "Akroma's Memorial"
+        }
+    ],
+    "E - Synergy": [
+        {
+            "name": "Steelshaper's Gift"
+        },
+        {
+            "name": "Soul Warden"
+        },
+        {
+            "name": "Soul's Attendant"
+        }
+    ],
+    "F - Lands": [
+        {
+            "name": "Nykthos, Shrine to Nyx"
+        },
+        {
+            "name": "Snow-Covered Plains",
+            "repeats": 34
+        }
+    ]
+}
