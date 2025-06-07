@@ -247,7 +247,7 @@ impl List {
         Self::print_histo(
             (0..=*max)
                 .into_iter()
-                .map(|n| (n.to_string(), curve[&n]))
+                .map(|n| (n.to_string(), *curve.get(&n).unwrap_or(&0)))
                 .collvect(),
         );
     }

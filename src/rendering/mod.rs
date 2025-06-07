@@ -1,6 +1,7 @@
 pub mod general;
 pub mod manafont;
 pub mod normal;
+pub mod reminders;
 
 use std::{
     collections::{BTreeMap, BTreeSet},
