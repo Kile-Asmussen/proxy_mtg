@@ -12,7 +12,7 @@ use normal::normal_card;
 
 use crate::{
     atomic_cards::types::CardLayout,
-    html::{Document, Element, Node, Tag},
+    html::{self, Document, Element, Node, Tag},
     proxy::Proxy,
     rendering::general::empty_card,
 };
@@ -44,18 +44,23 @@ impl RenderContext {
         }
     }
 
-    pub fn into_file(self) -> Document {
+    pub fn into_file(self) -> anyhow::Result<Document> {
         let mut html_pages = Document::new()
             .head(Element::new(Tag::title).text("PROXIES"))
             .head_link("preconnect", "https://fonts.googleapis.com")
             .head(Element::new(Tag::link).attr("rel", "preconnect").attr("href", "https://fonts.gstatic.com").flag("crossorigin"))
             .head_link("stylesheet", "https://fonts.googleapis.com/css2?family=Amarante&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inconsolata:wght@200..900&display=swap")
             .head_link("stylesheet", "https://cdn.jsdelivr.net/npm/mana-font@latest/css/mana.css")
-            .head_link("stylesheet", "../css/colors.css")
-            .head_link("stylesheet", "../css/dimensions.css")
-            .head_link("stylesheet", "../css/fonts.css")
-            .head_link("stylesheet", "../css/page.css")
-            .head_link("stylesheet", "../css/card.css");
+            .inline_style("./css/page-layout.css")?
+            .inline_style("./css/font-settings.css")?
+            .inline_style("./css/card-geometry.css")?;
+
+        html_pages = if self.settings.in_color {
+            html_pages.inline_style("./css/full-color.css")?
+        } else {
+            html_pages.inline_style("./css/monochrome.css")?
+        }
+        .inline_style("./css/card")?;
 
         let mut pages = vec![];
         {
@@ -94,6 +99,6 @@ impl RenderContext {
             html_pages = html_pages.body(Node::Element(html_page));
         }
 
-        html_pages
+        Ok(html_pages)
     }
 }

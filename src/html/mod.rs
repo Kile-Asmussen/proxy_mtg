@@ -4,7 +4,7 @@ mod tags;
 mod tests;
 pub use elements::*;
 pub use node::*;
-use std::{collections::BTreeMap, fmt::Display};
+use std::{collections::BTreeMap, fmt::Display, path::Path};
 pub use tags::*;
 
 use crate::utils::iter::IterExt;
@@ -51,6 +51,18 @@ impl Document {
         Element::new(Tag::html)
             .elem(Element::new(Tag::head).nodes(self.head))
             .elem(Element::new(Tag::body).nodes(self.body))
+    }
+
+    pub fn inline_style<P>(self, path: P) -> anyhow::Result<Self>
+    where
+        P: AsRef<Path>,
+    {
+        Ok(self.head(
+            Element::new(Tag::style)
+                .text("<![CDATA[\n")
+                .text(std::fs::read_to_string(path)?)
+                .text("\n]]>"),
+        ))
     }
 }
 

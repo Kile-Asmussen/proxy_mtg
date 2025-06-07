@@ -1,27 +1,3 @@
-:root {
-
-    --white-color-1: white;
-    --white-color-2: lightyellow;
-
-    --blue-color-1: aqua;
-    --blue-color-2: darkblue;
-
-    --black-color-1: indigo;
-    --black-color-2: darkslategrey;
-
-    --red-color-1: red;
-    --red-color-2: darkred;
-
-    --green-color-1: lightgreen;
-    --green-color-2: green;
-
-    --colorless-1: silver;
-    --colorless-2: slategrey;
-
-    --gold-1: gold;
-    --gold-2: goldenrod;
-}
-
 /* COLOR INDICATOR - COLORLESS AND MONO */
 
 div.card::before {

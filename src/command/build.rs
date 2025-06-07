@@ -34,9 +34,9 @@ impl Build {
         }
 
         if let Some(output) = &self.output {
-            std::fs::write(&output, format!("{}", render.into_file()))?;
+            std::fs::write(&output, format!("{}", render.into_file()?))?;
         } else {
-            println!("{}", render.into_file());
+            println!("{}", render.into_file()?);
         }
 
         Ok(())
