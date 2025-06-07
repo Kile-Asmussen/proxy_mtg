@@ -35,9 +35,6 @@
     ],
     "B.2 - Land Advantage": [
         {
-            "name": "Archaeomancer's Map"
-        },
-        {
             "name": "Land Tax"
         },
         {
@@ -65,25 +62,13 @@
             "name": "Extraplanar Lens"
         },
         {
-            "name": "Lotus Field"
-        },
-        {
-            "name": "Lotus Vale"
-        },
-        {
-            "name": "Scorched Ruins"
-        },
-        {
-            "name": "Karoo"
-        },
-        {
-            "name": "Arid Archway"
-        },
-        {
-            "name": "Guildless Commons"
+            "name": "Crucible of Worlds"
         }
     ],
     "C.1 - Control": [
+        {
+            "name": "Kabira Takedown // Kabira Plateau"
+        },
         {
             "name": "Winds of Abandon"
         },
@@ -94,10 +79,7 @@
             "name": "Parallax Wave"
         },
         {
-            "name": "Loran of the Third Path"
-        },
-        {
-            "name": "Generous Gift"
+            "name": "Witch Enchanter // Witch-Blessed Meadow"
         },
         {
             "name": "Generous Gift"
@@ -109,15 +91,24 @@
             "name": "Return to Dust"
         },
         {
-            "name": "Reprieve"
+            "name": "Austere Command"
         }
     ],
     "C.2 - Stax": [
         {
-            "name": "Ghostly Prison"
+            "name": "Archon of Absolution"
         },
         {
             "name": "Clarion Conqueror"
+        },
+        {
+            "name": "Myrel, Shield of Argive"
+        },
+        {
+            "name": "Magus of the Moat"
+        },
+        {
+            "name": "Thalia, Guardian of Thraben"
         }
     ],
     "D.1 - Commander Protection": [
@@ -125,7 +116,10 @@
             "name": "Commander's Plate"
         },
         {
-            "name": "Dawn's Truce"
+            "name": "Darksteel Plate"
+        },
+        {
+            "name": "Sejiri Shelter // Sejiri Glacier"
         }
     ],
     "D.2 - Board Protection": [
@@ -149,9 +143,12 @@
         },
         {
             "name": "Flare of Fortitude"
+        },
+        {
+            "name": "Emeria, the Sky Ruin"
         }
     ],
-    "D.1 - Bounce Synergy": [
+    "E.1 - Bounce Synergy": [
         {
             "name": "Whitemane Lion"
         },
@@ -183,12 +180,15 @@
             "name": "Mischievous Pup"
         }
     ],
-    "D.2 - Wincon Enabler": [
+    "E.2 - Wincon Enabler": [
         {
             "name": "Oketra's Monument"
         },
         {
             "name": "Pearl Medallion"
+        },
+        {
+            "name": "The Wind Crystal"
         },
         {
             "name": "Defiler of Faith"
@@ -200,18 +200,10 @@
             "name": "Mondrak, Glory Dominus"
         },
         {
-            "name": "Akroma's Memorial"
-        }
-    ],
-    "E - Synergy": [
-        {
-            "name": "Steelshaper's Gift"
+            "name": "Odric, Lunarch Marshal"
         },
         {
-            "name": "Soul Warden"
-        },
-        {
-            "name": "Soul's Attendant"
+            "name": "Concerted Effort"
         }
     ],
     "F - Lands": [
@@ -219,8 +211,32 @@
             "name": "Nykthos, Shrine to Nyx"
         },
         {
+            "name": "Lotus Field"
+        },
+        {
+            "name": "Lotus Vale"
+        },
+        {
+            "name": "Scorched Ruins"
+        },
+        {
+            "name": "Karoo"
+        },
+        {
+            "name": "Arid Archway"
+        },
+        {
+            "name": "Guildless Commons"
+        },
+        {
+            "name": "Vesuva"
+        },
+        {
+            "name": "Thespian's Stage"
+        },
+        {
             "name": "Snow-Covered Plains",
-            "repeats": 34
+            "repeats": 28
         }
     ]
 }

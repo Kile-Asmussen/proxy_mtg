@@ -142,7 +142,12 @@ impl List {
             let count: usize = names.iter().map(|s| cards.get(s).unwrap_or(&0usize)).sum();
             println!("  {} ({}):", cat, count);
             for name in names {
-                println!("    {} x {}", *cards.get(name).unwrap_or(&0usize), name);
+                let n = *cards.get(name).unwrap_or(&0usize);
+                if n == 1 {
+                    println!("    {}", name);
+                } else {
+                    println!("    {} x {}", n, name);
+                }
                 cards.remove(name);
             }
         }
