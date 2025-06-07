@@ -53,6 +53,26 @@ impl Element {
         }
     }
 
+    pub fn text_len(&self) -> usize {
+        self.nodes.iter().map(Node::text_len).sum()
+    }
+
+    pub fn len(&self) -> usize {
+        self.tag.len()
+            + self
+                .attributes
+                .iter()
+                .map(|(k, v)| {
+                    if k == v {
+                        k.len() + 1
+                    } else {
+                        k.len() + v.len() + 4
+                    }
+                })
+                .sum::<usize>()
+            + self.nodes.iter().map(Node::len).sum::<usize>()
+    }
+
     pub fn children(&self) -> &[Node] {
         &self.nodes[..]
     }

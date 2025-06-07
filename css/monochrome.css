@@ -21,3 +21,22 @@
     --gold-1: white;
     --gold-2: white;
 }
+
+.ms-cost,
+.ms-cost.ms-w,
+.ms-cost.ms-wp,
+.ms-cost.ms-u,
+.ms-cost.ms-up,
+.ms-cost.ms-b,
+.ms-cost.ms-bp,
+.ms-cost.ms-r,
+.ms-cost.ms-rp,
+.ms-cost.ms-g,
+.ms-cost.ms-gp {
+    background-color: white;
+}
+
+.ms-cost.ms-shadow {
+    border: 0.08em solid #111 !important;
+    box-shadow: none !important;
+}

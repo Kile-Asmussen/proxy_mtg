@@ -120,7 +120,7 @@ impl Card {
         self.subtypes.iter().any(|s| s == t)
     }
 
-    pub fn face_layouts(&self) -> FaceLayout {
+    pub fn face_layout(&self) -> FaceLayout {
         match &self.layout {
             CardLayout::Adventure => FaceLayout::Omenventure,
             CardLayout::Aftermath => FaceLayout::Aftermath,

@@ -280,14 +280,6 @@ impl DeckListFile {
                 };
                 proxy.cardoid = cardoid;
             }
-
-            let num_arts = proxy.art_urls.len();
-            let num_credits = proxy.art_urls.len();
-
-            if num_arts != num_credits {
-                errors.push("Missing art credits: ".to_string() + &proxy.name);
-                continue;
-            }
             res.push(proxy);
         }
     }

@@ -17,9 +17,9 @@
     --flavor-font-size-small: 7pt;
     --flavor-font-size-large: 9pt;
 
-    --corner-bubble-font-family: Crimson Text;
+    --corner-bubble-font-family: Amarante;
     --corner-bubble-font-size: 11pt;
-    --corner-bubble-font-adjustment: 0mm;
+    --corner-bubble-font-adjustment: 0.3mm;
 
     --flip-indicator-font-family: Amarante;
     --flip-indicator-font-size: 6pt;
@@ -36,26 +36,57 @@
     --mana-cost-adjustment: -0.5mm;
 }
 
-i.ms {
+.ms {
     font-size: var(--mana-symbol-size);
 }
 
-i.ms-2x {
+.ms-2x {
     font-size: calc(2*var(--mana-symbol-size));
 }
 
-i.ms-3x {
+.ms-3x {
     font-size: calc(3*var(--mana-symbol-size));
 }
 
-i.ms-4x {
+.ms-4x {
     font-size: calc(4*var(--mana-symbol-size));
 }
 
-i.ms-5x {
+.ms-5x {
     font-size: calc(5*var(--mana-symbol-size));
 }
 
-i.ms-6x {
+.ms-6x {
     font-size: calc(6*var(--mana-symbol-size));
+}
+
+p.rules-text {
+    font-family: var(--rules-font-family);
+    font-size: var(--rules-font-size);
+}
+
+div.text-box.dense>p.rules-text {
+    font-size: var(--rules-font-size-small);
+}
+
+div.text-box.sparse>p.rules-text {
+    font-size: var(--rules-font-size-large);
+}
+
+p.flavor-text {
+    font-style: italic;
+    font-family: var(--flavor-font-family);
+    font-size: var(--flavor-font-size);
+}
+
+div.text-box.dense>p.flavor-text {
+    font-size: var(--flavor-font-size-small);
+}
+
+div.text-box.sparse>p.flavor-text {
+    font-size: var(--flavor-font-size-large);
+}
+
+span.reminder {
+    font-style: italic;
 }

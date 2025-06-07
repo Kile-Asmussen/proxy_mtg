@@ -18,12 +18,8 @@ use crate::{
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Proxy {
     pub name: String,
-    #[serde(default, rename = "artUrls")]
-    pub art_urls: Vec<String>,
-    #[serde(default, rename = "artCredits")]
-    pub art_credits: Vec<String>,
-    #[serde(default, rename = "fullArts")]
-    pub full_arts: Vec<bool>,
+    #[serde(default)]
+    pub arts: Vec<Art>,
     #[serde(default)]
     pub copies: usize,
     #[serde(default, rename = "reminderText")]
@@ -42,6 +38,14 @@ pub struct Proxy {
     pub customize: Vec<ForeignData>,
     #[serde(default)]
     pub cardoid: Cardoid,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct Art {
+    pub url: String,
+    pub credit: String,
+    #[serde(default)]
+    pub full: bool,
 }
 
 impl Proxy {

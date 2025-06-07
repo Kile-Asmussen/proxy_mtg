@@ -13,9 +13,9 @@ pub struct Build {
     #[arg(value_name = "FILE")]
     pub decklist: PathBuf,
     #[arg(long)]
-    pub reminders: bool,
-    #[arg(long)]
     pub color: bool,
+    #[arg(long)]
+    pub testing: bool,
 }
 
 impl Build {
@@ -26,8 +26,16 @@ impl Build {
     pub fn dispatch(&self, decklist: &DeckList) -> anyhow::Result<()> {
         let mut render = RenderContext::new(RenderSettings {
             in_color: self.color,
-            reminder_text: self.reminders,
+            testing: self.testing,
         });
+
+        println!(
+            "Rendering {} cards",
+            decklist
+                .iter()
+                .map(|p| p.cardoid.printed_cards())
+                .sum::<usize>()
+        );
 
         for proxy in decklist {
             render.add_proxy(proxy);

@@ -2,6 +2,7 @@ mod elements;
 mod node;
 mod tags;
 mod tests;
+pub use anyhow::anyhow;
 pub use elements::*;
 pub use node::*;
 use std::{collections::BTreeMap, fmt::Display, path::Path};
@@ -59,9 +60,12 @@ impl Document {
     {
         Ok(self.head(
             Element::new(Tag::style)
-                .text("<![CDATA[\n")
-                .text(std::fs::read_to_string(path)?)
-                .text("\n]]>"),
+                .text("/*<![CDATA[*/")
+                .text(
+                    std::fs::read_to_string(&path)
+                        .map_err(|e| anyhow!("{:?} - {}", path.as_ref(), e))?,
+                )
+                .text("/*]]>*/"),
         ))
     }
 }

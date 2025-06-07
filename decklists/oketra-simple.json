@@ -2,11 +2,18 @@
     "uncategorized": [
         {
             "name": "God-Eternal Oketra",
-            "artUrls": [
-                "https://i.imgur.com/70qjbcs.png"
+            "arts": [
+                {
+                    "url": "https://i.imgur.com/70qjbcs.png",
+                    "credit": "u/Ishton"
+                }
             ],
-            "artCredits": [
-                "u/Ishton"
+            "customize": [
+                {
+                    "name": "God-Epurrnal Okittytra",
+                    "faceName": "God-Epurrnal Okittytra",
+                    "flavorText": "✨ Oketra/Harozet OTP ✨"
+                }
             ]
         },
         {

@@ -3,7 +3,7 @@ use regex::Regex;
 use crate::{
     atomic_cards::types::WUBRG,
     html::{Element, Node, Tag},
-    rendering::manafont::ManaFontSymbolics,
+    rendering::{manafont::ManaFontSymbolics, RenderSettings},
     utils::symbolics::{replace_symbols, RulesTextSymbolReplacer},
 };
 
@@ -18,7 +18,9 @@ impl RulesTextSymbolReplacer for ReminderText {
 
     fn map_symbol(&self, matched: &str) -> Self::Item {
         vec![Node::Element(
-            Element::new(Tag::i).nodes(replace_symbols(&ManaFontSymbolics, matched)),
+            Element::new(Tag::span)
+                .class(["reminder"])
+                .nodes(replace_symbols(&ManaFontSymbolics, matched)),
         )]
     }
 

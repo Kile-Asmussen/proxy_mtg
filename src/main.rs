@@ -27,7 +27,7 @@ fn main() -> anyhow::Result<()> {
         DeckList::load(decklist_file, &atomic_cards)?
     };
 
-    command.subcommand.dispatch(&atomic_cards, &decklist);
+    command.subcommand.dispatch(&atomic_cards, &decklist)?;
 
     Ok(())
 }

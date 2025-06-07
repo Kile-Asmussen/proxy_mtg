@@ -3,10 +3,7 @@ pub mod manafont;
 pub mod normal;
 pub mod reminders;
 
-use std::{
-    collections::{BTreeMap, BTreeSet},
-    mem,
-};
+use anyhow::anyhow;
 
 use normal::normal_card;
 
@@ -17,9 +14,10 @@ use crate::{
     rendering::general::empty_card,
 };
 
+#[derive(Clone, Copy)]
 pub struct RenderSettings {
     pub in_color: bool,
-    pub reminder_text: bool,
+    pub testing: bool,
 }
 
 pub struct RenderContext {
@@ -38,7 +36,7 @@ impl RenderContext {
     pub fn add_proxy(&mut self, proxy: &Proxy) {
         for _ in 1..=proxy.repeats {
             self.cards.append(&mut match proxy.layout() {
-                CardLayout::Normal => normal_card(proxy, &self.settings),
+                CardLayout::Normal => normal_card(proxy, self.settings),
                 _ => vec![empty_card(proxy.cardoid.face())],
             })
         }
@@ -50,17 +48,33 @@ impl RenderContext {
             .head_link("preconnect", "https://fonts.googleapis.com")
             .head(Element::new(Tag::link).attr("rel", "preconnect").attr("href", "https://fonts.gstatic.com").flag("crossorigin"))
             .head_link("stylesheet", "https://fonts.googleapis.com/css2?family=Amarante&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inconsolata:wght@200..900&display=swap")
-            .head_link("stylesheet", "https://cdn.jsdelivr.net/npm/mana-font@latest/css/mana.css")
-            .inline_style("./css/page-layout.css")?
-            .inline_style("./css/font-settings.css")?
-            .inline_style("./css/card-geometry.css")?;
+            .head_link("stylesheet", "https://cdn.jsdelivr.net/npm/mana-font@latest/css/mana.css");
 
-        html_pages = if self.settings.in_color {
-            html_pages.inline_style("./css/full-color.css")?
+        if self.settings.testing {
+            html_pages = html_pages
+                .head_link("stylesheet", "../css/page-layout.css")
+                .head_link("stylesheet", "../css/font-settings.css")
+                .head_link("stylesheet", "../css/card-geometry.css");
+
+            html_pages = if self.settings.in_color {
+                html_pages.head_link("stylesheet", "../css/full-color.css")
+            } else {
+                html_pages.head_link("stylesheet", "../css/monochrome.css")
+            }
+            .head_link("stylesheet", "../css/card-colors.css");
         } else {
-            html_pages.inline_style("./css/monochrome.css")?
+            html_pages = html_pages
+                .inline_style("./css/page-layout.css")?
+                .inline_style("./css/font-settings.css")?
+                .inline_style("./css/card-geometry.css")?;
+
+            html_pages = if self.settings.in_color {
+                html_pages.inline_style("./css/full-color.css")?
+            } else {
+                html_pages.inline_style("./css/monochrome.css")?
+            }
+            .inline_style("./css/card-colors.css")?;
         }
-        .inline_style("./css/card")?;
 
         let mut pages = vec![];
         {
@@ -68,10 +82,12 @@ impl RenderContext {
             let mut row = vec![];
             for card in self.cards {
                 if page.len() >= 3 {
-                    pages.push(mem::replace(&mut page, vec![]))
+                    pages.push(page);
+                    page = vec![];
                 }
                 if row.len() >= 3 {
-                    page.push(mem::replace(&mut row, vec![]))
+                    page.push(row);
+                    row = vec![];
                 }
                 row.push(card);
             }

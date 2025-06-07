@@ -148,13 +148,17 @@ img.art {
     object-fit: contain;
 }
 
-/* TEXT BOXES AND ART */
-
 img.art.full-art {
     width: var(--fullwidth-box);
     height: var(--fullheight-box);
     left: var(--fullwidth-margin);
     top: calc(var(--bar-height) + var(--upper-margin));
+}
+
+/* TEXT BOXES AND ART */
+
+img.art.full-art~div.text_box {
+    display: none;
 }
 
 div.text-box {
@@ -231,49 +235,16 @@ div.text-box.dense {
     justify-content: start;
 }
 
-p.rules-text {
-    font-family: var(--rules-font-family);
-    font-size: var(--rules-font-size);
-}
-
-div.text-box.dense>p.rules-text {
-    font-size: var(--rules-font-size-small);
-}
-
-div.text-box.sparse>p.rules-text {
-    font-size: var(--rules-font-size-large);
-}
-
-p.flavor-text {
-    font-style: italic;
-    font-family: var(--flavor-font-family);
-    font-size: var(--flavor-font-size);
-}
-
-div.text-box.dense>p.flavor-text {
-    font-size: var(--flavor-font-size-small);
-}
-
-div.text-box.dense>p.flavor-text {
-    font-size: var(--flavor-font-size-large);
-}
-
-span.reminder {
-    font-style: italic;
-}
-
 div.corner-bubble.bar {
     right: var(--bar-margin);
     left: auto;
     top: calc(var(--upper-margin) + 2*var(--bar-height) + var(--fullheight-box) - var(--pin-line-width) - var(--bar-height)/2);
     padding: 0 calc(1.5*var(--bar-endcap));
     width: auto;
-    color: white;
     font-weight: bold;
     font-size: var(--corner-bubble-font-size);
     font-family: var(--corner-bubble-font-family);
-    text-shadow: 1pt 1pt black;
-    background-color: darkgray;
+    font-kerning: normal;
 }
 
 div.corner-bubble.bar.shield {
@@ -331,18 +302,17 @@ div.flip-indicator.bar.reverse::before {
 }
 
 span.art-credits {
-    bottom: calc(var(--upper-margin)/2);
-    width: 100%;
-    text-align: center;
+    bottom: 0;
+    left: calc(var(--fullwidth-margin) + var(--pin-line-width));
     font-size: var(--art-credit-font-size);
     font-weight: bold;
     font-family: var(--art-credit-font);
     background-color: transparent;
-    border-width: 0;
-    border-color: transparent;
-    border-style: none;
+    border: 0 none transparent;
     color: white;
-    text-shadow: 0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
+    text-shadow:
+        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black,
+        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
 }
 
 span.art-credits::before {

@@ -1,6 +1,7 @@
 use crate::{
     atomic_cards::types::WUBRG,
     html::{Element, Node, Tag},
+    rendering::RenderSettings,
     utils::symbolics::RulesTextSymbolReplacer,
 };
 
