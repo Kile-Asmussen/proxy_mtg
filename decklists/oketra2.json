@@ -18,9 +18,6 @@
             "name": "Bennie Bracks, Zoologist"
         },
         {
-            "name": "Master of Ceremonies"
-        },
-        {
             "name": "Skullclamp"
         },
         {
@@ -67,9 +64,6 @@
     ],
     "C.1 - Control": [
         {
-            "name": "Kabira Takedown // Kabira Plateau"
-        },
-        {
             "name": "Winds of Abandon"
         },
         {
@@ -79,7 +73,7 @@
             "name": "Parallax Wave"
         },
         {
-            "name": "Witch Enchanter // Witch-Blessed Meadow"
+            "name": "Loran of the Third Path"
         },
         {
             "name": "Generous Gift"
@@ -95,6 +89,9 @@
         }
     ],
     "C.2 - Stax": [
+        {
+            "name": "Rune-Tail, Kitsune Ascendant // Rune-Tail's Essence"
+        },
         {
             "name": "Archon of Absolution"
         },
@@ -117,9 +114,6 @@
         },
         {
             "name": "Darksteel Plate"
-        },
-        {
-            "name": "Sejiri Shelter // Sejiri Glacier"
         }
     ],
     "D.2 - Board Protection": [
@@ -236,7 +230,7 @@
         },
         {
             "name": "Snow-Covered Plains",
-            "repeats": 28
+            "repeats": 30
         }
     ]
 }

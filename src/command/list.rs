@@ -1,5 +1,6 @@
 use clap::Parser;
 use rand::{seq::SliceRandom, SeedableRng};
+use regex::Regex;
 
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -44,6 +45,8 @@ pub struct List {
     pub tokens: bool,
     #[arg(long)]
     pub lands: bool,
+    #[arg(long)]
+    pub pips: bool,
 }
 
 impl List {
@@ -124,6 +127,11 @@ impl List {
             Self::print_lands(decklist);
         }
 
+        if self.pips {
+            println!();
+            Self::print_pips(decklist);
+        }
+
         println!();
 
         Ok(())
@@ -194,13 +202,17 @@ impl List {
         }
 
         println!("P/T curve:");
-        for (pt, c) in pt_count {
-            if power {
-                println!("  {}/{} {}", pt.0, pt.1, vec!["*"; c].join(""));
-            } else {
-                println!("  {}/{} {}", pt.1, pt.0, vec!["*"; c].join(""));
-            }
-        }
+        Self::print_histo(if power {
+            pt_count
+                .into_iter()
+                .map(|((p, t), n)| (format!("{p}/{t}"), n))
+                .collvect()
+        } else {
+            pt_count
+                .into_iter()
+                .map(|((t, p), n)| (format!("{p}/{t}"), n))
+                .collvect()
+        });
     }
 
     pub fn print_colors(decklist: &DeckList) {
@@ -216,9 +228,13 @@ impl List {
 
     pub fn print_color_hist(decklist: &DeckList) {
         println!("Color Histogram:");
-        for (color, n) in decklist.color_hist() {
-            println!("  {} x {}", n, WUBRG::render(&color));
-        }
+        Self::print_histo(
+            decklist
+                .color_hist()
+                .into_iter()
+                .map(|s| (WUBRG::render(&s.0), s.1))
+                .collvect(),
+        );
     }
 
     pub fn print_mana_curve(decklist: &DeckList) {
@@ -228,25 +244,22 @@ impl List {
             println!("  no curve");
             return;
         };
-        for mv in 0..=*max {
-            let n = *curve.get(&mv).unwrap_or(&0);
-            println!("  {} {}", mv, vec!["*"; n].join(""))
-        }
-        for (cmc, n) in decklist.curve() {}
+        Self::print_histo(
+            (0..=*max)
+                .into_iter()
+                .map(|n| (n.to_string(), curve[&n]))
+                .collvect(),
+        );
     }
 
     pub fn print_tag_hist(decklist: &DeckList) {
         println!("Tags:");
-        for (tag, n) in decklist.tag_hist() {
-            println!("  {} x {}", n, tag);
-        }
+        Self::print_histo(decklist.tag_hist().into_iter().collvect());
     }
 
     pub fn print_type_hist(decklist: &DeckList) {
         println!("Card Types:");
-        for (types, n) in decklist.type_hist() {
-            println!("  {} x {}", n, types);
-        }
+        Self::print_histo(decklist.type_hist().into_iter().collvect());
     }
 
     pub fn print_example_hand(decklist: &DeckList) {
@@ -263,7 +276,7 @@ impl List {
         hand.sort();
         println!("Example Hand:");
         for (i, n) in hand.iter().enumerate() {
-            println!("  {}. {}", i + 1, n);
+            println!("  {}. {n}", i + 1);
         }
     }
 
@@ -304,15 +317,15 @@ impl List {
         println!("  {} x total", total);
         println!("  {} x basic", basic);
         for name in &basic_names {
-            println!("    {}", name);
+            println!("    {name}");
         }
         println!("  {} x tapland", tapland);
         for name in &tapland_names {
-            println!("    {}", name);
+            println!("    {name}");
         }
         println!("  {} x nonmana land", nonmana);
         for name in &nonmana_names {
-            println!("    {}", name);
+            println!("    {name}");
         }
     }
 
@@ -330,8 +343,43 @@ impl List {
         }
 
         println!("Creature types:");
-        for (subtype, count) in types {
-            println!("  {} {}", vec!["*"; count].join(""), subtype);
+        Self::print_histo(types.into_iter().collvect())
+    }
+
+    pub fn print_pips(decklist: &DeckList) {
+        let mut res = BTreeMap::new();
+        let re = Regex::new(r"\{.*?\}").unwrap();
+        for proxy in decklist {
+            if !proxy.in_deck() {
+                continue;
+            }
+            for card in &proxy.cardoid {
+                for pip in re.find_iter(&card.mana_cost) {
+                    *res.entry(pip.as_str().to_string()).or_insert(0) += proxy.repeats;
+                }
+            }
+        }
+
+        let mut res = res.into_iter().collvect();
+        res.sort_by_key(|x| -(x.1 as isize));
+        println!("Mana Symbols:");
+        Self::print_histo(res);
+    }
+
+    fn print_histo(things: Vec<(String, usize)>) {
+        let width = things.iter().map(|s| s.0.len()).max().unwrap_or(0) + 1;
+
+        for (mut thing, n) in things {
+            thing += &vec![" "; width - thing.len()].join("");
+            println!(
+                "  {thing}{}{}",
+                vec!["*"; n].join(""),
+                if n > 7 {
+                    format!(" ({n})")
+                } else {
+                    "".to_string()
+                }
+            );
         }
     }
 }

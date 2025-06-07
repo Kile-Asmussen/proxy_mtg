@@ -6,6 +6,7 @@ use std::{
 };
 
 use rand::rand_core::block;
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -173,7 +174,7 @@ impl DeckList {
     pub fn type_hist(&self) -> BTreeMap<String, usize> {
         let mut res = BTreeMap::new();
 
-        for proxy in &self.0 {
+        for proxy in self {
             for card in &proxy.cardoid {
                 let typeline = card
                     .supertypes
