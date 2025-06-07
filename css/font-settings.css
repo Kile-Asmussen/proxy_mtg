@@ -32,32 +32,61 @@
     --proxy-mark-font-size: 1.5mm;
     --proxy-mark-nudge: 0.2mm;
 
-    --mana-symbol-size: 0.7em;
+    --mana-symbol-size-text: 0.6em;
+    --mana-symbol-size-title: 0.75em;
     --mana-cost-adjustment: -0.5mm;
 }
 
 .ms {
-    font-size: var(--mana-symbol-size);
+    font-size: var(--mana-symbol-size-text);
 }
 
 .ms-2x {
-    font-size: calc(2*var(--mana-symbol-size));
+    font-size: calc(2*var(--mana-symbol-size-text));
 }
 
 .ms-3x {
-    font-size: calc(3*var(--mana-symbol-size));
+    font-size: calc(3*var(--mana-symbol-size-text));
 }
 
 .ms-4x {
-    font-size: calc(4*var(--mana-symbol-size));
+    font-size: calc(4*var(--mana-symbol-size-text));
 }
 
 .ms-5x {
-    font-size: calc(5*var(--mana-symbol-size));
+    font-size: calc(5*var(--mana-symbol-size-text));
 }
 
 .ms-6x {
-    font-size: calc(6*var(--mana-symbol-size));
+    font-size: calc(6*var(--mana-symbol-size-text));
+}
+
+div.title.bar>span.cost>i.ms {
+    font-size: var(--mana-symbol-size-title);
+}
+
+div.title.bar>span.cost>i.ms-2x {
+    font-size: calc(2*var(--mana-symbol-size-title));
+}
+
+div.title.bar>span.cost>i.ms-3x {
+    font-size: calc(3*var(--mana-symbol-size-title));
+}
+
+div.title.bar>span.cost>i.ms-4x {
+    font-size: calc(4*var(--mana-symbol-size-title));
+}
+
+div.title.bar>span.cost>i.ms-5x {
+    font-size: calc(5*var(--mana-symbol-size-title));
+}
+
+div.title.bar>span.cost>i.ms-6x {
+    font-size: calc(6*var(--mana-symbol-size-title));
+}
+
+.ms-2 {
+    margin-left: 0 !important;
 }
 
 p.rules-text {

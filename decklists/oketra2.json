@@ -27,7 +27,7 @@
             "name": "Tocasia's Welcome"
         },
         {
-            "name": "Trouble in Pairs"
+            "name": "Welcoming Vampire"
         }
     ],
     "B.2 - Land Advantage": [
@@ -57,9 +57,6 @@
         },
         {
             "name": "Extraplanar Lens"
-        },
-        {
-            "name": "Crucible of Worlds"
         }
     ],
     "C.1 - Control": [
@@ -90,22 +87,19 @@
     ],
     "C.2 - Stax": [
         {
-            "name": "Rune-Tail, Kitsune Ascendant // Rune-Tail's Essence"
-        },
-        {
             "name": "Archon of Absolution"
         },
         {
             "name": "Clarion Conqueror"
         },
         {
-            "name": "Myrel, Shield of Argive"
-        },
-        {
             "name": "Magus of the Moat"
         },
         {
             "name": "Thalia, Guardian of Thraben"
+        },
+        {
+            "name": "Binding Mummy"
         }
     ],
     "D.1 - Commander Protection": [
@@ -117,6 +111,12 @@
         }
     ],
     "D.2 - Board Protection": [
+        {
+            "name": "Rune-Tail, Kitsune Ascendant // Rune-Tail's Essence"
+        },
+        {
+            "name": "Myrel, Shield of Argive"
+        },
         {
             "name": "Brought Back"
         },

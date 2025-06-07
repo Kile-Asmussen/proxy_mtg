@@ -1,98 +1,92 @@
-use lazy_regex::regex;
-use reqwest::blocking::get;
-use std::{
-    collections::BTreeSet,
-    mem::replace,
-    ops::{Div, Rem},
-};
-
 use crate::{
-    atomic_cards::{cards::*, types::*},
+    atomic_cards::{
+        cards::Card,
+        types::{FaceLayout, Side, Supertype, WUBRG},
+    },
     html::*,
     proxy::Proxy,
-    rendering::{
-        manafont::ManaFontSymbolics,
-        reminders::{NoReminderText, ReminderText},
-    },
-    utils::{
-        iter::IterExt,
-        symbolics::{replace_symbols, RulesTextSymbolReplacer},
-    },
+    rendering::reminders::{NoReminderText, ReminderText},
+    utils::{iter::IterExt, symbolics::replace_symbols},
 };
 
-use super::{general::*, RenderSettings};
+use super::general::{card_art_img, empty_card, flavor_text, get_side, type_line_div};
 
-pub fn normal_card(proxy: &Proxy, settings: RenderSettings) -> Vec<Element> {
+pub fn normal_card(proxy: &Proxy) -> Vec<Element> {
     let card = proxy.cardoid.face();
 
     vec![match card.face_layout() {
-        FaceLayout::Basic => basic_land(proxy, settings),
-        FaceLayout::Creature => creature_card(proxy, settings),
-        FaceLayout::Planeswalker => raw_card(proxy, settings),
-        FaceLayout::Unadorned => unadorned_card(proxy, settings),
-        _ => raw_card(proxy, settings),
+        FaceLayout::Basic => basic_land(proxy),
+        FaceLayout::Creature => creature_card(proxy),
+        FaceLayout::Planeswalker => raw_card(proxy),
+        FaceLayout::Unadorned => unadorned_card(proxy),
+        _ => raw_card(proxy),
     }]
 }
 
-pub fn raw_card(proxy: &Proxy, settings: RenderSettings) -> Element {
+pub fn raw_card(proxy: &Proxy) -> Element {
     let card = proxy.cardoid.face();
-    let mut name = card.name.clone();
 
-    if let Some(c) = proxy.customize.get(0) {
-        if !c.name.is_empty() {
-            name = c.name.clone();
-        }
-    }
-
-    empty_card(card)
-        .elem(title_bar_div(card, proxy))
-        .elem(type_line_div(card, Side::A, proxy))
-        .nodes(card_art_img(proxy, Side::A))
-        .elem(type_line_div(card, Side::A, proxy))
+    empty_card(card, proxy)
+        .node(type_line_div(card, proxy))
+        .nodes(card_art_img(card, proxy))
+        .node(type_line_div(card, proxy))
 }
 
-pub fn basic_land(proxy: &Proxy, settings: RenderSettings) -> Element {
+pub fn basic_land(proxy: &Proxy) -> Element {
     let card = proxy.cardoid.face();
-    raw_card(proxy, settings).elem(rules_text_basic_div(card, proxy))
+    raw_card(proxy).node(rules_text_basic_div(card, proxy))
 }
 
-pub fn unadorned_card(proxy: &Proxy, settings: RenderSettings) -> Element {
+pub fn unadorned_card(proxy: &Proxy) -> Element {
     let card = proxy.cardoid.face();
-    raw_card(proxy, settings).elem(rules_text_div(card, proxy, settings))
+    raw_card(proxy).node(rules_text_div(card, proxy))
 }
 
-pub fn creature_card(proxy: &Proxy, settings: RenderSettings) -> Element {
+pub fn creature_card(proxy: &Proxy) -> Element {
     let card = proxy.cardoid.face();
-    raw_card(proxy, settings)
-        .elem(rules_text_div(card, proxy, settings))
-        .elem(power_toughness(card))
+    raw_card(proxy)
+        .node(rules_text_div(card, proxy))
+        .node(power_toughness(card))
 }
 
 pub fn power_toughness(card: &Card) -> Element {
     Element::new(Tag::div)
         .class(["bar", "corner-bubble"])
-        .elem(Element::new(Tag::span).text(format!("{}/{}", card.power, card.toughness)))
+        .node(Element::new(Tag::span).node(format!("{}/{}", card.power, card.toughness)))
 }
 
 pub fn rules_text_basic_div(card: &Card, proxy: &Proxy) -> Element {
+    if proxy.reminder_text {
+        return rules_text_div(card, proxy);
+    }
+
     let mut text = Element::new(Tag::p)
         .class(["rules-text"])
-        .elem(Element::new(Tag::i).class([
-            format!("ms"),
-            format!("ms-{}", WUBRG::render(&card.color_identity).to_lowercase()),
-            format!("ms-4x"),
-        ]));
+        .node(big_mana_glyph(
+            format!("ms-{}", WUBRG::render(&card.color_identity)).to_lowercase(),
+        ));
 
     if card.is_supertype(Supertype::Snow) {
-        text = text.elem(Element::new(Tag::i).class(["ms", "ms-s", "ms-4x"]));
+        text = text.node(big_mana_glyph("ms-s"));
     }
+
+    let mut text = vec![text];
+
+    text.append(&mut flavor_text(card, proxy));
 
     Element::new(Tag::div)
         .class(["text-box", "sparse"])
-        .elem(text)
+        .nodes(text)
 }
 
-pub fn rules_text_div(card: &Card, proxy: &Proxy, settings: RenderSettings) -> Element {
+pub fn big_mana_glyph<S>(class: S) -> Element
+where
+    S: AsRef<str>,
+{
+    Element::new(Tag::i).class(["ms", class.as_ref(), "ms-4x"])
+}
+
+pub fn rules_text_div(card: &Card, proxy: &Proxy) -> Element {
     let mut text = card.text.clone();
     let mut flavor_text = None;
 
@@ -129,20 +123,18 @@ pub fn rules_text_div(card: &Card, proxy: &Proxy, settings: RenderSettings) -> E
         .collvect();
 
     if let Some(t) = flavor_text {
-        paragraphs.push(Element::new(Tag::p).class(["flavor-text"]).text(t));
+        paragraphs.push(Element::new(Tag::p).class(["flavor-text"]).node(t));
     }
 
     let text_len: usize = paragraphs.iter().map(|n| n.text_len()).sum();
 
     let class: &[&str] = if paragraphs.len() == 1 && text_len < 50 {
         &["text-box", "sparse"]
-    } else if paragraphs.len() >= 3 || text_len >= 200 {
+    } else if paragraphs.len() >= 4 || text_len >= 180 {
         &["text-box", "dense"]
     } else {
         &["text-box"]
     };
 
-    Element::new(Tag::div)
-        .class(class)
-        .nodes(paragraphs.into_iter().map(Node::Element))
+    Element::new(Tag::div).class(class).nodes(paragraphs)
 }

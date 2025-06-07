@@ -4,19 +4,14 @@ pub mod metadata;
 pub mod types;
 
 use std::{
-    alloc::Layout,
     collections::{BTreeSet, HashMap},
     error::Error,
     fmt::Display,
-    fs::{self, File},
-    io::{BufReader, BufWriter, Write},
+    fs::{self},
     time::Instant,
 };
 
-use anyhow::anyhow;
-
 use serde::{Deserialize, Serialize};
-use serde_json::map::IntoIter;
 
 use crate::utils::iter::*;
 

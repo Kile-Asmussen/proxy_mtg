@@ -1,19 +1,10 @@
 pub mod decklists;
 
-use std::{
-    collections::{BTreeMap, BTreeSet},
-    error::Error,
-    fmt::Display,
-    path::{Path, PathBuf},
-};
+use std::collections::BTreeSet;
 
-use rand::rand_core::block;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::CardLayout},
-    utils::iter::IterExt,
-};
+use crate::atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::CardLayout};
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Proxy {
@@ -22,7 +13,7 @@ pub struct Proxy {
     pub arts: Vec<Art>,
     #[serde(default)]
     pub copies: usize,
-    #[serde(default, rename = "reminderText")]
+    #[serde(rename = "reminderText", default = "Proxy::reminder_text_default")]
     pub reminder_text: bool,
     #[serde(default = "Proxy::repeats_default")]
     pub repeats: usize,
@@ -59,5 +50,9 @@ impl Proxy {
 
     fn repeats_default() -> usize {
         1
+    }
+
+    fn reminder_text_default() -> bool {
+        true
     }
 }

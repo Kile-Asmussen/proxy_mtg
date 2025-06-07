@@ -2,14 +2,9 @@ pub mod build;
 pub mod list;
 pub mod search;
 
-use std::{
-    fmt::Debug,
-    path::{Path, PathBuf},
-};
+use std::{fmt::Debug, path::Path};
 
-use clap::{builder::Str, Parser, Subcommand};
-use rand::seq::SliceRandom;
-use regex::Regex;
+use clap::{Parser, Subcommand};
 
 use crate::{atomic_cards::AtomicCardsFile, proxy::decklists::DeckList};
 
@@ -38,7 +33,11 @@ impl ListBuildSearch {
         }
     }
 
-    pub fn dispatch(self, atomics: &AtomicCardsFile, decklist: &DeckList) -> anyhow::Result<()> {
+    pub fn dispatch(
+        self,
+        atomics: &AtomicCardsFile,
+        decklist: &mut DeckList,
+    ) -> anyhow::Result<()> {
         match self {
             Self::List(l) => l.dispatch(decklist),
             Self::Build(b) => b.dispatch(decklist),

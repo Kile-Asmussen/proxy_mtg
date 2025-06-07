@@ -13,9 +13,13 @@ pub struct Build {
     #[arg(value_name = "FILE")]
     pub decklist: PathBuf,
     #[arg(long)]
-    pub color: bool,
+    pub in_color: bool,
     #[arg(long)]
     pub testing: bool,
+    #[arg(long, conflicts_with = "no_reminder_text")]
+    pub reminder_text: bool,
+    #[arg(long, conflicts_with = "reminder_text")]
+    pub no_reminder_text: bool,
 }
 
 impl Build {
@@ -23,11 +27,19 @@ impl Build {
         &self.decklist
     }
 
-    pub fn dispatch(&self, decklist: &DeckList) -> anyhow::Result<()> {
-        let mut render = RenderContext::new(RenderSettings {
-            in_color: self.color,
+    pub fn dispatch(&self, decklist: &mut DeckList) -> anyhow::Result<()> {
+        let settings = RenderSettings {
+            in_color: self.in_color,
             testing: self.testing,
-        });
+            remninder_text: if self.reminder_text {
+                Some(true)
+            } else if self.no_reminder_text {
+                Some(false)
+            } else {
+                None
+            },
+        };
+        let mut render = RenderContext::new(settings);
 
         println!(
             "Rendering {} cards",
@@ -38,6 +50,9 @@ impl Build {
         );
 
         for proxy in decklist {
+            if let Some(b) = settings.remninder_text {
+                proxy.reminder_text = b;
+            }
             render.add_proxy(proxy);
         }
 

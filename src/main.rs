@@ -1,4 +1,4 @@
-#![allow(unused)]
+#![warn(unused)]
 
 mod atomic_cards;
 mod command;
@@ -7,7 +7,7 @@ mod proxy;
 mod rendering;
 mod utils;
 
-use std::{error::Error, ffi::OsStr, path::Path, time::Instant};
+use std::path::Path;
 
 use atomic_cards::*;
 use clap::Parser;
@@ -21,13 +21,13 @@ fn main() -> anyhow::Result<()> {
     let atomic_cards = AtomicCardsFile::load(command.verbose)?;
 
     let decklist_file = command.subcommand.decklist_file();
-    let decklist = if decklist_file == Path::new("") {
+    let mut decklist = if decklist_file == Path::new("") {
         DeckList::new()
     } else {
         DeckList::load(decklist_file, &atomic_cards)?
     };
 
-    command.subcommand.dispatch(&atomic_cards, &decklist)?;
+    command.subcommand.dispatch(&atomic_cards, &mut decklist)?;
 
     Ok(())
 }

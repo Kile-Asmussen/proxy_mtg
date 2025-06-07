@@ -1,13 +1,11 @@
 use serde::{Deserialize, Serialize};
 
-use crate::utils::{
-    iter::IterExt,
-    symbolics::{DiscordEmoji, RulesTextSymbolReplacer},
+use super::{
+    metadata::{ForeignData, Identifiers, Legalities, PurchaseUrls, RelatedCards, Ruling},
+    types::{CardLayout, FaceLayout, LeadershipSkills, Side, Supertype, Type, WUBRG},
 };
 
-use super::{metadata::*, types::*};
-
-use std::{collections::BTreeSet, fmt::Display};
+use std::collections::BTreeSet;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct Card {
@@ -140,7 +138,7 @@ impl Card {
             CardLayout::Split => FaceLayout::Split,
             CardLayout::Token => self.guess_face_layout(),
             CardLayout::Transform => self.guess_face_layout(),
-            CardLayout::Other(s) => FaceLayout::Unsupported,
+            CardLayout::Other(_) => FaceLayout::Unsupported,
         }
     }
 

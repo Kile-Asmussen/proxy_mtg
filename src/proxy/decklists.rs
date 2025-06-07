@@ -5,14 +5,10 @@ use std::{
     path::Path,
 };
 
-use rand::rand_core::block;
-use regex::Regex;
 use serde::{Deserialize, Serialize};
 
 use crate::{
     atomic_cards::{
-        cardoids::Cardoid,
-        metadata::ForeignData,
         types::{Type, WUBRG},
         AtomicCardsFile,
     },
@@ -259,7 +255,7 @@ impl DeckListFile {
         res: &mut Vec<Proxy>,
         errors: &mut Vec<String>,
     ) {
-        for (mut category, mut vec) in categories {
+        for (category, mut vec) in categories {
             vec.sort_by_key(|a| a.name.clone());
             vec.iter_mut().for_each(|a| a.category = category.clone());
             Self::build_uncategorized(vec, atomics, res, errors);

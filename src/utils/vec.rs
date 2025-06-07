@@ -9,7 +9,7 @@ where
     K: PartialEq,
 {
     fn entry(&mut self, key: K) -> VecEntry<K, V> {
-        if let Some((i, _)) = self.iter().enumerate().find(|(i, (k, v))| k == &key) {
+        if let Some((i, _)) = self.iter().enumerate().find(|(_, (k, _))| k == &key) {
             VecEntry::Occupied(OccupiedVecEntry {
                 index: i,
                 vec: self,
@@ -51,6 +51,7 @@ pub trait VecEntryMethods<'a, K, V>: Sized {
         self.or_insert_with_key(|_| value())
     }
 
+    #[allow(dead_code)]
     fn or_default(self) -> &'a mut V
     where
         V: Default,
@@ -149,7 +150,7 @@ impl<'a, K, V> VecEntryMethods<'a, K, V> for OccupiedVecEntry<'a, K, V> {
         self
     }
 
-    fn or_insert_with_key<F>(self, closure: F) -> &'a mut V
+    fn or_insert_with_key<F>(self, _: F) -> &'a mut V
     where
         F: FnOnce(&K) -> V,
     {
@@ -182,7 +183,7 @@ impl<'a, K, V> VecEntryMethods<'a, K, V> for VacantVecEntry<'a, K, V> {
         }
     }
 
-    fn and_modify<F>(self, closure: F) -> Self
+    fn and_modify<F>(self, _: F) -> Self
     where
         F: FnOnce(&mut V),
     {

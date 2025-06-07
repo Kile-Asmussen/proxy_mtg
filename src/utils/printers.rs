@@ -4,7 +4,7 @@ use crate::{
     atomic_cards::{
         cardoids::Cardoid,
         cards::Card,
-        types::{Side, Type, WUBRG},
+        types::{Side, Type},
     },
     proxy::Proxy,
     utils::{
@@ -30,7 +30,7 @@ where
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self.1 {
             ToText::Proxy(p) => {
-                TextPrinter(self.0, ToText::Cardoid(&p.cardoid)).fmt(f);
+                TextPrinter(self.0, ToText::Cardoid(&p.cardoid)).fmt(f)?;
 
                 write!(f, "\n{}{}", self.0.line_start(), self.0.hr())?;
 

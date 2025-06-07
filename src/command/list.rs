@@ -215,13 +215,6 @@ impl List {
         });
     }
 
-    pub fn print_colors(decklist: &DeckList) {
-        println!("Colors:");
-        for (color, n) in decklist.color_hist() {
-            print!("  {} x {}", n, WUBRG::render(&color))
-        }
-    }
-
     pub fn print_color_id(decklist: &DeckList) {
         println!("Color Identity: {}", WUBRG::render(&decklist.color_id()))
     }

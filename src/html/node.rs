@@ -32,3 +32,18 @@ impl Display for Node {
         }
     }
 }
+
+impl From<Element> for Node {
+    fn from(value: Element) -> Self {
+        Self::Element(value)
+    }
+}
+
+impl<S> From<S> for Node
+where
+    S: AsRef<str>,
+{
+    fn from(value: S) -> Self {
+        Self::Text(value.as_ref().to_string())
+    }
+}

@@ -1,7 +1,7 @@
 use crate::{
     atomic_cards::types::WUBRG,
     html::{Element, Node, Tag},
-    rendering::RenderSettings,
+    rendering::general::cost_symbol,
     utils::symbolics::RulesTextSymbolReplacer,
 };
 
@@ -11,44 +11,40 @@ impl RulesTextSymbolReplacer for ManaFontSymbolics {
     type Item = Node;
 
     fn map_symbol(&self, matched: &str) -> Self::Item {
-        fn mana(c: &str) -> Node {
-            Node::Element(Element::new(Tag::i).class(["ms", c, "ms-cost", "ms-shadow"]))
-        }
-
         // fn split_mana(c: &str) -> Element {
         //     Element::new(Tag::i).class(["ms", c, "ms-cost", "ms-shadow"])
         // }
 
         match matched {
-            "{C}" => mana("ms-c"),
-            "{W}" => mana("ms-w"),
-            "{U}" => mana("ms-u"),
-            "{B}" => mana("ms-b"),
-            "{R}" => mana("ms-r"),
-            "{G}" => mana("ms-g"),
-            "{S}" => mana("ms-s"),
-            "{1}" => mana("ms-1"),
-            "{2}" => mana("ms-2"),
-            "{3}" => mana("ms-3"),
-            "{4}" => mana("ms-4"),
-            "{5}" => mana("ms-5"),
-            "{6}" => mana("ms-6"),
-            "{7}" => mana("ms-7"),
-            "{8}" => mana("ms-8"),
-            "{9}" => mana("ms-9"),
-            "{10}" => mana("ms-10"),
-            "{11}" => mana("ms-11"),
-            "{12}" => mana("ms-12"),
-            "{13}" => mana("ms-13"),
-            "{14}" => mana("ms-14"),
-            "{15}" => mana("ms-15"),
-            "{16}" => mana("ms-16"),
-            "{17}" => mana("ms-17"),
-            "{18}" => mana("ms-18"),
-            "{19}" => mana("ms-19"),
-            "{20}" => mana("ms-20"),
-            "{T}" => mana("ms-tap"),
-            "{U}" => mana("ms-untap"),
+            "{C}" => cost_symbol("ms-c"),
+            "{W}" => cost_symbol("ms-w"),
+            "{U}" => cost_symbol("ms-u"),
+            "{B}" => cost_symbol("ms-b"),
+            "{R}" => cost_symbol("ms-r"),
+            "{G}" => cost_symbol("ms-g"),
+            "{S}" => cost_symbol("ms-s"),
+            "{1}" => cost_symbol("ms-1"),
+            "{2}" => cost_symbol("ms-2"),
+            "{3}" => cost_symbol("ms-3"),
+            "{4}" => cost_symbol("ms-4"),
+            "{5}" => cost_symbol("ms-5"),
+            "{6}" => cost_symbol("ms-6"),
+            "{7}" => cost_symbol("ms-7"),
+            "{8}" => cost_symbol("ms-8"),
+            "{9}" => cost_symbol("ms-9"),
+            "{10}" => cost_symbol("ms-10"),
+            "{11}" => cost_symbol("ms-11"),
+            "{12}" => cost_symbol("ms-12"),
+            "{13}" => cost_symbol("ms-13"),
+            "{14}" => cost_symbol("ms-14"),
+            "{15}" => cost_symbol("ms-15"),
+            "{16}" => cost_symbol("ms-16"),
+            "{17}" => cost_symbol("ms-17"),
+            "{18}" => cost_symbol("ms-18"),
+            "{19}" => cost_symbol("ms-19"),
+            "{20}" => cost_symbol("ms-20"),
+            "{T}" => cost_symbol("ms-tap"),
+            "{Q}" => cost_symbol("ms-untap"),
             // "{W/P}" => "(:sunny:/:drop_of_blood:)",
             // "{U/P}" => "(:droplet:/:drop_of_blood:)",
             // "{B/P}" => "(:skull:/:drop_of_blood:)",
@@ -65,8 +61,9 @@ impl RulesTextSymbolReplacer for ManaFontSymbolics {
             // "{C/B}" => "(:diamond_shape_with_a_dot_inside:/:skull:)",
             // "{C/R}" => "(:diamond_shape_with_a_dot_inside:/:fire:)",
             // "{C/G}" => "(:diamond_shape_with_a_dot_inside:/:deciduous_tree:)",
-            s => Node::Text(s.to_string()),
+            s => return s.into(),
         }
+        .into()
     }
 
     fn intermediate_text(&self, non_matched: &str) -> Self::Item {

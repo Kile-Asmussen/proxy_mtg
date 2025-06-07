@@ -1,12 +1,8 @@
 use std::collections::BTreeSet;
 
-use clap::builder::Str;
-use lazy_regex::regex;
 use regex::Regex;
 
 use crate::atomic_cards::types::WUBRG;
-
-use super::iter::IterExt;
 
 pub fn replace_symbols<R>(replacer: &R, mut haystack: &str) -> Vec<R::Item>
 where
@@ -127,7 +123,7 @@ impl DiscordEmoji {
             "{9}" => ":nine:",
             "{10}" => ":keycap_ten:",
             "{T}" => ":arrow_heading_down:",
-            "{U}" => ":arrow_heading_up:",
+            "{Q}" => ":arrow_heading_up:",
             "{W/P}" => "(:sunny:/:drop_of_blood:)",
             "{U/P}" => "(:droplet:/:drop_of_blood:)",
             "{B/P}" => "(:skull:/:drop_of_blood:)",

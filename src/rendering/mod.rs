@@ -3,13 +3,11 @@ pub mod manafont;
 pub mod normal;
 pub mod reminders;
 
-use anyhow::anyhow;
-
 use normal::normal_card;
 
 use crate::{
     atomic_cards::types::CardLayout,
-    html::{self, Document, Element, Node, Tag},
+    html::{Document, Element, Tag},
     proxy::Proxy,
     rendering::general::empty_card,
 };
@@ -18,6 +16,7 @@ use crate::{
 pub struct RenderSettings {
     pub in_color: bool,
     pub testing: bool,
+    pub remninder_text: Option<bool>,
 }
 
 pub struct RenderContext {
@@ -36,15 +35,15 @@ impl RenderContext {
     pub fn add_proxy(&mut self, proxy: &Proxy) {
         for _ in 1..=proxy.repeats {
             self.cards.append(&mut match proxy.layout() {
-                CardLayout::Normal => normal_card(proxy, self.settings),
-                _ => vec![empty_card(proxy.cardoid.face())],
+                CardLayout::Normal => normal_card(proxy),
+                _ => vec![empty_card(proxy.cardoid.face(), proxy)],
             })
         }
     }
 
     pub fn into_file(self) -> anyhow::Result<Document> {
         let mut html_pages = Document::new()
-            .head(Element::new(Tag::title).text("PROXIES"))
+            .title("PROXIES")
             .head_link("preconnect", "https://fonts.googleapis.com")
             .head(Element::new(Tag::link).attr("rel", "preconnect").attr("href", "https://fonts.gstatic.com").flag("crossorigin"))
             .head_link("stylesheet", "https://fonts.googleapis.com/css2?family=Amarante&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inconsolata:wght@200..900&display=swap")
@@ -106,13 +105,13 @@ impl RenderContext {
                 let mut html_row = Element::new(Tag::div).class(["card-row"]);
 
                 for card in row {
-                    html_row = html_row.elem(card);
+                    html_row = html_row.node(card);
                 }
 
-                html_page = html_page.elem(html_row);
+                html_page = html_page.node(html_row);
             }
 
-            html_pages = html_pages.body(Node::Element(html_page));
+            html_pages = html_pages.body(html_page);
         }
 
         Ok(html_pages)

@@ -1,6 +1,5 @@
 use std::{
     collections::BTreeSet,
-    fmt::Display,
     path::{Path, PathBuf},
 };
 
@@ -13,7 +12,7 @@ use crate::{
     atomic_cards::{
         cardoids::Cardoid,
         cards::Card,
-        types::{CardLayout, Side, WUBRG},
+        types::{CardLayout, WUBRG},
         AtomicCardsFile,
     },
     proxy::{decklists::DeckList, Proxy},

@@ -5,6 +5,7 @@ pub struct Tag {
 }
 
 #[allow(non_upper_case_globals)]
+#[allow(dead_code)]
 impl Tag {
     pub fn len(&self) -> usize {
         self.name.len() + 2 + if self.void { 0 } else { self.name.len() + 3 }

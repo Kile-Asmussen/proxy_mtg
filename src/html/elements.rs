@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, fmt::Display};
+use std::fmt::Display;
 
 use crate::utils::{
     iter::IterExt,
@@ -57,6 +57,7 @@ impl Element {
         self.nodes.iter().map(Node::text_len).sum()
     }
 
+    #[allow(dead_code)]
     pub fn len(&self) -> usize {
         self.tag.len()
             + self
@@ -73,14 +74,6 @@ impl Element {
             + self.nodes.iter().map(Node::len).sum::<usize>()
     }
 
-    pub fn children(&self) -> &[Node] {
-        &self.nodes[..]
-    }
-
-    pub fn atttributes(&self) -> &[(&'static str, String)] {
-        &self.attributes[..]
-    }
-
     pub fn attr<S>(mut self, k: &'static str, v: S) -> Self
     where
         S: ToString,
@@ -89,11 +82,11 @@ impl Element {
         self
     }
 
-    pub fn flag(mut self, k: &'static str) -> Self {
+    pub fn flag(self, k: &'static str) -> Self {
         self.attr(k, k.to_string())
     }
 
-    pub fn class<SS, S>(mut self, cls: SS) -> Self
+    pub fn class<SS, S>(self, cls: SS) -> Self
     where
         SS: IntoIterator<Item = S>,
         S: ToString,
@@ -104,20 +97,10 @@ impl Element {
         )
     }
 
-    pub fn text<S>(mut self, text: S) -> Self
+    pub fn nodes<NS, N>(mut self, nodes: NS) -> Self
     where
-        S: ToString,
-    {
-        self.node(Node::Text(text.to_string()))
-    }
-
-    pub fn elem(mut self, elem: Element) -> Self {
-        self.node(Node::Element(elem))
-    }
-
-    pub fn nodes<ES>(mut self, nodes: ES) -> Self
-    where
-        ES: IntoIterator<Item = Node>,
+        NS: IntoIterator<Item = N>,
+        N: Into<Node>,
     {
         for e in nodes {
             self = self.node(e)
@@ -125,8 +108,11 @@ impl Element {
         self
     }
 
-    pub fn node(mut self, node: Node) -> Self {
-        self.nodes.push(node);
+    pub fn node<N>(mut self, node: N) -> Self
+    where
+        N: Into<Node>,
+    {
+        self.nodes.push(node.into());
         self
     }
 }

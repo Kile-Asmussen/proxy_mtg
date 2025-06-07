@@ -5,10 +5,8 @@ mod tests;
 pub use anyhow::anyhow;
 pub use elements::*;
 pub use node::*;
-use std::{collections::BTreeMap, fmt::Display, path::Path};
+use std::{fmt::Display, path::Path};
 pub use tags::*;
-
-use crate::utils::iter::IterExt;
 
 #[derive(Clone)]
 pub struct Document {
@@ -24,34 +22,44 @@ impl Document {
         }
     }
 
-    pub fn head(mut self, elem: Element) -> Self {
-        self.head.push(Node::Element(elem));
+    pub fn head<N>(mut self, elem: N) -> Self
+    where
+        N: Into<Node>,
+    {
+        self.head.push(elem.into());
         self
     }
 
-    pub fn title<S>(mut self, title: S) -> Self
+    pub fn title<S>(self, title: S) -> Self
     where
-        S: ToString,
+        S: AsRef<str>,
     {
-        self.head(Element::new(Tag::title).text(title))
+        self.head(Element::new(Tag::title).node(title))
     }
 
-    pub fn head_link<S>(mut self, rel: &'static str, href: S) -> Self
+    pub fn head_link<S>(self, rel: &'static str, href: S) -> Self
     where
-        S: ToString,
+        S: AsRef<str>,
     {
-        self.head(Element::new(Tag::link).attr("rel", rel).attr("href", href))
+        self.head(
+            Element::new(Tag::link)
+                .attr("rel", rel)
+                .attr("href", href.as_ref()),
+        )
     }
 
-    pub fn body(mut self, node: Node) -> Self {
-        self.body.push(node);
+    pub fn body<N>(mut self, node: N) -> Self
+    where
+        N: Into<Node>,
+    {
+        self.body.push(node.into());
         self
     }
 
     pub fn into_element(self) -> Element {
         Element::new(Tag::html)
-            .elem(Element::new(Tag::head).nodes(self.head))
-            .elem(Element::new(Tag::body).nodes(self.body))
+            .node(Element::new(Tag::head).nodes(self.head))
+            .node(Element::new(Tag::body).nodes(self.body))
     }
 
     pub fn inline_style<P>(self, path: P) -> anyhow::Result<Self>
@@ -60,12 +68,12 @@ impl Document {
     {
         Ok(self.head(
             Element::new(Tag::style)
-                .text("/*<![CDATA[*/")
-                .text(
+                .node("/*<![CDATA[*/")
+                .node(
                     std::fs::read_to_string(&path)
                         .map_err(|e| anyhow!("{:?} - {}", path.as_ref(), e))?,
                 )
-                .text("/*]]>*/"),
+                .node("/*]]>*/"),
         ))
     }
 }
