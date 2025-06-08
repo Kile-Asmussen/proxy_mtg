@@ -1,9 +1,14 @@
+use regex::Regex;
+
 use crate::{
     atomic_cards::{cards::Card, metadata::ForeignData, types::*},
     html::*,
-    proxy::Proxy,
+    proxy::{Art, Proxy},
     rendering::manafont::ManaFontSymbolics,
-    utils::{iter::IterExt, symbolics::replace_symbols},
+    utils::{
+        iter::IterExt,
+        symbolics::{replace_symbols, RulesTextSymbolReplacer},
+    },
 };
 
 pub fn empty_card(card: &Card, proxy: &Proxy) -> Element {
@@ -25,8 +30,27 @@ pub fn mana_cost_span(card: &Card) -> Element {
         .nodes(replace_symbols(&ManaFontSymbolics, &card.mana_cost))
 }
 
+pub fn rules_text_paragraph<NS, N>(text: NS) -> Element
+where
+    NS: IntoIterator<Item = N>,
+    N: Into<Node>,
+{
+    Element::new(Tag::p).class(["rules-text"]).nodes(text)
+}
+
+pub fn flavor_text_paragraph<NS, N>(text: NS) -> Element
+where
+    NS: IntoIterator<Item = N>,
+    N: Into<Node>,
+{
+    Element::new(Tag::p).class(["flavor-text"]).nodes(text)
+}
+
 pub fn card_name_span(card: &Card, proxy: &Proxy) -> Element {
-    let mut name = card.name.clone();
+    let mut name = card.face_name.clone();
+    if name.is_empty() {
+        name = card.name.clone();
+    }
 
     if let Some(c) = get_side(card.side, &proxy.customize) {
         if !c.name.is_empty() {
@@ -41,16 +65,16 @@ pub fn card_name_span(card: &Card, proxy: &Proxy) -> Element {
 
 pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Node> {
     if let Some(art) = get_side(card.side, &proxy.arts) {
+        let mut classes = vec!["art"];
+        if art.full {
+            classes.push("full-art");
+        }
+        if card.face_layout().is_vertical() {
+            classes.push("vertical")
+        }
+
         vec![
-            Node::Element(
-                Element::new(Tag::img)
-                    .class(if art.full {
-                        vec!["art", "full-art"]
-                    } else {
-                        vec!["art"]
-                    })
-                    .attr("src", &art.url),
-            ),
+            Node::Element(Element::new(Tag::img).class(classes).attr("src", &art.url)),
             Node::Element(
                 Element::new(Tag::span)
                     .class(["art-credits"])
@@ -63,19 +87,18 @@ pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Node> {
 }
 
 pub fn type_line_div(card: &Card, proxy: &Proxy) -> Element {
-    let on_bottom = match card.face_layout() {
-        FaceLayout::SagaCreature | FaceLayout::Saga | FaceLayout::Case | FaceLayout::Class => true,
-        _ => false,
-    } || get_side(card.side, &proxy.arts)
-        .map(|a| a.full)
-        .unwrap_or(false);
+    let mut classes = vec!["type-line", "bar"];
+
+    if card.face_layout().is_vertical() {
+        classes.push("bottom");
+    }
+
+    if let Some(Art { full: true, .. }) = get_side(card.side, &proxy.arts) {
+        classes.push("bottom");
+    }
 
     Element::new(Tag::div)
-        .class(if on_bottom {
-            vec!["type-line", "bar", "bottom"]
-        } else {
-            vec!["type-line", "bar"]
-        })
+        .class(classes)
         .node(type_line_span(card, proxy))
 }
 
@@ -131,4 +154,20 @@ where
     S: AsRef<str>,
 {
     Element::new(Tag::i).class(["ms", class.as_ref(), "ms-cost", "ms-shadow"])
+}
+
+pub fn anchor_words<RT>(mut text: &str) -> Vec<Node>
+where
+    RT: RulesTextSymbolReplacer<Item = Vec<Node>> + Default,
+{
+    let mut res = vec![];
+    let flavor_word = Regex::new(r"^(.*)\s+—\s+").unwrap();
+    if let Some(m) = flavor_word.captures(text).and_then(|c| c.get(1)) {
+        if m.as_str() != "Companion" {
+            res.push(Element::new(Tag::em).node(m.as_str()).into());
+            text = &text[m.end()..]
+        }
+    }
+    res.append(&mut replace_symbols::<RT>(&Default::default(), text).concat());
+    res
 }

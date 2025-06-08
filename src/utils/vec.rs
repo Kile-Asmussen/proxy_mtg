@@ -2,6 +2,7 @@ use std::marker::PhantomData;
 
 pub trait VecExt<K, V>: Sized {
     fn entry(&mut self, key: K) -> VecEntry<K, V>;
+    fn lookup(&self, key: &K) -> Option<&V>;
 }
 
 impl<K, V> VecExt<K, V> for Vec<(K, V)>
@@ -22,6 +23,10 @@ where
                 _marker: PhantomData,
             })
         }
+    }
+
+    fn lookup(&self, key: &K) -> Option<&V> {
+        self.iter().find(|(k, _)| k == key).map(|(_, v)| v)
     }
 }
 

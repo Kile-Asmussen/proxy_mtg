@@ -7,6 +7,7 @@ use crate::{
     utils::symbolics::{replace_symbols, RulesTextSymbolReplacer},
 };
 
+#[derive(Default, Clone, Copy)]
 pub struct ReminderText;
 
 impl RulesTextSymbolReplacer for ReminderText {
@@ -37,6 +38,7 @@ impl RulesTextSymbolReplacer for ReminderText {
     }
 }
 
+#[derive(Default, Clone, Copy)]
 pub struct NoReminderText;
 
 impl RulesTextSymbolReplacer for NoReminderText {

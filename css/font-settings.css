@@ -32,57 +32,62 @@
     --proxy-mark-font-size: 1.5mm;
     --proxy-mark-nudge: 0.2mm;
 
-    --mana-symbol-size-text: 0.6em;
-    --mana-symbol-size-title: 0.75em;
-    --mana-cost-adjustment: -0.5mm;
+    --cost-symbol-size-text: 0.65em;
+    --cost-symbol-size-title: 0.75em;
+    --cost-adjustment-title: -0.75mm;
+    --cost-adjustment-text: -0.3mm;
+}
+
+div.text-box .ms {
+    margin-top: var(--cost-adjustment-text);
 }
 
 .ms {
-    font-size: var(--mana-symbol-size-text);
+    font-size: var(--cost-symbol-size-text);
 }
 
 .ms-2x {
-    font-size: calc(2*var(--mana-symbol-size-text));
+    font-size: calc(2*var(--cost-symbol-size-text));
 }
 
 .ms-3x {
-    font-size: calc(3*var(--mana-symbol-size-text));
+    font-size: calc(3*var(--cost-symbol-size-text));
 }
 
 .ms-4x {
-    font-size: calc(4*var(--mana-symbol-size-text));
+    font-size: calc(4*var(--cost-symbol-size-text));
 }
 
 .ms-5x {
-    font-size: calc(5*var(--mana-symbol-size-text));
+    font-size: calc(5*var(--cost-symbol-size-text));
 }
 
 .ms-6x {
-    font-size: calc(6*var(--mana-symbol-size-text));
+    font-size: calc(6*var(--cost-symbol-size-text));
 }
 
 div.title.bar>span.cost>i.ms {
-    font-size: var(--mana-symbol-size-title);
+    font-size: var(--cost-symbol-size-title);
 }
 
 div.title.bar>span.cost>i.ms-2x {
-    font-size: calc(2*var(--mana-symbol-size-title));
+    font-size: calc(2*var(--cost-symbol-size-title));
 }
 
 div.title.bar>span.cost>i.ms-3x {
-    font-size: calc(3*var(--mana-symbol-size-title));
+    font-size: calc(3*var(--cost-symbol-size-title));
 }
 
 div.title.bar>span.cost>i.ms-4x {
-    font-size: calc(4*var(--mana-symbol-size-title));
+    font-size: calc(4*var(--cost-symbol-size-title));
 }
 
 div.title.bar>span.cost>i.ms-5x {
-    font-size: calc(5*var(--mana-symbol-size-title));
+    font-size: calc(5*var(--cost-symbol-size-title));
 }
 
 div.title.bar>span.cost>i.ms-6x {
-    font-size: calc(6*var(--mana-symbol-size-title));
+    font-size: calc(6*var(--cost-symbol-size-title));
 }
 
 .ms-2 {
@@ -99,7 +104,7 @@ div.text-box.dense>p.rules-text {
 }
 
 div.text-box.sparse>p.rules-text {
-    font-size: var(--rules-font-size-large);
+    font-size: var(--rules-font-size);
 }
 
 p.flavor-text {
@@ -113,7 +118,7 @@ div.text-box.dense>p.flavor-text {
 }
 
 div.text-box.sparse>p.flavor-text {
-    font-size: var(--flavor-font-size-large);
+    font-size: var(--flavor-font-size);
 }
 
 span.reminder {

@@ -207,10 +207,18 @@ pub enum FaceLayout {
     Prototype,
     Room,
     Saga,
-    SagaCreature,
     Split,
     Unadorned,
     Unsupported,
+}
+
+impl FaceLayout {
+    pub fn is_vertical(self) -> bool {
+        match self {
+            Self::Case | Self::Class | Self::Saga => true,
+            _ => false,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

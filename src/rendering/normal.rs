@@ -5,27 +5,28 @@ use crate::{
     },
     html::*,
     proxy::Proxy,
-    rendering::reminders::{NoReminderText, ReminderText},
+    rendering::{
+        general::{anchor_words, flavor_text_paragraph, rules_text_paragraph},
+        reminders::{NoReminderText, ReminderText},
+    },
     utils::{iter::IterExt, symbolics::replace_symbols},
 };
 
 use super::general::{card_art_img, empty_card, flavor_text, get_side, type_line_div};
 
-pub fn normal_card(proxy: &Proxy) -> Vec<Element> {
+pub fn normal_layout_card(proxy: &Proxy) -> Vec<Element> {
     let card = proxy.cardoid.face();
 
     vec![match card.face_layout() {
         FaceLayout::Basic => basic_land(proxy),
-        FaceLayout::Creature => creature_card(proxy),
-        FaceLayout::Planeswalker => raw_card(proxy),
-        FaceLayout::Unadorned => unadorned_card(proxy),
-        _ => raw_card(proxy),
+        FaceLayout::Creature => creature_card(card, proxy),
+        FaceLayout::Planeswalker => raw_card(card, proxy),
+        FaceLayout::Unadorned => unadorned_card(card, proxy),
+        _ => raw_card(card, proxy),
     }]
 }
 
-pub fn raw_card(proxy: &Proxy) -> Element {
-    let card = proxy.cardoid.face();
-
+pub fn raw_card(card: &Card, proxy: &Proxy) -> Element {
     empty_card(card, proxy)
         .node(type_line_div(card, proxy))
         .nodes(card_art_img(card, proxy))
@@ -34,17 +35,15 @@ pub fn raw_card(proxy: &Proxy) -> Element {
 
 pub fn basic_land(proxy: &Proxy) -> Element {
     let card = proxy.cardoid.face();
-    raw_card(proxy).node(rules_text_basic_div(card, proxy))
+    raw_card(card, proxy).node(rules_text_basic_div(card, proxy))
 }
 
-pub fn unadorned_card(proxy: &Proxy) -> Element {
-    let card = proxy.cardoid.face();
-    raw_card(proxy).node(rules_text_div(card, proxy))
+pub fn unadorned_card(card: &Card, proxy: &Proxy) -> Element {
+    raw_card(card, proxy).node(rules_text_div(card, proxy))
 }
 
-pub fn creature_card(proxy: &Proxy) -> Element {
-    let card = proxy.cardoid.face();
-    raw_card(proxy)
+pub fn creature_card(card: &Card, proxy: &Proxy) -> Element {
+    raw_card(card, proxy)
         .node(rules_text_div(card, proxy))
         .node(power_toughness(card))
 }
@@ -56,23 +55,28 @@ pub fn power_toughness(card: &Card) -> Element {
 }
 
 pub fn rules_text_basic_div(card: &Card, proxy: &Proxy) -> Element {
-    if proxy.reminder_text {
-        return rules_text_div(card, proxy);
-    }
-
-    let mut text = Element::new(Tag::p)
-        .class(["rules-text"])
-        .node(big_mana_glyph(
-            format!("ms-{}", WUBRG::render(&card.color_identity)).to_lowercase(),
-        ));
+    let mut big_symbol = rules_text_paragraph([big_mana_glyph(
+        format!("ms-{}", WUBRG::render(&card.color_identity)).to_lowercase(),
+    )]);
 
     if card.is_supertype(Supertype::Snow) {
-        text = text.node(big_mana_glyph("ms-s"));
+        big_symbol = big_symbol.node(big_mana_glyph("ms-s"));
     }
 
-    let mut text = vec![text];
+    let mut text = vec![big_symbol.into()];
 
-    text.append(&mut flavor_text(card, proxy));
+    if proxy.reminder_text {
+        text.push(rules_text_paragraph(
+            replace_symbols(&ReminderText, &card.text).concat(),
+        ))
+    }
+
+    text.append(
+        &mut flavor_text(card, proxy)
+            .into_iter()
+            .map(Into::into)
+            .collvect(),
+    );
 
     Element::new(Tag::div)
         .class(["text-box", "sparse"])
@@ -99,31 +103,24 @@ pub fn rules_text_div(card: &Card, proxy: &Proxy) -> Element {
         }
     }
 
-    fn with_reminders(text: &str) -> Vec<Node> {
-        replace_symbols(&ReminderText, text).concat()
-    }
-
-    fn without_reminders(text: &str) -> Vec<Node> {
-        replace_symbols(&NoReminderText, text).concat()
-    }
-
     let reminders = if proxy.reminder_text {
-        with_reminders
+        anchor_words::<ReminderText>
     } else {
-        without_reminders
+        anchor_words::<NoReminderText>
     };
 
     let mut paragraphs = text
         .lines()
-        .map(|line| {
-            Element::new(Tag::p)
-                .class(["rules-text"])
-                .nodes(reminders(line))
-        })
+        .map(|line| reminders(line))
+        .filter(|line| !line.is_empty())
+        .map(rules_text_paragraph)
         .collvect();
 
     if let Some(t) = flavor_text {
-        paragraphs.push(Element::new(Tag::p).class(["flavor-text"]).node(t));
+        paragraphs.push(Element::new(Tag::hr));
+        for line in t.lines() {
+            paragraphs.push(flavor_text_paragraph([line]));
+        }
     }
 
     let text_len: usize = paragraphs.iter().map(|n| n.text_len()).sum();

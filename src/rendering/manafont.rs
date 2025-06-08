@@ -5,6 +5,7 @@ use crate::{
     utils::symbolics::RulesTextSymbolReplacer,
 };
 
+#[derive(Default, Clone, Copy)]
 pub struct ManaFontSymbolics;
 
 impl RulesTextSymbolReplacer for ManaFontSymbolics {

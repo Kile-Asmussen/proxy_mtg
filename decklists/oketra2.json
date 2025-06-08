@@ -1,7 +1,19 @@
 {
     "A - Commander": [
         {
-            "name": "God-Eternal Oketra"
+            "name": "God-Eternal Oketra",
+            "art": [
+                {
+                    "url": "https://i.imgur.com/70qjbcs.png",
+                    "credit": "u/Ishton"
+                }
+            ],
+            "customize": [
+                {
+                    "name": "God-Epurrnal Okittytra",
+                    "flavorText": "✨ Hazoret/Oketra ✨"
+                }
+            ]
         }
     ],
     "B.1 - Card Advantage": [

@@ -46,6 +46,7 @@ pub trait RulesTextSymbolReplacer {
     fn indicator(&self, indicate: &BTreeSet<WUBRG>) -> Self::Item;
 }
 
+#[derive(Default, Clone, Copy)]
 pub struct NothingReplacer;
 
 impl RulesTextSymbolReplacer for NothingReplacer {
@@ -68,6 +69,7 @@ impl RulesTextSymbolReplacer for NothingReplacer {
     }
 }
 
+#[derive(Default, Clone, Copy)]
 pub struct DiscordEmoji;
 
 impl RulesTextSymbolReplacer for DiscordEmoji {

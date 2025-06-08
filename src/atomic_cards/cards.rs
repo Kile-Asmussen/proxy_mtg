@@ -132,7 +132,6 @@ impl Card {
             CardLayout::Normal => self.guess_face_layout(),
             CardLayout::Prototype => FaceLayout::Prototype,
             CardLayout::ReversibleCard => self.guess_face_layout(),
-            CardLayout::Saga if self.is_type(Type::Creature) => FaceLayout::SagaCreature,
             CardLayout::Saga => FaceLayout::Saga,
             CardLayout::Split if self.text.contains("Fuse") => FaceLayout::Fuse,
             CardLayout::Split => FaceLayout::Split,
@@ -145,8 +144,6 @@ impl Card {
     pub fn guess_face_layout(&self) -> FaceLayout {
         if self.is_basic() {
             FaceLayout::Basic
-        } else if self.is_type(Type::Creature) && self.is_subtype("Saga") {
-            FaceLayout::SagaCreature
         } else if self.is_type(Type::Creature) {
             FaceLayout::Creature
         } else if self.is_subtype("Saga") {
@@ -159,6 +156,4 @@ impl Card {
             FaceLayout::Unadorned
         }
     }
-
-    pub fn translation() {}
 }

@@ -54,7 +54,14 @@ impl Element {
     }
 
     pub fn text_len(&self) -> usize {
-        self.nodes.iter().map(Node::text_len).sum()
+        if self.tag == Tag::i
+            && self.attributes.lookup(&"class").map(|v| v.contains("ms")) == Some(true)
+            && self.nodes.is_empty()
+        {
+            1
+        } else {
+            self.nodes.iter().map(Node::text_len).sum()
+        }
     }
 
     #[allow(dead_code)]
@@ -89,11 +96,14 @@ impl Element {
     pub fn class<SS, S>(self, cls: SS) -> Self
     where
         SS: IntoIterator<Item = S>,
-        S: ToString,
+        S: AsRef<str>,
     {
         self.attr(
             "class",
-            cls.into_iter().map(|s| s.to_string()).collvect().join(" "),
+            cls.into_iter()
+                .map(|s| s.as_ref().to_string())
+                .collvect()
+                .join(" "),
         )
     }
 

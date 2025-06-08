@@ -1,15 +1,17 @@
+pub mod dual_faced;
 pub mod general;
 pub mod manafont;
 pub mod normal;
 pub mod reminders;
+pub mod verticalia;
 
-use normal::normal_card;
+use normal::normal_layout_card;
 
 use crate::{
     atomic_cards::types::CardLayout,
     html::{Document, Element, Tag},
     proxy::Proxy,
-    rendering::general::empty_card,
+    rendering::{dual_faced::flip_layout_card, general::empty_card, verticalia::class_layout_card},
 };
 
 #[derive(Clone, Copy)]
@@ -35,7 +37,9 @@ impl RenderContext {
     pub fn add_proxy(&mut self, proxy: &Proxy) {
         for _ in 1..=proxy.repeats {
             self.cards.append(&mut match proxy.layout() {
-                CardLayout::Normal => normal_card(proxy),
+                CardLayout::Normal => normal_layout_card(proxy),
+                CardLayout::Class => class_layout_card(proxy),
+                CardLayout::Flip => flip_layout_card(proxy),
                 _ => vec![empty_card(proxy.cardoid.face(), proxy)],
             })
         }

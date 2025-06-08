@@ -52,7 +52,7 @@ impl Cardoid {
 
     pub fn printed_cards(&self) -> usize {
         match self.layout() {
-            CardLayout::ModalDfc | CardLayout::Transform => 2,
+            CardLayout::ModalDfc | CardLayout::Transform | CardLayout::Flip => 2,
             _ => 1,
         }
     }
