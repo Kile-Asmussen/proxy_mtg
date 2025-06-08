@@ -120,19 +120,19 @@ div.card.reverse>div.title.bar::before {
     left: 1.5mm;
 }
 
-div.card.obverse>div.title.bar::before {
+div.card.obverse.transform>div.title.bar::before {
     content: "▲";
 }
 
-div.card.reverse>div.title.bar::before {
+div.card.reverse.transform>div.title.bar::before {
     content: "▼";
 }
 
-div.card.obverse.mdfc>div.title.bar::before {
+div.card.obverse.modal>div.title.bar::before {
     content: "▲▼";
 }
 
-div.card.reverse.mdfc>div.title.bar::before {
+div.card.reverse.modal>div.title.bar::before {
     content: "▼▲";
 }
 
@@ -140,7 +140,7 @@ div.card.obverse.meld>div.title.bar::before {
     content: "◀";
 }
 
-div.card.reverse.meld>div.title.bar.::before {
+div.card.reverse.meld>div.title.bar::before {
     content: "▶◀";
 }
 
@@ -149,7 +149,7 @@ div.type-line.bar {
     top: calc(var(--upper-margin) + var(--bar-height) + var(--art-height));
 }
 
-div.type-line.bar.bottom {
+div.bar.bottom {
     top: calc(var(--upper-margin) + var(--bar-height) + var(--fullheight-box));
 }
 
@@ -158,6 +158,12 @@ div.type-line.bar>span.type {
     font-size: var(--typeline-font-size);
     margin-top: var(--typeline-font-adjustment);
 }
+
+div.card.flip>div.title.bar.bottom {
+    transform: rotate(0.5turn);
+}
+
+/* TODO: flip cards */
 
 /* ART */
 
@@ -299,14 +305,6 @@ div.vertical~div.flip-indicator.bar {
 
 div.flip-indicator.bar>span {
     margin-top: var(--flip-indicator-font-adjustment);
-}
-
-div.card.obverse.flip>div.flip-indicator.bar::before {
-    content: "🗘";
-}
-
-div.card.reverse.flip>div.flip-indicator.bar::before {
-    content: "🗘";
 }
 
 div.card.obverse.transform>div.flip-indicator.bar::before {

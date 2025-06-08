@@ -11,8 +11,12 @@ use crate::{
     },
 };
 
+pub fn blank_card() -> Element {
+    Element::new(Tag::div).class(["card"])
+}
+
 pub fn empty_card(card: &Card, proxy: &Proxy) -> Element {
-    Element::new(Tag::div)
+    blank_card()
         .class(card_css_class(card))
         .node(title_bar_div(card, proxy))
 }
@@ -119,14 +123,10 @@ pub fn card_css_class(card: &Card) -> Vec<&'static str> {
         card.color_identity
             .iter()
             .map(WUBRG::name)
-            .chain(["colorless", "card"].into_iter())
+            .chain(["colorless"])
             .collvect()
     } else {
-        card.colors
-            .iter()
-            .map(WUBRG::name)
-            .chain(["card"].into_iter())
-            .collvect()
+        card.colors.iter().map(WUBRG::name).collvect()
     }
 }
 

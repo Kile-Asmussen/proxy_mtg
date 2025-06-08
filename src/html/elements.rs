@@ -93,18 +93,22 @@ impl Element {
         self.attr(k, k.to_string())
     }
 
-    pub fn class<SS, S>(self, cls: SS) -> Self
+    pub fn class<SS, S>(self, classes: SS) -> Self
     where
         SS: IntoIterator<Item = S>,
         S: AsRef<str>,
     {
-        self.attr(
-            "class",
-            cls.into_iter()
+        let mut cls = vec![];
+        if let Some(c) = self.attributes.lookup(&"class") {
+            cls.append(&mut c.split(" ").map(ToString::to_string).collvect())
+        }
+        cls.append(
+            &mut classes
+                .into_iter()
                 .map(|s| s.as_ref().to_string())
-                .collvect()
-                .join(" "),
-        )
+                .collvect(),
+        );
+        self.attr("class", cls.join(" "))
     }
 
     pub fn nodes<NS, N>(mut self, nodes: NS) -> Self
