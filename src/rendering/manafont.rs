@@ -84,8 +84,8 @@ impl RulesTextSymbolReplacer for ManaFontSymbolics {
         }
 
         let class = vec![
-            format!("ms"),
-            format!("ms-ci"),
+            "ms".s(),
+            "ms-ci".s(),
             format!("ms-ci-{}", indicate.len()),
             format!("ms-ci-{}", WUBRG::render(indicate).to_lowercase()),
         ];

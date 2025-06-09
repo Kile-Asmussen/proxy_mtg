@@ -8,6 +8,7 @@ use crate::{
     utils::{
         iter::IterExt,
         symbolics::{replace_symbols, RulesTextSymbolReplacer},
+        ToS,
     },
 };
 
@@ -149,20 +150,13 @@ pub fn get_side<T>(side: Side, v: &Vec<T>) -> Option<&T> {
     }
 }
 
-pub fn loyalty_symbol<S>(n: isize) -> Element
-where
-    S: AsRef<str>,
-{
+pub fn loyalty_symbol<S>(n: isize) -> Element {
     Element::new(Tag::i).class(match n {
-        1.. => vec![
-            format!("ms"),
-            format!("ms-loyalty-up"),
-            format!("ms-loyalty-{}", n),
-        ],
-        0 => vec![format!("ms"), format!("ms-loyalty-zero")],
+        1.. => vec!["ms".s(), "ms-loyalty-up".s(), format!("ms-loyalty-{}", n)],
+        0 => vec!["ms".s(), "ms-loyalty-zero".s()],
         ..=-1 => vec![
-            format!("ms"),
-            format!("ms-loyalty-down"),
+            "ms".s(),
+            "ms-loyalty-down".s(),
             format!("ms-loyalty-{}", -n),
         ],
     })
