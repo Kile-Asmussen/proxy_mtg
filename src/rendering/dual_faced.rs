@@ -1,10 +1,10 @@
 use crate::{
-    atomic_cards::types::{FaceLayout, Side},
-    html::Element,
+    atomic_cards::types::{Side, Type},
+    html::{Element, Tag},
     proxy::Proxy,
     rendering::{
         general::blank_card,
-        normal::{creature_card, raw_card, unadorned_card},
+        normal::{creature_card, unadorned_card},
     },
 };
 
@@ -13,18 +13,26 @@ pub fn flip_layout_card(proxy: &Proxy) -> Vec<Element> {
         return vec![blank_card(), blank_card()];
     };
 
-    println!("{} {}", &up.face_layout(), &down.face_layout());
-
     vec![
-        match up.face_layout() {
-            FaceLayout::Creature => creature_card(up, proxy),
-            FaceLayout::Unadorned => unadorned_card(up, proxy),
-            _ => raw_card(up, proxy),
-        },
-        match down.face_layout() {
-            FaceLayout::Creature => creature_card(down, proxy),
-            FaceLayout::Unadorned => unadorned_card(down, proxy),
-            _ => raw_card(down, proxy),
-        },
+        if up.types.contains(&Type::Creature) {
+            creature_card(up, proxy)
+        } else {
+            unadorned_card(up, proxy)
+        }
+        .class(["obverse", "flip"])
+        .node(dual_face_indicator(&down.face_name)),
+        if down.types.contains(&Type::Creature) {
+            creature_card(down, proxy)
+        } else {
+            unadorned_card(down, proxy)
+        }
+        .class(["reverse", "flip"])
+        .node(dual_face_indicator(&up.face_name)),
     ]
+}
+
+fn dual_face_indicator(name: &str) -> Element {
+    Element::new(Tag::div)
+        .class(["dual-face-indicator", "bar"])
+        .node(Element::new(Tag::span).node(name))
 }

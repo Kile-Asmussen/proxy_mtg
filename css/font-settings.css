@@ -1,7 +1,7 @@
 :root {
     --title-font-family: Amarante;
-    --title-font-size: 9.5pt;
-    --title-font-adjustment: 0.3mm;
+    --title-font-size: 9pt;
+    --title-font-adjustment: 0mm;
 
     --typeline-font-family: Amarante;
     --typeline-font-size: 8pt;
@@ -21,9 +21,9 @@
     --corner-bubble-font-size: 11pt;
     --corner-bubble-font-adjustment: 0.3mm;
 
-    --flip-indicator-font-family: Amarante;
-    --flip-indicator-font-size: 6pt;
-    --flip-indicator-font-adjustment: -0.1mm;
+    --dual-face-indicator-font-family: Amarante;
+    --dual-face-indicator-font-size: 6pt;
+    --dual-face-indicator-font-adjustment: -0.1mm;
 
     --art-credit-font: Crimson Text;
     --art-credit-font-size: 6pt;
@@ -123,4 +123,31 @@ div.text-box.sparse>p.flavor-text {
 
 span.reminder {
     font-style: italic;
+}
+
+div.dual-face-indicator.bar>span {
+    margin-top: var(--dual-face-indicator-font-adjustment);
+    font-size: var(--dual-face-indicator-font-size);
+    font-family: var(--dual-face-indicator-font-family);
+}
+
+span.art-credits {
+    font-weight: bold;
+    font-family: var(--art-credit-font);
+    border: 0 none transparent;
+    color: white;
+    text-shadow:
+        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black,
+        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
+}
+
+div.card.obverse>div.title.bar::before,
+div.card.reverse>div.title.bar::before,
+div.card.obverse>div.dual-face-indicator.bar::before,
+div.card.reverse>div.dual-face-indicator.bar::before {
+    font-weight: bold;
+    color: white;
+    text-shadow:
+        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black,
+        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
 }

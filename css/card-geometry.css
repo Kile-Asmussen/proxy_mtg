@@ -14,7 +14,7 @@
     --bar-height: 5mm;
     --bar-endcap: 1mm;
 
-    --flip-indicator-height: 3mm;
+    --dual-face-indicator-height: 3mm;
 
     --content-width: calc(var(--card-width) - 2*var(--card-border));
     --content-height: calc(var(--card-height) - 2*var(--card-border));
@@ -112,14 +112,6 @@ div.title.bar.token {
     background-color: transparent;
 }
 
-div.card.obverse>div.title.bar::before,
-div.card.reverse>div.title.bar::before {
-    padding-left: var(--bar-height);
-    position: absolute;
-    font-size: 85%;
-    left: 1.5mm;
-}
-
 div.type-line.bar {
     justify-content: start;
     top: calc(var(--upper-margin) + var(--bar-height) + var(--art-height));
@@ -189,15 +181,8 @@ img.art.vertical {
 span.art-credits {
     bottom: 0;
     left: calc(var(--fullwidth-margin) + var(--pin-line-width));
-    font-size: var(--art-credit-font-size);
-    font-weight: bold;
-    font-family: var(--art-credit-font);
     background-color: transparent;
-    border: 0 none transparent;
-    color: white;
-    text-shadow:
-        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black,
-        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
+    font-size: var(--art-credit-font-size);
 }
 
 span.art-credits::before {
@@ -266,13 +251,26 @@ div.corner-bubble.bar>span {
 
 /* DFC */
 
-div.flip-indicator.bar {
+div.card.obverse>div.title.bar,
+div.card.reverse>div.title.bar {
+    padding-left: 1.3em;
+}
+
+div.card.obverse>div.title.bar::before,
+div.card.reverse>div.title.bar::before {
+    margin-left: -0.5mm;
+    position: absolute;
+    font-size: 85%;
+    left: 1.5mm;
+}
+
+div.dual-face-indicator.bar {
     left: 0;
-    font-size: var(--flip-indicator-font-size);
-    font-family: var(--flip-indicator-font-family);
-    height: var(--flip-indicator-height);
-    top: calc(var(--upper-margin) + var(--bar-height)*2 + var(--fullheight-box) - var(--pin-line-width) - var(--flip-indicator-height)/2);
-    padding-left: var(--flip-indicator-height);
+    font-size: var(--dual-face-indicator-font-size);
+    font-family: var(--dual-face-indicator-font-family);
+    height: var(--dual-face-indicator-height);
+    top: calc(var(--upper-margin) + var(--bar-height)*2 + var(--fullheight-box) - var(--pin-line-width) - var(--dual-face-indicator-height)/2);
+    padding-left: var(--dual-face-indicator-height);
     border-left-width: 0;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -280,54 +278,55 @@ div.flip-indicator.bar {
     padding-left: 3mm;
 }
 
-div.flip-indicator.bar::before {
+div.dual-face-indicator.bar::before {
     position: absolute;
     font-size: 85%;
     left: 0.5mm;
 }
 
-img.full-art~div.flip-indicator.bar,
-div.vertical~div.flip-indicator.bar {
-    top: calc(var(--upper-margin) + var(--bar-height) + var(--fullheight-box) - var(--pin-line-width) - var(--flip-indicator-height))
+img.full-art~div.dual-face-indicator.bar,
+div.vertical~div.dual-face-indicator.bar {
+    top: calc(var(--upper-margin) + var(--bar-height) + var(--fullheight-box) - var(--pin-line-width) - var(--dual-face-indicator-height))
 }
 
-div.flip-indicator.bar>span {
-    margin-top: var(--flip-indicator-font-adjustment);
+div.dual-face-indicator.bar>span {
+    margin-top: var(--dual-face-indicator-font-adjustment);
 }
 
 div.card.obverse.flip>div.title.bar::before,
 div.card.reverse.flip>div.title.bar::before,
-div.card.obverse.flip>div.flip-indicator.bar::before,
-div.card.reverse.flip>div.flip-indicator.bar::before {
+div.card.obverse.flip>div.dual-face-indicator.bar::before,
+div.card.reverse.flip>div.dual-face-indicator.bar::before {
+    margin-top: 0.3em;
     content: "🗘";
 }
 
 div.card.obverse.transform>div.title.bar::before,
-div.card.reverse.transform>div.flip-indicator.bar::before {
+div.card.reverse.transform>div.dual-face-indicator.bar::before {
     content: "▲";
 }
 
 div.card.reverse.transform>div.title.bar::before,
-div.card.obverse.transform>div.flip-indicator.bar::before {
+div.card.obverse.transform>div.dual-face-indicator.bar::before {
     content: "▼";
 }
 
 div.card.obverse.modal>div.title.bar::before,
-div.card.reverse.modal>div.flip-indicator.bar::before {
+div.card.reverse.modal>div.dual-face-indicator.bar::before {
     content: "▲▼";
 }
 
 div.card.reverse.modal>div.title.bar::before,
-div.card.obverse.modal>div.flip-indicator.bar::before {
+div.card.obverse.modal>div.dual-face-indicator.bar::before {
     content: "▼▲";
 }
 
 div.card.obverse.meld>div.title.bar::before,
-div.card.reverse.meld>div.flip-indicator.bar::before {
+div.card.reverse.meld>div.dual-face-indicator.bar::before {
     content: "◀";
 }
 
 div.card.reverse.meld>div.title.bar::before,
-div.card.obverse.meld>div.flip-indicator.bar::before {
+div.card.obverse.meld>div.dual-face-indicator.bar::before {
     content: "▶◀";
 }

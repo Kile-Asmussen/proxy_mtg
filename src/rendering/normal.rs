@@ -9,11 +9,7 @@ use crate::{
         general::{anchor_words, flavor_text_paragraph, rules_text_paragraph},
         reminders::{NoReminderText, ReminderText},
     },
-    utils::{
-        iter::IterExt,
-        printers::{TextPrinter, ToText},
-        symbolics::{replace_symbols, NothingReplacer},
-    },
+    utils::{iter::IterExt, symbolics::replace_symbols},
 };
 
 use super::general::{card_art_img, empty_card, flavor_text, get_side, type_line_div};
@@ -47,7 +43,6 @@ pub fn unadorned_card(card: &Card, proxy: &Proxy) -> Element {
 }
 
 pub fn creature_card(card: &Card, proxy: &Proxy) -> Element {
-    println!("{}", TextPrinter(&NothingReplacer, ToText::Card(card)));
     raw_card(card, proxy)
         .node(rules_text_div(card, proxy))
         .node(power_toughness(card))
@@ -93,11 +88,14 @@ pub fn rules_text_div(card: &Card, proxy: &Proxy) -> Element {
     }
 
     let text_len: usize = paragraphs.iter().map(|n| n.text_len()).sum();
+    let centered = get_side(card.side, &proxy.arts)
+        .map(|a| a.center_text)
+        .unwrap_or(false);
 
-    let class: &[&str] = if paragraphs.len() == 1 && text_len < 50 {
-        &["text-box", "sparse"]
-    } else if paragraphs.len() >= 4 || text_len >= 180 {
+    let class: &[&str] = if paragraphs.len() >= 4 || text_len >= 180 {
         &["text-box", "dense"]
+    } else if centered {
+        &["text-box", "sparse"]
     } else {
         &["text-box"]
     };
@@ -141,6 +139,7 @@ pub fn rules_text_basic_div(card: &Card, proxy: &Proxy) -> Element {
     }
 }
 
+#[allow(dead_code)]
 pub fn rules_text_planeswalker_div(card: &Card, proxy: &Proxy) -> Element {
     let mut text = card.text.clone();
     let mut flavor_text = None;

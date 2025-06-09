@@ -142,14 +142,23 @@ pub fn flavor_text(card: &Card, proxy: &Proxy) -> Vec<Element> {
         .collvect()
 }
 
-pub fn get_side<T>(side: Side, v: &Vec<T>) -> Option<&T> {
-    match side {
-        Side::A => v.get(0),
-        Side::B => v.get(1),
-        _ => None,
+pub fn anchor_words<RT>(mut text: &str) -> Vec<Node>
+where
+    RT: RulesTextSymbolReplacer<Item = Vec<Node>> + Default,
+{
+    let mut res = vec![];
+    let flavor_word = Regex::new(r"^((?:\w+\s*?)+)\s+—\s+").unwrap();
+    if let Some(m) = flavor_word.captures(text).and_then(|c| c.get(1)) {
+        if m.as_str() != "Companion" {
+            res.push(Element::new(Tag::em).node(m.as_str()).into());
+            text = &text[m.end()..]
+        }
     }
+    res.append(&mut replace_symbols::<RT>(&Default::default(), text).concat());
+    res
 }
 
+#[allow(dead_code)]
 pub fn loyalty_symbol<S>(n: isize) -> Element {
     Element::new(Tag::i).class(match n {
         1.. => vec!["ms".s(), "ms-loyalty-up".s(), format!("ms-loyalty-{}", n)],
@@ -169,18 +178,10 @@ where
     Element::new(Tag::i).class(["ms", class.as_ref(), "ms-cost", "ms-shadow"])
 }
 
-pub fn anchor_words<RT>(mut text: &str) -> Vec<Node>
-where
-    RT: RulesTextSymbolReplacer<Item = Vec<Node>> + Default,
-{
-    let mut res = vec![];
-    let flavor_word = Regex::new(r"^((?:\w+\s*)+)\s+—\s+").unwrap();
-    if let Some(m) = flavor_word.captures(text).and_then(|c| c.get(1)) {
-        if m.as_str() != "Companion" {
-            res.push(Element::new(Tag::em).node(m.as_str()).into());
-            text = &text[m.end()..]
-        }
+pub fn get_side<T>(side: Side, v: &Vec<T>) -> Option<&T> {
+    match side {
+        Side::A => v.get(0),
+        Side::B => v.get(1),
+        _ => None,
     }
-    res.append(&mut replace_symbols::<RT>(&Default::default(), text).concat());
-    res
 }

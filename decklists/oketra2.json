@@ -24,7 +24,7 @@
             "name": "Caretaker's Talent"
         },
         {
-            "name": "Esper Sentinel"
+            "name": "Rumor Gatherer"
         },
         {
             "name": "Bennie Bracks, Zoologist"
@@ -71,6 +71,20 @@
             "name": "Extraplanar Lens"
         }
     ],
+    "B.3 -- Tutors": [
+        {
+            "name": "Steelshaper's Gift"
+        },
+        {
+            "name": "Search for Glory"
+        },
+        {
+            "name": "Thalia's Lancers"
+        },
+        {
+            "name": "Recruiter of the Guard"
+        }
+    ],
     "C.1 - Control": [
         {
             "name": "Winds of Abandon"
@@ -100,9 +114,6 @@
     "C.2 - Stax": [
         {
             "name": "Aven Mindcensor"
-        },
-        {
-            "name": "Archon of Absolution"
         },
         {
             "name": "Clarion Conqueror"
@@ -155,6 +166,11 @@
         },
         {
             "name": "Emeria, the Sky Ruin"
+        }
+    ],
+    "D.3 - Survival": [
+        {
+            "name": "Solitary Confinement"
         }
     ],
     "E.1 - Bounce Synergy": [
@@ -244,8 +260,11 @@
             "name": "Thespian's Stage"
         },
         {
+            "name": "Desert of the True"
+        },
+        {
             "name": "Snow-Covered Plains",
-            "repeats": 30
+            "repeats": 29
         }
     ]
 }
