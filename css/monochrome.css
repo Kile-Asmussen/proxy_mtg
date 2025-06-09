@@ -40,3 +40,7 @@
     border: 0.08em solid #111 !important;
     box-shadow: none !important;
 }
+
+img.art {
+    filter: grayscale(100%)
+}

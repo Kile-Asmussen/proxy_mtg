@@ -64,7 +64,7 @@ impl List {
 
         if self.cards {
             println!();
-            Self::print_cards(decklist, "Cards", |p| p.in_deck());
+            Self::print_cards(decklist, "Cards", Proxy::in_deck);
         }
 
         if self.sideboard {

@@ -45,7 +45,7 @@ impl Build {
             "Rendering {} cards",
             decklist
                 .iter()
-                .map(|p| p.cardoid.printed_cards())
+                .map(|p| p.cardoid.printed_cards() * p.repeats)
                 .sum::<usize>()
         );
 

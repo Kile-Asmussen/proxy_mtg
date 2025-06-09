@@ -37,7 +37,7 @@ pub struct Art {
     pub credit: String,
     #[serde(default)]
     pub full: bool,
-    #[serde(default)]
+    #[serde(default, rename = "centerText")]
     pub center_text: bool,
 }
 

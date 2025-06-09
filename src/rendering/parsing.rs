@@ -20,7 +20,7 @@ pub fn split_line_starter<'a>(rx: &Regex, text: &'a str) -> (&'a str, &'a str) {
 }
 
 pub fn split_anchor_word(text: &str) -> (&str, &str) {
-    let flavor_word = Regex::new(r"^((?:\w+\s*?)+)\s+—\s+").unwrap();
+    let flavor_word = Regex::new(r"^((?:[\w•]+\s*?)+)\s+—\s+").unwrap();
 
     let (word, rest) = split_line_starter(&flavor_word, text);
     if word == "Companion" {
@@ -96,14 +96,15 @@ pub fn colored_mana(m: &str) -> Option<Element> {
         "{B}" => ms_cost_shadow("b"),
         "{R}" => ms_cost_shadow("r"),
         "{G}" => ms_cost_shadow("g"),
+        "{C}" => ms_cost_shadow("c"),
         _ => return None,
     })
 }
 
 pub fn tap_untap(m: &str) -> Option<Element> {
     Some(match m {
-        "{T}" => ms_cost_shadow("t"),
-        "{Q}" => ms_cost_shadow("q"),
+        "{T}" => ms_cost_shadow("tap"),
+        "{Q}" => ms_cost_shadow("untap"),
         _ => return None,
     })
 }

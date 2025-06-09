@@ -4,6 +4,7 @@ pub mod manafont;
 pub mod normal;
 pub mod parsing;
 pub mod reminders;
+pub mod tokens;
 pub mod verticalia;
 
 use normal::normal_layout_proxy;
@@ -15,6 +16,7 @@ use crate::{
     rendering::{
         dual_faced::{flip_layout_proxy, genuine_dual_face_proxy},
         general::empty_card,
+        tokens::token_proxy,
         verticalia::{class_layout_proxy, saga_layout_proxy},
     },
 };
@@ -48,6 +50,7 @@ impl RenderContext {
                 CardLayout::Flip => flip_layout_proxy(proxy),
                 CardLayout::Transform => genuine_dual_face_proxy(proxy),
                 CardLayout::ModalDfc => genuine_dual_face_proxy(proxy),
+                CardLayout::Token => token_proxy(proxy),
                 _ => vec![empty_card(proxy.cardoid.face(), proxy)],
             })
         }

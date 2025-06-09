@@ -105,10 +105,10 @@ div.title.bar {
     font-size: var(--title-font-size);
 }
 
-div.title.bar.token {
+div.card.token>div.title.bar {
     border-width: var(--pin-line-width);
     border-style: none;
-    border-color: black;
+    justify-content: center;
     background-color: transparent;
 }
 
@@ -135,7 +135,13 @@ img.art {
     top: calc(var(--bar-height) + var(--upper-margin));
     width: var(--fullwidth-box);
     height: var(--art-height);
-    object-fit: contain;
+    object-fit: cover;
+}
+
+div.card.token>img.art {
+    border-top-left-radius: 50% 20%;
+    border-top-right-radius: 50% 20%;
+    border-top-width: var(--pin-line-width);
 }
 
 img.art.full-art {
@@ -180,7 +186,7 @@ img.art.vertical {
 
 span.art-credits {
     bottom: 0;
-    left: calc(3*var(--fullwidth-margin) + var(--halfwidth-box));
+    right: var(--fullwidth-margin);
     border: 0 none transparent;
     background-color: transparent;
 }
@@ -190,6 +196,53 @@ span.art-credits::before {
 }
 
 /* TEXT CONTENT */
+
+div.text-box {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+div.text-box>p {
+    margin: 1.5mm 3mm 0mm;
+}
+
+div.text-box.vertical>p.level-up {
+    margin-top: 0.75mm;
+    padding: 0.75mm 3mm 0mm;
+    margin-bottom: -1.5mm;
+}
+
+div.text-box.dense>p {
+    margin: 1mm 1mm 0mm;
+}
+
+div.text-box.vertical.dense>p.level-up {
+    margin-top: 0.5mm;
+    padding: 0.5mm 1mm 0mm;
+    margin-bottom: -1mm;
+}
+
+div.text-box.compact>p {
+    margin-top: 0.5mm;
+    margin: 0.5mm 1mm 0mm;
+}
+
+div.text-box.vertical.compact>p.level-up {
+    margin-top: 0.25mm;
+    padding: 0.25mm 1mm 0mm;
+    margin-bottom: -0.5mm;
+}
+
+div.text-box.sparse {
+    justify-content: center;
+}
+
+div.text-box.sparse>p {
+    margin: 2mm 3mm 2mm;
+    text-align: center;
+}
 
 div.text-box>hr {
     width: 80%;
@@ -202,45 +255,29 @@ div.text-box>hr {
     margin: 1mm auto 0mm;
 }
 
-div.text-box {
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-}
-
-div.text-box>p {
-    margin: 2mm 3mm 0mm;
-}
-
-div.text-box.dense>p {
-    margin: 1mm 1mm 0mm;
-}
-
-div.text-box.compact>p {
-    margin: 0.5mm 1mm 0mm;
-}
-
 div.text-box.compact>hr {
     margin: 0.5mm auto 0mm;
     border-top-width: calc(var(--pin-line-width)/2);
 }
 
-div.text-box.sparse {
-    justify-content: center;
-}
-
-div.text-box.sparse>p {
-    margin: 2mm 3mm 2mm;
-    text-align: center;
-}
-
-div.text-box.dense,
-div.text-box.compact {
-    padding: 0;
+div.text-box.vertical>p.saga-chapter {
+    margin-left: 0;
+    margin-right: 0;
+    background: linear-gradient(180deg, white 20%, lightgray 50%, white 80%);
     display: flex;
-    flex-direction: column;
-    justify-content: start;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+div.text-box.vertical>p.level-up {
+    background: linear-gradient(180deg, lightgray 0%, white 50%);
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    border-top: black solid var(--pin-line-width);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 /* CORNER BUBBLE */
@@ -289,14 +326,17 @@ div.card.reverse>div.title.bar::before {
 
 div.dual-face-indicator.bar {
     left: 0;
+    bottom: 0;
     font-size: var(--dual-face-indicator-font-size);
     font-family: var(--dual-face-indicator-font-family);
     height: var(--dual-face-indicator-height);
-    top: calc(var(--upper-margin) + var(--bar-height)*2 + var(--fullheight-box) - var(--pin-line-width) - var(--dual-face-indicator-height)/2);
+    /* top: calc(var(--upper-margin) + var(--bar-height)*2 + var(--fullheight-box) - var(--pin-line-width) - var(--dual-face-indicator-height)/2); */
     padding-left: var(--dual-face-indicator-height);
     border-left-width: 0;
+    border-bottom-width: 0;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
     width: auto;
     padding-left: 3mm;
 }

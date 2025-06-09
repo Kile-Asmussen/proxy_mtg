@@ -33,10 +33,10 @@ pub fn title_bar_div(card: &Card, proxy: &Proxy) -> Element {
     Element::new(Tag::div)
         .class(["title", "bar"])
         .node(card_name_span(card, proxy))
-        .node(mana_cost_span(card))
+        .node(mana_cost_span(card, proxy))
 }
 
-pub fn mana_cost_span(card: &Card) -> Element {
+pub fn mana_cost_span(card: &Card, _proxy: &Proxy) -> Element {
     Element::new(Tag::span)
         .class(["cost"])
         .nodes(replace_symbols_with(&ManaFontSymbolics, &card.mana_cost))

@@ -18,45 +18,30 @@
     ],
     "B.1 - Card Advantage": [
         {
-            "name": "Mentor of the Meek"
+            "name": "Bennie Bracks, Zoologist"
         },
         {
             "name": "Caretaker's Talent"
         },
         {
-            "name": "Rumor Gatherer"
+            "name": "Mentor of the Meek"
         },
         {
-            "name": "Bennie Bracks, Zoologist"
+            "name": "Rumor Gatherer"
         },
         {
             "name": "Skullclamp"
         },
         {
-            "name": "War Room"
-        },
-        {
             "name": "Tocasia's Welcome"
         },
         {
-            "name": "Welcoming Vampire"
+            "name": "War Room"
         }
     ],
     "B.2 - Land Advantage": [
         {
-            "name": "Land Tax"
-        },
-        {
-            "name": "Knight of the White Orchid"
-        },
-        {
-            "name": "Loyal Warhound"
-        },
-        {
-            "name": "Space Marine Scout"
-        },
-        {
-            "name": "Keeper of the Accord"
+            "name": "Archaeomancer's Map"
         },
         {
             "name": "Claim Jumper"
@@ -65,10 +50,19 @@
             "name": "Deep Gnome Terramancer"
         },
         {
-            "name": "Archaeomancer's Map"
+            "name": "Extraplanar Lens"
         },
         {
-            "name": "Extraplanar Lens"
+            "name": "Keeper of the Accord"
+        },
+        {
+            "name": "Knight of the White Orchid"
+        },
+        {
+            "name": "Land Tax"
+        },
+        {
+            "name": "Loyal Warhound"
         }
     ],
     "B.3 -- Tutors": [
@@ -87,28 +81,25 @@
     ],
     "C.1 - Control": [
         {
-            "name": "Winds of Abandon"
+            "name": "Austere Command"
         },
         {
             "name": "Dismantling Wave"
         },
         {
-            "name": "Parallax Wave"
+            "name": "Generous Gift"
         },
         {
             "name": "Loran of the Third Path"
         },
         {
-            "name": "Generous Gift"
+            "name": "Return to Dust"
         },
         {
             "name": "Slash the Ranks"
         },
         {
-            "name": "Return to Dust"
-        },
-        {
-            "name": "Austere Command"
+            "name": "Winds of Abandon"
         }
     ],
     "C.2 - Stax": [
@@ -120,9 +111,6 @@
         },
         {
             "name": "Magus of the Moat"
-        },
-        {
-            "name": "Thalia, Guardian of Thraben"
         },
         {
             "name": "Binding Mummy"
@@ -138,43 +126,34 @@
     ],
     "D.2 - Board Protection": [
         {
-            "name": "Rune-Tail, Kitsune Ascendant // Rune-Tail's Essence"
-        },
-        {
-            "name": "Myrel, Shield of Argive"
-        },
-        {
             "name": "Brought Back"
-        },
-        {
-            "name": "Second Sunrise"
-        },
-        {
-            "name": "Redemption Choir"
-        },
-        {
-            "name": "Dawn's Truce"
-        },
-        {
-            "name": "Flawless Maneuver"
-        },
-        {
-            "name": "Your Temple Is Under Attack"
-        },
-        {
-            "name": "Flare of Fortitude"
-        },
-        {
-            "name": "Emeria, the Sky Ruin"
-        },
-        {
-            "name": "Guardian of Faith"
         },
         {
             "name": "Eerie Interlude"
         },
         {
+            "name": "Emeria, the Sky Ruin"
+        },
+        {
+            "name": "Flare of Fortitude"
+        },
+        {
+            "name": "Flawless Maneuver"
+        },
+        {
             "name": "Ghostway"
+        },
+        {
+            "name": "Guardian of Faith"
+        },
+        {
+            "name": "Rune-Tail, Kitsune Ascendant // Rune-Tail's Essence"
+        },
+        {
+            "name": "Second Sunrise"
+        },
+        {
+            "name": "Your Temple Is Under Attack"
         }
     ],
     "D.3 - Survival": [
@@ -184,13 +163,10 @@
     ],
     "E.1 - Bounce Synergy": [
         {
-            "name": "Whitemane Lion"
+            "name": "Ambrosia Whiteheart"
         },
         {
             "name": "Aviary Mechanic"
-        },
-        {
-            "name": "Ambrosia Whiteheart"
         },
         {
             "name": "Dust Elemental"
@@ -202,33 +178,27 @@
             "name": "Kor Skyfisher"
         },
         {
-            "name": "Sunpearl Kirin"
-        },
-        {
-            "name": "Emancipation Angel"
+            "name": "Mischievous Pup"
         },
         {
             "name": "Stonecloaker"
         },
         {
-            "name": "Mischievous Pup"
+            "name": "Sunpearl Kirin"
+        },
+        {
+            "name": "Whitemane Lion"
         }
     ],
     "E.2 - Wincon Enabler": [
         {
-            "name": "Oketra's Monument"
+            "name": "Anointed Procession"
         },
         {
-            "name": "Pearl Medallion"
-        },
-        {
-            "name": "The Wind Crystal"
+            "name": "Concerted Effort"
         },
         {
             "name": "Defiler of Faith"
-        },
-        {
-            "name": "Anointed Procession"
         },
         {
             "name": "Mondrak, Glory Dominus"
@@ -237,12 +207,27 @@
             "name": "Odric, Lunarch Marshal"
         },
         {
-            "name": "Concerted Effort"
+            "name": "Oketra's Monument"
+        },
+        {
+            "name": "Pearl Medallion"
+        },
+        {
+            "name": "The Wind Crystal"
         }
     ],
-    "F - Lands": [
+    "F.1 - Lands": [
         {
-            "name": "Nykthos, Shrine to Nyx"
+            "name": "Arid Archway"
+        },
+        {
+            "name": "Desert of the True"
+        },
+        {
+            "name": "Guildless Commons"
+        },
+        {
+            "name": "Karoo"
         },
         {
             "name": "Lotus Field"
@@ -251,29 +236,88 @@
             "name": "Lotus Vale"
         },
         {
+            "name": "Nykthos, Shrine to Nyx"
+        },
+        {
             "name": "Scorched Ruins"
-        },
-        {
-            "name": "Karoo"
-        },
-        {
-            "name": "Arid Archway"
-        },
-        {
-            "name": "Guildless Commons"
-        },
-        {
-            "name": "Vesuva"
         },
         {
             "name": "Thespian's Stage"
         },
         {
-            "name": "Desert of the True"
+            "name": "Vesuva"
         },
         {
             "name": "Snow-Covered Plains",
-            "repeats": 29
+            "repeats": 29,
+            "reminderText": false
+        }
+    ],
+    "F.2 -- Sideboard": [
+        {
+            "name": "Zombie Warrior",
+            "repeats": 3,
+            "arts": [
+                {
+                    "url": "https://www.originalmagicart.store/cdn/shop/products/Zombie_Warrior_Token_5000x.jpg?v=1603664561",
+                    "credit": "Mike Bierek",
+                    "centerText": true
+                }
+            ],
+            "cardoid": [
+                {
+                    "name": "Zombie Warrior",
+                    "layout": "token",
+                    "colors": [
+                        "B"
+                    ],
+                    "power": "4",
+                    "toughness": "4",
+                    "text": "Vigilance",
+                    "type": "Creature Token \u2014 Zombie Warrior",
+                    "types": [
+                        "Creature"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Soldier",
+            "cardoid": [
+                {
+                    "name": "Soldier",
+                    "layout": "token",
+                    "colors": [
+                        "W"
+                    ],
+                    "power": "1",
+                    "toughness": "1",
+                    "text": "",
+                    "type": "Creature Token \u2014 Soldier",
+                    "types": [
+                        "Creature"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Warrior",
+            "cardoid": [
+                {
+                    "name": "Warrior",
+                    "layout": "token",
+                    "colors": [
+                        "W"
+                    ],
+                    "power": "1",
+                    "toughness": "1",
+                    "text": "Vigilance",
+                    "type": "Creature Token \u2014 Warrior",
+                    "types": [
+                        "Creature"
+                    ]
+                }
+            ]
         }
     ]
 }

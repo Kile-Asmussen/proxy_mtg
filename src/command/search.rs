@@ -36,15 +36,21 @@ pub struct Search {
     #[arg(long)]
     pub vtype: Vec<String>,
     #[arg(long)]
+    pub text: Vec<String>,
+    #[arg(long)]
+    pub vtext: Vec<String>,
+    #[arg(long)]
     pub grep: Vec<String>,
     #[arg(long)]
     pub vgrep: Vec<String>,
     #[arg(long)]
-    pub discord: bool,
+    pub cat: Vec<String>,
     #[arg(long)]
     pub sideboard: bool,
     #[arg(long)]
     pub funnies: bool,
+    #[arg(long)]
+    pub debug: bool,
     #[arg(long)]
     pub case_sensitive: bool,
     #[arg(value_name = "OFILE")]
@@ -97,11 +103,14 @@ struct Searcher {
     vname: Vec<Regex>,
     r#type: Vec<Regex>,
     vtype: Vec<Regex>,
+    cats: Vec<Regex>,
     grep: Vec<Regex>,
     vgrep: Vec<Regex>,
-    discord: bool,
+    text: Vec<Regex>,
+    vtext: Vec<Regex>,
     sideboard: bool,
     funnies: bool,
+    debug: bool,
 }
 
 impl Searcher {
@@ -116,32 +125,42 @@ impl Searcher {
             vtype: Self::build_regexes(it.case_sensitive, it.vtype)?,
             grep: Self::build_regexes(it.case_sensitive, it.grep)?,
             vgrep: Self::build_regexes(it.case_sensitive, it.vgrep)?,
+            text: Self::build_regexes(it.case_sensitive, it.text)?,
+            vtext: Self::build_regexes(it.case_sensitive, it.vtext)?,
+            cats: Self::build_regexes(it.case_sensitive, it.cat)?,
+            debug: it.debug,
             sideboard: it.sideboard,
-            discord: it.discord,
             funnies: it.funnies,
         })
     }
 
     fn print_cardoid(&self, c: &Cardoid) {
         println!();
-        if self.discord {
-            println!("{}", ToText::Cardoid(c))
+        if self.debug {
+            println!("{:?}", c);
         } else {
-            println!("{}", ToText::Cardoid(c))
+            println!("{}", ToText::Cardoid(c));
         }
     }
 
     fn print_proxy(&self, p: &Proxy) {
         println!();
-        if self.discord {
-            println!("{}", ToText::Proxy(p))
+        if self.debug {
+            println!("{:?}", p);
         } else {
-            println!("{}", ToText::Proxy(p))
+            println!("{}", ToText::Proxy(p));
         }
     }
 
     fn matches_proxy(&self, proxy: &Proxy) -> bool {
-        &self.tags <= &proxy.tags && self.matches_cardoid(&proxy.cardoid)
+        &self.tags <= &proxy.tags
+            && Self::regex_match(&self.cats, &[], &proxy.category)
+            && Self::regex_match(
+                &self.grep,
+                &self.vgrep,
+                &format!("{}", ToText::Proxy(&proxy)),
+            )
+            && self.matches_cardoid(&proxy.cardoid)
     }
 
     fn matches_cardoid(&self, cardoid: &Cardoid) -> bool {
@@ -153,7 +172,7 @@ impl Searcher {
     fn matches_card(&self, card: &Card) -> bool {
         self.color <= card.colors
             && Self::regex_match(&self.r#type, &self.vtype, &card.type_line)
-            && Self::regex_match(&self.grep, &self.vgrep, &card.text)
+            && Self::regex_match(&self.text, &self.vtext, &card.text)
     }
 
     fn build_color(it: Option<String>, or: BTreeSet<WUBRG>) -> anyhow::Result<BTreeSet<WUBRG>> {

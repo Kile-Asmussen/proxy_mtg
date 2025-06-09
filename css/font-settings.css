@@ -27,7 +27,7 @@
     --dual-face-indicator-font-adjustment: -0.1mm;
 
     --art-credit-font: Crimson Text;
-    --art-credit-font-size: 5pt;
+    --art-credit-font-size: 4.5pt;
 
     --proxy-mark-font: Inconsolata;
     --proxy-mark-font-size: 1.5mm;
@@ -37,6 +37,14 @@
     --cost-symbol-size-title: 0.75em;
     --cost-adjustment-title: -0.75mm;
     --cost-adjustment-text: -0.3mm;
+}
+
+p.rules-text>span.reminder {
+    font-size: 0.9em;
+}
+
+p.rules-text:has(span.reminder:only-child) {
+    line-height: 95%;
 }
 
 div.text-box .ms {
@@ -95,13 +103,10 @@ div.title.bar>span.cost>i.ms-6x {
     margin-left: 0 !important;
 }
 
-p.rules-text {
+p.rules-text,
+p.saga-chapter {
     font-family: var(--rules-font-family);
     font-size: var(--rules-font-size);
-}
-
-p.rules-text.centered {
-    text-align: center;
 }
 
 div.text-box.dense>p.rules-text {
@@ -273,7 +278,7 @@ p.rules-text>i.ms.ms-loyalty-zero:first-child {
 }
 
 .ms-saga {
-    font-size: calc(2.5*var(--cost-symbol-size-text));
+    font-size: calc(2*var(--cost-symbol-size-text));
 }
 
 .ms-saga::after {

@@ -70,9 +70,6 @@ pub fn rules_text_normal_div(card: &Card, proxy: &Proxy) -> Element {
 
         par.append(&mut rules_text(line));
 
-        if !paragraphs.is_empty() {
-            paragraphs.push(Element::new(Tag::hr));
-        }
         paragraphs.push(rules_text_paragraph(par));
     }
 
@@ -83,17 +80,20 @@ pub fn rules_text_normal_div(card: &Card, proxy: &Proxy) -> Element {
         .map(|a| a.center_text)
         .unwrap_or(false);
 
-    let class: &[&str] = if paragraphs.len() >= 6 || text_len >= 250 {
-        &["text-box", "compact"]
+    let text_class: &[&str] = if text_len >= 350 {
+        &["compact"]
     } else if paragraphs.len() >= 4 || text_len >= 200 {
-        &["text-box", "dense"]
+        &["dense"]
     } else if centered {
-        &["text-box", "sparse"]
+        &["sparse"]
     } else {
-        &["text-box"]
+        &[]
     };
 
-    Element::new(Tag::div).class(class).nodes(paragraphs)
+    Element::new(Tag::div)
+        .class(["text-box"])
+        .class(text_class)
+        .nodes(paragraphs)
 }
 
 pub fn rules_text_planeswalker_div(card: &Card, proxy: &Proxy) -> Element {
@@ -133,15 +133,18 @@ pub fn rules_text_planeswalker_div(card: &Card, proxy: &Proxy) -> Element {
 
     let text_len: usize = paragraphs.iter().map(|n| n.text_len()).sum();
 
-    let class: &[&str] = if text_len >= 250 {
-        &["text-box", "compact"]
+    let text_class: &[&str] = if text_len >= 350 {
+        &["compact"]
     } else if text_len >= 200 {
-        &["text-box", "dense"]
+        &["dense"]
     } else {
-        &["text-box"]
+        &[]
     };
 
-    Element::new(Tag::div).class(class).nodes(paragraphs)
+    Element::new(Tag::div)
+        .class(["text-box"])
+        .class(text_class)
+        .nodes(paragraphs)
 }
 
 pub fn rules_text_basic_div(card: &Card, proxy: &Proxy) -> Element {
