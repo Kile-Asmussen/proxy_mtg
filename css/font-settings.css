@@ -10,6 +10,7 @@
     --rules-font-family: Crimson Text;
     --rules-font-size: 8pt;
     --rules-font-size-small: 7pt;
+    --rules-font-size-tiny: 6pt;
     --rules-font-size-large: 9pt;
 
     --flavor-font-family: Crimson Text;
@@ -26,7 +27,7 @@
     --dual-face-indicator-font-adjustment: -0.1mm;
 
     --art-credit-font: Crimson Text;
-    --art-credit-font-size: 6pt;
+    --art-credit-font-size: 5pt;
 
     --proxy-mark-font: Inconsolata;
     --proxy-mark-font-size: 1.5mm;
@@ -99,8 +100,16 @@ p.rules-text {
     font-size: var(--rules-font-size);
 }
 
+p.rules-text.centered {
+    text-align: center;
+}
+
 div.text-box.dense>p.rules-text {
     font-size: var(--rules-font-size-small);
+}
+
+div.text-box.compact>p.rules-text {
+    font-size: var(--rules-font-size-tiny);
 }
 
 div.text-box.sparse>p.rules-text {
@@ -125,6 +134,10 @@ span.reminder {
     font-style: italic;
 }
 
+span.anchor-word {
+    font-style: italic;
+}
+
 div.dual-face-indicator.bar>span {
     margin-top: var(--dual-face-indicator-font-adjustment);
     font-size: var(--dual-face-indicator-font-size);
@@ -134,7 +147,7 @@ div.dual-face-indicator.bar>span {
 span.art-credits {
     font-weight: bold;
     font-family: var(--art-credit-font);
-    border: 0 none transparent;
+    font-size: var(--art-credit-font-size);
     color: white;
     text-shadow:
         0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black,
@@ -148,8 +161,8 @@ div.card.reverse>div.dual-face-indicator.bar::before {
     font-weight: bold;
     color: white;
     text-shadow:
-        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black,
-        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
+        0 0 2pt black, 0 0 2pt black, 0 0 2pt black, 0 0 2pt black,
+        0 0 2pt black, 0 0 2pt black, 0 0 2pt black, 0 0 2pt black;
 }
 
 div.corner-bubble.shield,
@@ -257,4 +270,12 @@ p.rules-text>i.ms.ms-loyalty-zero:first-child {
 
 .ms-loyalty-down.ms-loyalty-X::after {
     content: "−X";
+}
+
+.ms-saga {
+    font-size: calc(2.5*var(--cost-symbol-size-text));
+}
+
+.ms-saga::after {
+    margin-top: -0.15em;
 }

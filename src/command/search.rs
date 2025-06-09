@@ -16,12 +16,7 @@ use crate::{
         AtomicCardsFile,
     },
     proxy::{decklists::DeckList, Proxy},
-    utils::{
-        iter::IterExt,
-        printers::{TextPrinter, ToText},
-        symbolics::{DiscordEmoji, NothingReplacer},
-        ToS,
-    },
+    utils::{iter::IterExt, printers::ToText, ToS},
 };
 
 #[derive(Parser, Debug, Clone)]
@@ -130,18 +125,18 @@ impl Searcher {
     fn print_cardoid(&self, c: &Cardoid) {
         println!();
         if self.discord {
-            println!("{}", TextPrinter(&DiscordEmoji, ToText::Cardoid(c)))
+            println!("{}", ToText::Cardoid(c))
         } else {
-            println!("{}", TextPrinter(&NothingReplacer, ToText::Cardoid(c)))
+            println!("{}", ToText::Cardoid(c))
         }
     }
 
     fn print_proxy(&self, p: &Proxy) {
         println!();
         if self.discord {
-            println!("{}", TextPrinter(&DiscordEmoji, ToText::Proxy(p)))
+            println!("{}", ToText::Proxy(p))
         } else {
-            println!("{}", TextPrinter(&NothingReplacer, ToText::Proxy(p)))
+            println!("{}", ToText::Proxy(p))
         }
     }
 

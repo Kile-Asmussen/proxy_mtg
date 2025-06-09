@@ -1,10 +1,8 @@
-use std::collections::BTreeSet;
-
 use regex::Regex;
 
-use crate::{atomic_cards::types::WUBRG, utils::ToS};
+use crate::utils::ToS;
 
-pub fn replace_symbols<R>(replacer: &R, mut haystack: &str) -> Vec<R::Item>
+pub fn replace_symbols_with<R>(replacer: &R, mut haystack: &str) -> Vec<R::Item>
 where
     R: RulesTextSymbolReplacer,
 {
@@ -30,20 +28,23 @@ where
     vec
 }
 
+pub fn replace_symbols<R>(haystack: &str) -> Vec<R::Item>
+where
+    R: RulesTextSymbolReplacer + Default,
+{
+    replace_symbols_with::<R>(&Default::default(), haystack)
+}
+
 pub trait RulesTextSymbolReplacer {
     type Item;
 
-    fn matcher(&self) -> Regex {
-        Regex::new(r"\{.*?\}").unwrap()
-    }
+    fn matcher(&self) -> Regex;
 
     fn map_symbol(&self, matched: &str) -> Self::Item;
 
     fn intermediate_text(&self, non_matched: &str) -> Self::Item;
 
     fn joiner(&self) -> Option<Self::Item>;
-
-    fn indicator(&self, indicate: &BTreeSet<WUBRG>) -> Self::Item;
 }
 
 #[derive(Default, Clone, Copy)]
@@ -51,6 +52,10 @@ pub struct NothingReplacer;
 
 impl RulesTextSymbolReplacer for NothingReplacer {
     type Item = String;
+
+    fn matcher(&self) -> Regex {
+        Regex::new("\u{10FFFF}").unwrap()
+    }
 
     fn map_symbol(&self, matched: &str) -> Self::Item {
         matched.s()
@@ -62,87 +67,5 @@ impl RulesTextSymbolReplacer for NothingReplacer {
 
     fn joiner(&self) -> Option<Self::Item> {
         None
-    }
-
-    fn indicator(&self, indicate: &BTreeSet<WUBRG>) -> Self::Item {
-        WUBRG::render(indicate)
-    }
-}
-
-#[derive(Default, Clone, Copy)]
-pub struct DiscordEmoji;
-
-impl RulesTextSymbolReplacer for DiscordEmoji {
-    type Item = String;
-
-    fn map_symbol(&self, matched: &str) -> Self::Item {
-        Self::symbols(matched).s()
-    }
-
-    fn intermediate_text(&self, non_matched: &str) -> Self::Item {
-        non_matched.s()
-    }
-
-    fn joiner(&self) -> Option<Self::Item> {
-        Some(" ".s())
-    }
-
-    fn indicator(&self, indicate: &BTreeSet<WUBRG>) -> Self::Item {
-        let mut res = "".s();
-
-        for c in indicate {
-            res += match c {
-                WUBRG::W => ":yellow_circle:",
-                WUBRG::U => ":blue_circle:",
-                WUBRG::B => ":black_circle:",
-                WUBRG::R => ":red_circle:",
-                WUBRG::G => ":green_circle:",
-            }
-        }
-
-        res
-    }
-}
-
-impl DiscordEmoji {
-    fn symbols(matched: &str) -> &str {
-        match matched {
-            "{C}" => ":diamond_shape_with_a_dot_inside:",
-            "{W}" => ":sunny:",
-            "{U}" => ":droplet:",
-            "{B}" => ":skull:",
-            "{R}" => ":fire:",
-            "{G}" => ":deciduous_tree:",
-            "{S}" => ":snowflake:",
-            "{1}" => ":one:",
-            "{2}" => ":two:",
-            "{3}" => ":three:",
-            "{4}" => ":four:",
-            "{5}" => ":five:",
-            "{6}" => ":six:",
-            "{7}" => ":seven:",
-            "{8}" => ":eight:",
-            "{9}" => ":nine:",
-            "{10}" => ":keycap_ten:",
-            "{T}" => ":arrow_heading_down:",
-            "{Q}" => ":arrow_heading_up:",
-            "{W/P}" => "(:sunny:/:drop_of_blood:)",
-            "{U/P}" => "(:droplet:/:drop_of_blood:)",
-            "{B/P}" => "(:skull:/:drop_of_blood:)",
-            "{R/P}" => "(:fire:/:drop_of_blood:)",
-            "{G/P}" => "(:deciduous_tree:/:drop_of_blood:)",
-            "{C/P}" => "(:diamond_shape_with_a_dot_inside:/:drop_of_blood:)",
-            "{2/W}" => "(:two:/:sunny:)",
-            "{2/U}" => "(:two:/:droplet:)",
-            "{2/B}" => "(:two:/:skull:)",
-            "{2/R}" => "(:two:/:fire:)",
-            "{2/G}" => "(:two:/:deciduous_tree:)",
-            "{C/W}" => "(:diamond_shape_with_a_dot_inside:/:sunny:)",
-            "{C/U}" => "(:diamond_shape_with_a_dot_inside:/:droplet:)",
-            "{C/B}" => "(:diamond_shape_with_a_dot_inside:/:skull:)",
-            "{C/R}" => "(:diamond_shape_with_a_dot_inside:/:fire:)",
-            "{C/G}" => "(:diamond_shape_with_a_dot_inside:/:deciduous_tree:)",
-            s => s,
-        }
     }
 }

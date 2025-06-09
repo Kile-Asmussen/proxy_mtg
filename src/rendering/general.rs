@@ -1,16 +1,14 @@
-use std::str::FromStr;
-
-use regex::Regex;
-
 use crate::{
     atomic_cards::{cards::Card, metadata::ForeignData, types::*},
     html::*,
     proxy::{Art, Proxy},
-    rendering::manafont::ManaFontSymbolics,
+    rendering::{
+        manafont::ManaFontSymbolics,
+        reminders::{NoReminderText, ReminderText},
+    },
     utils::{
         iter::IterExt,
-        symbolics::{replace_symbols, RulesTextSymbolReplacer},
-        ToS,
+        symbolics::{replace_symbols, replace_symbols_with},
     },
 };
 
@@ -41,7 +39,7 @@ pub fn title_bar_div(card: &Card, proxy: &Proxy) -> Element {
 pub fn mana_cost_span(card: &Card) -> Element {
     Element::new(Tag::span)
         .class(["cost"])
-        .nodes(replace_symbols(&ManaFontSymbolics, &card.mana_cost))
+        .nodes(replace_symbols_with(&ManaFontSymbolics, &card.mana_cost))
 }
 
 pub fn corner_bubble<N>(content: N) -> Element
@@ -61,15 +59,19 @@ where
     Element::new(Tag::p).class(["rules-text"]).nodes(text)
 }
 
-pub fn flavor_text(card: &Card, proxy: &Proxy) -> Vec<Element> {
+pub fn flavor_text_paragraphs(card: &Card, proxy: &Proxy) -> Vec<Element> {
     let Some(ForeignData { flavor_text, .. }) = get_side(card.side, &proxy.customize) else {
         return vec![];
     };
 
-    flavor_text
-        .lines()
-        .map(|s| flavor_text_paragraph([s]))
-        .collvect()
+    if flavor_text.is_empty() {
+        vec![]
+    } else {
+        [Element::new(Tag::hr)]
+            .into_iter()
+            .chain(flavor_text.lines().map(|s| flavor_text_paragraph([s])))
+            .collvect()
+    }
 }
 
 pub fn flavor_text_paragraph<NS, N>(text: NS) -> Element
@@ -148,6 +150,16 @@ pub fn type_line_span(card: &Card, proxy: &Proxy) -> Element {
     Element::new(Tag::span).class(["type"]).node(type_line)
 }
 
+pub fn anchor_words(words: &str) -> Vec<Node> {
+    vec![
+        Element::new(Tag::span)
+            .class(["anchor-word"])
+            .node(words)
+            .into(),
+        " \u{2014} ".into(),
+    ]
+}
+
 pub fn card_css_class(card: &Card) -> Vec<&'static str> {
     if card.types.contains(&Type::Land) {
         card.color_identity
@@ -160,59 +172,12 @@ pub fn card_css_class(card: &Card) -> Vec<&'static str> {
     }
 }
 
-pub fn rules_text_line<RT>(text: &str) -> Vec<Node>
-where
-    RT: RulesTextSymbolReplacer<Item = Vec<Node>> + Default,
-{
-    let (mut res, text) = loyalty_ability(text);
-    let (mut more, text) = anchor_words(text);
-    res.append(&mut more);
-    res.append(&mut replace_symbols::<RT>(&Default::default(), text).concat());
-    res
-}
-
-pub fn anchor_words(text: &str) -> (Vec<Node>, &str) {
-    let flavor_word = Regex::new(r"^((?:\w+\s*?)+)\s+—\s+").unwrap();
-    if let Some(m) = flavor_word.captures(text).and_then(|c| c.get(1)) {
-        if m.as_str() != "Companion" {
-            return (
-                vec![Element::new(Tag::em).node(m.as_str()).into()],
-                &text[m.end()..],
-            );
-        }
+pub fn rules_text_filter(proxy: &Proxy) -> fn(&str) -> Vec<Node> {
+    if proxy.reminder_text {
+        |s| replace_symbols::<ReminderText>(s).concat()
+    } else {
+        |s| replace_symbols::<NoReminderText>(s).concat()
     }
-    (vec![], text)
-}
-
-pub fn loyalty_ability(text: &str) -> (Vec<Node>, &str) {
-    let ability = Regex::new(r"^\[([+−]?\d+)\]:").unwrap();
-    if let Some(c) = ability.captures(text) {
-        let m = c.get(1).unwrap().as_str().replace("−", "-");
-        let c = c.get(0).unwrap();
-        if let Ok(i) = isize::from_str(&m) {
-            return (vec![loyalty_symbol(i).into()], &text[c.end()..]);
-        }
-    }
-    return (vec![], text);
-}
-
-pub fn loyalty_symbol(n: isize) -> Element {
-    Element::new(Tag::i).class(match n {
-        1.. => vec!["ms".s(), "ms-loyalty-up".s(), format!("ms-loyalty-{}", n)],
-        0 => vec!["ms".s(), "ms-loyalty-zero".s()],
-        ..=-1 => vec![
-            "ms".s(),
-            "ms-loyalty-down".s(),
-            format!("ms-loyalty-{}", -n),
-        ],
-    })
-}
-
-pub fn cost_symbol<S>(class: S) -> Element
-where
-    S: AsRef<str>,
-{
-    Element::new(Tag::i).class(["ms", class.as_ref(), "ms-cost", "ms-shadow"])
 }
 
 pub fn get_side<T>(side: Side, v: &Vec<T>) -> Option<&T> {

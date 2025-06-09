@@ -1,10 +1,9 @@
 use regex::Regex;
 
 use crate::{
-    atomic_cards::types::WUBRG,
     html::{Element, Node, Tag},
     rendering::manafont::ManaFontSymbolics,
-    utils::symbolics::{replace_symbols, RulesTextSymbolReplacer},
+    utils::symbolics::{replace_symbols_with, RulesTextSymbolReplacer},
 };
 
 #[derive(Default, Clone, Copy)]
@@ -21,20 +20,16 @@ impl RulesTextSymbolReplacer for ReminderText {
         vec![Node::Element(
             Element::new(Tag::span)
                 .class(["reminder"])
-                .nodes(replace_symbols(&ManaFontSymbolics, matched)),
+                .nodes(replace_symbols_with(&ManaFontSymbolics, matched)),
         )]
     }
 
     fn intermediate_text(&self, non_matched: &str) -> Self::Item {
-        replace_symbols(&ManaFontSymbolics, non_matched)
+        replace_symbols_with(&ManaFontSymbolics, non_matched)
     }
 
     fn joiner(&self) -> Option<Self::Item> {
         None
-    }
-
-    fn indicator(&self, indicate: &std::collections::BTreeSet<WUBRG>) -> Self::Item {
-        vec![ManaFontSymbolics.indicator(indicate)]
     }
 }
 
@@ -53,14 +48,10 @@ impl RulesTextSymbolReplacer for NoReminderText {
     }
 
     fn intermediate_text(&self, non_matched: &str) -> Self::Item {
-        replace_symbols(&ManaFontSymbolics, non_matched)
+        replace_symbols_with(&ManaFontSymbolics, non_matched)
     }
 
     fn joiner(&self) -> Option<Self::Item> {
         None
-    }
-
-    fn indicator(&self, indicate: &std::collections::BTreeSet<WUBRG>) -> Self::Item {
-        vec![ManaFontSymbolics.indicator(indicate)]
     }
 }

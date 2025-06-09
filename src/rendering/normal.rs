@@ -3,16 +3,17 @@ use crate::{
         cards::Card,
         types::{FaceLayout, Side, Supertype, WUBRG},
     },
-    html::{Element, Tag},
+    html::{Element, Node, Tag},
     proxy::Proxy,
     rendering::{
-        general::{corner_bubble, raw_card, rules_text_line, rules_text_paragraph},
-        reminders::{NoReminderText, ReminderText},
+        general::{anchor_words, corner_bubble, raw_card, rules_text_filter, rules_text_paragraph},
+        parsing::{loyalty_symbol, split_anchor_word, split_loyalty_ability},
+        reminders::ReminderText,
     },
     utils::{iter::IterExt, symbolics::replace_symbols},
 };
 
-use super::general::{card_art_img, empty_card, flavor_text, get_side, type_line_div};
+use super::general::{flavor_text_paragraphs, get_side};
 
 pub fn normal_layout_proxy(proxy: &Proxy) -> Vec<Element> {
     let card = proxy.cardoid.face();
@@ -55,34 +56,36 @@ pub fn rules_text_normal_div(card: &Card, proxy: &Proxy) -> Element {
         }
     }
 
-    let reminders = if proxy.reminder_text {
-        rules_text_line::<ReminderText>
-    } else {
-        rules_text_line::<NoReminderText>
-    };
+    let rules_text = rules_text_filter(proxy);
 
     let mut paragraphs = vec![];
 
     for line in text.lines() {
-        let line = reminders(line);
-        if line.is_empty() {
-            continue;
+        let mut par = Vec::<Node>::new();
+        let (words, line) = split_anchor_word(line);
+
+        if !words.is_empty() {
+            par.append(&mut anchor_words(words))
         }
-        paragraphs.push(rules_text_paragraph(line))
+
+        par.append(&mut rules_text(line));
+
+        if !paragraphs.is_empty() {
+            paragraphs.push(Element::new(Tag::hr));
+        }
+        paragraphs.push(rules_text_paragraph(par));
     }
 
-    let mut flavor_text = flavor_text(card, proxy);
-    if !flavor_text.is_empty() {
-        paragraphs.push(Element::new(Tag::hr));
-        paragraphs.append(&mut flavor_text);
-    }
+    paragraphs.append(&mut flavor_text_paragraphs(card, proxy));
 
     let text_len: usize = paragraphs.iter().map(|n| n.text_len()).sum();
     let centered = get_side(card.side, &proxy.arts)
         .map(|a| a.center_text)
         .unwrap_or(false);
 
-    let class: &[&str] = if paragraphs.len() >= 4 || text_len >= 180 {
+    let class: &[&str] = if paragraphs.len() >= 6 || text_len >= 250 {
+        &["text-box", "compact"]
+    } else if paragraphs.len() >= 4 || text_len >= 200 {
         &["text-box", "dense"]
     } else if centered {
         &["text-box", "sparse"]
@@ -102,28 +105,37 @@ pub fn rules_text_planeswalker_div(card: &Card, proxy: &Proxy) -> Element {
         }
     }
 
-    let reminders = if proxy.reminder_text {
-        rules_text_line::<ReminderText>
-    } else {
-        rules_text_line::<NoReminderText>
-    };
+    let rules_text = rules_text_filter(proxy);
 
     let mut paragraphs = vec![];
 
     for line in text.lines() {
-        let line = reminders(line);
-        if line.is_empty() {
-            continue;
+        let mut par = Vec::<Node>::new();
+        let (loyalty, line) = split_loyalty_ability(line);
+
+        if let Some(l) = loyalty_symbol(loyalty) {
+            par.push(l.into())
         }
+
+        let (words, line) = split_anchor_word(line);
+
+        if !words.is_empty() {
+            par.append(&mut anchor_words(words))
+        }
+
+        par.append(&mut rules_text(line));
+
         if !paragraphs.is_empty() {
             paragraphs.push(Element::new(Tag::hr));
         }
-        paragraphs.push(rules_text_paragraph(line));
+        paragraphs.push(rules_text_paragraph(par));
     }
 
     let text_len: usize = paragraphs.iter().map(|n| n.text_len()).sum();
 
-    let class: &[&str] = if paragraphs.len() >= 4 || text_len >= 180 {
+    let class: &[&str] = if text_len >= 250 {
+        &["text-box", "compact"]
+    } else if text_len >= 200 {
         &["text-box", "dense"]
     } else {
         &["text-box"]
@@ -145,12 +157,12 @@ pub fn rules_text_basic_div(card: &Card, proxy: &Proxy) -> Element {
 
     if proxy.reminder_text {
         paragraphs.push(rules_text_paragraph(
-            replace_symbols(&ReminderText, &card.text).concat(),
+            replace_symbols::<ReminderText>(&card.text).concat(),
         ))
     }
 
     paragraphs.append(
-        &mut flavor_text(card, proxy)
+        &mut flavor_text_paragraphs(card, proxy)
             .into_iter()
             .map(Into::into)
             .collvect(),
@@ -164,7 +176,7 @@ pub fn rules_text_basic_div(card: &Card, proxy: &Proxy) -> Element {
     where
         S: AsRef<str>,
     {
-        Element::new(Tag::i).class(["ms", class.as_ref(), "ms-4x"])
+        Element::new(Tag::i).class(["ms", class.as_ref(), "ms-5x"])
     }
 }
 
