@@ -1,15 +1,17 @@
 pub mod decklists;
+pub mod deserializers;
 
+use deserializers::OneOrMany;
 use std::collections::BTreeSet;
 
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 use crate::atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::CardLayout};
 
-#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize)]
 pub struct Proxy {
     pub name: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "OneOrMany::<Art>::one_or_many")]
     pub arts: Vec<Art>,
     #[serde(default)]
     pub copies: usize,
@@ -25,15 +27,17 @@ pub struct Proxy {
     pub tags: BTreeSet<String>,
     #[serde(default)]
     pub notes: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "OneOrMany::<ForeignData>::one_or_many")]
     pub customize: Vec<ForeignData>,
     #[serde(default)]
     pub cardoid: Cardoid,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct Art {
+    #[serde(default)]
     pub url: String,
+    #[serde(default)]
     pub credit: String,
     #[serde(default)]
     pub full: bool,

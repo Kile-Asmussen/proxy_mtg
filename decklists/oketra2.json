@@ -283,6 +283,16 @@
         },
         {
             "name": "Soldier",
+            "arts": [
+                {
+                    "centerText": true
+                }
+            ],
+            "customize": [
+                {
+                    "flavorText": "Onee-sama, what are you doing with that skullclamp? Are you really sure it will cure my headache? "
+                }
+            ],
             "cardoid": [
                 {
                     "name": "Soldier",
@@ -302,6 +312,16 @@
         },
         {
             "name": "Warrior",
+            "arts": [
+                {
+                    "centerText": true
+                }
+            ],
+            "customize": [
+                {
+                    "flavorText": "Onee-sama, what are you doing with that skullclamp? Are you really sure it will cure my headache? "
+                }
+            ],
             "cardoid": [
                 {
                     "name": "Warrior",

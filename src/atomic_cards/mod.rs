@@ -11,11 +11,11 @@ use std::{
     time::Instant,
 };
 
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 use crate::utils::iter::*;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct AtomicCardsFile {
     pub meta: metadata::MetaData,
     pub data: HashMap<String, cardoids::Cardoid>,

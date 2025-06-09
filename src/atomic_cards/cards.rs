@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 use super::{
     metadata::{ForeignData, Identifiers, Legalities, PurchaseUrls, RelatedCards, Ruling},
@@ -7,7 +7,7 @@ use super::{
 
 use std::collections::BTreeSet;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Deserialize, Debug, Clone, Default)]
 pub struct Card {
     #[serde(default, rename = "asciiName")]
     pub ascii_name: String,

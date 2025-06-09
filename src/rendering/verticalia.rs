@@ -9,8 +9,7 @@ use crate::{
     proxy::Proxy,
     rendering::{
         general::{
-            anchor_words, empty_card, flavor_text_paragraphs, get_side, raw_card,
-            rules_text_filter, rules_text_paragraph,
+            anchor_words, empty_card, get_side, raw_card, rules_text_filter, rules_text_paragraph,
         },
         normal::power_toughness,
         parsing::{chapter_symbol, split_anchor_word, split_chapter_abilities},
@@ -121,8 +120,6 @@ fn saga_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
         }
         paragraphs.push(rules_text_paragraph(par));
     }
-
-    paragraphs.append(&mut flavor_text_paragraphs(card, proxy));
 
     Element::new(Tag::div)
         .class(["text-box", "dense", "vertical"])

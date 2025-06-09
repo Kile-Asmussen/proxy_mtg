@@ -1,12 +1,12 @@
-use crate::utils::{iter::*, ToS};
-use serde::{Deserialize, Serialize};
+use crate::utils::{iter::IterExt, ToS};
+use serde::Deserialize;
 use std::{
     collections::BTreeSet,
     fmt::{Debug, Display},
     ops::Sub,
 };
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Supertype {
     Basic,
     Legendary,
@@ -25,7 +25,7 @@ impl Display for Supertype {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Type {
     Artifact,
     Battle,
@@ -50,7 +50,7 @@ impl Display for Type {
     }
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
 #[repr(u8)]
 pub enum WUBRG {
     W,
@@ -151,7 +151,7 @@ impl Display for WUBRG {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub enum CardLayout {
     #[serde(rename = "adventure")]
     Adventure,
@@ -227,14 +227,14 @@ impl Display for FaceLayout {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Deserialize, Debug, Clone, Default)]
 pub struct LeadershipSkills {
     pub brawl: bool,
     pub commander: bool,
     pub oathbreaker: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Side {
     #[serde(rename = "a")]
     #[default]

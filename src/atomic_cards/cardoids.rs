@@ -1,5 +1,6 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
+use crate::proxy::deserializers::OneOrMany;
 use crate::utils::iter::IterExt;
 
 use super::{
@@ -9,9 +10,15 @@ use super::{
 
 use std::collections::BTreeSet;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-#[serde(transparent)]
+#[derive(Deserialize, Debug, Clone, Default)]
+#[serde(from = "OneOrMany<Card>")]
 pub struct Cardoid(Vec<Card>);
+
+impl From<OneOrMany<Card>> for Cardoid {
+    fn from(value: OneOrMany<Card>) -> Self {
+        Self(value.into())
+    }
+}
 
 impl Cardoid {
     pub fn iter(&self) -> <&Vec<Card> as IntoIterator>::IntoIter {

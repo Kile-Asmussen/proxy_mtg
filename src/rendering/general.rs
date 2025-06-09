@@ -67,9 +67,9 @@ pub fn flavor_text_paragraphs(card: &Card, proxy: &Proxy) -> Vec<Element> {
     if flavor_text.is_empty() {
         vec![]
     } else {
-        [Element::new(Tag::hr)]
-            .into_iter()
-            .chain(flavor_text.lines().map(|s| flavor_text_paragraph([s])))
+        flavor_text
+            .lines()
+            .map(|s| flavor_text_paragraph([s]))
             .collvect()
     }
 }
@@ -100,26 +100,34 @@ pub fn card_name_span(card: &Card, proxy: &Proxy) -> Element {
 }
 
 pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Node> {
-    if let Some(art) = get_side(card.side, &proxy.arts) {
-        let mut classes = vec!["art"];
-        if art.full {
-            classes.push("full-art");
-        }
-        if card.face_layout().is_vertical() {
-            classes.push("vertical")
-        }
+    let Some(art) = get_side(card.side, &proxy.arts) else {
+        return vec![];
+    };
 
-        vec![
-            Node::Element(Element::new(Tag::img).class(classes).attr("src", &art.url)),
-            Node::Element(
-                Element::new(Tag::span)
-                    .class(["art-credits"])
-                    .node(&art.credit),
-            ),
-        ]
-    } else {
-        vec![]
+    let mut classes = vec!["art"];
+    if art.full {
+        classes.push("full-art");
     }
+    if card.face_layout().is_vertical() {
+        classes.push("vertical")
+    }
+
+    let mut res = vec![];
+
+    if !art.url.is_empty() {
+        res.push(Node::Element(
+            Element::new(Tag::img).class(classes).attr("src", &art.url),
+        ));
+    }
+    if !art.credit.is_empty() {
+        res.push(Node::Element(
+            Element::new(Tag::span)
+                .class(["art-credits"])
+                .node(&art.credit),
+        ));
+    }
+
+    res
 }
 
 pub fn type_line_div(card: &Card, proxy: &Proxy) -> Element {

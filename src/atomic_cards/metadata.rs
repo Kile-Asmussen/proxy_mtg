@@ -1,12 +1,12 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct MetaData {
     pub date: String,
     pub version: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+#[derive(Deserialize, Debug, Default, Clone)]
 pub struct RelatedCards {
     #[serde(default, rename = "reverseRelated")]
     pub reverse_related: Vec<String>,
@@ -14,7 +14,7 @@ pub struct RelatedCards {
     pub spellbook: Vec<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Deserialize, Debug, Clone, Default)]
 pub struct PurchaseUrls {
     #[serde(default, rename = "cardKingdom")]
     pub card_kingdom: String,
@@ -30,13 +30,13 @@ pub struct PurchaseUrls {
     pub tcgplayer_etched: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+#[derive(Deserialize, Debug, Default, Clone)]
 pub struct Ruling {
     pub date: String,
     pub text: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct ForeignData {
     #[serde(default, rename = "faceName")]
     pub face_name: String,
@@ -54,7 +54,7 @@ pub struct ForeignData {
     pub type_line: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Deserialize, Debug, Clone, Default)]
 pub struct Identifiers {
     #[serde(default, rename = "cardKingdomEtchedId")]
     pub card_kingdom_etched_id: String,
@@ -94,7 +94,7 @@ pub struct Identifiers {
     pub tcgplayer_etched_product_id: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Deserialize, Debug, Clone, Default)]
 pub struct Legalities {
     #[serde(default)]
     pub alchemy: String,

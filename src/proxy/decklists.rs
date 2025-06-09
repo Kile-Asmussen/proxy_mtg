@@ -5,7 +5,7 @@ use std::{
     path::Path,
 };
 
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 use crate::{
     atomic_cards::{
@@ -17,8 +17,7 @@ use crate::{
 
 use super::Proxy;
 
-#[derive(Clone, Debug, Default, Serialize, Deserialize)]
-#[serde(transparent)]
+#[derive(Clone, Debug, Default)]
 pub struct DeckList(Vec<Proxy>);
 
 impl DeckList {
@@ -231,7 +230,7 @@ impl<'a> IntoIterator for &'a mut DeckList {
     }
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Deserialize, Clone)]
 #[serde(transparent)]
 struct DeckListFile(BTreeMap<String, Vec<Proxy>>);
 

@@ -10,7 +10,7 @@ use crate::{
         parsing::{loyalty_symbol, split_anchor_word, split_loyalty_ability},
         reminders::ReminderText,
     },
-    utils::{iter::IterExt, symbolics::replace_symbols},
+    utils::symbolics::replace_symbols,
 };
 
 use super::general::{flavor_text_paragraphs, get_side};
@@ -73,7 +73,11 @@ pub fn rules_text_normal_div(card: &Card, proxy: &Proxy) -> Element {
         paragraphs.push(rules_text_paragraph(par));
     }
 
-    paragraphs.append(&mut flavor_text_paragraphs(card, proxy));
+    let mut flavor = flavor_text_paragraphs(card, proxy);
+    if !paragraphs.is_empty() && !flavor.is_empty() {
+        paragraphs.push(Element::new(Tag::hr));
+    }
+    paragraphs.append(&mut flavor);
 
     let text_len: usize = paragraphs.iter().map(|n| n.text_len()).sum();
     let centered = get_side(card.side, &proxy.arts)
@@ -164,12 +168,7 @@ pub fn rules_text_basic_div(card: &Card, proxy: &Proxy) -> Element {
         ))
     }
 
-    paragraphs.append(
-        &mut flavor_text_paragraphs(card, proxy)
-            .into_iter()
-            .map(Into::into)
-            .collvect(),
-    );
+    paragraphs.append(&mut flavor_text_paragraphs(card, proxy));
 
     return Element::new(Tag::div)
         .class(["text-box", "sparse"])
