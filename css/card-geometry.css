@@ -233,6 +233,8 @@ div.text-box.dense {
     justify-content: start;
 }
 
+/* CORNER BUBBLE */
+
 div.corner-bubble.bar {
     right: var(--bar-margin);
     left: auto;
@@ -243,6 +245,17 @@ div.corner-bubble.bar {
     font-size: var(--corner-bubble-font-size);
     font-family: var(--corner-bubble-font-family);
     font-kerning: normal;
+}
+
+div.corner-bubble.shield {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: var(--bar-endcap) 50%;
+    border-bottom-right-radius: var(--bar-endcap) 50%;
+}
+
+div.corner-bubble.square {
+    border-radius: 0;
 }
 
 div.corner-bubble.bar>span {

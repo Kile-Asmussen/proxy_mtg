@@ -151,3 +151,110 @@ div.card.reverse>div.dual-face-indicator.bar::before {
         0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black,
         0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
 }
+
+div.corner-bubble.shield,
+div.corner-bubble.square {
+    border-color: white;
+    color: white;
+    background-color: black;
+}
+
+.ms.ms-loyalty-up,
+.ms.ms-loyalty-down,
+.ms.ms-loyalty-zero {
+    font-size: calc(2*var(--cost-symbol-size-text));
+}
+
+p.rules-text>i.ms.ms-loyalty-up:first-child,
+p.rules-text>i.ms.ms-loyalty-down:first-child,
+p.rules-text>i.ms.ms-loyalty-zero:first-child {
+    font-size: calc(2.5*var(--cost-symbol-size-text));
+}
+
+.ms-loyalty-down.ms-loyalty-1::after {
+    content: "−1";
+}
+
+.ms-loyalty-down.ms-loyalty-2::after {
+    content: "−2";
+}
+
+.ms-loyalty-down.ms-loyalty-3::after {
+    content: "−3";
+}
+
+.ms-loyalty-down.ms-loyalty-4::after {
+    content: "−4";
+}
+
+.ms-loyalty-down.ms-loyalty-5::after {
+    content: "−5";
+}
+
+.ms-loyalty-down.ms-loyalty-6::after {
+    content: "−6";
+}
+
+.ms-loyalty-down.ms-loyalty-7::after {
+    content: "−7";
+}
+
+.ms-loyalty-down.ms-loyalty-8::after {
+    content: "−8";
+}
+
+.ms-loyalty-down.ms-loyalty-9::after {
+    content: "−9";
+}
+
+.ms-loyalty-down.ms-loyalty-10::after {
+    content: "−10";
+}
+
+.ms-loyalty-down.ms-loyalty-11::after {
+    content: "−11";
+}
+
+.ms-loyalty-down.ms-loyalty-12::after {
+    content: "−12";
+}
+
+.ms-loyalty-down.ms-loyalty-13::after {
+    content: "−31";
+}
+
+.ms-loyalty-down.ms-loyalty-14::after {
+    content: "−14";
+}
+
+.ms-loyalty-down.ms-loyalty-15::after {
+    content: "−15";
+}
+
+.ms-loyalty-down.ms-loyalty-16::after {
+    content: "−16";
+}
+
+.ms-loyalty-down.ms-loyalty-17::after {
+    content: "−17";
+}
+
+.ms-loyalty-down.ms-loyalty-18::after {
+    content: "−18";
+}
+
+.ms-loyalty-down.ms-loyalty-19::after {
+    content: "−19";
+}
+
+.ms-loyalty-down.ms-loyalty-20::after {
+    content: "−20";
+}
+
+.ms-loyalty-down.ms-loyalty-25::after {
+    content: "−25";
+}
+
+.ms-loyalty-down.ms-loyalty-X::after {
+    content: "−X";
+}

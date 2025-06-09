@@ -9,7 +9,7 @@ use crate::{
     proxy::Proxy,
     rendering::{
         general::{
-            anchor_words, card_art_img, empty_card, flavor_text_paragraph, get_side,
+            card_art_img, empty_card, flavor_text_paragraph, get_side, raw_card, rules_text_line,
             rules_text_paragraph, type_line_div,
         },
         reminders::{NoReminderText, ReminderText},
@@ -25,21 +25,18 @@ pub fn class_layout_card(proxy: &Proxy) -> Vec<Element> {
     }]
 }
 
-fn class_card(card: &Card, proxy: &Proxy) -> Element {
-    empty_card(card, proxy)
-        .nodes(card_art_img(card, proxy))
-        .node(type_line_div(card, proxy))
-        .node(vertical_rules_text(card, proxy))
+pub fn class_card(card: &Card, proxy: &Proxy) -> Element {
+    raw_card(card, proxy).node(vertical_rules_text_div(card, proxy))
 }
 
-fn vertical_rules_text(card: &Card, proxy: &Proxy) -> Element {
+fn vertical_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
     match card.face_layout() {
-        FaceLayout::Class => class_rules_text(card, proxy),
+        FaceLayout::Class => class_rules_text_div(card, proxy),
         _ => Element::new(Tag::div).class(["rules-text"]),
     }
 }
 
-fn class_rules_text(card: &Card, proxy: &Proxy) -> Element {
+fn class_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
     let mut text = card.text.clone();
     let mut flavor_text = None;
 
@@ -53,9 +50,9 @@ fn class_rules_text(card: &Card, proxy: &Proxy) -> Element {
     }
 
     let reminders = if proxy.reminder_text {
-        anchor_words::<ReminderText>
+        rules_text_line::<ReminderText>
     } else {
-        anchor_words::<NoReminderText>
+        rules_text_line::<NoReminderText>
     };
 
     let level_up = Regex::new(r"^.*?:\s+Level\s+\d\s*$").unwrap();

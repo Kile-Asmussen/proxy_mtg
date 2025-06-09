@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use regex::Regex;
 
 use crate::{
@@ -22,6 +24,13 @@ pub fn empty_card(card: &Card, proxy: &Proxy) -> Element {
         .node(title_bar_div(card, proxy))
 }
 
+pub fn raw_card(card: &Card, proxy: &Proxy) -> Element {
+    empty_card(card, proxy)
+        .node(type_line_div(card, proxy))
+        .nodes(card_art_img(card, proxy))
+        .node(type_line_div(card, proxy))
+}
+
 pub fn title_bar_div(card: &Card, proxy: &Proxy) -> Element {
     Element::new(Tag::div)
         .class(["title", "bar"])
@@ -35,12 +44,32 @@ pub fn mana_cost_span(card: &Card) -> Element {
         .nodes(replace_symbols(&ManaFontSymbolics, &card.mana_cost))
 }
 
+pub fn corner_bubble<N>(content: N) -> Element
+where
+    N: Into<Node>,
+{
+    Element::new(Tag::div)
+        .class(["bar", "corner-bubble"])
+        .node(Element::new(Tag::span).node(content))
+}
+
 pub fn rules_text_paragraph<NS, N>(text: NS) -> Element
 where
     NS: IntoIterator<Item = N>,
     N: Into<Node>,
 {
     Element::new(Tag::p).class(["rules-text"]).nodes(text)
+}
+
+pub fn flavor_text(card: &Card, proxy: &Proxy) -> Vec<Element> {
+    let Some(ForeignData { flavor_text, .. }) = get_side(card.side, &proxy.customize) else {
+        return vec![];
+    };
+
+    flavor_text
+        .lines()
+        .map(|s| flavor_text_paragraph([s]))
+        .collvect()
 }
 
 pub fn flavor_text_paragraph<NS, N>(text: NS) -> Element
@@ -131,35 +160,43 @@ pub fn card_css_class(card: &Card) -> Vec<&'static str> {
     }
 }
 
-pub fn flavor_text(card: &Card, proxy: &Proxy) -> Vec<Element> {
-    let Some(ForeignData { flavor_text, .. }) = get_side(card.side, &proxy.customize) else {
-        return vec![];
-    };
-
-    flavor_text
-        .lines()
-        .map(|s| Element::new(Tag::p).class(["flavor-text"]).node(s))
-        .collvect()
-}
-
-pub fn anchor_words<RT>(mut text: &str) -> Vec<Node>
+pub fn rules_text_line<RT>(text: &str) -> Vec<Node>
 where
     RT: RulesTextSymbolReplacer<Item = Vec<Node>> + Default,
 {
-    let mut res = vec![];
-    let flavor_word = Regex::new(r"^((?:\w+\s*?)+)\s+—\s+").unwrap();
-    if let Some(m) = flavor_word.captures(text).and_then(|c| c.get(1)) {
-        if m.as_str() != "Companion" {
-            res.push(Element::new(Tag::em).node(m.as_str()).into());
-            text = &text[m.end()..]
-        }
-    }
+    let (mut res, text) = loyalty_ability(text);
+    let (mut more, text) = anchor_words(text);
+    res.append(&mut more);
     res.append(&mut replace_symbols::<RT>(&Default::default(), text).concat());
     res
 }
 
-#[allow(dead_code)]
-pub fn loyalty_symbol<S>(n: isize) -> Element {
+pub fn anchor_words(text: &str) -> (Vec<Node>, &str) {
+    let flavor_word = Regex::new(r"^((?:\w+\s*?)+)\s+—\s+").unwrap();
+    if let Some(m) = flavor_word.captures(text).and_then(|c| c.get(1)) {
+        if m.as_str() != "Companion" {
+            return (
+                vec![Element::new(Tag::em).node(m.as_str()).into()],
+                &text[m.end()..],
+            );
+        }
+    }
+    (vec![], text)
+}
+
+pub fn loyalty_ability(text: &str) -> (Vec<Node>, &str) {
+    let ability = Regex::new(r"^\[([+−]?\d+)\]:").unwrap();
+    if let Some(c) = ability.captures(text) {
+        let m = c.get(1).unwrap().as_str().replace("−", "-");
+        let c = c.get(0).unwrap();
+        if let Ok(i) = isize::from_str(&m) {
+            return (vec![loyalty_symbol(i).into()], &text[c.end()..]);
+        }
+    }
+    return (vec![], text);
+}
+
+pub fn loyalty_symbol(n: isize) -> Element {
     Element::new(Tag::i).class(match n {
         1.. => vec!["ms".s(), "ms-loyalty-up".s(), format!("ms-loyalty-{}", n)],
         0 => vec!["ms".s(), "ms-loyalty-zero".s()],
