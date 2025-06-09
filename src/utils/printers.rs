@@ -10,6 +10,7 @@ use crate::{
     utils::{
         iter::IterExt,
         symbolics::{replace_symbols, DiscordEmoji, NothingReplacer, RulesTextSymbolReplacer},
+        ToS,
     },
 };
 
@@ -113,25 +114,25 @@ trait TextFormatting {
 
 impl TextFormatting for NothingReplacer {
     fn line_start(&self) -> String {
-        "".to_string()
+        "".s()
     }
 
     fn em(&self, text: &str) -> String {
-        text.to_string()
+        text.s()
     }
 
     fn strong(&self, text: &str) -> String {
-        text.to_string()
+        text.s()
     }
 
     fn hr(&self) -> String {
-        "###".to_string()
+        "###".s()
     }
 }
 
 impl TextFormatting for DiscordEmoji {
     fn line_start(&self) -> String {
-        "> ".to_string()
+        "> ".s()
     }
 
     fn em(&self, text: &str) -> String {
@@ -143,6 +144,6 @@ impl TextFormatting for DiscordEmoji {
     }
 
     fn hr(&self) -> String {
-        "".to_string()
+        "".s()
     }
 }

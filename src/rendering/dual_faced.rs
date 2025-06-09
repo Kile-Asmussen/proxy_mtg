@@ -13,8 +13,7 @@ pub fn flip_layout_card(proxy: &Proxy) -> Vec<Element> {
         return vec![blank_card(), blank_card()];
     };
 
-    let mut down = down.clone();
-    down.mana_cost = up.mana_cost.clone();
+    println!("{} {}", &up.face_layout(), &down.face_layout());
 
     vec![
         match up.face_layout() {

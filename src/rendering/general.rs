@@ -149,6 +149,25 @@ pub fn get_side<T>(side: Side, v: &Vec<T>) -> Option<&T> {
     }
 }
 
+pub fn loyalty_symbol<S>(n: isize) -> Element
+where
+    S: AsRef<str>,
+{
+    Element::new(Tag::i).class(match n {
+        1.. => vec![
+            format!("ms"),
+            format!("ms-loyalty-up"),
+            format!("ms-loyalty-{}", n),
+        ],
+        0 => vec![format!("ms"), format!("ms-loyalty-zero")],
+        ..=-1 => vec![
+            format!("ms"),
+            format!("ms-loyalty-down"),
+            format!("ms-loyalty-{}", -n),
+        ],
+    })
+}
+
 pub fn cost_symbol<S>(class: S) -> Element
 where
     S: AsRef<str>,
@@ -161,7 +180,7 @@ where
     RT: RulesTextSymbolReplacer<Item = Vec<Node>> + Default,
 {
     let mut res = vec![];
-    let flavor_word = Regex::new(r"^(.*)\s+—\s+").unwrap();
+    let flavor_word = Regex::new(r"^((?:\w+\s*)+)\s+—\s+").unwrap();
     if let Some(m) = flavor_word.captures(text).and_then(|c| c.get(1)) {
         if m.as_str() != "Companion" {
             res.push(Element::new(Tag::em).node(m.as_str()).into());

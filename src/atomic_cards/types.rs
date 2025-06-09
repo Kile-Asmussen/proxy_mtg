@@ -1,4 +1,4 @@
-use crate::utils::iter::*;
+use crate::utils::{iter::*, ToS};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::BTreeSet,
@@ -63,7 +63,7 @@ pub enum WUBRG {
 impl WUBRG {
     pub fn render(colors: &BTreeSet<WUBRG>) -> String {
         match &colors.iter().map(Clone::clone).collvect()[..] {
-            &[] => "C".to_string(),
+            &[] => "C".s(),
             &[a] => format!("{a}"),
             &[a, b] => {
                 if a - b <= 2 {
@@ -92,8 +92,8 @@ impl WUBRG {
                     format!("{d}{a}{b}{c}")
                 }
             }
-            &[_, _, _, _, _] => "WUBRG".to_string(),
-            _ => "".to_string(),
+            &[_, _, _, _, _] => "WUBRG".s(),
+            _ => "".s(),
         }
     }
 
@@ -190,7 +190,7 @@ pub enum CardLayout {
     Other(String),
 }
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum FaceLayout {
     Aftermath,
     Basic,
@@ -218,6 +218,12 @@ impl FaceLayout {
             Self::Case | Self::Class | Self::Saga => true,
             _ => false,
         }
+    }
+}
+
+impl Display for FaceLayout {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Debug::fmt(self, f)
     }
 }
 

@@ -12,7 +12,7 @@ use crate::{
         types::{Type, WUBRG},
         AtomicCardsFile,
     },
-    utils::iter::IterExt,
+    utils::{iter::IterExt, ToS},
 };
 
 use super::Proxy;
@@ -271,7 +271,7 @@ impl DeckListFile {
         for mut proxy in vec {
             if proxy.cardoid.is_empty() {
                 let Some(cardoid) = atomics.data.get(&proxy.name).map(Clone::clone) else {
-                    errors.push("Failed to find: ".to_string() + &proxy.name);
+                    errors.push("Failed to find: ".s() + &proxy.name);
                     continue;
                 };
                 proxy.cardoid = cardoid;

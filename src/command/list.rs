@@ -10,7 +10,7 @@ use std::{
 use crate::{
     atomic_cards::types::*,
     proxy::{decklists::DeckList, Proxy},
-    utils::iter::*,
+    utils::{iter::*, ToS},
 };
 
 #[derive(Parser, Debug, Clone)]
@@ -240,7 +240,7 @@ impl List {
         Self::print_histo(
             (0..=*max)
                 .into_iter()
-                .map(|n| (n.to_string(), *curve.get(&n).unwrap_or(&0)))
+                .map(|n| (n.s(), *curve.get(&n).unwrap_or(&0)))
                 .collvect(),
         );
     }
@@ -348,7 +348,7 @@ impl List {
             }
             for card in &proxy.cardoid {
                 for pip in re.find_iter(&card.mana_cost) {
-                    *res.entry(pip.as_str().to_string()).or_insert(0) += proxy.repeats;
+                    *res.entry(pip.as_str().s()).or_insert(0) += proxy.repeats;
                 }
             }
         }
@@ -367,11 +367,7 @@ impl List {
             println!(
                 "  {thing}{}{}",
                 vec!["*"; n].join(""),
-                if n > 7 {
-                    format!(" ({n})")
-                } else {
-                    "".to_string()
-                }
+                if n > 7 { format!(" ({n})") } else { "".s() }
             );
         }
     }

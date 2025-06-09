@@ -3,6 +3,7 @@ use std::fmt::Display;
 use crate::utils::{
     iter::IterExt,
     vec::{VecEntryMethods, VecExt},
+    ToS,
 };
 
 use super::{Node, Tag};
@@ -21,14 +22,14 @@ impl Display for Element {
             .iter()
             .map(|(k, v)| {
                 if k == v {
-                    k.to_string()
+                    k.s()
                 } else {
                     format!("{}='{}'", k, v)
                 }
             })
             .collvect();
 
-        tag_content.insert(0, self.tag.name.to_string());
+        tag_content.insert(0, self.tag.name.s());
 
         f.write_fmt(format_args!("<{}>", tag_content.join(" ")))?;
 
@@ -85,12 +86,12 @@ impl Element {
     where
         S: ToString,
     {
-        self.attributes.entry(k).insert_entry(v.to_string());
+        self.attributes.entry(k).insert_entry(v.s());
         self
     }
 
     pub fn flag(self, k: &'static str) -> Self {
-        self.attr(k, k.to_string())
+        self.attr(k, k.s())
     }
 
     pub fn class<SS, S>(self, classes: SS) -> Self
@@ -102,12 +103,7 @@ impl Element {
         if let Some(c) = self.attributes.lookup(&"class") {
             cls.append(&mut c.split(" ").map(ToString::to_string).collvect())
         }
-        cls.append(
-            &mut classes
-                .into_iter()
-                .map(|s| s.as_ref().to_string())
-                .collvect(),
-        );
+        cls.append(&mut classes.into_iter().map(|s| s.as_ref().s()).collvect());
         self.attr("class", cls.join(" "))
     }
 

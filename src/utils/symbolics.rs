@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use regex::Regex;
 
-use crate::atomic_cards::types::WUBRG;
+use crate::{atomic_cards::types::WUBRG, utils::ToS};
 
 pub fn replace_symbols<R>(replacer: &R, mut haystack: &str) -> Vec<R::Item>
 where
@@ -53,11 +53,11 @@ impl RulesTextSymbolReplacer for NothingReplacer {
     type Item = String;
 
     fn map_symbol(&self, matched: &str) -> Self::Item {
-        matched.to_string()
+        matched.s()
     }
 
     fn intermediate_text(&self, non_matched: &str) -> Self::Item {
-        non_matched.to_string()
+        non_matched.s()
     }
 
     fn joiner(&self) -> Option<Self::Item> {
@@ -76,19 +76,19 @@ impl RulesTextSymbolReplacer for DiscordEmoji {
     type Item = String;
 
     fn map_symbol(&self, matched: &str) -> Self::Item {
-        Self::symbols(matched).to_string()
+        Self::symbols(matched).s()
     }
 
     fn intermediate_text(&self, non_matched: &str) -> Self::Item {
-        non_matched.to_string()
+        non_matched.s()
     }
 
     fn joiner(&self) -> Option<Self::Item> {
-        Some(" ".to_string())
+        Some(" ".s())
     }
 
     fn indicator(&self, indicate: &BTreeSet<WUBRG>) -> Self::Item {
-        let mut res = "".to_string();
+        let mut res = "".s();
 
         for c in indicate {
             res += match c {

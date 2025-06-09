@@ -20,6 +20,7 @@ use crate::{
         iter::IterExt,
         printers::{TextPrinter, ToText},
         symbolics::{DiscordEmoji, NothingReplacer},
+        ToS,
     },
 };
 
@@ -184,11 +185,7 @@ impl Searcher {
     fn build_regexes(case: bool, it: Vec<String>) -> anyhow::Result<Vec<Regex>> {
         let mut res = vec![];
         for s in it {
-            let pref = if case {
-                "".to_string()
-            } else {
-                "(?i)".to_string()
-            };
+            let pref = if case { "".s() } else { "(?i)".s() };
             res.push(Regex::new(&(pref + &s))?)
         }
         Ok(res)

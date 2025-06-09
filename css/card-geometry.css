@@ -120,30 +120,6 @@ div.card.reverse>div.title.bar::before {
     left: 1.5mm;
 }
 
-div.card.obverse.transform>div.title.bar::before {
-    content: "▲";
-}
-
-div.card.reverse.transform>div.title.bar::before {
-    content: "▼";
-}
-
-div.card.obverse.modal>div.title.bar::before {
-    content: "▲▼";
-}
-
-div.card.reverse.modal>div.title.bar::before {
-    content: "▼▲";
-}
-
-div.card.obverse.meld>div.title.bar::before {
-    content: "◀";
-}
-
-div.card.reverse.meld>div.title.bar::before {
-    content: "▶◀";
-}
-
 div.type-line.bar {
     justify-content: start;
     top: calc(var(--upper-margin) + var(--bar-height) + var(--art-height));
@@ -158,12 +134,6 @@ div.type-line.bar>span.type {
     font-size: var(--typeline-font-size);
     margin-top: var(--typeline-font-adjustment);
 }
-
-div.card.flip>div.title.bar.bottom {
-    transform: rotate(0.5turn);
-}
-
-/* TODO: flip cards */
 
 /* ART */
 
@@ -182,8 +152,6 @@ img.art.full-art {
     left: var(--fullwidth-margin);
     top: calc(var(--bar-height) + var(--upper-margin));
 }
-
-/* TEXT BOXES AND ART */
 
 img.art.full-art~div.text_box {
     display: none;
@@ -216,6 +184,24 @@ img.art.vertical {
 
 img.art.vertical {
     left: calc(var(--fullwidth-margin) + var(--halfwidth-box));
+}
+
+span.art-credits {
+    bottom: 0;
+    left: calc(var(--fullwidth-margin) + var(--pin-line-width));
+    font-size: var(--art-credit-font-size);
+    font-weight: bold;
+    font-family: var(--art-credit-font);
+    background-color: transparent;
+    border: 0 none transparent;
+    color: white;
+    text-shadow:
+        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black,
+        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
+}
+
+span.art-credits::before {
+    content: "artist: "
 }
 
 /* TEXT CONTENT */
@@ -278,6 +264,8 @@ div.corner-bubble.bar>span {
     margin-top: var(--corner-bubble-font-adjustment);
 }
 
+/* DFC */
+
 div.flip-indicator.bar {
     left: 0;
     font-size: var(--flip-indicator-font-size);
@@ -307,44 +295,39 @@ div.flip-indicator.bar>span {
     margin-top: var(--flip-indicator-font-adjustment);
 }
 
-div.card.obverse.transform>div.flip-indicator.bar::before {
-    content: "▼";
+div.card.obverse.flip>div.title.bar::before,
+div.card.reverse.flip>div.title.bar::before,
+div.card.obverse.flip>div.flip-indicator.bar::before,
+div.card.reverse.flip>div.flip-indicator.bar::before {
+    content: "🗘";
 }
 
+div.card.obverse.transform>div.title.bar::before,
 div.card.reverse.transform>div.flip-indicator.bar::before {
     content: "▲";
 }
 
-div.card.obverse.modal>div.flip-indicator.bar::before {
+div.card.reverse.transform>div.title.bar::before,
+div.card.obverse.transform>div.flip-indicator.bar::before {
+    content: "▼";
+}
+
+div.card.obverse.modal>div.title.bar::before,
+div.card.reverse.modal>div.flip-indicator.bar::before {
     content: "▲▼";
 }
 
-div.card.reverse.modal>div.flip-indicator.bar::before {
+div.card.reverse.modal>div.title.bar::before,
+div.card.obverse.modal>div.flip-indicator.bar::before {
     content: "▼▲";
 }
 
-div.card.obverse.meld>div.flip-indicator.bar::before {
+div.card.obverse.meld>div.title.bar::before,
+div.card.reverse.meld>div.flip-indicator.bar::before {
     content: "◀";
 }
 
-div.card.reverse.meld>div.flip-indicator.bar::before {
+div.card.reverse.meld>div.title.bar::before,
+div.card.obverse.meld>div.flip-indicator.bar::before {
     content: "▶◀";
-}
-
-span.art-credits {
-    bottom: 0;
-    left: calc(var(--fullwidth-margin) + var(--pin-line-width));
-    font-size: var(--art-credit-font-size);
-    font-weight: bold;
-    font-family: var(--art-credit-font);
-    background-color: transparent;
-    border: 0 none transparent;
-    color: white;
-    text-shadow:
-        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black,
-        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
-}
-
-span.art-credits::before {
-    content: "artist: "
 }

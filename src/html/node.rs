@@ -1,5 +1,7 @@
 use std::fmt::Display;
 
+use crate::utils::ToS;
+
 use super::Element;
 
 #[derive(Clone)]
@@ -44,6 +46,6 @@ where
     S: AsRef<str>,
 {
     fn from(value: S) -> Self {
-        Self::Text(value.as_ref().to_string())
+        Self::Text(value.as_ref().s())
     }
 }

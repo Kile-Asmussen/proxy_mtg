@@ -2,7 +2,7 @@ use crate::{
     atomic_cards::types::WUBRG,
     html::{Element, Node, Tag},
     rendering::general::cost_symbol,
-    utils::symbolics::RulesTextSymbolReplacer,
+    utils::{symbolics::RulesTextSymbolReplacer, ToS},
 };
 
 #[derive(Default, Clone, Copy)]
@@ -68,7 +68,7 @@ impl RulesTextSymbolReplacer for ManaFontSymbolics {
     }
 
     fn intermediate_text(&self, non_matched: &str) -> Self::Item {
-        Node::Text(non_matched.to_string())
+        Node::Text(non_matched.s())
     }
 
     fn joiner(&self) -> Option<Self::Item> {
@@ -80,7 +80,7 @@ impl RulesTextSymbolReplacer for ManaFontSymbolics {
         indicate: &std::collections::BTreeSet<crate::atomic_cards::types::WUBRG>,
     ) -> Self::Item {
         if indicate.is_empty() {
-            return Node::Text("".to_string());
+            return Node::Text("".s());
         }
 
         let class = vec![
