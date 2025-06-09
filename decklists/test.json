@@ -1,17 +1,10 @@
 {
     "uncategorized": [
         {
-            "name": "Rune-Tail, Kitsune Ascendant // Rune-Tail's Essence",
-            "arts": [
-                {
-                    "url": "",
-                    "credit": "wtgsertg"
-                },
-                {
-                    "url": "",
-                    "credit": "regsertg"
-                }
-            ]
+            "name": "Counterspell",
+            "customize": {
+                "text": "{W/U}{U/B}{B/R}{R/G}{G/W}\n{W/B}{B/G}{G/U}{U/R}{R/W}\n{2/W}{2/U}{2/B}{2/R}{2/G}\n{W/P}{U/P}{B/P}{R/P}{G/P}"
+            }
         }
     ]
 }

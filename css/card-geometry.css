@@ -240,7 +240,6 @@ div.text-box.sparse {
 }
 
 div.text-box.sparse>p {
-    margin: 2mm 3mm 2mm;
     text-align: center;
 }
 
@@ -252,12 +251,16 @@ div.text-box>hr {
     border-top-width: var(--pin-line-width);
     border-top-style: solid;
     border-top-color: black;
-    margin: 1mm auto 0mm;
+    margin: 1.5mm auto 0mm;
 }
 
 div.text-box.compact>hr {
     margin: 0.5mm auto 0mm;
     border-top-width: calc(var(--pin-line-width)/2);
+}
+
+div.text-box.dense>hr {
+    margin: 1mm auto 0mm;
 }
 
 div.text-box.vertical>p.saga-chapter {

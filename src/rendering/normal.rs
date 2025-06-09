@@ -73,26 +73,27 @@ pub fn rules_text_normal_div(card: &Card, proxy: &Proxy) -> Element {
         paragraphs.push(rules_text_paragraph(par));
     }
 
-    let mut flavor = flavor_text_paragraphs(card, proxy);
-    if !paragraphs.is_empty() && !flavor.is_empty() {
-        paragraphs.push(Element::new(Tag::hr));
-    }
-    paragraphs.append(&mut flavor);
-
     let text_len: usize = paragraphs.iter().map(|n| n.text_len()).sum();
+
     let centered = get_side(card.side, &proxy.arts)
         .map(|a| a.center_text)
         .unwrap_or(false);
 
     let text_class: &[&str] = if text_len >= 350 {
         &["compact"]
-    } else if paragraphs.len() >= 4 || text_len >= 200 {
+    } else if paragraphs.len() >= 5 || text_len >= 200 {
         &["dense"]
     } else if centered {
         &["sparse"]
     } else {
         &[]
     };
+
+    let mut flavor = flavor_text_paragraphs(card, proxy);
+    if !paragraphs.is_empty() && !flavor.is_empty() {
+        paragraphs.push(Element::new(Tag::hr));
+    }
+    paragraphs.append(&mut flavor);
 
     Element::new(Tag::div)
         .class(["text-box"])

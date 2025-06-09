@@ -109,11 +109,39 @@ pub fn tap_untap(m: &str) -> Option<Element> {
     })
 }
 
-pub fn hybrid_mana(_: &str) -> Option<Element> {
-    None
+pub fn hybrid_mana(m: &str) -> Option<Element> {
+    Some(match m {
+        "{W/P}" => ms_cost_shadow("wp"),
+        "{U/P}" => ms_cost_shadow("up"),
+        "{B/P}" => ms_cost_shadow("bp"),
+        "{R/P}" => ms_cost_shadow("rp"),
+        "{G/P}" => ms_cost_shadow("gp"),
+
+        "{2/W}" => ms_cost_shadow("2w"),
+        "{2/U}" => ms_cost_shadow("2u"),
+        "{2/B}" => ms_cost_shadow("2b"),
+        "{2/R}" => ms_cost_shadow("2r"),
+        "{2/G}" => ms_cost_shadow("2g"),
+
+        "{W/U}" => ms_cost_shadow("wu"),
+        "{U/B}" => ms_cost_shadow("ub"),
+        "{B/R}" => ms_cost_shadow("br"),
+        "{R/G}" => ms_cost_shadow("rg"),
+        "{G/W}" => ms_cost_shadow("gw"),
+
+        "{W/B}" => ms_cost_shadow("wb"),
+        "{B/G}" => ms_cost_shadow("bg"),
+        "{G/U}" => ms_cost_shadow("gu"),
+        "{U/R}" => ms_cost_shadow("ur"),
+        "{R/W}" => ms_cost_shadow("rw"),
+        _ => return None,
+    })
 }
 
 pub fn generic_mana(m: &str) -> Option<Element> {
+    if m == "{X}" {
+        return Some(ms_cost_shadow("x"));
+    }
     let n = <usize as FromStr>::from_str(&m.replace("{", "").replace("}", "")).ok()?;
     if n <= 20 {
         Some(ms_cost_shadow(&n.to_string()))

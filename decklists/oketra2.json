@@ -2,18 +2,14 @@
     "A - Commander": [
         {
             "name": "God-Eternal Oketra",
-            "art": [
-                {
-                    "url": "https://i.imgur.com/70qjbcs.png",
-                    "credit": "u/Ishton"
-                }
-            ],
-            "customize": [
-                {
-                    "name": "God-Epurrnal Okittytra",
-                    "flavorText": "✨ Hazoret/Oketra ✨"
-                }
-            ]
+            "art": {
+                "url": "https://i.imgur.com/70qjbcs.png",
+                "credit": "u/Ishton"
+            },
+            "customize": {
+                "name": "God-Epurrnal Okittytra",
+                "flavorText": "✨ Hazoret/Oketra ✨"
+            }
         }
     ],
     "B.1 - Card Advantage": [
@@ -201,7 +197,8 @@
             "name": "Defiler of Faith"
         },
         {
-            "name": "Mondrak, Glory Dominus"
+            "name": "Mondrak, Glory Dominus",
+            "reminderText": false
         },
         {
             "name": "Odric, Lunarch Marshal"
@@ -218,10 +215,12 @@
     ],
     "F.1 - Lands": [
         {
-            "name": "Arid Archway"
+            "name": "Arid Archway",
+            "reminderText": false
         },
         {
-            "name": "Desert of the True"
+            "name": "Desert of the True",
+            "reminderText": false
         },
         {
             "name": "Guildless Commons"
@@ -236,16 +235,23 @@
             "name": "Lotus Vale"
         },
         {
-            "name": "Nykthos, Shrine to Nyx"
+            "name": "Nykthos, Shrine to Nyx",
+            "reminderText": false
         },
         {
             "name": "Scorched Ruins"
         },
         {
-            "name": "Thespian's Stage"
+            "name": "Thespian's Stage",
+            "customize": {
+                "flavorText": "All the world's a\u2014"
+            }
         },
         {
-            "name": "Vesuva"
+            "name": "Vesuva",
+            "customize": {
+                "flavorText": "Preserved eternally in volcanic ash, a copy of what once was..."
+            }
         },
         {
             "name": "Snow-Covered Plains",
@@ -257,87 +263,71 @@
         {
             "name": "Zombie Warrior",
             "repeats": 3,
-            "arts": [
-                {
-                    "url": "https://www.originalmagicart.store/cdn/shop/products/Zombie_Warrior_Token_5000x.jpg?v=1603664561",
-                    "credit": "Mike Bierek",
-                    "centerText": true
-                }
-            ],
-            "cardoid": [
-                {
-                    "name": "Zombie Warrior",
-                    "layout": "token",
-                    "colors": [
-                        "B"
-                    ],
-                    "power": "4",
-                    "toughness": "4",
-                    "text": "Vigilance",
-                    "type": "Creature Token \u2014 Zombie Warrior",
-                    "types": [
-                        "Creature"
-                    ]
-                }
-            ]
+            "arts": {
+                "url": "https://www.originalmagicart.store/cdn/shop/products/Zombie_Warrior_Token_5000x.jpg?v=1603664561",
+                "credit": "Mike Bierek",
+                "centerText": true
+            },
+            "cardoid": {
+                "name": "Zombie Warrior",
+                "layout": "token",
+                "colors": [
+                    "B"
+                ],
+                "power": "4",
+                "toughness": "4",
+                "text": "Vigilance",
+                "type": "Creature Token \u2014 Zombie Warrior",
+                "types": [
+                    "Creature"
+                ]
+            }
         },
         {
             "name": "Soldier",
-            "arts": [
-                {
-                    "centerText": true
-                }
-            ],
-            "customize": [
-                {
-                    "flavorText": "Onee-sama, what are you doing with that skullclamp? Are you really sure it will cure my headache? "
-                }
-            ],
-            "cardoid": [
-                {
-                    "name": "Soldier",
-                    "layout": "token",
-                    "colors": [
-                        "W"
-                    ],
-                    "power": "1",
-                    "toughness": "1",
-                    "text": "",
-                    "type": "Creature Token \u2014 Soldier",
-                    "types": [
-                        "Creature"
-                    ]
-                }
-            ]
+            "arts": {
+                "centerText": true
+            },
+            "customize": {
+                "flavorText": "Onee-sama, what are you doing with that skull-clamping device?"
+            },
+            "cardoid": {
+                "name": "Soldier",
+                "layout": "token",
+                "colors": [
+                    "W"
+                ],
+                "power": "1",
+                "toughness": "1",
+                "text": "",
+                "type": "Creature Token \u2014 Soldier",
+                "types": [
+                    "Creature"
+                ]
+            }
         },
         {
             "name": "Warrior",
-            "arts": [
-                {
-                    "centerText": true
-                }
-            ],
-            "customize": [
-                {
-                    "flavorText": "Onee-sama, what are you doing with that skullclamp? Are you really sure it will cure my headache? "
-                }
-            ],
-            "cardoid": [
-                {
-                    "name": "Warrior",
-                    "layout": "token",
-                    "colors": [
-                        "W"
-                    ],
-                    "power": "1",
-                    "toughness": "1",
-                    "text": "Vigilance",
-                    "type": "Creature Token \u2014 Warrior",
-                    "types": [
-                        "Creature"
-                    ]
-                }
-            ]
+            "arts": {
+                "centerText": true
+            },
+            "customize": {
+                "flavorText": "Onee-sama, are you really sure this will cure my headache? "
+            },
+            "cardoid": {
+                "name": "Warrior",
+                "layout": "token",
+                "colors": [
+                    "W"
+                ],
+                "power": "1",
+                "toughness": "1",
+                "text": "Vigilance",
+                "type": "Creature Token \u2014 Warrior",
+                "types": [
+                    "Creature"
+                ]
+            }
         }
     ]
 }
