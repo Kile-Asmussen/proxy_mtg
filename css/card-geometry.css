@@ -364,7 +364,7 @@ div.card.reverse.flip>div.title.bar::before,
 div.card.obverse.flip>div.dual-face-indicator.bar::before,
 div.card.reverse.flip>div.dual-face-indicator.bar::before {
     margin-top: 0.3em;
-    content: "🗘";
+    content: "⧎";
 }
 
 div.card.obverse.transform>div.title.bar::before,
@@ -379,20 +379,15 @@ div.card.obverse.transform>div.dual-face-indicator.bar::before {
 
 div.card.obverse.modal>div.title.bar::before,
 div.card.reverse.modal>div.dual-face-indicator.bar::before {
-    content: "▲▼";
+    content: "◭";
 }
 
 div.card.reverse.modal>div.title.bar::before,
 div.card.obverse.modal>div.dual-face-indicator.bar::before {
-    content: "▼▲";
+    content: "◮";
 }
 
 div.card.obverse.meld>div.title.bar::before,
-div.card.reverse.meld>div.dual-face-indicator.bar::before {
-    content: "◀";
-}
-
-div.card.reverse.meld>div.title.bar::before,
 div.card.obverse.meld>div.dual-face-indicator.bar::before {
-    content: "▶◀";
+    content: "⧓";
 }
