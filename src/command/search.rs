@@ -115,12 +115,17 @@ struct Searcher {
 
 impl Searcher {
     fn new(it: Search) -> anyhow::Result<Self> {
+        let color = Self::build_color(it.color, WUBRG::colorless())?;
+        let commander = Self::build_color(it.commander, WUBRG::wubrg())?;
+
+        println!("Commander: {}", WUBRG::render(&commander));
+        println!("Colors: {}", WUBRG::render(&color));
         Ok(Self {
             tags: BTreeSet::from_iter(it.tag.into_iter()),
             name: Self::build_regexes(it.case_sensitive, it.name)?,
             vname: Self::build_regexes(it.case_sensitive, it.vname)?,
-            color: Self::build_color(it.color, WUBRG::colorless())?,
-            commander: Self::build_color(it.commander, WUBRG::wubrg())?,
+            color,
+            commander,
             r#type: Self::build_regexes(it.case_sensitive, it.r#type)?,
             vtype: Self::build_regexes(it.case_sensitive, it.vtype)?,
             grep: Self::build_regexes(it.case_sensitive, it.grep)?,
@@ -155,17 +160,17 @@ impl Searcher {
     fn matches_proxy(&self, proxy: &Proxy) -> bool {
         &self.tags <= &proxy.tags
             && Self::regex_match(&self.cats, &[], &proxy.category)
-            && Self::regex_match(
-                &self.grep,
-                &self.vgrep,
-                &format!("{}", ToText::Proxy(&proxy)),
-            )
             && self.matches_cardoid(&proxy.cardoid)
     }
 
     fn matches_cardoid(&self, cardoid: &Cardoid) -> bool {
         cardoid.color_identity() <= &self.commander
             && Self::regex_match(&self.name, &self.vname, cardoid.name())
+            && Self::regex_match(
+                &self.grep,
+                &self.vgrep,
+                &format!("{}", ToText::Cardoid(&cardoid)),
+            )
             && cardoid.iter().any(|card| self.matches_card(card))
     }
 

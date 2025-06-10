@@ -2,7 +2,7 @@
     "A - Commander": [
         {
             "name": "God-Eternal Oketra",
-            "art": {
+            "arts": {
                 "url": "https://i.imgur.com/70qjbcs.png",
                 "credit": "u/Ishton"
             },
@@ -256,7 +256,10 @@
         {
             "name": "Snow-Covered Plains",
             "repeats": 29,
-            "reminderText": false
+            "reminderText": false,
+            "customize": {
+                "flavorText": "Under snow, next year's crop lie dormant."
+            }
         }
     ],
     "F.2 -- Sideboard": [
