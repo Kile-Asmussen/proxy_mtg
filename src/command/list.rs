@@ -47,6 +47,8 @@ pub struct List {
     pub lands: bool,
     #[arg(long)]
     pub pips: bool,
+    #[arg(long)]
+    pub moxfield: bool,
 }
 
 impl List {
@@ -130,6 +132,11 @@ impl List {
         if self.pips {
             println!();
             Self::print_pips(decklist);
+        }
+
+        if self.moxfield {
+            println!();
+            Self::print_moxfield(decklist);
         }
 
         println!();
@@ -369,6 +376,14 @@ impl List {
                 vec!["*"; n].join(""),
                 if n > 7 { format!(" ({n})") } else { "".s() }
             );
+        }
+    }
+
+    fn print_moxfield(decklist: &DeckList) {
+        for proxy in decklist {
+            if proxy.in_deck() {
+                println!("{} {} #{}", proxy.repeats, proxy.name, proxy.category);
+            }
         }
     }
 }
