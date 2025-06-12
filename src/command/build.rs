@@ -20,6 +20,8 @@ pub struct Build {
     pub reminder_text: bool,
     #[arg(long, conflicts_with = "reminder_text")]
     pub no_reminder_text: bool,
+    #[arg(long)]
+    pub scryfall_art: bool,
 }
 
 impl Build {
