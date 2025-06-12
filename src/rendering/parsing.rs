@@ -97,6 +97,7 @@ pub fn colored_mana(m: &str) -> Option<Element> {
         "{R}" => ms_cost_shadow("r"),
         "{G}" => ms_cost_shadow("g"),
         "{C}" => ms_cost_shadow("c"),
+        "{S}" => ms_cost_shadow("s"),
         _ => return None,
     })
 }

@@ -10,7 +10,12 @@
     ],
     "B.1 - Card Advantage": [
         {
-            "name": "Bennie Bracks, Zoologist"
+            "name": "Bennie Bracks, Zoologist",
+            "reminderText": false,
+            "customize": {
+                "name": "Entrapta, Artificer, Physicist",
+                "flavorText": "“By which I mean, someone has to be inside the portal topology to close it, and when it does, they will be trapped there.”"
+            }
         },
         {
             "name": "Caretaker's Talent"
@@ -22,7 +27,11 @@
             "name": "Rumor Gatherer"
         },
         {
-            "name": "Skullclamp"
+            "name": "Skullclamp",
+            "customize": {
+                "name": "Sanitizing-wasp",
+                "flavorText": "“He’ll sanitize the entire population&hellip;”"
+            }
         },
         {
             "name": "Tocasia's Welcome"
@@ -62,10 +71,17 @@
     ],
     "B.3 - Tutors": [
         {
-            "name": "Steelshaper's Gift"
+            "name": "Steelshaper's Gift",
+            "customize": {
+                "name": "Omnitool"
+            }
         },
         {
-            "name": "Search for Glory"
+            "name": "Search for Glory",
+            "reminderText": false,
+            "customize": {
+                "name": "Nothern Reach Expedition"
+            }
         },
         {
             "name": "Thalia's Lancers"
@@ -76,10 +92,16 @@
     ],
     "C.1 - Control": [
         {
-            "name": "Austere Command"
+            "name": "Austere Command",
+            "customize": {
+                "name": "Heart Weapon Activation"
+            }
         },
         {
-            "name": "Dismantling Wave"
+            "name": "Dismantling Wave",
+            "customize": {
+                "name": "Failsafe Activation"
+            }
         },
         {
             "name": "Generous Gift"
@@ -88,13 +110,24 @@
             "name": "Loran of the Third Path"
         },
         {
-            "name": "Return to Dust"
+            "name": "Return to Dust",
+            "customize": {
+                "name": "Destroy the Aegis"
+            }
         },
         {
-            "name": "Slash the Ranks"
+            "name": "Slash the Ranks",
+            "customize": {
+                "name": "She-Ra's Wrath"
+            }
         },
         {
-            "name": "Winds of Abandon"
+            "name": "Winds of Abandon",
+            "reminderText": false,
+            "customize": {
+                "name": "Category 11 Unreality Field",
+                "flavorText": "The scale only goes up to 5."
+            }
         }
     ],
     "C.2 - Stax": [
@@ -136,10 +169,18 @@
             "name": "Flawless Maneuver"
         },
         {
-            "name": "Ghostway"
+            "name": "Ghostway",
+            "customize": {
+                "name": "Portal Network",
+                "flavorText": ""
+            }
         },
         {
-            "name": "Guardian of Faith"
+            "name": "Guardian of Faith",
+            "reminderText": true,
+            "customize": {
+                "text": "Flash, vigilance\nWhen this creature enters, any number of other target creatures you control phase out. (They phase in on your untap step.)"
+            }
         },
         {
             "name": "Rune-Tail, Kitsune Ascendant // Rune-Tail's Essence"
@@ -187,17 +228,32 @@
     ],
     "E.2 - Wincon Enabler": [
         {
-            "name": "Anointed Procession"
+            "name": "Anointed Procession",
+            "customize": {
+                "name": "Prime's Light",
+                "flavorText": "&ldquo;Devotion shall be rewarded with deliverance from darkness! Behold: the purest among you!&rdquo;"
+            }
         },
         {
-            "name": "Concerted Effort"
+            "name": "Concerted Effort",
+            "customize": {
+                "name": "Operation &ldquo;Cascade&rdquo;",
+                "flavorText": "&ldquo;The date for commencement is in nine days. The scale is total mobilization. For those of you interested, there are time tables available in the data packet.&rdquo;"
+            }
         },
         {
-            "name": "Defiler of Faith"
+            "name": "Defiler of Faith",
+            "customize": {
+                "name": "Princess Sweet Bee"
+            }
         },
         {
             "name": "Mondrak, Glory Dominus",
-            "reminderText": false
+            "reminderText": false,
+            "customize": {
+                "name": "Damara of the Swift Wind",
+                "flavorText": "&ldquo;Air Marshal Damara here; drone swarm standing by.&rdquo;"
+            }
         },
         {
             "name": "Odric, Lunarch Marshal",
@@ -207,10 +263,16 @@
             }
         },
         {
-            "name": "Oketra's Monument"
+            "name": "Oketra's Monument",
+            "customize": {
+                "name": "Refuge's Replicators"
+            }
         },
         {
-            "name": "Pearl Medallion"
+            "name": "Pearl Medallion",
+            "customize": {
+                "name": "The Aegis' Runestone"
+            }
         },
         {
             "name": "The Wind Crystal",

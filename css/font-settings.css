@@ -15,6 +15,7 @@
 
     --flavor-font-family: Crimson Text;
     --flavor-font-size: 8pt;
+    --flavor-font-size-tiny: 6pt;
     --flavor-font-size-small: 7pt;
     --flavor-font-size-large: 9pt;
 
@@ -125,6 +126,10 @@ p.flavor-text {
     font-style: italic;
     font-family: var(--flavor-font-family);
     font-size: var(--flavor-font-size);
+}
+
+div.text-box.compact>p.flavor-text {
+    font-size: var(--flavor-font-size-tiny);
 }
 
 div.text-box.dense>p.flavor-text {

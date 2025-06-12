@@ -118,7 +118,7 @@ div.alt-title.bar {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     justify-content: center;
-    border-top-width: 0;
+    border-top: none;
     z-index: 1;
 }
 
@@ -391,7 +391,6 @@ div.card.obverse.flip>div.title.bar::before,
 div.card.reverse.flip>div.title.bar::before,
 div.card.obverse.flip>div.dual-face-indicator.bar::before,
 div.card.reverse.flip>div.dual-face-indicator.bar::before {
-    margin-top: 0.3em;
     content: "⧎";
 }
 
