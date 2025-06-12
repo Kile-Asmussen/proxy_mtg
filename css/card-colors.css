@@ -278,3 +278,15 @@ div.card.white.blue.black.red.green {
         radial-gradient(ellipse at bottom right, var(--gold-2), transparent 75% 75%);
 
 }
+
+div.card.token>div.title.bar {
+    border-width: var(--pin-line-width);
+    justify-content: center;
+    background-color: black;
+    color: white;
+}
+
+div.card.token>div.alt-title.bar {
+    background-color: black;
+    color: white;
+}

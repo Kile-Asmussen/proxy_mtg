@@ -33,18 +33,6 @@ pub struct Proxy {
     pub cardoid: Cardoid,
 }
 
-#[derive(Clone, Debug, Deserialize)]
-pub struct Art {
-    #[serde(default)]
-    pub url: String,
-    #[serde(default)]
-    pub credit: String,
-    #[serde(default)]
-    pub full: bool,
-    #[serde(default, rename = "centerText")]
-    pub center_text: bool,
-}
-
 impl Proxy {
     pub fn layout(&self) -> &CardLayout {
         (&self.cardoid).layout()
@@ -60,5 +48,31 @@ impl Proxy {
 
     fn reminder_text_default() -> bool {
         true
+    }
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct Art {
+    #[serde(default)]
+    pub url: String,
+    #[serde(default)]
+    pub credit: String,
+    #[serde(default)]
+    pub full: bool,
+    #[serde(default, rename = "centerText")]
+    pub center_text: bool,
+    #[serde(default)]
+    pub scryfall: bool,
+}
+
+impl Art {
+    pub fn copy_from(&mut self, other: &Art) -> &mut Self {
+        if self.url.is_empty() {
+            self.url = other.url.to_string();
+            self.full |= other.full;
+            self.credit = other.credit.to_string();
+            self.scryfall = other.scryfall;
+        }
+        self
     }
 }

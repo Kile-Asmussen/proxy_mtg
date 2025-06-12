@@ -19,6 +19,7 @@ use crate::{
         tokens::token_proxy,
         verticalia::{class_layout_proxy, saga_layout_proxy},
     },
+    scryfall::ScryfallClient,
 };
 
 #[derive(Clone, Copy)]
@@ -26,19 +27,22 @@ pub struct RenderSettings {
     pub in_color: bool,
     pub testing: bool,
     pub remninder_text: Option<bool>,
+    pub scryfall: Option<bool>,
 }
 
 pub struct RenderContext {
     pub settings: RenderSettings,
+    pub scryfall_client: ScryfallClient,
     pub cards: Vec<Element>,
 }
 
 impl RenderContext {
-    pub fn new(settings: RenderSettings) -> Self {
-        Self {
+    pub fn new(settings: RenderSettings) -> anyhow::Result<Self> {
+        Ok(Self {
             settings,
+            scryfall_client: ScryfallClient::new()?,
             cards: vec![],
-        }
+        })
     }
 
     pub fn add_proxy(&mut self, proxy: &Proxy) {

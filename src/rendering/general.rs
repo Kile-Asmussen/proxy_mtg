@@ -119,7 +119,7 @@ pub fn card_name_spans(card: &Card, proxy: &Proxy) -> (Element, Option<Element>)
     }
 }
 
-pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Node> {
+pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Element> {
     let Some(art) = get_side(card.side, &proxy.arts) else {
         return vec![];
     };
@@ -135,16 +135,14 @@ pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Node> {
     let mut res = vec![];
 
     if !art.url.is_empty() {
-        res.push(Node::Element(
-            Element::new(Tag::img).class(classes).attr("src", &art.url),
-        ));
+        res.push(Element::new(Tag::img).class(classes).attr("src", &art.url));
     }
     if !art.credit.is_empty() {
-        res.push(Node::Element(
+        res.push(
             Element::new(Tag::span)
                 .class(["art-credits"])
                 .node(&art.credit),
-        ));
+        );
     }
 
     res

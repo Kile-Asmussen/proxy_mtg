@@ -69,24 +69,11 @@ impl Search {
         let searcher = Searcher::new(self)?;
 
         if decklist.is_empty() {
-            let mut hits = atomics
-                .data
-                .values()
-                .filter(|c| c.face().is_funny <= searcher.funnies)
-                .filter(|c| match c.layout() {
-                    &CardLayout::Other(_) => searcher.funnies,
-                    _ => true,
-                })
-                .filter(|c| searcher.matches_cardoid(c))
-                .collvect();
+            let mut hits = searcher.matches_cardoids(atomics.data.values());
             hits.sort_by_key(|c| c.name());
             hits.iter().for_each(|c| searcher.print_cardoid(*c));
         } else {
-            let mut hits = decklist
-                .iter()
-                .filter(|p| p.in_deck() != searcher.sideboard)
-                .filter(|p| searcher.matches_proxy(p))
-                .collvect();
+            let mut hits = searcher.match_proxies(decklist);
             hits.sort_by_key(|p| (&p.category, &p.name));
             hits.iter().for_each(|p| searcher.print_proxy(*p));
         }
@@ -134,22 +121,27 @@ impl Searcher {
         })
     }
 
-    fn print_cardoid(&self, c: &Cardoid) {
-        println!();
-        if self.debug {
-            println!("{:?}", c);
-        } else {
-            println!("{}", ToText::Cardoid(c));
-        }
+    fn match_proxies<'a>(&self, proxies: impl IntoIterator<Item = &'a Proxy>) -> Vec<&'a Proxy> {
+        proxies
+            .into_iter()
+            .filter(|p| p.in_deck() != self.sideboard)
+            .filter(|p| self.matches_proxy(p))
+            .collvect()
     }
 
-    fn print_proxy(&self, p: &Proxy) {
-        println!();
-        if self.debug {
-            println!("{:?}", p);
-        } else {
-            println!("{}", ToText::Proxy(p));
-        }
+    fn matches_cardoids<'a>(
+        &self,
+        cardoids: impl IntoIterator<Item = &'a Cardoid>,
+    ) -> Vec<&'a Cardoid> {
+        cardoids
+            .into_iter()
+            .filter(|c| c.face().is_funny <= self.funnies)
+            .filter(|c| match c.layout() {
+                &CardLayout::Other(_) => self.funnies,
+                _ => true,
+            })
+            .filter(|c| self.matches_cardoid(c))
+            .collvect()
     }
 
     fn matches_proxy(&self, proxy: &Proxy) -> bool {
@@ -207,5 +199,23 @@ impl Searcher {
 
     fn regex_match(pos: &[Regex], neg: &[Regex], data: &str) -> bool {
         pos.iter().all(|r| r.is_match(data)) && !neg.iter().any(|r| r.is_match(data))
+    }
+
+    fn print_cardoid(&self, c: &Cardoid) {
+        println!();
+        if self.debug {
+            println!("{:?}", c);
+        } else {
+            println!("{}", ToText::Cardoid(c));
+        }
+    }
+
+    fn print_proxy(&self, p: &Proxy) {
+        println!();
+        if self.debug {
+            println!("{:?}", p);
+        } else {
+            println!("{}", ToText::Proxy(p));
+        }
     }
 }

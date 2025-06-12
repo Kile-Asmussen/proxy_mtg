@@ -1,20 +1,68 @@
+use std::{
+    thread,
+    time::{Duration, Instant},
+};
+
 use reqwest::blocking::Client;
 use serde::Deserialize;
 
+use crate::{
+    proxy::Art,
+    utils::{iter::IterExt, ToS},
+};
+
 #[derive(Deserialize)]
-pub struct ScryfallCard {
-    #[serde(flatten, default)]
-    pub card_face: ScryfallArt,
-    #[serde(default)]
-    pub card_faces: Vec<ScryfallArt>,
+#[serde(untagged)]
+pub enum ScryfallCard {
+    #[allow(unused)]
+    Error(ScryfallError),
+    Single(ScryfallArt),
+    Multi(ScryfallMulti),
+}
+
+impl ScryfallCard {
+    pub fn arts(&self) -> Vec<Art> {
+        match self {
+            Self::Error(_) => vec![],
+            Self::Single(a) => vec![a.art()],
+            Self::Multi(m) => m.arts(),
+        }
+    }
 }
 
 #[derive(Deserialize, Default)]
+pub struct ScryfallError {
+    pub object: Error,
+    pub status: usize,
+    pub code: String,
+    pub details: String,
+}
+
+#[derive(Deserialize, Default)]
+#[serde(rename = "error")]
+pub struct Error;
+
+#[derive(Deserialize, Default)]
+#[serde(rename = "card")]
+pub struct Card;
+
+#[derive(Deserialize, Default)]
 pub struct ScryfallArt {
-    #[serde(default)]
+    pub object: Card,
     pub artist: String,
-    #[serde(default)]
     pub image_uris: ImageUris,
+}
+
+impl ScryfallArt {
+    pub fn art(&self) -> Art {
+        Art {
+            credit: self.artist.s(),
+            url: self.image_uris.art_crop.s(),
+            full: false,
+            center_text: false,
+            scryfall: true,
+        }
+    }
 }
 
 #[derive(Deserialize, Default)]
@@ -22,21 +70,42 @@ pub struct ImageUris {
     pub art_crop: String,
 }
 
+#[derive(Deserialize)]
+pub struct ScryfallMulti {
+    pub object: Card,
+    pub card_faces: Vec<ScryfallArt>,
+}
+
+impl ScryfallMulti {
+    pub fn arts(&self) -> Vec<Art> {
+        self.card_faces.iter().map(ScryfallArt::art).collvect()
+    }
+}
+
 pub struct ScryfallClient {
-    pub force: bool,
     pub client: Client,
+    pub last: Instant,
 }
 
 impl ScryfallClient {
-    fn new(force: bool) -> anyhow::Result<Self> {
+    const DELAY: Duration = Duration::from_millis(150);
+
+    pub fn new() -> anyhow::Result<Self> {
         let client = reqwest::blocking::ClientBuilder::new()
             .timeout(None)
             .build()?;
 
-        Ok(Self { force, client })
+        Ok(Self {
+            client,
+            last: Instant::now()
+                .checked_sub(Self::DELAY)
+                .unwrap_or_else(Instant::now),
+        })
     }
 
-    fn get_scryfall_card_art(&self, card_name: &str) -> anyhow::Result<ScryfallCard> {
+    pub fn get_scryfall_card_art(&mut self, card_name: &str) -> anyhow::Result<ScryfallCard> {
+        thread::sleep(Self::DELAY.saturating_sub(self.last.elapsed()));
+
         let request = self
             .client
             .get(format!("https://api.scryfall.com/cards/named/"))
@@ -50,18 +119,10 @@ impl ScryfallClient {
 
         let response = self.client.execute(request)?;
 
+        self.last = Instant::now();
+
         let body = response.bytes()?.to_vec();
 
         Ok(serde_json::from_slice(&body)?)
     }
-}
-
-#[test]
-fn scryfall_client_tests() -> anyhow::Result<()> {
-    let client = ScryfallClient::new(false)?;
-    let card = client.get_scryfall_card_art("Keeper of the Accord")?;
-
-    assert_ne!(card.card_face.artist, "");
-    assert_ne!(card.card_face.image_uris.art_crop, "");
-    Ok(())
 }

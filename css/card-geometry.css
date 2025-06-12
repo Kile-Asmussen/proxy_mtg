@@ -130,13 +130,6 @@ div.title.bar {
     top: var(--upper-margin);
 }
 
-div.card.token>div.title.bar {
-    border-width: var(--pin-line-width);
-    border-style: none;
-    justify-content: center;
-    background-color: transparent;
-}
-
 div.type-line.bar {
     justify-content: start;
     top: calc(var(--upper-margin) + var(--bar-height) + var(--art-height));

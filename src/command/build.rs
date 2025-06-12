@@ -1,9 +1,12 @@
 use clap::Parser;
+use itertools::{EitherOrBoth, Itertools};
 use std::path::{Path, PathBuf};
 
 use crate::{
+    atomic_cards::types::CardLayout,
     proxy::decklists::DeckList,
     rendering::{RenderContext, RenderSettings},
+    utils::iter::IterExt,
 };
 
 #[derive(Parser, Debug, Clone)]
@@ -20,8 +23,10 @@ pub struct Build {
     pub reminder_text: bool,
     #[arg(long, conflicts_with = "reminder_text")]
     pub no_reminder_text: bool,
-    #[arg(long)]
+    #[arg(long, conflicts_with = "no_scryfall_art")]
     pub scryfall_art: bool,
+    #[arg(long, conflicts_with = "scryfall_art")]
+    pub no_scryfall_art: bool,
 }
 
 impl Build {
@@ -40,8 +45,15 @@ impl Build {
             } else {
                 None
             },
+            scryfall: if self.scryfall_art {
+                Some(true)
+            } else if self.no_scryfall_art {
+                Some(false)
+            } else {
+                None
+            },
         };
-        let mut render = RenderContext::new(settings);
+        let mut render = RenderContext::new(settings)?;
 
         println!(
             "Rendering {} cards",
@@ -54,6 +66,33 @@ impl Build {
         for proxy in decklist {
             if let Some(b) = settings.remninder_text {
                 proxy.reminder_text = b;
+            }
+
+            if proxy.layout() != &CardLayout::Token {
+                if let Some(true) = settings.scryfall {
+                    let arts = render
+                        .scryfall_client
+                        .get_scryfall_card_art(&proxy.name)?
+                        .arts();
+                    proxy.arts = proxy
+                        .arts
+                        .iter_mut()
+                        .zip_longest(arts)
+                        .map(|x| match x {
+                            EitherOrBoth::Both(a, b) => a.copy_from(&b).clone(),
+                            EitherOrBoth::Left(a) => a.clone(),
+                            EitherOrBoth::Right(a) => a,
+                        })
+                        .collvect()
+                } else if let None = settings.scryfall {
+                    let arts = render
+                        .scryfall_client
+                        .get_scryfall_card_art(&proxy.name)?
+                        .arts();
+                    proxy.arts.iter_mut().zip(arts).for_each(|(a, b)| {
+                        a.copy_from(&b);
+                    });
+                }
             }
             render.add_proxy(proxy);
         }

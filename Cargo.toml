@@ -1,5 +1,5 @@
 [package]
-name = "proxy_mtg"
+name = "proxygenitus"
 version = "0.1.0"
 edition = "2021"
 
@@ -13,6 +13,7 @@ lazy-regex = "3.4.1"
 clap = { version = "4.5.38", features = [ "derive" ] }
 rand = "0.9.1"
 anyhow = "1.0.98"
+itertools = "0.14.0"
 reqwest = { version = "0.12.18", default-features = false, features = [ "blocking", "rustls-tls" ] }
 
 [profile.dev]
