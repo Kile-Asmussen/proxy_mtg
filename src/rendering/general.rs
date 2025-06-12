@@ -19,7 +19,7 @@ pub fn blank_card() -> Element {
 pub fn empty_card(card: &Card, proxy: &Proxy) -> Element {
     blank_card()
         .class(card_css_class(card))
-        .node(title_bar_div(card, proxy))
+        .nodes(title_bar_div(card, proxy))
 }
 
 pub fn raw_card(card: &Card, proxy: &Proxy) -> Element {
@@ -29,11 +29,20 @@ pub fn raw_card(card: &Card, proxy: &Proxy) -> Element {
         .node(type_line_div(card, proxy))
 }
 
-pub fn title_bar_div(card: &Card, proxy: &Proxy) -> Element {
-    Element::new(Tag::div)
-        .class(["title", "bar"])
-        .node(card_name_span(card, proxy))
-        .node(mana_cost_span(card, proxy))
+pub fn title_bar_div(card: &Card, proxy: &Proxy) -> Vec<Element> {
+    let (name, alt) = card_name_spans(card, proxy);
+
+    let mut res = vec![];
+    res.push(
+        Element::new(Tag::div)
+            .class(["title", "bar"])
+            .node(name)
+            .node(mana_cost_span(card, proxy)),
+    );
+    if let Some(alt) = alt {
+        res.push(Element::new(Tag::div).class(["alt-title", "bar"]).node(alt));
+    }
+    res
 }
 
 pub fn mana_cost_span(card: &Card, _proxy: &Proxy) -> Element {
@@ -82,21 +91,32 @@ where
     Element::new(Tag::p).class(["flavor-text"]).nodes(text)
 }
 
-pub fn card_name_span(card: &Card, proxy: &Proxy) -> Element {
+pub fn card_name_spans(card: &Card, proxy: &Proxy) -> (Element, Option<Element>) {
     let mut name = card.face_name.clone();
+    let mut alt_name = String::new();
     if name.is_empty() {
         name = card.name.clone();
     }
 
     if let Some(c) = get_side(card.side, &proxy.customize) {
         if !c.name.is_empty() {
+            alt_name = name;
             name = c.name.clone();
         } else if !c.face_name.is_empty() {
-            name = c.name.clone();
+            alt_name = name;
+            name = c.face_name.clone();
         }
     }
 
-    Element::new(Tag::span).class(["name"]).node(name)
+    let res = Element::new(Tag::span).class(["name"]).node(name);
+    if !alt_name.is_empty() {
+        (
+            res,
+            Some(Element::new(Tag::span).class(["name"]).node(alt_name)),
+        )
+    } else {
+        (res, None)
+    }
 }
 
 pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Node> {

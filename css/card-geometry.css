@@ -14,7 +14,7 @@
     --bar-height: 5mm;
     --bar-endcap: 1mm;
 
-    --dual-face-indicator-height: 3mm;
+    --bar-height--small: 3mm;
 
     --content-width: calc(var(--card-width) - 2*var(--card-border));
     --content-height: calc(var(--card-height) - 2*var(--card-border));
@@ -91,6 +91,9 @@ div.bar::before,
 div.bar::after {
     align-self: center;
     font-weight: bold;
+}
+
+div.title.bar>span.name {
     margin-top: var(--title-font-adjustment);
 }
 
@@ -99,10 +102,32 @@ div.title.bar>span.cost {
 }
 
 div.title.bar {
-    top: var(--upper-margin);
     justify-content: space-between;
     font-family: var(--title-font-family);
     font-size: var(--title-font-size);
+}
+
+div.alt-title.bar {
+    top: calc(var(--upper-margin) + var(--bar-height));
+    height: var(--bar-height--small);
+    font-size: var(--bar-small-font-size);
+    font-family: var(--bar-small-font-family);
+    width: auto;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    justify-content: center;
+    border-top-width: 0;
+    z-index: 1;
+}
+
+div.alt-title.bar>span.name {
+    margin-top: var(--bar-small-font-adjustment);
+}
+
+div.title.bar {
+    top: var(--upper-margin);
 }
 
 div.card.token>div.title.bar {
@@ -153,6 +178,10 @@ img.art.full-art {
 
 img.art.full-art~div.text_box {
     display: none;
+}
+
+div.alt-title.bar~img.art {
+    z-index: 0;
 }
 
 div.text-box {
@@ -330,11 +359,10 @@ div.card.reverse>div.title.bar::before {
 div.dual-face-indicator.bar {
     left: 0;
     bottom: 0;
-    font-size: var(--dual-face-indicator-font-size);
-    font-family: var(--dual-face-indicator-font-family);
-    height: var(--dual-face-indicator-height);
-    /* top: calc(var(--upper-margin) + var(--bar-height)*2 + var(--fullheight-box) - var(--pin-line-width) - var(--dual-face-indicator-height)/2); */
-    padding-left: var(--dual-face-indicator-height);
+    font-size: var(--bar-small-font-size);
+    font-family: var(--bar-small-font-family);
+    height: var(--bar-height--small);
+    padding-left: var(--bar-height--small);
     border-left-width: 0;
     border-bottom-width: 0;
     border-top-left-radius: 0;
@@ -352,11 +380,11 @@ div.dual-face-indicator.bar::before {
 
 img.full-art~div.dual-face-indicator.bar,
 div.vertical~div.dual-face-indicator.bar {
-    top: calc(var(--upper-margin) + var(--bar-height) + var(--fullheight-box) - var(--pin-line-width) - var(--dual-face-indicator-height))
+    top: calc(var(--upper-margin) + var(--bar-height) + var(--fullheight-box) - var(--pin-line-width) - var(--bar-height--small))
 }
 
 div.dual-face-indicator.bar>span {
-    margin-top: var(--dual-face-indicator-font-adjustment);
+    margin-top: var(--bar-small-font-adjustment);
 }
 
 div.card.obverse.flip>div.title.bar::before,

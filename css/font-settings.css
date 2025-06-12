@@ -22,9 +22,9 @@
     --corner-bubble-font-size: 11pt;
     --corner-bubble-font-adjustment: 0.3mm;
 
-    --dual-face-indicator-font-family: Amarante;
-    --dual-face-indicator-font-size: 6pt;
-    --dual-face-indicator-font-adjustment: -0.1mm;
+    --bar-small-font-family: Amarante;
+    --bar-small-font-size: 6pt;
+    --bar-small-font-adjustment: -0.1mm;
 
     --art-credit-font: Crimson Text;
     --art-credit-font-size: 4.5pt;
@@ -144,9 +144,9 @@ span.anchor-word {
 }
 
 div.dual-face-indicator.bar>span {
-    margin-top: var(--dual-face-indicator-font-adjustment);
-    font-size: var(--dual-face-indicator-font-size);
-    font-family: var(--dual-face-indicator-font-family);
+    margin-top: var(--bar-small-font-adjustment);
+    font-size: var(--bar-small-font-size);
+    font-family: var(--bar-small-font-family);
 }
 
 span.art-credits {

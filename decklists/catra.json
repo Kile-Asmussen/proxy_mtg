@@ -2,13 +2,9 @@
     "A - Commander": [
         {
             "name": "God-Eternal Oketra",
-            "arts": {
-                "url": "https://i.imgur.com/70qjbcs.png",
-                "credit": "u/Ishton"
-            },
             "customize": {
-                "name": "God-Epurrnal Okittytra",
-                "flavorText": "✨ Hazoret/Oketra ✨"
+                "name": "Demigoddess Catra",
+                "flavorText": "For the vengeance of Krytis..."
             }
         }
     ],
@@ -204,7 +200,11 @@
             "reminderText": false
         },
         {
-            "name": "Odric, Lunarch Marshal"
+            "name": "Odric, Lunarch Marshal",
+            "customize": {
+                "name": "Demigoddess Adora",
+                "flavorText": "For the hope of Etheria..."
+            }
         },
         {
             "name": "Oketra's Monument"
@@ -213,7 +213,10 @@
             "name": "Pearl Medallion"
         },
         {
-            "name": "The Wind Crystal"
+            "name": "The Wind Crystal",
+            "customize": {
+                "name": "Moonstone of Brightmoon"
+            }
         }
     ],
     "F.1 - Lands": [
