@@ -110,6 +110,8 @@ impl ScryfallClient {
     }
 
     pub fn get_scryfall_card_art(&mut self, card_name: &str) -> anyhow::Result<ScryfallCard> {
+        println!("Downloading Scryfall art for {}", card_name);
+
         thread::sleep(Self::DELAY.saturating_sub(self.last.elapsed()));
 
         let request = self

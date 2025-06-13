@@ -10,7 +10,10 @@
     "B.1 - Card Advantage": [
         {
             "name": "Bennie Bracks, Zoologist",
-            "reminderText": false
+            "reminderText": false,
+            "arts": {
+                "scryfall": true
+            }
         },
         {
             "name": "Caretaker's Talent"
