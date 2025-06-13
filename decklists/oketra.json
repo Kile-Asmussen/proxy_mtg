@@ -98,7 +98,7 @@
         },
         {
             "name": "Dismantling Wave",
-            "reminderText": "false"
+            "reminderText": false
         },
         {
             "name": "Generous Gift"

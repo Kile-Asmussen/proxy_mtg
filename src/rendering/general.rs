@@ -3,12 +3,13 @@ use crate::{
     html::*,
     proxy::{Art, Proxy},
     rendering::{
-        manafont::ManaFontSymbolics,
+        manafont::{ms_cost_shadow, ManaFontSymbolics},
         reminders::{NoReminderText, ReminderText},
     },
     utils::{
         iter::IterExt,
         symbolics::{replace_symbols, replace_symbols_with},
+        ToS,
     },
 };
 
@@ -168,6 +169,7 @@ pub fn type_line_div(card: &Card, proxy: &Proxy) -> Element {
 
     Element::new(Tag::div)
         .class(classes)
+        .node(color_indicator_span(card, proxy))
         .node(type_line_span(card, proxy))
 }
 
@@ -181,6 +183,16 @@ pub fn type_line_span(card: &Card, proxy: &Proxy) -> Element {
     }
 
     Element::new(Tag::span).class(["type"]).node(type_line)
+}
+
+pub fn color_indicator_span(card: &Card, proxy: &Proxy) -> Element {
+    Element::new(Tag::span).class(["indicator"]).nodes(
+        WUBRG::render(&card.colors)
+            .to_lowercase()
+            .chars()
+            .map(|c| Element::new(Tag::i).class(vec!["ms".s(), format!("ms-{}", c)]))
+            .collvect(),
+    )
 }
 
 pub fn anchor_words(words: &str) -> Vec<Node> {

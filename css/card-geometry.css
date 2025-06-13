@@ -136,8 +136,10 @@ div.type-line.bar {
     top: calc(var(--upper-margin) + var(--bar-height) + var(--art-height));
 }
 
-div.bar.bottom {
-    top: calc(var(--upper-margin) + var(--bar-height) + var(--fullheight-box));
+div.type-line.bar>span.indicator {
+    font-size: var(--typeline-font-size);
+    margin-top: var(--cost-adjustment-title);
+    margin-right: 1mm;
 }
 
 div.type-line.bar>span.type {
@@ -145,6 +147,11 @@ div.type-line.bar>span.type {
     font-size: var(--typeline-font-size);
     margin-top: var(--typeline-font-adjustment);
 }
+
+div.bar.bottom {
+    top: calc(var(--upper-margin) + var(--bar-height) + var(--fullheight-box));
+}
+
 
 /* ART */
 
@@ -370,11 +377,6 @@ div.dual-face-indicator.bar::before {
     position: absolute;
     font-size: 85%;
     left: 0.5mm;
-}
-
-img.full-art~div.dual-face-indicator.bar,
-div.vertical~div.dual-face-indicator.bar {
-    top: calc(var(--upper-margin) + var(--bar-height) + var(--fullheight-box) - var(--pin-line-width) - var(--bar-height--small))
 }
 
 div.dual-face-indicator.bar>span {
