@@ -61,6 +61,9 @@
         },
         {
             "name": "Surveyor's Scope"
+        },
+        {
+            "name": "Sand Scout"
         }
     ],
     "B.3 - Tutors": [
@@ -157,11 +160,6 @@
             "name": "Your Temple Is Under Attack"
         }
     ],
-    "D.3 - Survival": [
-        {
-            "name": "Solitary Confinement"
-        }
-    ],
     "E.1 - Bounce Synergy": [
         {
             "name": "Ambrosia Whiteheart"
@@ -170,16 +168,10 @@
             "name": "Aviary Mechanic"
         },
         {
-            "name": "Dust Elemental"
-        },
-        {
             "name": "Jeskai Barricade"
         },
         {
             "name": "Kor Skyfisher"
-        },
-        {
-            "name": "Mischievous Pup"
         },
         {
             "name": "Stonecloaker"
@@ -226,6 +218,12 @@
         {
             "name": "Desert of the True",
             "reminderText": false
+        },
+        {
+            "name": "Lazotep Quarry"
+        },
+        {
+            "name": "Scavenger Grounds"
         },
         {
             "name": "Guildless Commons"

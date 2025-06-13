@@ -1,22 +1,24 @@
+mod tags;
+
 use std::{
     thread,
     time::{Duration, Instant},
 };
 
 use reqwest::blocking::Client;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{
     proxy::Art,
+    scryfall::tags::{DeserializeAsTag, Tag},
     utils::{iter::IterExt, ToS},
 };
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum ScryfallCard {
-    #[allow(unused)]
     Error(ScryfallError),
-    Single(ScryfallArt),
+    Single(ScryfallSingle),
     Multi(ScryfallMulti),
 }
 
@@ -24,16 +26,42 @@ impl ScryfallCard {
     pub fn arts(&self) -> Vec<Art> {
         match self {
             Self::Error(_) => vec![],
-            Self::Single(a) => vec![a.art()],
+            Self::Single(s) => s.arts(),
             Self::Multi(m) => m.arts(),
         }
     }
 }
 
-#[derive(Deserialize, Default)]
+#[test]
+fn scryfall_card() -> anyhow::Result<()> {
+    match serde_json::from_str::<ScryfallCard>(
+        r#"{"object":"error","status":404,"code":"not_found","details":"Blah"}"#,
+    )? {
+        ScryfallCard::Error(_) => Ok(()),
+        _ => Err(anyhow::anyhow!("Not Error")),
+    }?;
+
+    match serde_json::from_str::<ScryfallCard>(
+        r#"{"object":"card","artist":"Frida Kahlo","image_uris":{"art_crop":"http://localhost:80/"}}"#,
+    )? {
+        ScryfallCard::Single(_) => Ok(()),
+        _ => Err(anyhow::anyhow!("Not Single")),
+    }?;
+
+    match serde_json::from_str::<ScryfallCard>(
+        r#"{"object":"card","card_faces":[{"artist":"Frida Kahlo","image_uris":{"art_crop":"http://localhost:80/"}}]}"#,
+    )? {
+        ScryfallCard::Multi(_) => Ok(()),
+        _ => Err(anyhow::anyhow!("Not Multi")),
+    }?;
+
+    Ok(())
+}
+
+#[derive(Deserialize, Serialize)]
 pub struct ScryfallError {
     #[serde(rename = "object")]
-    _object: Error,
+    _object: Tag<Error>,
     #[serde(rename = "status")]
     pub _status: usize,
     #[serde(rename = "code")]
@@ -42,20 +70,30 @@ pub struct ScryfallError {
     pub _details: String,
 }
 
-#[derive(Deserialize, Default)]
-#[serde(rename = "error")]
+#[derive(Default, Serialize)]
 pub struct Error;
+impl DeserializeAsTag for Error {
+    const TAG: &'static str = "error";
+}
 
-#[derive(Deserialize, Default)]
-#[serde(rename = "card")]
-pub struct Card;
+#[test]
+fn scryfall_error() -> anyhow::Result<()> {
+    serde_json::from_str::<ScryfallError>(
+        r#"{"object":"error","status":404,"code":"not_found","details":"Blah"}"#,
+    )?;
+    Ok(())
+}
 
-#[derive(Deserialize, Default)]
+#[derive(Deserialize, Serialize)]
 pub struct ScryfallArt {
-    #[serde(rename = "object")]
-    _object: Card,
     pub artist: String,
     pub image_uris: ImageUris,
+}
+
+#[derive(Default)]
+pub struct Card;
+impl DeserializeAsTag for Card {
+    const TAG: &'static str = "card";
 }
 
 impl ScryfallArt {
@@ -70,15 +108,37 @@ impl ScryfallArt {
     }
 }
 
-#[derive(Deserialize, Default)]
+#[derive(Deserialize, Serialize)]
 pub struct ImageUris {
     pub art_crop: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
+pub struct ScryfallSingle {
+    #[serde(rename = "object")]
+    pub _object: Tag<Card>,
+    #[serde(flatten)]
+    pub art: ScryfallArt,
+}
+
+impl ScryfallSingle {
+    pub fn arts(&self) -> Vec<Art> {
+        vec![self.art.art()]
+    }
+}
+
+#[test]
+fn scryfall_single() -> anyhow::Result<()> {
+    serde_json::from_str::<ScryfallSingle>(
+        r#"{"object":"card","artist":"Frida Kahlo","image_uris":{"art_crop":"http://localhost:80/"}}"#,
+    )?;
+    Ok(())
+}
+
+#[derive(Deserialize, Serialize)]
 pub struct ScryfallMulti {
     #[serde(rename = "object")]
-    _object: Card,
+    _object: Tag<Card>,
     pub card_faces: Vec<ScryfallArt>,
 }
 
@@ -86,6 +146,14 @@ impl ScryfallMulti {
     pub fn arts(&self) -> Vec<Art> {
         self.card_faces.iter().map(ScryfallArt::art).collvect()
     }
+}
+
+#[test]
+fn scryfall_multi() -> anyhow::Result<()> {
+    serde_json::from_str::<ScryfallMulti>(
+        r#"{"object":"card","card_faces":[{"artist":"Frida Kahlo","image_uris":{"art_crop":"http://localhost:80/"}}]}"#,
+    )?;
+    Ok(())
 }
 
 pub struct ScryfallClient {
@@ -130,6 +198,8 @@ impl ScryfallClient {
         self.last = Instant::now();
 
         let body = response.bytes()?.to_vec();
+
+        println!("{}", String::from_utf8(body.clone())?);
 
         Ok(serde_json::from_slice(&body)?)
     }
