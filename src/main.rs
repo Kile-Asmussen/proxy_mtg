@@ -6,7 +6,6 @@ mod html;
 mod proxy;
 mod rendering;
 mod scryfall;
-mod seml;
 mod utils;
 
 use std::path::Path;

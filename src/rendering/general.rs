@@ -26,7 +26,6 @@ pub fn raw_card(card: &Card, proxy: &Proxy) -> Element {
     empty_card(card, proxy)
         .node(type_line_div(card, proxy))
         .nodes(card_art_img(card, proxy))
-        .node(type_line_div(card, proxy))
 }
 
 pub fn title_bar_div(card: &Card, proxy: &Proxy) -> Vec<Element> {

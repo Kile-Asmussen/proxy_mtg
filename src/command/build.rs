@@ -1,5 +1,4 @@
 use clap::Parser;
-use itertools::{EitherOrBoth, Itertools};
 use std::path::{Path, PathBuf};
 
 use crate::{

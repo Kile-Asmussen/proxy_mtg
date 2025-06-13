@@ -1,602 +1,348 @@
 {
-    "Block 0 - Commander": [
+    "A - Commander": [
         {
             "name": "God-Eternal Oketra",
-            "tags": [
-                "zombie beatdown"
-            ]
+            "customize": {
+                "name": "God-Epurrnal Okittytra"
+            }
         }
     ],
-    "Block 1 - Card Advantage": [
-        {
-            "name": "Esper Sentinel",
-            "tags": [
-                "draw",
-                "stax"
-            ]
-        },
-        {
-            "name": "Helpful Hunter",
-            "tags": [
-                "draw",
-                "oketra fodder"
-            ]
-        },
-        {
-            "name": "Spirited Companion",
-            "tags": [
-                "draw",
-                "oketra fodder"
-            ]
-        },
-        {
-            "name": "Mentor of the Meek",
-            "tags": [
-                "draw",
-                "oketra fodder"
-            ]
-        },
-        {
-            "name": "Caretaker's Talent",
-            "tags": [
-                "draw",
-                "zombie beatdown"
-            ]
-        },
+    "B.1 - Card Advantage": [
         {
             "name": "Bennie Bracks, Zoologist",
-            "tags": [
-                "draw",
-                "zombie beatdown"
-            ]
+            "reminderText": false
         },
         {
-            "name": "Rumor Gatherer",
-            "tags": [
-                "draw",
-                "zombie beatdown",
-                "oketra fodder"
-            ]
+            "name": "Caretaker's Talent"
         },
         {
-            "name": "Tocasia's Welcome",
-            "tags": [
-                "draw"
-            ]
+            "name": "Mentor of the Meek"
+        },
+        {
+            "name": "Rumor Gatherer"
+        },
+        {
+            "name": "Skullclamp"
+        },
+        {
+            "name": "Tocasia's Welcome"
+        },
+        {
+            "name": "War Room"
         }
     ],
-    "Block 2 - Land Advantage": [
+    "B.2 - Land Advantage": [
         {
-            "name": "Loyal Warhound",
-            "tags": [
-                "catch-up ramp",
-                "oketra fodder"
-            ]
+            "name": "Archaeomancer's Map"
         },
         {
-            "name": "Knight of the White Orchid",
-            "tags": [
-                "catch-up ramp",
-                "oketra fodder"
-            ]
+            "name": "Claim Jumper"
         },
         {
-            "name": "Claim Jumper",
-            "tags": [
-                "catch-up ramp",
-                "oketra fodder"
-            ]
+            "name": "Deep Gnome Terramancer"
         },
         {
-            "name": "Sand Scout",
-            "tags": [
-                "catch-up ramp",
-                "desert",
-                "oketra fodder"
-            ]
+            "name": "Extraplanar Lens"
         },
         {
-            "name": "Surveyor's Scope",
-            "tags": [
-                "catch-up ramp"
-            ]
+            "name": "Keeper of the Accord"
         },
         {
-            "name": "Keeper of the Accord",
-            "tags": [
-                "catch-up ramp",
-                "soldier tokens"
-            ]
+            "name": "Knight of the White Orchid"
         },
         {
-            "name": "Archaeomancer's Map",
-            "tags": [
-                "catch-up ramp"
-            ]
+            "name": "Land Tax"
         },
         {
-            "name": "Land Tax",
-            "tags": [
-                "catch-up ramp"
-            ]
+            "name": "Loyal Warhound"
+        },
+        {
+            "name": "Surveyor's Scope"
         }
     ],
-    "Block 3 - Removal": [
+    "B.3 - Tutors": [
+        {
+            "name": "Steelshaper's Gift"
+        },
+        {
+            "name": "Search for Glory",
+            "reminderText": false
+        },
+        {
+            "name": "Thalia's Lancers"
+        },
+        {
+            "name": "Recruiter of the Guard"
+        }
+    ],
+    "C.1 - Control": [
+        {
+            "name": "Austere Command"
+        },
+        {
+            "name": "Dismantling Wave"
+        },
+        {
+            "name": "Generous Gift"
+        },
+        {
+            "name": "Loran of the Third Path"
+        },
+        {
+            "name": "Return to Dust"
+        },
+        {
+            "name": "Slash the Ranks"
+        },
         {
             "name": "Winds of Abandon",
-            "tags": [
-                "removal"
-            ]
-        },
-        {
-            "name": "Path to Exile",
-            "tags": [
-                "removal",
-                "ramp"
-            ]
-        },
-        {
-            "name": "Cathar Commando",
-            "tags": [
-                "removal",
-                "oketra fodder"
-            ]
-        },
-        {
-            "name": "Loran of the Third Path",
-            "tags": [
-                "removal",
-                "oketra fodder",
-                "draw"
-            ]
-        },
-        {
-            "name": "Generous Gift",
-            "tags": [
-                "removal"
-            ]
-        },
-        {
-            "name": "Slash the Ranks",
-            "tags": [
-                "board wipe",
-                "planeswalker hate"
-            ]
-        },
-        {
-            "name": "Austere Command",
-            "tags": [
-                "board wipe"
-            ]
-        },
-        {
-            "name": "Hour of Reckoning",
-            "tags": [
-                "board wipe",
-                "zombie beatdown"
-            ]
+            "reminderText": false
         }
     ],
-    "Block 4 - Protection": [
+    "C.2 - Stax": [
         {
-            "name": "Akroma's Will",
-            "tags": [
-                "board protection",
-                "zombie beatdown"
-            ]
+            "name": "Aven Mindcensor"
         },
         {
-            "name": "Dawn's Truce",
-            "tags": [
-                "board protection"
-            ]
+            "name": "Clarion Conqueror"
         },
         {
-            "name": "Flawless Maneuver",
-            "tags": [
-                "board protection"
-            ]
+            "name": "Magus of the Moat"
         },
         {
-            "name": "Flare of Fortitude",
-            "tags": [
-                "board protection",
-                "defense"
-            ]
-        },
-        {
-            "name": "Dedicated Dollmaker",
-            "tags": [
-                "board protection",
-                "oketra fodder"
-            ]
-        },
-        {
-            "name": "Duty Beyond Death",
-            "tags": [
-                "board protection"
-            ]
-        },
-        {
-            "name": "Basilisk Collar",
-            "tags": [
-                "commander protection"
-            ]
-        },
-        {
-            "name": "Lightning Greaves",
-            "tags": [
-                "commander protection"
-            ]
+            "name": "Binding Mummy"
         }
     ],
-    "Block 5 - Zombie Beatdown": [
+    "D.1 - Commander Protection": [
         {
-            "name": "Elesh Norn, Grand Cenobite",
-            "tags": [
-                "anthem",
-                "stax",
-                "zombie beatdown"
-            ]
+            "name": "Commander's Plate"
         },
         {
-            "name": "Elesh Norn, Mother of Machines",
-            "tags": [
-                "anthem",
-                "stax",
-                "zombie beatdown"
-            ]
+            "name": "Darksteel Plate"
+        }
+    ],
+    "D.2 - Board Protection": [
+        {
+            "name": "Brought Back"
+        },
+        {
+            "name": "Eerie Interlude"
+        },
+        {
+            "name": "Emeria, the Sky Ruin"
+        },
+        {
+            "name": "Flare of Fortitude"
+        },
+        {
+            "name": "Flawless Maneuver"
+        },
+        {
+            "name": "Ghostway"
+        },
+        {
+            "name": "Guardian of Faith",
+            "reminderText": true
+        },
+        {
+            "name": "Rune-Tail, Kitsune Ascendant // Rune-Tail's Essence"
+        },
+        {
+            "name": "Second Sunrise"
+        },
+        {
+            "name": "Your Temple Is Under Attack"
+        }
+    ],
+    "D.3 - Survival": [
+        {
+            "name": "Solitary Confinement"
+        }
+    ],
+    "E.1 - Bounce Synergy": [
+        {
+            "name": "Ambrosia Whiteheart"
+        },
+        {
+            "name": "Aviary Mechanic"
+        },
+        {
+            "name": "Dust Elemental"
+        },
+        {
+            "name": "Jeskai Barricade"
+        },
+        {
+            "name": "Kor Skyfisher"
+        },
+        {
+            "name": "Mischievous Pup"
+        },
+        {
+            "name": "Stonecloaker"
+        },
+        {
+            "name": "Sunpearl Kirin"
+        },
+        {
+            "name": "Whitemane Lion"
+        }
+    ],
+    "E.2 - Wincon Enabler": [
+        {
+            "name": "Anointed Procession"
+        },
+        {
+            "name": "Concerted Effort"
+        },
+        {
+            "name": "Defiler of Faith"
         },
         {
             "name": "Mondrak, Glory Dominus",
-            "tags": [
-                "doubler",
-                "zombie beatdown"
-            ]
+            "reminderText": false
         },
         {
-            "name": "Anointed Procession",
-            "tags": [
-                "doubler",
-                "zombie beatdown"
-            ]
+            "name": "Odric, Lunarch Marshal"
         },
         {
-            "name": "Honor of the Pure",
-            "tags": [
-                "anthem",
-                "zombie beatdown"
-            ]
+            "name": "Oketra's Monument"
         },
         {
-            "name": "Divine Sacrament",
-            "tags": [
-                "anthem",
-                "zombie beatdown"
-            ]
+            "name": "Pearl Medallion"
         },
         {
-            "name": "True Conviction",
-            "tags": [
-                "anthem",
-                "zombie beatdown"
-            ]
-        },
-        {
-            "name": "Akroma's Memorial",
-            "tags": [
-                "anthem",
-                "zombie beatdown"
-            ]
+            "name": "The Wind Crystal"
         }
     ],
-    "Block 6 - Bounce Creatures": [
-        {
-            "name": "Jeskai Barricade",
-            "tags": [
-                "oketra fodder",
-                "bounce creature"
-            ]
-        },
-        {
-            "name": "Kor Skyfisher",
-            "tags": [
-                "oketra fodder",
-                "bounce creature"
-            ]
-        },
-        {
-            "name": "Aviary Mechanic",
-            "tags": [
-                "oketra fodder",
-                "bounce creature"
-            ]
-        },
-        {
-            "name": "Sunpearl Kirin",
-            "tags": [
-                "oketra fodder",
-                "bounce creature"
-            ]
-        },
-        {
-            "name": "Whitemane Lion",
-            "tags": [
-                "oketra fodder",
-                "bounce creature"
-            ]
-        },
-        {
-            "name": "Ambrosia Whiteheart",
-            "tags": [
-                "bounce creature",
-                "oketra fodder",
-                "single target protection"
-            ]
-        },
-        {
-            "name": "Dust Elemental",
-            "tags": [
-                "bounce creature"
-            ]
-        },
-        {
-            "name": "Stonecloaker",
-            "tags": [
-                "oketra fodder",
-                "bounce creature"
-            ]
-        }
-    ],
-    "Block 7 - Synergies": [
-        {
-            "name": "Pearl Medallion",
-            "tags": [
-                "discount"
-            ]
-        },
-        {
-            "name": "Oketra's Monument",
-            "tags": [
-                "discount"
-            ]
-        },
-        {
-            "name": "Defiler of Faith",
-            "tags": [
-                "discount",
-                "soldier tokens"
-            ]
-        },
-        {
-            "name": "Clarion Conqueror",
-            "tags": [
-                "stax",
-                "oketra fodder"
-            ]
-        },
-        {
-            "name": "Lunarch Veteran // Luminous Phantom",
-            "tags": [
-                "oketra fodder",
-                "recursion",
-                "life gain"
-            ]
-        },
-        {
-            "name": "Binding Mummy",
-            "tags": [
-                "stax",
-                "zombie beatdown"
-            ]
-        },
-        {
-            "name": "Extraplanar Lens",
-            "tags": [
-                "catch-up ramp"
-            ]
-        },
-        {
-            "name": "The Immortal Sun",
-            "tags": [
-                "discount",
-                "planeswalker hate"
-            ]
-        }
-    ],
-    "Block 8 - Recursion + Stax": [
-        {
-            "name": "Thalia, Guardian of Thraben",
-            "tags": [
-                "stax",
-                "oketra fodder"
-            ]
-        },
-        {
-            "name": "Myrel, Shield of Argive",
-            "tags": [
-                "stax",
-                "soldier tokens"
-            ]
-        },
-        {
-            "name": "Crucible of Worlds",
-            "tags": [
-                "recursion",
-                "catch-up ramp"
-            ]
-        },
-        {
-            "name": "Sun Titan",
-            "tags": [
-                "recursion"
-            ]
-        },
-        {
-            "name": "Disciple of the Sun",
-            "tags": [
-                "recursion"
-            ]
-        },
-        {
-            "name": "Brought Back",
-            "tags": [
-                "recursion"
-            ]
-        },
-        {
-            "name": "Sigil of the New Dawn",
-            "tags": [
-                "recursion"
-            ]
-        },
-        {
-            "name": "Emeria Shepherd",
-            "tags": [
-                "recursion"
-            ]
-        }
-    ],
-    "Block 9 - Utility Lands": [
-        {
-            "name": "Karoo",
-            "tags": [
-                "catch-up ramp",
-                "bounce land"
-            ]
-        },
-        {
-            "name": "Guildless Commons",
-            "tags": [
-                "catch-up ramp",
-                "bounce land"
-            ]
-        },
+    "F.1 - Lands": [
         {
             "name": "Arid Archway",
-            "tags": [
-                "catch-up ramp",
-                "desert",
-                "bounce land"
-            ]
-        },
-        {
-            "name": "Lotus Vale",
-            "tags": [
-                "catch-up ramp",
-                "lotus land"
-            ]
-        },
-        {
-            "name": "Lotus Field",
-            "tags": [
-                "catch-up ramp",
-                "lotus land"
-            ]
-        },
-        {
-            "name": "Scorched Ruins",
-            "tags": [
-                "catch-up ramp",
-                "lotus land"
-            ]
-        },
-        {
-            "name": "Vesuva",
-            "tags": [
-                "catch-up ramp",
-                "bounce land",
-                "lotus land",
-                "utility land"
-            ]
-        },
-        {
-            "name": "Scavenger Grounds",
-            "tags": [
-                "desert",
-                "utility land",
-                "graveyard hate"
-            ]
+            "reminderText": false
         },
         {
             "name": "Desert of the True",
-            "tags": [
-                "desert"
-            ]
+            "reminderText": false
         },
         {
-            "name": "Inventors' Fair",
-            "tags": [
-                "recursion"
-            ]
+            "name": "Guildless Commons"
         },
         {
-            "name": "War Room",
-            "tags": [
-                "draw"
-            ]
+            "name": "Karoo"
         },
         {
-            "name": "Cavern of Souls",
-            "tags": [
-                "counter protection"
-            ]
+            "name": "Lotus Field"
         },
         {
-            "name": "Emeria, the Sky Ruin",
-            "tags": [
-                "recursion"
-            ]
+            "name": "Lotus Vale"
         },
         {
             "name": "Nykthos, Shrine to Nyx",
-            "tags": [
-                "ramp"
-            ]
+            "reminderText": false
         },
         {
-            "name": "Thespian's Stage",
-            "tags": [
-                "utility land",
-                "ramp"
-            ]
-        }
-    ],
-    "Block A - Manabase": [
+            "name": "Scorched Ruins"
+        },
+        {
+            "name": "Thespian's Stage"
+        },
+        {
+            "name": "Vesuva"
+        },
         {
             "name": "Snow-Covered Plains",
-            "repeats": 20
-        },
-        {
-            "name": "Snow-Covered Swamp",
-            "repeats": 20,
-            "sideboard": true
+            "repeats": 28,
+            "reminderText": false
         }
     ],
-    "Block B - Tokens": [
+    "F.2 -- Sideboard": [
         {
             "name": "Zombie Warrior",
             "repeats": 3,
-            "cardoid": [
-                {
-                    "layout": "token",
-                    "name": "Zombie Warrior",
-                    "colors": [
-                        "B"
-                    ],
-                    "power": "4",
-                    "toughness": "4",
-                    "text": "Vigilance",
-                    "type": "Token Creature - Zombie Warrior",
-                    "types": [
-                        "Creature"
-                    ],
-                    "subtypes": [
-                        "Zombie",
-                        "Warrior"
-                    ]
-                }
-            ]
+            "arts": {
+                "url": "https://cards.scryfall.io/art_crop/front/2/e/2e06aa97-1611-4af6-8bad-32051927fcfd.jpg?1557575941",
+                "credit": "Mike Bierek",
+                "centerText": true
+            },
+            "cardoid": {
+                "name": "Zombie Warrior",
+                "layout": "token",
+                "colors": [
+                    "B"
+                ],
+                "power": "4",
+                "toughness": "4",
+                "text": "Vigilance",
+                "type": "Creature Token \u2014 Zombie Warrior",
+                "types": [
+                    "Creature"
+                ]
+            }
+        },
+        {
+            "name": "Soldier",
+            "arts": {
+                "url": "https://cards.scryfall.io/art_crop/front/6/4/6455d903-6996-448f-9148-9068febecb00.jpg?1742506671",
+                "credit": "Eelis Kyttanen",
+                "full": true
+            },
+            "cardoid": {
+                "name": "Soldier",
+                "layout": "token",
+                "colors": [
+                    "W"
+                ],
+                "power": "1",
+                "toughness": "1",
+                "text": "",
+                "type": "Creature Token \u2014 Soldier",
+                "types": [
+                    "Creature"
+                ]
+            }
+        },
+        {
+            "name": "Warrior",
+            "arts": {
+                "centerText": true,
+                "url": "https://cards.scryfall.io/art_crop/front/1/d/1d7b1dfa-14a2-4e4e-baf2-e06672651db1.jpg?1675455562",
+                "credit": "Magali Villeneuve"
+            },
+            "cardoid": {
+                "name": "Warrior",
+                "layout": "token",
+                "colors": [
+                    "W"
+                ],
+                "power": "1",
+                "toughness": "1",
+                "text": "Vigilance",
+                "type": "Creature Token \u2014 Warrior",
+                "types": [
+                    "Creature"
+                ]
+            }
+        },
+        {
+            "name": "Elephant",
+            "arts": {
+                "url": "https://cards.scryfall.io/art_crop/front/f/c/fc70e127-ffc8-45ed-9ca3-7f9f926ac4d5.jpg?1700321873",
+                "credit": "Kev Walker"
+            },
+            "cardoid": {
+                "name": "Elephant",
+                "layout": "token",
+                "colors": [
+                    "G"
+                ],
+                "power": "3",
+                "toughness": "3",
+                "text": "",
+                "type": "Creature Token \u2014 Elephant",
+                "types": [
+                    "Creature"
+                ]
+            }
         }
     ]
 }
