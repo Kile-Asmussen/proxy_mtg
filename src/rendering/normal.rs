@@ -180,7 +180,7 @@ pub fn rules_text_basic_div(card: &Card, proxy: &Proxy) -> Element {
     where
         S: AsRef<str>,
     {
-        Element::new(Tag::i).class(["ms", class.as_ref(), "ms-5x"])
+        Element::new(Tag::i).class(["ms", class.as_ref(), "ms-6x"])
     }
 }
 

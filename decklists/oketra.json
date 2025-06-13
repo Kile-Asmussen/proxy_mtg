@@ -94,7 +94,8 @@
             "name": "Austere Command"
         },
         {
-            "name": "Dismantling Wave"
+            "name": "Dismantling Wave",
+            "reminderText": "false"
         },
         {
             "name": "Generous Gift"
@@ -269,7 +270,11 @@
         {
             "name": "Snow-Covered Plains",
             "repeats": 28,
-            "reminderText": false
+            "reminderText": false,
+            "arts": {
+                "url": "https://cards.scryfall.io/art_crop/front/7/a/7a961768-6166-4852-b518-23eb4cced47d.jpg?1562202622",
+                "credit": "Titus Lunter"
+            }
         }
     ],
     "F.2 -- Sideboard": [
