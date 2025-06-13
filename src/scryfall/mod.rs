@@ -32,10 +32,14 @@ impl ScryfallCard {
 
 #[derive(Deserialize, Default)]
 pub struct ScryfallError {
-    pub object: Error,
-    pub status: usize,
-    pub code: String,
-    pub details: String,
+    #[serde(rename = "object")]
+    _object: Error,
+    #[serde(rename = "status")]
+    pub _status: usize,
+    #[serde(rename = "code")]
+    pub _code: String,
+    #[serde(rename = "details")]
+    pub _details: String,
 }
 
 #[derive(Deserialize, Default)]
@@ -48,7 +52,8 @@ pub struct Card;
 
 #[derive(Deserialize, Default)]
 pub struct ScryfallArt {
-    pub object: Card,
+    #[serde(rename = "object")]
+    _object: Card,
     pub artist: String,
     pub image_uris: ImageUris,
 }
@@ -72,7 +77,8 @@ pub struct ImageUris {
 
 #[derive(Deserialize)]
 pub struct ScryfallMulti {
-    pub object: Card,
+    #[serde(rename = "object")]
+    _object: Card,
     pub card_faces: Vec<ScryfallArt>,
 }
 

@@ -2,11 +2,16 @@ pub mod decklists;
 pub mod deserializers;
 
 use deserializers::OneOrMany;
+use itertools::{EitherOrBoth, Itertools};
 use std::collections::BTreeSet;
 
 use serde::Deserialize;
 
-use crate::atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::CardLayout};
+use crate::{
+    atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::CardLayout},
+    scryfall::ScryfallCard,
+    utils::iter::IterExt,
+};
 
 #[derive(Clone, Debug, Default, Deserialize)]
 pub struct Proxy {
@@ -48,6 +53,40 @@ impl Proxy {
 
     fn reminder_text_default() -> bool {
         true
+    }
+
+    pub fn set_scryfall_arts<F>(&mut self, mut scryfall: F) -> anyhow::Result<()>
+    where
+        F: FnMut() -> anyhow::Result<ScryfallCard>,
+    {
+        if self.arts.len() < self.cardoid.printed_cards() || self.arts.iter().any(|a| a.scryfall) {
+            self.arts = self
+                .arts
+                .iter_mut()
+                .zip_longest(scryfall()?.arts())
+                .map(|x| match x {
+                    EitherOrBoth::Both(a, b) => a.copy_from(&b).clone(),
+                    EitherOrBoth::Left(a) => a.clone(),
+                    EitherOrBoth::Right(a) => a,
+                })
+                .collvect();
+        }
+        Ok(())
+    }
+
+    pub fn add_scryfall_arts<F>(&mut self, mut scryfall: F) -> anyhow::Result<()>
+    where
+        F: FnMut() -> anyhow::Result<ScryfallCard>,
+    {
+        if self.arts.iter().any(|a| a.scryfall) {
+            self.arts
+                .iter_mut()
+                .zip(scryfall()?.arts())
+                .for_each(|(a, b)| {
+                    a.copy_from(&b);
+                });
+        }
+        Ok(())
     }
 }
 

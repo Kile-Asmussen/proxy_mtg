@@ -70,28 +70,15 @@ impl Build {
 
             if proxy.layout() != &CardLayout::Token {
                 if let Some(true) = settings.scryfall {
-                    let arts = render
-                        .scryfall_client
-                        .get_scryfall_card_art(&proxy.name)?
-                        .arts();
-                    proxy.arts = proxy
-                        .arts
-                        .iter_mut()
-                        .zip_longest(arts)
-                        .map(|x| match x {
-                            EitherOrBoth::Both(a, b) => a.copy_from(&b).clone(),
-                            EitherOrBoth::Left(a) => a.clone(),
-                            EitherOrBoth::Right(a) => a,
-                        })
-                        .collvect()
+                    let name = proxy.name.clone();
+                    proxy.set_scryfall_arts(|| {
+                        render.scryfall_client.get_scryfall_card_art(&name)
+                    })?;
                 } else if let None = settings.scryfall {
-                    let arts = render
-                        .scryfall_client
-                        .get_scryfall_card_art(&proxy.name)?
-                        .arts();
-                    proxy.arts.iter_mut().zip(arts).for_each(|(a, b)| {
-                        a.copy_from(&b);
-                    });
+                    let name = proxy.name.clone();
+                    proxy.add_scryfall_arts(|| {
+                        render.scryfall_client.get_scryfall_card_art(&name)
+                    })?;
                 }
             }
             render.add_proxy(proxy);
