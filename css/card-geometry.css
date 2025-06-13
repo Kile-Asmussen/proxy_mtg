@@ -202,6 +202,10 @@ img.art.vertical {
     left: calc(var(--fullwidth-margin) + var(--halfwidth-box));
 }
 
+div.card.reverse.flip>img.art {
+    transform: rotate(180deg);
+}
+
 span.art-credits {
     bottom: 0;
     right: var(--fullwidth-margin);

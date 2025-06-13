@@ -199,8 +199,6 @@ impl ScryfallClient {
 
         let body = response.bytes()?.to_vec();
 
-        println!("{}", String::from_utf8(body.clone())?);
-
         Ok(serde_json::from_slice(&body)?)
     }
 }

@@ -119,11 +119,19 @@ pub fn card_name_spans(card: &Card, proxy: &Proxy) -> (Element, Option<Element>)
 }
 
 pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Element> {
-    let Some(art) = get_side(card.side, &proxy.arts) else {
+    let mut side = card.side;
+    let mut classes = vec!["art"];
+
+    if proxy.layout() == &CardLayout::Flip && card.side == Side::B {
+        if let Some(Art { scryfall: true, .. }) = get_side(Side::A, &proxy.arts) {
+            side = Side::A;
+        }
+    }
+
+    let Some(art) = get_side(side, &proxy.arts) else {
         return vec![];
     };
 
-    let mut classes = vec!["art"];
     if art.full {
         classes.push("full-art");
     }

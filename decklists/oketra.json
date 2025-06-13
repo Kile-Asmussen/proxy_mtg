@@ -2,6 +2,10 @@
     "A - Commander": [
         {
             "name": "God-Eternal Oketra",
+            "arts": {
+                "url": "https://cards.scryfall.io/art_crop/front/f/2/f2cc79cf-d4db-4236-b3e2-fd12662b2a74.jpg?1543674712",
+                "credit": "Chase Stone"
+            },
             "customize": {
                 "name": "God-Epurrnal Okittytra"
             }
@@ -10,10 +14,7 @@
     "B.1 - Card Advantage": [
         {
             "name": "Bennie Bracks, Zoologist",
-            "reminderText": false,
-            "arts": {
-                "scryfall": true
-            }
+            "reminderText": false
         },
         {
             "name": "Caretaker's Talent"
@@ -25,13 +26,20 @@
             "name": "Rumor Gatherer"
         },
         {
-            "name": "Skullclamp"
+            "name": "Skullclamp",
+            "arts": {
+                "url": "https://cards.scryfall.io/art_crop/front/4/e/4e5d5649-3e30-4aca-80f8-5a7522d366da.jpg?1748705453",
+                "credit": "Josephine Chang"
+            }
         },
         {
             "name": "Tocasia's Welcome"
         },
         {
             "name": "War Room"
+        },
+        {
+            "name": "Idol of Oblivion"
         }
     ],
     "B.2 - Land Advantage": [
@@ -107,7 +115,10 @@
     ],
     "C.2 - Stax": [
         {
-            "name": "Aven Mindcensor"
+            "name": "Aven Mindcensor",
+            "customize": {
+                "text": "Flash, flying\nIf an opponent would search a library, that player searches the top four cards of that library instead."
+            }
         },
         {
             "name": "Clarion Conqueror"
@@ -148,10 +159,9 @@
         },
         {
             "name": "Guardian of Faith",
-            "reminderText": true
-        },
-        {
-            "name": "Rune-Tail, Kitsune Ascendant // Rune-Tail's Essence"
+            "customize": {
+                "text": "Flash, vigilance\nWhen this creature enters, any number of other target creatures you control phase out. (They phase in on your untap step.)"
+            }
         },
         {
             "name": "Second Sunrise"
@@ -168,7 +178,10 @@
             "name": "Aviary Mechanic"
         },
         {
-            "name": "Jeskai Barricade"
+            "name": "Jeskai Barricade",
+            "customize": {
+                "text": "Flash, defender\nWhen this creature enters, you may return another target creature you control to its owner's hand."
+            }
         },
         {
             "name": "Kor Skyfisher"
@@ -177,7 +190,10 @@
             "name": "Stonecloaker"
         },
         {
-            "name": "Sunpearl Kirin"
+            "name": "Sunpearl Kirin",
+            "customize": {
+                "text": "Flash, flying\nWhen this creature enters, you may return another target nonland permanent you control to its owner's hand. If it was a token, draw a card."
+            }
         },
         {
             "name": "Whitemane Lion"
@@ -340,6 +356,26 @@
                 "toughness": "3",
                 "text": "",
                 "type": "Creature Token \u2014 Elephant",
+                "types": [
+                    "Creature"
+                ]
+            }
+        },
+        {
+            "name": "Eldrazi",
+            "arts": {
+                "url": "https://cards.scryfall.io/art_crop/front/2/0/209a3cfb-2c5a-4a9f-87f8-f9f6e290a88b.jpg?1717193455",
+                "credit": "Jack Wang",
+                "full": true
+            },
+            "cardoid": {
+                "name": "Eldrazi",
+                "layout": "token",
+                "colors": [],
+                "power": "10",
+                "toughness": "10",
+                "text": "",
+                "type": "Creature Token \u2014 Eldrazi",
                 "types": [
                     "Creature"
                 ]

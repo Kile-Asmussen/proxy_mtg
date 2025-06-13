@@ -103,5 +103,5 @@
 }
 
 img.art {
-    filter: grayscale(100%)
+    filter: grayscale(100%) opacity(50%);
 }

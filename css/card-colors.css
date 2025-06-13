@@ -280,13 +280,24 @@ div.card.white.blue.black.red.green {
 }
 
 div.card.token>div.title.bar {
-    border-width: var(--pin-line-width);
+    border-style: none;
     justify-content: center;
-    background-color: black;
     color: white;
 }
 
+div.card.token>div.title.bar>span.name {
+    text-shadow:
+        0 0 3pt black, 0 0 3pt black, 0 0 3pt black, 0 0 3pt black,
+        0 0 3pt black, 0 0 3pt black, 0 0 3pt black, 0 0 3pt black;
+}
+
+div.card.token>div.alt-title.bar>span.name {
+    text-shadow:
+        0 0 2pt black, 0 0 2pt black, 0 0 2pt black, 0 0 2pt black,
+        0 0 2pt black, 0 0 2pt black, 0 0 2pt black, 0 0 2pt black;
+}
+
 div.card.token>div.alt-title.bar {
-    background-color: black;
+    border-style: none;
     color: white;
 }
