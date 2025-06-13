@@ -3,7 +3,7 @@ use crate::{
     html::*,
     proxy::{Art, Proxy},
     rendering::{
-        manafont::{ms_cost_shadow, ManaFontSymbolics},
+        manafont::ManaFontSymbolics,
         reminders::{NoReminderText, ReminderText},
     },
     utils::{
@@ -185,7 +185,7 @@ pub fn type_line_span(card: &Card, proxy: &Proxy) -> Element {
     Element::new(Tag::span).class(["type"]).node(type_line)
 }
 
-pub fn color_indicator_span(card: &Card, proxy: &Proxy) -> Element {
+pub fn color_indicator_span(card: &Card, _proxy: &Proxy) -> Element {
     Element::new(Tag::span).class(["indicator"]).nodes(
         WUBRG::render(&card.colors)
             .to_lowercase()
