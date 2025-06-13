@@ -6,7 +6,6 @@ use crate::{
     atomic_cards::types::CardLayout,
     proxy::decklists::DeckList,
     rendering::{RenderContext, RenderSettings},
-    utils::iter::IterExt,
 };
 
 #[derive(Parser, Debug, Clone)]
@@ -23,10 +22,10 @@ pub struct Build {
     pub reminder_text: bool,
     #[arg(long, conflicts_with = "reminder_text")]
     pub no_reminder_text: bool,
-    #[arg(long, conflicts_with = "no_scryfall_art")]
-    pub scryfall_art: bool,
     #[arg(long, conflicts_with = "scryfall_art")]
-    pub no_scryfall_art: bool,
+    pub all_scryfall_art: bool,
+    #[arg(long, conflicts_with = "all_scryfall_art")]
+    pub scryfall_art: bool,
 }
 
 impl Build {
@@ -45,12 +44,12 @@ impl Build {
             } else {
                 None
             },
-            scryfall: if self.scryfall_art {
+            scryfall: if self.all_scryfall_art {
                 Some(true)
-            } else if self.no_scryfall_art {
-                Some(false)
-            } else {
+            } else if self.scryfall_art {
                 None
+            } else {
+                Some(false)
             },
         };
         let mut render = RenderContext::new(settings)?;
