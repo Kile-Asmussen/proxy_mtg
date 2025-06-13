@@ -21,10 +21,10 @@ pub struct Build {
     pub reminder_text: bool,
     #[arg(long, conflicts_with = "reminder_text")]
     pub no_reminder_text: bool,
-    #[arg(long, conflicts_with = "scryfall_art")]
-    pub all_scryfall_art: bool,
-    #[arg(long, conflicts_with = "all_scryfall_art")]
-    pub scryfall_art: bool,
+    #[arg(long, conflicts_with = "allow_scryfall_art")]
+    pub force_scryfall_art: bool,
+    #[arg(long, conflicts_with = "force_scryfall_art")]
+    pub allow_scryfall_art: bool,
 }
 
 impl Build {
@@ -43,9 +43,9 @@ impl Build {
             } else {
                 None
             },
-            scryfall: if self.all_scryfall_art {
+            scryfall: if self.force_scryfall_art {
                 Some(true)
-            } else if self.scryfall_art {
+            } else if self.allow_scryfall_art {
                 None
             } else {
                 Some(false)
