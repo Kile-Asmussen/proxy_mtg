@@ -10,9 +10,9 @@ mod utils;
 
 use std::path::Path;
 
-use atomic_cards::*;
+use atomic_cards::AtomicCardsFile;
 use clap::Parser;
-use command::*;
+use command::Command;
 
 use crate::proxy::decklists::DeckList;
 
