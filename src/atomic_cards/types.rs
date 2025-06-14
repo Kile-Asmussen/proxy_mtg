@@ -12,16 +12,13 @@ pub enum Supertype {
     Legendary,
     Snow,
 
-    #[serde(untagged)]
-    Other(String),
+    #[serde(other)]
+    Unsupported,
 }
 
 impl Display for Supertype {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Other(s) => f.write_str(s),
-            x => Debug::fmt(x, f),
-        }
+        Debug::fmt(self, f)
     }
 }
 
@@ -37,16 +34,15 @@ pub enum Type {
     Planeswalker,
     Sorcery,
 
-    #[serde(untagged)]
-    Other(String),
+    #[serde(other)]
+    Unsupported,
 }
 
 impl Type {
     pub fn plural(&self) -> Option<String> {
         match self {
             Type::Sorcery => Some("Sorceries".s()),
-            Type::Kindred => None,
-            Type::Other(_) => None,
+            Type::Kindred | Type::Unsupported => None,
             rest => Some(format!("{}s", rest)),
         }
     }
@@ -54,10 +50,7 @@ impl Type {
 
 impl Display for Type {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Other(s) => f.write_str(s),
-            x => Debug::fmt(x, f),
-        }
+        Debug::fmt(self, f)
     }
 }
 
@@ -197,8 +190,8 @@ pub enum CardLayout {
     Token,
     #[serde(rename = "transform")]
     Transform,
-    #[serde(untagged)]
-    Other(String),
+    #[serde(other)]
+    Unsupported,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

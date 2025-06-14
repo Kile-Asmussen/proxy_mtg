@@ -14,21 +14,21 @@ pub struct RelatedCards {
     pub spellbook: Vec<String>,
 }
 
-#[derive(Deserialize, Debug, Clone, Default)]
-pub struct PurchaseUrls {
-    #[serde(default, rename = "cardKingdom")]
-    pub card_kingdom: String,
-    #[serde(default, rename = "cardKingdomEtched")]
-    pub card_kingdom_etched: String,
-    #[serde(default, rename = "cardKingdomFoil")]
-    pub card_kingdom_foil: String,
-    #[serde(default)]
-    pub cardmarket: String,
-    #[serde(default)]
-    pub tcgplayer: String,
-    #[serde(default, rename = "tcgplayerEtched")]
-    pub tcgplayer_etched: String,
-}
+// #[derive(Deserialize, Debug, Clone, Default)]
+// pub struct PurchaseUrls {
+//     #[serde(default, rename = "cardKingdom")]
+//     pub card_kingdom: String,
+//     #[serde(default, rename = "cardKingdomEtched")]
+//     pub card_kingdom_etched: String,
+//     #[serde(default, rename = "cardKingdomFoil")]
+//     pub card_kingdom_foil: String,
+//     #[serde(default)]
+//     pub cardmarket: String,
+//     #[serde(default)]
+//     pub tcgplayer: String,
+//     #[serde(default, rename = "tcgplayerEtched")]
+//     pub tcgplayer_etched: String,
+// }
 
 #[derive(Deserialize, Debug, Default, Clone)]
 pub struct Ruling {
@@ -54,45 +54,45 @@ pub struct ForeignData {
     pub type_line: String,
 }
 
-#[derive(Deserialize, Debug, Clone, Default)]
-pub struct Identifiers {
-    #[serde(default, rename = "cardKingdomEtchedId")]
-    pub card_kingdom_etched_id: String,
-    #[serde(default, rename = "cardKingdomFoilId")]
-    pub card_kingdom_foil_id: String,
-    #[serde(default, rename = "cardKingdomId")]
-    pub card_kingdom_id: String,
-    #[serde(default, rename = "cardsphereId")]
-    pub cardsphere_id: String,
-    #[serde(default, rename = "mcmId")]
-    pub mcm_id: String,
-    #[serde(default, rename = "mcmMetaId")]
-    pub mcm_meta_id: String,
-    #[serde(default, rename = "mtgArenaId")]
-    pub mtg_arena_id: String,
-    #[serde(default, rename = "mtgjsonFoilVersionId")]
-    pub mtgjson_foil_version_id: String,
-    #[serde(default, rename = "mtgjsonNonFoilVersionId")]
-    pub mtgjson_non_foil_version_id: String,
-    #[serde(default, rename = "mtgjsonV4Id")]
-    pub mtgjson_v4_id: String,
-    #[serde(default, rename = "mtgoFoilId")]
-    pub mtgo_foil_id: String,
-    #[serde(default, rename = "mtgoId")]
-    pub mtgo_id: String,
-    #[serde(default, rename = "multiverseId")]
-    pub multiverse_id: String,
-    #[serde(default, rename = "scryfallId")]
-    pub scryfall_id: String,
-    #[serde(default, rename = "scryfallOracleId")]
-    pub scryfall_oracle_id: String,
-    #[serde(default, rename = "scryfallIllustrationId")]
-    pub scryfall_illustration_id: String,
-    #[serde(default, rename = "tcgplayerProductId")]
-    pub tcgplayer_product_id: String,
-    #[serde(default, rename = "tcgplayerEtchedProductId")]
-    pub tcgplayer_etched_product_id: String,
-}
+// #[derive(Deserialize, Debug, Clone, Default)]
+// pub struct Identifiers {
+//     #[serde(default, rename = "cardKingdomEtchedId")]
+//     pub card_kingdom_etched_id: String,
+//     #[serde(default, rename = "cardKingdomFoilId")]
+//     pub card_kingdom_foil_id: String,
+//     #[serde(default, rename = "cardKingdomId")]
+//     pub card_kingdom_id: String,
+//     #[serde(default, rename = "cardsphereId")]
+//     pub cardsphere_id: String,
+//     #[serde(default, rename = "mcmId")]
+//     pub mcm_id: String,
+//     #[serde(default, rename = "mcmMetaId")]
+//     pub mcm_meta_id: String,
+//     #[serde(default, rename = "mtgArenaId")]
+//     pub mtg_arena_id: String,
+//     #[serde(default, rename = "mtgjsonFoilVersionId")]
+//     pub mtgjson_foil_version_id: String,
+//     #[serde(default, rename = "mtgjsonNonFoilVersionId")]
+//     pub mtgjson_non_foil_version_id: String,
+//     #[serde(default, rename = "mtgjsonV4Id")]
+//     pub mtgjson_v4_id: String,
+//     #[serde(default, rename = "mtgoFoilId")]
+//     pub mtgo_foil_id: String,
+//     #[serde(default, rename = "mtgoId")]
+//     pub mtgo_id: String,
+//     #[serde(default, rename = "multiverseId")]
+//     pub multiverse_id: String,
+//     #[serde(default, rename = "scryfallId")]
+//     pub scryfall_id: String,
+//     #[serde(default, rename = "scryfallOracleId")]
+//     pub scryfall_oracle_id: String,
+//     #[serde(default, rename = "scryfallIllustrationId")]
+//     pub scryfall_illustration_id: String,
+//     #[serde(default, rename = "tcgplayerProductId")]
+//     pub tcgplayer_product_id: String,
+//     #[serde(default, rename = "tcgplayerEtchedProductId")]
+//     pub tcgplayer_etched_product_id: String,
+// }
 
 #[derive(Deserialize, Debug, Clone, Default)]
 pub struct Legalities {

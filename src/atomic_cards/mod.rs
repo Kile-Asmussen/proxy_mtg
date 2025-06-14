@@ -24,9 +24,10 @@ pub struct AtomicCardsFile {
 
 impl AtomicCardsFile {
     pub fn load(verbose: bool) -> anyhow::Result<Self> {
-        let (atomic_cards_file_json, start) = Self::read_or_download(verbose)?;
+        let (mut atomic_cards_file_json, start) = Self::read_or_download(verbose)?;
 
-        let atomic_cards: AtomicCardsFile = serde_json::from_slice(&atomic_cards_file_json[..])?;
+        let atomic_cards: AtomicCardsFile =
+            serde_json::from_slice(&mut atomic_cards_file_json[..])?;
 
         if verbose {
             println!(

@@ -2,7 +2,7 @@ use indexmap::IndexSet;
 use serde::Deserialize;
 
 use super::{
-    metadata::{ForeignData, Identifiers, Legalities, PurchaseUrls, RelatedCards, Ruling},
+    metadata::{ForeignData, Legalities, RelatedCards, Ruling},
     types::{CardLayout, FaceLayout, LeadershipSkills, Side, Supertype, Type, WUBRG},
 };
 
@@ -19,34 +19,34 @@ pub struct Card {
     #[serde(default, rename = "colorIndicator")]
     pub color_indicator: BTreeSet<WUBRG>,
     pub colors: BTreeSet<WUBRG>,
-    #[serde(default, rename = "convertedManaCost")]
-    pub converted_mana_cost: f64,
+    // #[serde(default, rename = "convertedManaCost")]
+    // pub converted_mana_cost: f64,
     #[serde(default)]
     pub defense: String,
     #[serde(default, rename = "edhrecRank")]
     pub edhrec_rank: Option<f64>,
     #[serde(default, rename = "edhrecSaltiness")]
     pub edhrec_saltiness: Option<f64>,
-    #[serde(default, rename = "faceConvertedManaCost")]
-    pub face_converted_mana_cost: f64,
+    // #[serde(default, rename = "faceConvertedManaCost")]
+    // pub face_converted_mana_cost: f64,
     #[serde(default, rename = "faceManaValue")]
     pub face_mana_value: f64,
     #[serde(default, rename = "faceName")]
     pub face_name: String,
-    #[serde(default, rename = "firstPrinting")]
-    pub first_printing: String,
+    // #[serde(default, rename = "firstPrinting")]
+    // pub first_printing: String,
     #[serde(default, rename = "foreignData")]
     pub foreign_data: Vec<ForeignData>,
-    #[serde(default)]
-    pub hand: String,
+    // #[serde(default)]
+    // pub hand: String,
     #[serde(default, rename = "hasAlternativeDeckLimit")]
     pub has_alternative_deck_limit: bool,
-    #[serde(default)]
-    pub identifiers: Identifiers,
+    // #[serde(default)]
+    // pub identifiers: Identifiers,
     #[serde(default, rename = "isFunny")]
     pub is_funny: bool,
-    #[serde(default, rename = "isReserved")]
-    pub is_reserved: bool,
+    // #[serde(default, rename = "isReserved")]
+    // pub is_reserved: bool,
     #[serde(default)]
     pub keywords: IndexSet<String>,
     pub layout: CardLayout,
@@ -65,10 +65,10 @@ pub struct Card {
     pub name: String,
     #[serde(default)]
     pub power: String,
-    #[serde(default)]
-    pub printings: Vec<String>,
-    #[serde(default, rename = "purchaseUrls")]
-    pub purchase_urls: PurchaseUrls,
+    // #[serde(default)]
+    // pub printings: Vec<String>,
+    // #[serde(default, rename = "purchaseUrls")]
+    // pub purchase_urls: PurchaseUrls,
     #[serde(default, rename = "relatedCards")]
     pub related_cards: RelatedCards,
     #[serde(default)]
@@ -138,7 +138,7 @@ impl Card {
             CardLayout::Split => FaceLayout::Split,
             CardLayout::Token => self.guess_face_layout(),
             CardLayout::Transform => self.guess_face_layout(),
-            CardLayout::Other(_) => FaceLayout::Unsupported,
+            CardLayout::Unsupported => FaceLayout::Unsupported,
         }
     }
 

@@ -134,7 +134,7 @@ impl Searcher {
             .into_iter()
             .filter(|c| c.face().is_funny <= self.funnies)
             .filter(|c| match c.layout() {
-                &CardLayout::Other(_) => self.funnies,
+                &CardLayout::Unsupported => self.funnies,
                 _ => true,
             })
             .filter(|c| self.matches_cardoid(c))
