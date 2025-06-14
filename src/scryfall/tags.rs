@@ -6,7 +6,7 @@ pub trait DeserializeAsTag: Default {
     const TAG: &'static str;
 }
 
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Tag<T: DeserializeAsTag>(PhantomData<T>);
 
 impl<'de, T> Visitor<'de> for Tag<T>

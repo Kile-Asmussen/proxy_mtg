@@ -2,15 +2,15 @@ pub mod decklists;
 pub mod deserializers;
 
 use deserializers::OneOrMany;
+use indexmap::IndexSet;
 use itertools::{EitherOrBoth, Itertools};
-use std::collections::BTreeSet;
 
 use serde::Deserialize;
 
 use crate::{
     atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::CardLayout},
-    scryfall::ScryfallCard,
-    utils::iter::IterExt,
+    scryfall::api::ScryfallCard,
+    utils::{iter::IterExt, ToS},
 };
 
 #[derive(Clone, Debug, Default, Deserialize)]
@@ -27,9 +27,7 @@ pub struct Proxy {
     #[serde(default)]
     pub sideboard: bool,
     #[serde(default)]
-    pub category: String,
-    #[serde(default)]
-    pub tags: BTreeSet<String>,
+    pub tags: IndexSet<String>,
     #[serde(default)]
     pub notes: String,
     #[serde(default, deserialize_with = "OneOrMany::<ForeignData>::one_or_many")]
@@ -53,6 +51,19 @@ impl Proxy {
 
     fn reminder_text_default() -> bool {
         true
+    }
+
+    pub fn category(&self) -> Option<String> {
+        self.tags.get_index(0).map(Clone::clone)
+    }
+
+    pub fn uncategorized(&self) -> String {
+        for t in &self.cardoid.face().types {
+            if let Some(s) = t.plural() {
+                return s;
+            }
+        }
+        return "Uncategorized".s();
     }
 
     pub fn set_scryfall_arts<F>(&mut self, mut scryfall: F) -> anyhow::Result<()>

@@ -11,6 +11,7 @@ use std::{
     time::Instant,
 };
 
+use indexmap::IndexSet;
 use serde::Deserialize;
 
 use crate::utils::iter::*;
@@ -35,7 +36,7 @@ impl AtomicCardsFile {
             );
         }
 
-        let mut malformed_cards = BTreeSet::new();
+        let mut malformed_cards = IndexSet::new();
 
         for (name, cardoid) in &atomic_cards.data {
             if cardoid.sides().len() < 1 || !cardoid.sides().is_sorted() {

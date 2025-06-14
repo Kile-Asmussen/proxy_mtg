@@ -5,6 +5,7 @@ use std::{
     path::Path,
 };
 
+use indexmap::{IndexMap, IndexSet};
 use serde::Deserialize;
 
 use crate::{
@@ -68,16 +69,16 @@ impl DeckList {
             .sum()
     }
 
-    pub fn categories<F>(&self, filter: F) -> BTreeMap<String, BTreeSet<String>>
+    pub fn categories<F>(&self, filter: F) -> IndexMap<String, IndexSet<String>>
     where
         F: Fn(&Proxy) -> bool,
     {
-        let mut res = BTreeMap::new();
+        let mut res = IndexMap::new();
 
         for proxy in &self.0 {
             if filter(proxy) {
-                res.entry(proxy.category.clone())
-                    .or_insert_with(BTreeSet::new)
+                res.entry(proxy.category().unwrap_or(proxy.uncategorized()))
+                    .or_insert_with(IndexSet::new)
                     .insert(proxy.name.clone());
             }
         }
@@ -151,15 +152,15 @@ impl DeckList {
         return res;
     }
 
-    pub fn tags(&self) -> BTreeMap<String, BTreeSet<String>> {
-        let mut res = BTreeMap::new();
+    pub fn tags(&self) -> IndexMap<String, IndexSet<String>> {
+        let mut res = IndexMap::new();
 
         for proxy in &self.0 {
             if !proxy.in_deck() {
                 continue;
             }
             res.entry(proxy.name.clone())
-                .or_insert(BTreeSet::new())
+                .or_insert(IndexSet::new())
                 .append(&mut proxy.tags.clone())
         }
 
@@ -232,7 +233,7 @@ impl<'a> IntoIterator for &'a mut DeckList {
 
 #[derive(Deserialize, Clone)]
 #[serde(transparent)]
-struct DeckListFile(BTreeMap<String, Vec<Proxy>>);
+struct DeckListFile(IndexMap<String, Vec<Proxy>>);
 
 impl DeckListFile {
     fn build(self, atomics: &AtomicCardsFile) -> anyhow::Result<Vec<Proxy>> {
@@ -249,14 +250,17 @@ impl DeckListFile {
     }
 
     fn build_categorized(
-        categories: BTreeMap<String, Vec<Proxy>>,
+        categories: IndexMap<String, Vec<Proxy>>,
         atomics: &AtomicCardsFile,
         res: &mut Vec<Proxy>,
         errors: &mut Vec<String>,
     ) {
         for (category, mut vec) in categories {
-            vec.sort_by_key(|a| a.name.clone());
-            vec.iter_mut().for_each(|a| a.category = category.clone());
+            if !category.is_empty() {
+                vec.iter_mut().for_each(|a| {
+                    a.tags.insert_before(0, category.clone());
+                });
+            }
             Self::build_uncategorized(vec, atomics, res, errors);
         }
     }

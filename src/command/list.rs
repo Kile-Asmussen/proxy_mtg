@@ -1,9 +1,10 @@
 use clap::Parser;
+use indexmap::IndexSet;
 use rand::{seq::SliceRandom, SeedableRng};
 use regex::Regex;
 
 use std::{
-    collections::{BTreeMap, BTreeSet},
+    collections::BTreeMap,
     path::{Path, PathBuf},
 };
 
@@ -283,11 +284,11 @@ impl List {
     pub fn print_lands(decklist: &DeckList) {
         println!("Land base:");
         let mut basic = 0usize;
-        let mut basic_names = BTreeSet::new();
+        let mut basic_names = IndexSet::new();
         let mut tapland = 0usize;
-        let mut tapland_names = BTreeSet::new();
+        let mut tapland_names = IndexSet::new();
         let mut nonmana = 0usize;
-        let mut nonmana_names = BTreeSet::new();
+        let mut nonmana_names = IndexSet::new();
         let mut total = 0usize;
         for proxy in decklist {
             for land in &proxy.cardoid {

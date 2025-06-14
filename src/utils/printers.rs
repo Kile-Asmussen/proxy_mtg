@@ -24,9 +24,6 @@ impl<'a> Display for ToText<'a> {
 
                 write!(f, "\n###")?;
 
-                if !p.category.is_empty() {
-                    write!(f, "\ncategory: {}", p.category)?;
-                }
                 if !p.tags.is_empty() {
                     write!(
                         f,

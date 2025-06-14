@@ -1,3 +1,4 @@
+use indexmap::IndexSet;
 use serde::Deserialize;
 
 use super::{
@@ -47,7 +48,7 @@ pub struct Card {
     #[serde(default, rename = "isReserved")]
     pub is_reserved: bool,
     #[serde(default)]
-    pub keywords: BTreeSet<String>,
+    pub keywords: IndexSet<String>,
     pub layout: CardLayout,
     #[serde(default, rename = "leadershipSkills")]
     pub leadership_skills: LeadershipSkills,

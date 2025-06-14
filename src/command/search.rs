@@ -4,6 +4,7 @@ use std::{
 };
 
 use clap::Parser;
+use indexmap::IndexSet;
 use regex::Regex;
 
 use anyhow::anyhow;
@@ -44,8 +45,6 @@ pub struct Search {
     #[arg(long)]
     pub vgrep: Vec<String>,
     #[arg(long)]
-    pub cat: Vec<String>,
-    #[arg(long)]
     pub sideboard: bool,
     #[arg(long)]
     pub funnies: bool,
@@ -74,7 +73,7 @@ impl Search {
             hits.iter().for_each(|c| searcher.print_cardoid(*c));
         } else {
             let mut hits = searcher.match_proxies(decklist);
-            hits.sort_by_key(|p| (&p.category, &p.name));
+            hits.sort_by_key(|p| (p.category(), &p.name));
             hits.iter().for_each(|p| searcher.print_proxy(*p));
         }
 
@@ -83,14 +82,13 @@ impl Search {
 }
 
 struct Searcher {
-    tags: BTreeSet<String>,
+    tags: IndexSet<String>,
     color: BTreeSet<WUBRG>,
     commander: BTreeSet<WUBRG>,
     name: Vec<Regex>,
     vname: Vec<Regex>,
     r#type: Vec<Regex>,
     vtype: Vec<Regex>,
-    cats: Vec<Regex>,
     grep: Vec<Regex>,
     vgrep: Vec<Regex>,
     text: Vec<Regex>,
@@ -103,7 +101,7 @@ struct Searcher {
 impl Searcher {
     fn new(it: Search) -> anyhow::Result<Self> {
         Ok(Self {
-            tags: BTreeSet::from_iter(it.tag.into_iter()),
+            tags: IndexSet::from_iter(it.tag.into_iter()),
             name: Self::build_regexes(it.case_sensitive, it.name)?,
             vname: Self::build_regexes(it.case_sensitive, it.vname)?,
             color: Self::build_color(it.color, WUBRG::colorless())?,
@@ -114,7 +112,6 @@ impl Searcher {
             vgrep: Self::build_regexes(it.case_sensitive, it.vgrep)?,
             text: Self::build_regexes(it.case_sensitive, it.text)?,
             vtext: Self::build_regexes(it.case_sensitive, it.vtext)?,
-            cats: Self::build_regexes(it.case_sensitive, it.cat)?,
             debug: it.debug,
             sideboard: it.sideboard,
             funnies: it.funnies,
@@ -145,9 +142,7 @@ impl Searcher {
     }
 
     fn matches_proxy(&self, proxy: &Proxy) -> bool {
-        self.tags.is_subset(&proxy.tags)
-            && Self::regex_match(&self.cats, &[], &proxy.category)
-            && self.matches_cardoid(&proxy.cardoid)
+        self.tags.is_subset(&proxy.tags) && self.matches_cardoid(&proxy.cardoid)
     }
 
     fn matches_cardoid(&self, cardoid: &Cardoid) -> bool {

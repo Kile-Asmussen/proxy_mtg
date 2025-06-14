@@ -1,5 +1,5 @@
 {
-    "A - Commander": [
+    "Commander": [
         {
             "name": "God-Eternal Oketra",
             "arts": {
@@ -14,13 +14,17 @@
             ]
         }
     ],
-    "B.1 - Card Advantage": [
+    "Card Advantage": [
         {
             "name": "Bennie Bracks, Zoologist",
             "reminderText": false
         },
         {
-            "name": "Caretaker's Talent"
+            "name": "Caretaker's Talent",
+            "arts": {
+                "url": "https://cards.scryfall.io/art_crop/front/5/9/59988d6c-d43c-4f37-85d5-27c5c47bc792.jpg?1748013667",
+                "credit": "Andrew Mar"
+            }
         },
         {
             "name": "Mentor of the Meek"
@@ -45,7 +49,7 @@
             "name": "Idol of Oblivion"
         }
     ],
-    "B.2 - Land Advantage": [
+    "Land Advantage": [
         {
             "name": "Archaeomancer's Map"
         },
@@ -77,7 +81,7 @@
             "name": "Sand Scout"
         }
     ],
-    "B.3 - Tutors": [
+    "Tutors": [
         {
             "name": "Steelshaper's Gift"
         },
@@ -92,7 +96,7 @@
             "name": "Recruiter of the Guard"
         }
     ],
-    "C.1 - Control": [
+    "Control": [
         {
             "name": "Austere Command"
         },
@@ -117,7 +121,7 @@
             "reminderText": false
         }
     ],
-    "C.2 - Stax": [
+    "Stax": [
         {
             "name": "Aven Mindcensor",
             "customize": {
@@ -134,7 +138,7 @@
             "name": "Binding Mummy"
         }
     ],
-    "D.1 - Commander Protection": [
+    "Commander Protection": [
         {
             "name": "Commander's Plate"
         },
@@ -142,7 +146,7 @@
             "name": "Darksteel Plate"
         }
     ],
-    "D.2 - Board Protection": [
+    "Board Protection": [
         {
             "name": "Brought Back"
         },
@@ -174,7 +178,7 @@
             "name": "Your Temple Is Under Attack"
         }
     ],
-    "E.1 - Bounce Synergy": [
+    "Bounce Synergy": [
         {
             "name": "Ambrosia Whiteheart"
         },
@@ -203,7 +207,7 @@
             "name": "Whitemane Lion"
         }
     ],
-    "E.2 - Wincon Enabler": [
+    "Wincon Enabler": [
         {
             "name": "Anointed Procession"
         },
@@ -230,7 +234,7 @@
             "name": "The Wind Crystal"
         }
     ],
-    "F.1 - Lands": [
+    "Lands": [
         {
             "name": "Arid Archway",
             "reminderText": false
@@ -280,13 +284,13 @@
             }
         }
     ],
-    "F.2 -- Sideboard": [
+    "Sideboard": [
         {
             "name": "Zombie Warrior",
-            "repeats": 3,
+            "repeats": 2,
             "arts": {
-                "url": "https://cards.scryfall.io/art_crop/front/2/e/2e06aa97-1611-4af6-8bad-32051927fcfd.jpg?1557575941",
-                "credit": "Mike Bierek",
+                "url": "https://cards.scryfall.io/art_crop/front/3/4/343fc82d-7d10-4489-8f7e-9995322114e2.jpg?1543675258",
+                "credit": "Josh Hass",
                 "centerText": true
             },
             "cardoid": {
@@ -298,7 +302,7 @@
                 "power": "4",
                 "toughness": "4",
                 "text": "Vigilance",
-                "type": "Creature Token \u2014 Zombie Warrior",
+                "type": "Creature Token — Zombie Warrior",
                 "types": [
                     "Creature"
                 ]
@@ -306,6 +310,7 @@
         },
         {
             "name": "Soldier",
+            "repeats": 2,
             "arts": {
                 "url": "https://cards.scryfall.io/art_crop/front/6/4/6455d903-6996-448f-9148-9068febecb00.jpg?1742506671",
                 "credit": "Eelis Kyttanen",
@@ -320,7 +325,7 @@
                 "power": "1",
                 "toughness": "1",
                 "text": "",
-                "type": "Creature Token \u2014 Soldier",
+                "type": "Creature Token — Soldier",
                 "types": [
                     "Creature"
                 ]
@@ -328,6 +333,7 @@
         },
         {
             "name": "Warrior",
+            "repeats": 2,
             "arts": {
                 "centerText": true,
                 "url": "https://cards.scryfall.io/art_crop/front/1/d/1d7b1dfa-14a2-4e4e-baf2-e06672651db1.jpg?1675455562",
@@ -342,7 +348,33 @@
                 "power": "1",
                 "toughness": "1",
                 "text": "Vigilance",
-                "type": "Creature Token \u2014 Warrior",
+                "type": "Creature Token — Warrior",
+                "types": [
+                    "Creature"
+                ]
+            }
+        },
+        {
+            "name": "Sand Warrior",
+            "repeats": 2,
+            "arts": {
+                "centerText": true,
+                "url": "https://cards.scryfall.io/art_crop/front/1/7/17812f4e-a10c-472b-970f-35a8f392235a.jpg?1717194127",
+                "credit": "Piotr Foksowicz",
+                "full": true
+            },
+            "cardoid": {
+                "name": "Sand Warrior",
+                "layout": "token",
+                "colors": [
+                    "W",
+                    "G",
+                    "R"
+                ],
+                "power": "1",
+                "toughness": "1",
+                "text": "",
+                "type": "Creature Token — Sand Warrior",
                 "types": [
                     "Creature"
                 ]
@@ -363,7 +395,7 @@
                 "power": "3",
                 "toughness": "3",
                 "text": "",
-                "type": "Creature Token \u2014 Elephant",
+                "type": "Creature Token — Elephant",
                 "types": [
                     "Creature"
                 ]
@@ -383,7 +415,7 @@
                 "power": "10",
                 "toughness": "10",
                 "text": "",
-                "type": "Creature Token \u2014 Eldrazi",
+                "type": "Creature Token — Eldrazi",
                 "types": [
                     "Creature"
                 ]

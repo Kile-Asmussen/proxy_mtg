@@ -60,7 +60,7 @@ impl RenderContext {
         }
     }
 
-    pub fn into_file(self) -> anyhow::Result<Document> {
+    pub fn into_file(mut self) -> anyhow::Result<Document> {
         let mut html_pages = Document::new()
             .title("PROXIES")
             .head_link("preconnect", "https://fonts.googleapis.com")
@@ -131,6 +131,14 @@ impl RenderContext {
             }
 
             html_pages = html_pages.body(html_page);
+        }
+
+        if let Some(false) = self.settings.scryfall {
+        } else {
+            match self.scryfall_client.save() {
+                Ok(()) => {}
+                Err(e) => println!("There was a problem saving the cached scryfall results: {e}"),
+            }
         }
 
         Ok(html_pages)
