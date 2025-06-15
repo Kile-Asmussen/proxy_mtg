@@ -1,0 +1,57 @@
+div.card.landscape {
+    --card-height: 63.5mm;
+    --card-width: 88mm;
+    --card-border: 2mm;
+
+    --card-corner-radius: 3mm;
+    --pin-line-width: 0.35mm;
+    --upper-margin: 1mm;
+
+    --fullwidth-box: 80.5mm;
+    --fullheight-box: 44mm;
+
+    --art-height: 24mm;
+    --bar-height: 5mm;
+    --bar-endcap: 1mm;
+
+    --bar-height--small: 3mm;
+
+    --content-width: calc(var(--card-width) - 2*var(--card-border));
+    --content-height: calc(var(--card-height) - 2*var(--card-border));
+    --text-box-height: calc(var(--fullheight-box) - var(--art-height));
+    --fullwidth-margin: calc((var(--content-width) - var(--fullwidth-box))/2);
+    --halfwidth-box: calc(var(--fullwidth-box)/2);
+    --bar-width: calc(var(--fullwidth-box) + 2*var(--bar-endcap));
+    --bar-margin: calc((var(--content-width) - var(--bar-width))/2);
+
+    transform: rotate(90deg);
+    margin-top: calc((var(--card-width) - var(--card-height)) / 2 + var(--card-border));
+    margin-left: calc(-1 * (var(--card-width) - var(--card-height)) / 2 + var(--card-border));
+    margin-right: calc(-1 * (var(--card-width) - var(--card-height)) / 2 + var(--card-border));
+}
+
+div.card.landscape>div.bar.left {
+    width: calc(var(--bar-width)/2 + var(--bar-endcap));
+    z-index: 3;
+    left: var(--bar-margin);
+}
+
+div.card.landscape>div.bar.right {
+    width: calc(var(--bar-width)/2 + var(--bar-endcap));
+    padding-left: calc(3*var(--bar-endcap));
+    left: auto;
+    right: var(--bar-margin);
+}
+
+div.card.landscape>div.text-box.left,
+div.card.landscape>img.art.left {
+    width: calc(var(--content-width)/2 - var(--fullwidth-margin) + var(--pin-line-width));
+    left: var(--fullwidth-margin);
+}
+
+div.card.landscape>div.text-box.right,
+div.card.landscape>img.art.right {
+    width: calc(var(--content-width)/2 - var(--fullwidth-margin) + var(--pin-line-width));
+    right: var(--fullwidth-margin);
+    left: auto;
+}

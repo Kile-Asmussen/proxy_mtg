@@ -206,15 +206,19 @@ pub fn anchor_words(words: &str) -> Vec<Node> {
 }
 
 pub fn card_css_class(card: &Card) -> Vec<&'static str> {
-    if card.types.contains(&Type::Land) {
-        card.color_identity
-            .iter()
-            .map(WUBRG::name)
-            .chain(["colorless"])
-            .collvect()
+    let mut res = if card.face_layout().is_landscape() {
+        vec!["landscape"]
     } else {
-        card.colors.iter().map(WUBRG::name).collvect()
+        vec!["portrait"]
+    };
+
+    if card.types.contains(&Type::Land) {
+        res.append(&mut card.color_identity.iter().map(WUBRG::name).collvect());
+    } else {
+        res.append(&mut card.colors.iter().map(WUBRG::name).collvect());
     }
+
+    res
 }
 
 pub fn rules_text_filter(proxy: &Proxy) -> fn(&str) -> Vec<Node> {

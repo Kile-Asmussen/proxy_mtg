@@ -1,12 +1,13 @@
+use super::is_default;
 use crate::utils::{iter::IterExt, ToS};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::{
     collections::BTreeSet,
     fmt::{Debug, Display},
     ops::Sub,
 };
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Supertype {
     Basic,
     Legendary,
@@ -22,7 +23,7 @@ impl Display for Supertype {
     }
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Type {
     Artifact,
     Battle,
@@ -54,7 +55,7 @@ impl Display for Type {
     }
 }
 
-#[derive(Clone, Copy, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Deserialize, Serialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
 #[repr(u8)]
 pub enum WUBRG {
     W,
@@ -155,7 +156,7 @@ impl Display for WUBRG {
     }
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub enum CardLayout {
     #[serde(rename = "adventure")]
     Adventure,
@@ -223,6 +224,12 @@ impl FaceLayout {
             _ => false,
         }
     }
+
+    pub fn is_landscape(self) -> bool {
+        match self {
+            Self::Battle | Self::Fuse | Self::Aftermath | _ => false,
+        }
+    }
 }
 
 impl Display for FaceLayout {
@@ -231,14 +238,17 @@ impl Display for FaceLayout {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, Default)]
+#[derive(Deserialize, Serialize, Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct LeadershipSkills {
+    #[serde(default, skip_serializing_if = "is_default")]
     pub brawl: bool,
+    #[serde(default, skip_serializing_if = "is_default")]
     pub commander: bool,
+    #[serde(default, skip_serializing_if = "is_default")]
     pub oathbreaker: bool,
 }
 
-#[derive(Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Deserialize, Serialize, Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Side {
     #[serde(rename = "a")]
     #[default]

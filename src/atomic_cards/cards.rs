@@ -1,92 +1,110 @@
 use indexmap::IndexSet;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use super::{
-    metadata::{ForeignData, Legalities, RelatedCards, Ruling},
+    is_default,
+    metadata::{ForeignData, Legalities, RelatedCards /*Ruling*/},
     types::{CardLayout, FaceLayout, LeadershipSkills, Side, Supertype, Type, WUBRG},
 };
 
 use std::collections::BTreeSet;
 
-#[derive(Deserialize, Debug, Clone, Default)]
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
 pub struct Card {
-    #[serde(default, rename = "asciiName")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "asciiName")]
     pub ascii_name: String,
-    #[serde(default, rename = "attractionLights")]
+    #[serde(
+        default,
+        skip_serializing_if = "is_default",
+        rename = "attractionLights"
+    )]
     pub attraction_lights: Vec<String>,
-    #[serde(default, rename = "colorIdentity")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "colorIdentity")]
     pub color_identity: BTreeSet<WUBRG>,
-    #[serde(default, rename = "colorIndicator")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "colorIndicator")]
     pub color_indicator: BTreeSet<WUBRG>,
     pub colors: BTreeSet<WUBRG>,
-    // #[serde(default, rename = "convertedManaCost")]
+    // #[serde(default, skip_serializing_if = "is_default",  rename = "convertedManaCost")]
     // pub converted_mana_cost: f64,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub defense: String,
-    #[serde(default, rename = "edhrecRank")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "edhrecRank")]
     pub edhrec_rank: Option<f64>,
-    #[serde(default, rename = "edhrecSaltiness")]
+    #[serde(
+        default,
+        skip_serializing_if = "is_default",
+        rename = "edhrecSaltiness"
+    )]
     pub edhrec_saltiness: Option<f64>,
-    // #[serde(default, rename = "faceConvertedManaCost")]
+    // #[serde(default, skip_serializing_if = "is_default",  rename = "faceConvertedManaCost")]
     // pub face_converted_mana_cost: f64,
-    #[serde(default, rename = "faceManaValue")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "faceManaValue")]
     pub face_mana_value: f64,
-    #[serde(default, rename = "faceName")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "faceName")]
     pub face_name: String,
-    // #[serde(default, rename = "firstPrinting")]
+    // #[serde(default, skip_serializing_if = "is_default",  rename = "firstPrinting")]
     // pub first_printing: String,
-    #[serde(default, rename = "foreignData")]
+    #[serde(default, skip_serializing_if = "Vec::is_empty", rename = "foreignData")]
     pub foreign_data: Vec<ForeignData>,
     // #[serde(default)]
     // pub hand: String,
-    #[serde(default, rename = "hasAlternativeDeckLimit")]
+    #[serde(
+        default,
+        skip_serializing_if = "is_default",
+        rename = "hasAlternativeDeckLimit"
+    )]
     pub has_alternative_deck_limit: bool,
     // #[serde(default)]
     // pub identifiers: Identifiers,
-    #[serde(default, rename = "isFunny")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "isFunny")]
     pub is_funny: bool,
-    // #[serde(default, rename = "isReserved")]
+    // #[serde(default, skip_serializing_if = "is_default",  rename = "isReserved")]
     // pub is_reserved: bool,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub keywords: IndexSet<String>,
     pub layout: CardLayout,
-    #[serde(default, rename = "leadershipSkills")]
+    #[serde(
+        default,
+        skip_serializing_if = "is_default",
+        rename = "leadershipSkills"
+    )]
     pub leadership_skills: LeadershipSkills,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub legalities: Legalities,
-    #[serde(default)]
-    pub life: String,
-    #[serde(default)]
+    // #[serde(default, skip_serializing_if = "is_default")]
+    // pub life: String,
+    #[serde(default, skip_serializing_if = "is_default")]
     pub loyalty: String,
-    #[serde(default, rename = "manaCost")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "manaCost")]
     pub mana_cost: String,
-    #[serde(default, rename = "manaValue")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "manaValue")]
     pub mana_value: f64,
     pub name: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub power: String,
     // #[serde(default)]
     // pub printings: Vec<String>,
-    // #[serde(default, rename = "purchaseUrls")]
+    // #[serde(default, skip_serializing_if = "is_default",  rename = "purchaseUrls")]
     // pub purchase_urls: PurchaseUrls,
-    #[serde(default, rename = "relatedCards")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "relatedCards")]
     pub related_cards: RelatedCards,
-    #[serde(default)]
-    pub rulings: Vec<Ruling>,
-    #[serde(default)]
+    // #[serde(default, skip_serializing_if = "is_default")]
+    // pub rulings: Vec<Ruling>,
+    #[serde(default, skip_serializing_if = "is_default")]
     pub side: Side,
-    #[serde(default)]
-    pub subsets: Vec<String>,
-    #[serde(default)]
+    // #[serde(default, skip_serializing_if = "is_default")]
+    // pub subsets: Vec<String>,
+    #[serde(default, skip_serializing_if = "is_default")]
     pub subtypes: Vec<String>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub supertypes: Vec<Supertype>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub text: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub toughness: String,
-    #[serde(rename = "type")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "type")]
     pub type_line: String,
+    #[serde(default, skip_serializing_if = "is_default")]
     pub types: Vec<Type>,
 }
 

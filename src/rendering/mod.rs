@@ -72,7 +72,8 @@ impl RenderContext {
             html_pages = html_pages
                 .head_link("stylesheet", "../css/page-layout.css")
                 .head_link("stylesheet", "../css/font-settings.css")
-                .head_link("stylesheet", "../css/card-geometry.css");
+                .head_link("stylesheet", "../css/card-geometry.css")
+                .head_link("stylesheet", "../css/card-landscape.css");
 
             html_pages = if self.settings.in_color {
                 html_pages.head_link("stylesheet", "../css/full-color.css")
@@ -84,7 +85,8 @@ impl RenderContext {
             html_pages = html_pages
                 .inline_style("./css/page-layout.css")?
                 .inline_style("./css/font-settings.css")?
-                .inline_style("./css/card-geometry.css")?;
+                .inline_style("./css/card-geometry.css")?
+                .inline_style("./css/card-landscape.css")?;
 
             html_pages = if self.settings.in_color {
                 html_pages.inline_style("./css/full-color.css")?

@@ -1,16 +1,17 @@
-use serde::Deserialize;
+use super::is_default;
+use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct MetaData {
     pub date: String,
     pub version: String,
 }
 
-#[derive(Deserialize, Debug, Default, Clone)]
+#[derive(Deserialize, Serialize, Debug, Default, Clone, PartialEq, Eq)]
 pub struct RelatedCards {
-    #[serde(default, rename = "reverseRelated")]
+    #[serde(default, skip_serializing_if = "is_default", rename = "reverseRelated")]
     pub reverse_related: Vec<String>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub spellbook: Vec<String>,
 }
 
@@ -30,13 +31,13 @@ pub struct RelatedCards {
 //     pub tcgplayer_etched: String,
 // }
 
-#[derive(Deserialize, Debug, Default, Clone)]
-pub struct Ruling {
-    pub date: String,
-    pub text: String,
-}
+// #[derive(Deserialize, Serialize, Debug, Default, Clone)]
+// pub struct Ruling {
+//     pub date: String,
+//     pub text: String,
+// }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct ForeignData {
     #[serde(default, rename = "faceName")]
     pub face_name: String,
@@ -94,44 +95,44 @@ pub struct ForeignData {
 //     pub tcgplayer_etched_product_id: String,
 // }
 
-#[derive(Deserialize, Debug, Clone, Default)]
+#[derive(Deserialize, Serialize, Debug, Clone, Default, PartialEq, Eq)]
 pub struct Legalities {
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub alchemy: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub brawl: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub commander: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub duel: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub explorer: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub future: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub gladiator: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub historic: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub historicbrawl: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub legacy: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub modern: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub oldschool: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub pauper: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub penny: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub pioneer: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub predh: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub premodern: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub standard: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub vintage: String,
 }

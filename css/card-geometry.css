@@ -1,4 +1,4 @@
-:root {
+div.card.portrait {
     --card-width: 63.5mm;
     --card-height: 88mm;
     --card-border: 2mm;
@@ -71,7 +71,6 @@ div.card::after {
     bottom: calc(-1*var(--card-corner-radius) + var(--card-border)/2 - var(--proxy-mark-nudge));
     content: "PROXY";
 }
-
 
 /* CARD PARTS */
 
@@ -383,13 +382,6 @@ div.dual-face-indicator.bar::before {
 
 div.dual-face-indicator.bar>span {
     margin-top: var(--bar-small-font-adjustment);
-}
-
-div.card.obverse.flip>div.title.bar::before,
-div.card.reverse.flip>div.title.bar::before,
-div.card.obverse.flip>div.dual-face-indicator.bar::before,
-div.card.reverse.flip>div.dual-face-indicator.bar::before {
-    content: "⧎";
 }
 
 div.card.obverse.transform>div.title.bar::before,

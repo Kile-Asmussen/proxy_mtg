@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::proxy::deserializers::OneOrMany;
 use crate::utils::iter::IterExt;
@@ -10,7 +10,7 @@ use super::{
 
 use std::collections::BTreeSet;
 
-#[derive(Deserialize, Debug, Clone, Default)]
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
 #[serde(from = "OneOrMany<Card>")]
 pub struct Cardoid(Vec<Card>);
 
