@@ -3,6 +3,7 @@ mod node;
 mod tags;
 mod tests;
 pub use anyhow::anyhow;
+use css_minify::optimizations::{Level, Minifier};
 pub use elements::*;
 pub use node::*;
 use std::{fmt::Display, path::Path};
@@ -66,13 +67,27 @@ impl Document {
     where
         P: AsRef<Path>,
     {
+        let input =
+            std::fs::read_to_string(&path).map_err(|e| anyhow!("{:?} - {}", path.as_ref(), e))?;
+
+        let minified = Minifier::default().minify(&input, Level::One);
+
+        let input = match minified {
+            Ok(minified) => minified,
+            Err(error) => {
+                eprintln!(
+                    "Failure to minify {}: {}",
+                    path.as_ref().to_string_lossy(),
+                    error
+                );
+                input
+            }
+        };
+
         Ok(self.head(
             Element::new(Tag::style)
                 .node("/*<![CDATA[*/")
-                .node(
-                    std::fs::read_to_string(&path)
-                        .map_err(|e| anyhow!("{:?} - {}", path.as_ref(), e))?,
-                )
+                .node(input)
                 .node("/*]]>*/"),
         ))
     }

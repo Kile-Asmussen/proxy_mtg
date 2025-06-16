@@ -32,7 +32,7 @@ impl AtomicCardsFile {
         let atomic_cards: AtomicCardsFile = serde_json::from_slice(&mut atomic_cards[..])?;
 
         if verbose {
-            println!(
+            eprintln!(
                 "Loaded {} cards in {} milliseconds.",
                 atomic_cards.data.len(),
                 start.elapsed().as_millis()
@@ -64,7 +64,7 @@ impl AtomicCardsFile {
         let mut start = Instant::now();
 
         if !(fs::exists(Self::ATOMIC_CARDS_FILENAME)?) {
-            println!(
+            eprintln!(
                 "{} file not found, downloading...",
                 Self::ATOMIC_CARDS_FILENAME
             );
@@ -80,13 +80,13 @@ impl AtomicCardsFile {
             let mut downloaded = response.bytes()?.to_vec();
 
             if verbose {
-                println!(
+                eprintln!(
                     "Downloaded {} megabytes in {} seconds.",
                     downloaded.len() / 1024 / 1000,
                     start.elapsed().as_secs()
                 );
 
-                println!("Storing cards database...");
+                eprintln!("Storing cards database...");
                 start = Instant::now();
             }
 
@@ -98,13 +98,13 @@ impl AtomicCardsFile {
             std::fs::write(Self::ATOMIC_CARDS_FILENAME, &reserialized[..])?;
 
             if verbose {
-                println!(
+                eprintln!(
                     "Stored {} megabytes in {} milliseconds.",
                     reserialized.len() / 1024 / 1000,
                     start.elapsed().as_millis()
                 );
 
-                println!("Loading cards database...");
+                eprintln!("Loading cards database...");
             }
 
             start = Instant::now();
@@ -112,7 +112,7 @@ impl AtomicCardsFile {
             Ok((reserialized, start))
         } else {
             if verbose {
-                println!("Loading cards database...");
+                eprintln!("Loading cards database...");
             }
 
             Ok((std::fs::read(Self::ATOMIC_CARDS_FILENAME)?, start))

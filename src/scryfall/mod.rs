@@ -54,7 +54,7 @@ impl ScryfallClient {
             return Ok(o.get().clone());
         }
 
-        println!("Downloading Scryfall art for {}", card_name);
+        eprintln!("Downloading Scryfall art for {}", card_name);
 
         thread::sleep(Self::DELAY.saturating_sub(self.last.elapsed()));
 

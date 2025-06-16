@@ -139,7 +139,7 @@ impl RenderContext {
         } else {
             match self.scryfall_client.save() {
                 Ok(()) => {}
-                Err(e) => println!("There was a problem saving the cached scryfall results: {e}"),
+                Err(e) => eprintln!("There was a problem saving the cached scryfall results: {e}"),
             }
         }
 

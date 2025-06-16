@@ -44,10 +44,10 @@ impl Build {
                 None
             },
             scryfall: if self.force_scryfall_art {
-                println!("Scryfall art will be downloaded for all cards.");
+                eprintln!("Scryfall art will be downloaded for all cards.");
                 Some(true)
             } else if self.allow_scryfall_art {
-                println!("Scryfall art will be downloaded for specified cards.");
+                eprintln!("Scryfall art will be downloaded for specified cards.");
                 None
             } else {
                 Some(false)
@@ -55,7 +55,7 @@ impl Build {
         };
         let mut render = RenderContext::new(settings)?;
 
-        println!(
+        eprintln!(
             "Rendering {} cards",
             decklist
                 .iter()

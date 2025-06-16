@@ -16,6 +16,7 @@ anyhow = "1.0.98"
 itertools = "0.14.0"
 reqwest = { version = "0.12.18", default-features = false, features = [ "blocking", "rustls-tls" ] }
 indexmap = { version = "2.9.0", features = [ "serde" ] }
+css-minify = "0.5.2"
 
 [profile.dev]
 opt-level = 2
