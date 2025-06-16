@@ -238,41 +238,6 @@ div.text-box>p {
     margin: 1.5mm 3mm 0mm;
 }
 
-div.text-box.vertical>p.level-up {
-    margin-top: 0.75mm;
-    padding: 0.75mm 3mm 0mm;
-    margin-bottom: -1.5mm;
-}
-
-div.text-box.dense>p {
-    margin: 1mm 1mm 0mm;
-}
-
-div.text-box.vertical.dense>p.level-up {
-    margin-top: 0.5mm;
-    padding: 0.5mm 1mm 0mm;
-    margin-bottom: -1mm;
-}
-
-div.text-box.compact>p {
-    margin-top: 0.5mm;
-    margin: 0.5mm 1mm 0mm;
-}
-
-div.text-box.vertical.compact>p.level-up {
-    margin-top: 0.25mm;
-    padding: 0.25mm 1mm 0mm;
-    margin-bottom: -0.5mm;
-}
-
-div.text-box.sparse {
-    justify-content: center;
-}
-
-div.text-box.sparse>p {
-    text-align: center;
-}
-
 div.text-box>hr {
     width: 80%;
     border-bottom: none;
@@ -284,13 +249,61 @@ div.text-box>hr {
     margin: 1.5mm auto 0mm;
 }
 
-div.text-box.compact>hr {
-    margin: 0.5mm auto 0mm;
-    border-top-width: calc(var(--pin-line-width)/2);
+div.text-box.slim-margins>p {
+    margin: 1mm 1mm 0mm;
 }
 
-div.text-box.dense>hr {
+div.text-box.no-line-spacing {
+    padding-top: 1.5mm;
+}
+
+div.text-box.no-line-spacing.slim-margins {
+    padding-top: 1mm;
+}
+
+div.text-box.no-line-spacing>p {
+    margin-top: 0mm;
+    margin-bottom: 0mm;
+}
+
+div.text-box.no-line-spacing>hr {
+    margin-top: 1.5mm;
+    margin-bottom: 1.5mm;
+}
+
+div.text-box.no-line-spacing.slim-margins>hr {
+    margin-top: 1mm;
+    margin-bottom: 1mm;
+}
+
+div.text-box.slim-margins>hr {
     margin: 1mm auto 0mm;
+}
+
+div.text-box.vertical>p.level-up {
+    margin-top: 0.75mm;
+    padding: 0.75mm 3mm 0mm;
+    margin-bottom: -1.5mm;
+}
+
+div.text-box.vertical.slim-margins>p.level-up {
+    margin-top: 0.5mm;
+    padding: 0.5mm 1mm 0mm;
+    margin-bottom: -1mm;
+}
+
+div.text-box.vertical.compact>p.level-up {
+    margin-top: 0.25mm;
+    padding: 0.25mm 1mm 0mm;
+    margin-bottom: -0.5mm;
+}
+
+div.text-box.centered-text {
+    justify-content: center;
+}
+
+div.text-box.centered-text>p {
+    text-align: center;
 }
 
 div.text-box.vertical>p.saga-chapter {

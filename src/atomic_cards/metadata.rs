@@ -1,3 +1,5 @@
+use crate::utils::escape_html_text;
+
 use super::is_default;
 use serde::{Deserialize, Serialize};
 
@@ -45,14 +47,36 @@ pub struct ForeignData {
     pub flavor_text: String,
     #[serde(default)]
     pub language: String,
-    #[serde(default, rename = "multiverseId")]
-    pub multiverse_id: f64,
+    // #[serde(default, rename = "multiverseId")]
+    // pub multiverse_id: f64,
     #[serde(default)]
     pub name: String,
     #[serde(default)]
     pub text: String,
     #[serde(default, rename = "type")]
     pub type_line: String,
+}
+
+impl ForeignData {
+    pub fn get_name(&self) -> String {
+        escape_html_text(if self.name.is_empty() {
+            &self.face_name
+        } else {
+            &self.name
+        })
+    }
+
+    pub fn get_text(&self) -> String {
+        escape_html_text(&self.text)
+    }
+
+    pub fn get_flavor(&self) -> String {
+        escape_html_text(&self.flavor_text)
+    }
+
+    pub fn get_type_line(&self) -> String {
+        escape_html_text(&self.type_line)
+    }
 }
 
 // #[derive(Deserialize, Debug, Clone, Default)]

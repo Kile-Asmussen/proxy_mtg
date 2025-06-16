@@ -51,8 +51,9 @@ pub fn rules_text_normal_div(card: &Card, proxy: &Proxy) -> Element {
     let mut text = card.text.clone();
 
     if let Some(c) = get_side(Side::A, &proxy.customize) {
-        if !c.text.is_empty() {
-            text = c.text.clone();
+        let ctext = c.get_text();
+        if !ctext.is_empty() {
+            text = ctext;
         }
     }
 
@@ -73,32 +74,21 @@ pub fn rules_text_normal_div(card: &Card, proxy: &Proxy) -> Element {
         paragraphs.push(rules_text_paragraph(par));
     }
 
-    let centered = get_side(card.side, &proxy.arts)
-        .map(|a| a.center_text)
-        .unwrap_or(false);
-
-    let text_len: usize = paragraphs.iter().map(|n| n.text_len()).sum();
-    let num_paragraphs = paragraphs.len();
-
     let mut flavor = flavor_text_paragraphs(card, proxy);
     if !paragraphs.is_empty() && !flavor.is_empty() {
         paragraphs.push(Element::new(Tag::hr));
     }
     paragraphs.append(&mut flavor);
 
-    let text_class: &[&str] = if text_len >= 350 {
-        &["compact"]
-    } else if num_paragraphs >= 5 || text_len >= 200 {
-        &["dense"]
-    } else if centered {
-        &["sparse"]
+    let style = if let Some(a) = get_side(Side::A, &proxy.arts) {
+        a.text_style.clone()
     } else {
-        &[]
+        vec![]
     };
 
     Element::new(Tag::div)
         .class(["text-box"])
-        .class(text_class)
+        .class(style)
         .nodes(paragraphs)
 }
 
@@ -106,8 +96,9 @@ pub fn rules_text_planeswalker_div(card: &Card, proxy: &Proxy) -> Element {
     let mut text = card.text.clone();
 
     if let Some(c) = get_side(Side::A, &proxy.customize) {
-        if !c.text.is_empty() {
-            text = c.text.clone();
+        let ctext = c.get_text();
+        if !ctext.is_empty() {
+            text = ctext;
         }
     }
 
@@ -137,19 +128,15 @@ pub fn rules_text_planeswalker_div(card: &Card, proxy: &Proxy) -> Element {
         paragraphs.push(rules_text_paragraph(par));
     }
 
-    let text_len: usize = paragraphs.iter().map(|n| n.text_len()).sum();
-
-    let text_class: &[&str] = if text_len >= 350 {
-        &["compact"]
-    } else if text_len >= 200 {
-        &["dense"]
+    let style = if let Some(a) = get_side(Side::A, &proxy.arts) {
+        a.text_style.clone()
     } else {
-        &[]
+        vec![]
     };
 
     Element::new(Tag::div)
         .class(["text-box"])
-        .class(text_class)
+        .class(style)
         .nodes(paragraphs)
 }
 
@@ -173,7 +160,7 @@ pub fn rules_text_basic_div(card: &Card, proxy: &Proxy) -> Element {
     paragraphs.append(&mut flavor_text_paragraphs(card, proxy));
 
     return Element::new(Tag::div)
-        .class(["text-box", "sparse"])
+        .class(["text-box", "centered-text"])
         .nodes(paragraphs);
 
     pub fn big_mana_glyph<S>(class: S) -> Element

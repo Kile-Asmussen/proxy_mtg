@@ -98,6 +98,7 @@ impl ScryfallArt {
             full: false,
             center_text: false,
             scryfall: true,
+            text_style: vec![],
         }
     }
 }

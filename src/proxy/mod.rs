@@ -1,11 +1,13 @@
 pub mod decklists;
 pub mod deserializers;
 
+use std::fmt::Display;
+
 use deserializers::OneOrMany;
 use indexmap::IndexSet;
 use itertools::{EitherOrBoth, Itertools};
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{
     atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::CardLayout},
@@ -113,6 +115,8 @@ pub struct Art {
     pub center_text: bool,
     #[serde(default)]
     pub scryfall: bool,
+    #[serde(default, rename = "textStyle")]
+    pub text_style: Vec<String>,
 }
 
 impl Art {
@@ -124,5 +128,31 @@ impl Art {
             self.scryfall = other.scryfall;
         }
         self
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+pub enum TextStyle {
+    #[serde(rename = "slim-margins")]
+    SlimMargins,
+    #[serde(rename = "no-line-spacing")]
+    NoLineSpacing,
+    #[serde(rename = "centered-text")]
+    CenteredText,
+    #[serde(rename = "bigger-text")]
+    BigText,
+    #[serde(rename = "small-text")]
+    SmallText,
+    #[serde(rename = "smaller-text")]
+    SmallerText,
+    #[serde(rename = "smallest-text")]
+    SmallestText,
+    #[serde(other, rename = "unknown")]
+    Unknown,
+}
+
+impl Display for TextStyle {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(serde_json::to_value(self).unwrap().as_str().unwrap())
     }
 }

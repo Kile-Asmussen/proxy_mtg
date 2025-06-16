@@ -7,17 +7,8 @@
     --typeline-font-size: 8pt;
     --typeline-font-adjustment: 0mm;
 
-    --rules-font-family: Crimson Text;
-    --rules-font-size: 8pt;
-    --rules-font-size-small: 7.3pt;
-    --rules-font-size-tiny: 6pt;
-    --rules-font-size-large: 9pt;
-
-    --flavor-font-family: Crimson Text;
-    --flavor-font-size: 8pt;
-    --flavor-font-size-tiny: 6pt;
-    --flavor-font-size-small: 7pt;
-    --flavor-font-size-large: 9pt;
+    --text-font-family: Crimson Text;
+    --text-font-size: 8pt;
 
     --corner-bubble-font-family: Amarante;
     --corner-bubble-font-size: 11pt;
@@ -105,39 +96,44 @@ div.title.bar>span.cost>i.ms-6x {
 }
 
 p.rules-text,
-p.saga-chapter {
-    font-family: var(--rules-font-family);
-    font-size: var(--rules-font-size);
-}
-
-div.text-box.dense>p.rules-text {
-    font-size: var(--rules-font-size-small);
-}
-
-div.text-box.compact>p.rules-text {
-    font-size: var(--rules-font-size-tiny);
-}
-
-div.text-box.sparse>p.rules-text {
-    font-size: var(--rules-font-size);
+p.saga-chapter,
+p.flavor-text {
+    font-family: var(--text-font-family);
+    font-size: var(--text-font-size);
 }
 
 p.flavor-text {
     font-style: italic;
-    font-family: var(--flavor-font-family);
-    font-size: var(--flavor-font-size);
 }
 
-div.text-box.compact>p.flavor-text {
-    font-size: var(--flavor-font-size-tiny);
+div.text-box.bigger-text>p.rules-text,
+div.text-box.bigger-text>p.saga-chapter,
+div.text-box.bigger-text>p.flavor-text {
+    font-size: calc(var(--rules-font-size) * 1.1);
 }
 
-div.text-box.dense>p.flavor-text {
-    font-size: var(--flavor-font-size-small);
+div.text-box.normal-text>p.rules-text,
+div.text-box.normal-text>p.saga-chapter,
+div.text-box.normal-text>p.flavor-text {
+    font-size: var(--rules-font-size);
 }
 
-div.text-box.sparse>p.flavor-text {
-    font-size: var(--flavor-font-size);
+div.text-box.small-text>p.rules-text,
+div.text-box.small-text>p.saga-chapter,
+div.text-box.small-text>p.flavor-text {
+    font-size: calc(var(--rules-font-size) * 0.9);
+}
+
+div.text-box.smaller-text>p.rules-text,
+div.text-box.smaller-text>p.saga-chapter,
+div.text-box.smaller-text>p.flavor-text {
+    font-size: calc(var(--rules-font-size) * 0.8);
+}
+
+div.text-box.smallest-text>p.rules-text,
+div.text-box.smallest-text>p.saga-chapter,
+div.text-box.smallest-text>p.flavor-text {
+    font-size: calc(var(--rules-font-size) * 0.7);
 }
 
 span.reminder {

@@ -157,14 +157,20 @@ pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Element> {
 }
 
 pub fn type_line_div(card: &Card, proxy: &Proxy) -> Element {
-    let mut classes = vec!["type-line", "bar"];
+    let mut classes = vec!["type-line".s(), "bar".s()];
 
     if card.face_layout().is_vertical() {
-        classes.push("bottom");
+        classes.push("bottom".s());
     }
 
-    if let Some(Art { full: true, .. }) = get_side(card.side, &proxy.arts) {
-        classes.push("bottom");
+    if let Some(Art {
+        full, text_style, ..
+    }) = get_side(card.side, &proxy.arts)
+    {
+        if *full && !classes.contains(&"bottom".s()) {
+            classes.push("bottom".s());
+        }
+        classes.append(&mut text_style.clone());
     }
 
     Element::new(Tag::div)
