@@ -2,6 +2,7 @@ use std::marker::PhantomData;
 
 pub trait VecExt<K, V>: Sized {
     fn entry(&mut self, key: K) -> VecEntry<K, V>;
+    #[allow(unused)]
     fn lookup(&self, key: &K) -> Option<&V>;
 }
 

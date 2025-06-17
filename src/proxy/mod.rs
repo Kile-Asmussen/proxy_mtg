@@ -34,7 +34,7 @@ pub struct Proxy {
     pub notes: String,
     #[serde(default, deserialize_with = "OneOrMany::<ForeignData>::one_or_many")]
     pub customize: Vec<ForeignData>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "Cardoid::one_or_many")]
     pub cardoid: Cardoid,
 }
 
@@ -103,6 +103,26 @@ impl Proxy {
     }
 }
 
+impl Display for Proxy {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.cardoid.fmt(f)?;
+
+        write!(f, "\n###")?;
+
+        if !self.tags.is_empty() {
+            write!(
+                f,
+                "\ntags: {}",
+                &self.tags.iter().map(Clone::clone).collvect().join(", ")
+            )?;
+        }
+        if self.repeats > 1 {
+            write!(f, "\ncopies: {}", self.repeats)?;
+        }
+        Ok(())
+    }
+}
+
 #[derive(Clone, Debug, Deserialize)]
 pub struct Art {
     #[serde(default)]
@@ -147,8 +167,6 @@ pub enum TextStyle {
     SmallerText,
     #[serde(rename = "smallest-text")]
     SmallestText,
-    #[serde(other, rename = "unknown")]
-    Unknown,
 }
 
 impl Display for TextStyle {

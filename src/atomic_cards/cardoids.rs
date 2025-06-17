@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 
 use crate::proxy::deserializers::OneOrMany;
 use crate::utils::iter::IterExt;
@@ -8,15 +8,24 @@ use super::{
     types::{CardLayout, Side, WUBRG},
 };
 
-use std::collections::BTreeSet;
+use std::{collections::BTreeSet, fmt::Display};
 
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
-#[serde(from = "OneOrMany<Card>")]
+#[serde(transparent)]
 pub struct Cardoid(Vec<Card>);
 
-impl From<OneOrMany<Card>> for Cardoid {
-    fn from(value: OneOrMany<Card>) -> Self {
-        Self(value.into())
+impl Cardoid {
+    pub fn one_or_many<'de, D>(de: D) -> Result<Cardoid, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        Ok(Cardoid(OneOrMany::<Card>::deserialize(de)?.into()))
+    }
+}
+
+impl From<Vec<Card>> for Cardoid {
+    fn from(value: Vec<Card>) -> Self {
+        Self(value)
     }
 }
 
@@ -92,5 +101,21 @@ impl<'a> IntoIterator for &'a mut Cardoid {
 
     fn into_iter(self) -> Self::IntoIter {
         (&mut self.0).into_iter()
+    }
+}
+
+impl Display for Cardoid {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let face = self.face();
+        if let Some(b_side) = self.side(Side::B) {
+            write!(f, "{}", &face.name)?;
+            write!(f, "\nSIDE A\n")?;
+            face.fmt(f)?;
+            write!(f, "\nSIDE B\n")?;
+            b_side.fmt(f)?;
+        } else {
+            face.fmt(f)?;
+        }
+        Ok(())
     }
 }

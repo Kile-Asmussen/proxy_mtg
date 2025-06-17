@@ -17,11 +17,10 @@ impl RulesTextSymbolReplacer for ReminderText {
     }
 
     fn map_symbol(&self, matched: &str) -> Self::Item {
-        vec![Node::Element(
-            Element::new(Tag::span)
-                .class(["reminder"])
-                .nodes(replace_symbols_with(&ManaFontSymbolics, matched)),
-        )]
+        vec![Element::new(Tag::span)
+            .class(["reminder"])
+            .nodes(replace_symbols_with(&ManaFontSymbolics, matched))
+            .into()]
     }
 
     fn intermediate_text(&self, non_matched: &str) -> Self::Item {

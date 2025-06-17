@@ -27,7 +27,7 @@ impl RulesTextSymbolReplacer for ManaFontSymbolics {
     }
 
     fn intermediate_text(&self, non_matched: &str) -> Self::Item {
-        Node::Text(non_matched.s())
+        Node::from(non_matched)
     }
 
     fn joiner(&self) -> Option<Self::Item> {

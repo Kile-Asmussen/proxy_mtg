@@ -17,7 +17,7 @@ use crate::{
         AtomicCardsFile,
     },
     proxy::{decklists::DeckList, Proxy},
-    utils::{iter::IterExt, printers::ToText, ToS},
+    utils::{iter::IterExt, ToS},
 };
 
 #[derive(Parser, Debug, Clone)]
@@ -148,11 +148,7 @@ impl Searcher {
     fn matches_cardoid(&self, cardoid: &Cardoid) -> bool {
         cardoid.color_identity().is_subset(&self.commander)
             && Self::regex_match(&self.name, &self.vname, cardoid.name())
-            && Self::regex_match(
-                &self.grep,
-                &self.vgrep,
-                &format!("{}", ToText::Cardoid(&cardoid)),
-            )
+            && Self::regex_match(&self.grep, &self.vgrep, &format!("{}", cardoid))
             && cardoid.iter().any(|card| self.matches_card(card))
     }
 
@@ -201,7 +197,7 @@ impl Searcher {
         if self.debug {
             println!("{:?}", c);
         } else {
-            println!("{}", ToText::Cardoid(c));
+            println!("{}", c);
         }
     }
 
@@ -210,7 +206,7 @@ impl Searcher {
         if self.debug {
             println!("{:?}", p);
         } else {
-            println!("{}", ToText::Proxy(p));
+            println!("{}", p);
         }
     }
 }

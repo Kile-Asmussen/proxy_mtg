@@ -1,6 +1,7 @@
 use std::fmt::Display;
 
 use crate::utils::{
+    escape_html_attr,
     iter::IterExt,
     vec::{VecEntryMethods, VecExt},
     ToS,
@@ -54,39 +55,13 @@ impl Element {
         }
     }
 
-    pub fn text_len(&self) -> usize {
-        if self.tag == Tag::i
-            && self.attributes.lookup(&"class").map(|v| v.contains("ms")) == Some(true)
-            && self.nodes.is_empty()
-        {
-            1
-        } else {
-            self.nodes.iter().map(Node::text_len).sum()
-        }
-    }
-
-    #[allow(dead_code)]
-    pub fn len(&self) -> usize {
-        self.tag.len()
-            + self
-                .attributes
-                .iter()
-                .map(|(k, v)| {
-                    if k == v {
-                        k.len() + 1
-                    } else {
-                        k.len() + v.len() + 4
-                    }
-                })
-                .sum::<usize>()
-            + self.nodes.iter().map(Node::len).sum::<usize>()
-    }
-
     pub fn attr<S>(mut self, k: &'static str, v: S) -> Self
     where
-        S: ToString,
+        S: AsRef<str>,
     {
-        self.attributes.entry(k).insert_entry(v.s());
+        self.attributes
+            .entry(k)
+            .insert_entry(escape_html_attr(v.as_ref()));
         self
     }
 
@@ -94,17 +69,20 @@ impl Element {
         self.attr(k, k.s())
     }
 
-    pub fn class<SS, S>(self, classes: SS) -> Self
+    pub fn class<SS, S>(mut self, classes: SS) -> Self
     where
         SS: IntoIterator<Item = S>,
-        S: AsRef<str>,
+        S: ToString,
     {
-        let mut cls = vec![];
-        if let Some(c) = self.attributes.lookup(&"class") {
-            cls.append(&mut c.split(" ").map(ToString::to_string).collvect())
+        let entry = self.attributes.entry("class").or_insert("".s());
+
+        if !entry.is_empty() {
+            *entry += " ";
         }
-        cls.append(&mut classes.into_iter().map(|s| s.as_ref().s()).collvect());
-        self.attr("class", cls.join(" "))
+
+        *entry += &classes.into_iter().map(|s| s.s()).collvect().join(" ");
+
+        self
     }
 
     pub fn nodes<NS, N>(mut self, nodes: NS) -> Self

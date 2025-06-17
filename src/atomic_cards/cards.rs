@@ -7,7 +7,7 @@ use super::{
     types::{CardLayout, FaceLayout, LeadershipSkills, Side, Supertype, Type, WUBRG},
 };
 
-use std::collections::BTreeSet;
+use std::{collections::BTreeSet, fmt::Display};
 
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
 pub struct Card {
@@ -174,5 +174,29 @@ impl Card {
         } else {
             FaceLayout::Unadorned
         }
+    }
+}
+
+impl Display for Card {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut name = &self.face_name;
+        if name.is_empty() {
+            name = &self.name;
+        }
+        write!(f, "{} {}", &name, &self.mana_cost)?;
+        write!(f, "\n({}) {}", WUBRG::render(&self.colors), self.type_line)?;
+        for line in self.text.lines() {
+            write!(f, "\n{}", line)?;
+        }
+        if self.types.contains(&Type::Planeswalker) {
+            write!(f, "\n[{}]", self.loyalty)?;
+        }
+        if self.types.contains(&Type::Battle) {
+            write!(f, "\n<{}>", self.defense)?;
+        }
+        if self.types.contains(&Type::Creature) {
+            write!(f, "\n{}/{}", self.power, self.toughness)?;
+        }
+        Ok(())
     }
 }
