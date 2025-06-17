@@ -6,8 +6,9 @@ use crate::{
     html::{Element, Tag},
     proxy::Proxy,
     rendering::{
-        general::{blank_card, corner_bubble, raw_card},
-        normal::{creature_card, planeswalker_card, rules_text_normal_div, unadorned_card},
+        general::{blank_card, empty_card},
+        landscapes::battle_card,
+        normal::{creature_card, planeswalker_card, unadorned_card},
         verticalia::{class_card, saga_card},
     },
 };
@@ -64,14 +65,8 @@ fn card_by_face_layout(card: &Card, proxy: &Proxy) -> Element {
         FaceLayout::Battle => battle_card(card, proxy),
         FaceLayout::Class => class_card(card, proxy),
         FaceLayout::Saga => saga_card(card, proxy),
-        _ => raw_card(card, proxy),
+        _ => empty_card(card, proxy),
     }
-}
-
-pub fn battle_card(card: &Card, proxy: &Proxy) -> Element {
-    raw_card(card, proxy)
-        .node(rules_text_normal_div(card, proxy))
-        .node(corner_bubble(&card.defense).class(["square"]))
 }
 
 fn dual_face_indicator(name: &str) -> Element {

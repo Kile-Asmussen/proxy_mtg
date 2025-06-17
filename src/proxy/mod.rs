@@ -136,7 +136,7 @@ pub struct Art {
     #[serde(default)]
     pub scryfall: bool,
     #[serde(default, rename = "textStyle")]
-    pub text_style: Vec<String>,
+    pub text_style: Option<Vec<String>>,
 }
 
 impl Art {
@@ -146,6 +146,9 @@ impl Art {
             self.full |= other.full;
             self.credit = other.credit.to_string();
             self.scryfall = other.scryfall;
+        }
+        if self.text_style.is_none() {
+            self.text_style = other.text_style.clone();
         }
         self
     }

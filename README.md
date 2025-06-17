@@ -1,21 +1,23 @@
-# Unnamed Proxying Tool for MTG
+# Proxygenitus
 
-Just a little toy tool for creating proxies for Magic the Gathering.
+This is a command-line oriented tool that is intended to fulfill three purposes:
+
+- Provide a scyfall-like search capability of all magic cards.
+- Provide decklist analytics similar to moxfield.
+- Provide printable proxies.
 
 # Usage notes
 
-You will need to download the Atomic Cards JSON file from [here](https://mtgjson.com/downloads/all-files/#atomiccards), since it is too large for github. (It is ecommended that you run it through a tool like [JQ](https://jqlang.github.io/jq/) to make it readable.)
-
-You will also need to obtain the Beleren 2016 font, the Matrix Bold font, and the Goudy Medeival font through legitimate avenues. While a typeface itself cannot be copyrighted, the font encoding of each of these three fonts are all protected by licensing.
+The printable proxies are produced as HTML files, which
 
 # Sale and resale of proxied cards
 
-The proxy graphics produced by this tool are ***NOT*** to be sold or resold.
+The proxy graphics produced by this tool are ***NOT*** to be sold or resold, as this is a breach of the intellectual
 
 # Acknowledgements
 
-- [MTGJson](https://mtgjson.com/), which this project is based on, developed by MTGJson team: Zach Halpern, Milo Rue, and Eric Lakatos.
-
-- [MTG Font](https://github.com/AlexandreArpin/mtg-font), which this project uses, is developed by Alexandre Arpin.
+- [MTGJSON](https://mtgjson.com/), developed by MTGJson team: Zach Halpern, Milo Rue, and Eric Lakatos, is used for the card data.
+- [Mana](https://mana.andrewgioia.com/), developed by Andrew Gioia, is used for the symbol graphics.
+- [Scryfall](https://scryfall.com/), developed by Scryfallm LLC. is used for default graphics.
 
 Magic the Gathering is the property of Wizards of the Coast.

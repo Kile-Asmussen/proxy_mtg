@@ -9,11 +9,13 @@ use crate::{
     proxy::Proxy,
     rendering::{
         general::{
-            anchor_words, empty_card, get_side, raw_card, rules_text_filter, rules_text_paragraph,
+            anchor_words, empty_card, get_side, rules_text_filter, rules_text_paragraph,
+            text_style, type_line_div,
         },
         normal::power_toughness,
         parsing::{chapter_symbol, split_anchor_word, split_chapter_abilities},
     },
+    utils::ToS,
 };
 
 pub fn class_layout_proxy(proxy: &Proxy) -> Vec<Element> {
@@ -36,6 +38,12 @@ pub fn saga_layout_proxy(proxy: &Proxy) -> Vec<Element> {
 
 pub fn class_card(card: &Card, proxy: &Proxy) -> Element {
     raw_card(card, proxy).node(vertical_rules_text_div(card, proxy))
+}
+
+pub fn raw_card(card: &Card, proxy: &Proxy) -> Element {
+    empty_card(card, proxy)
+        .node(type_line_div(card, proxy))
+        .nodes(card_art_img(card, proxy))
 }
 
 pub fn saga_card(card: &Card, proxy: &Proxy) -> Element {
@@ -93,14 +101,19 @@ fn class_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
     }
 
     Element::new(Tag::div)
-        .class(["text-box", "dense", "vertical"])
+        .class(["text-box", "dense", "vertical", "right"])
+        .class(text_style(
+            card,
+            proxy,
+            vec!["text-small".s(), "slim-margins".s()],
+        ))
         .nodes(paragraphs)
 }
 
 fn saga_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
     let mut text = card.text.clone();
 
-    if let Some(c) = get_side(Side::A, &proxy.customize) {
+    if let Some(c) = get_side(card.side, &proxy.customize) {
         if !c.text.is_empty() {
             text = c.text.clone();
         }
@@ -122,7 +135,12 @@ fn saga_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
     }
 
     Element::new(Tag::div)
-        .class(["text-box", "dense", "vertical"])
+        .class(["text-box", "vertical", "left"])
+        .class(text_style(
+            card,
+            proxy,
+            vec!["text-small".s(), "slim-margins".s()],
+        ))
         .nodes(paragraphs)
 }
 
@@ -130,4 +148,34 @@ fn saga_chapter_indicator(chapters: Vec<&str>) -> Element {
     Element::new(Tag::p)
         .class(["saga-chapter"])
         .nodes(chapters.into_iter().map(chapter_symbol).flatten())
+}
+
+pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Element> {
+    let mut classes = vec!["art", "vertical"];
+
+    let Some(art) = get_side(card.side, &proxy.arts) else {
+        return vec![];
+    };
+
+    if card.face_layout() == FaceLayout::Saga {
+        classes.push("right");
+    } else {
+        classes.push("left");
+    }
+
+    let mut res = vec![];
+
+    if !art.url.is_empty() {
+        res.push(Element::new(Tag::img).class(classes).attr("src", &art.url));
+    }
+
+    if !art.credit.is_empty() {
+        res.push(
+            Element::new(Tag::span)
+                .class(["art-credits"])
+                .node(&art.credit),
+        );
+    }
+
+    res
 }

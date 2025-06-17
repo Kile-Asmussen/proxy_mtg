@@ -150,16 +150,6 @@ div.dual-face-indicator.bar>span {
     font-family: var(--bar-small-font-family);
 }
 
-span.art-credits {
-    font-weight: bold;
-    font-family: var(--art-credit-font);
-    font-size: var(--art-credit-font-size);
-    color: white;
-    text-shadow:
-        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black,
-        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
-}
-
 div.card.obverse>div.title.bar::before,
 div.card.reverse>div.title.bar::before,
 div.card.obverse>div.dual-face-indicator.bar::before,

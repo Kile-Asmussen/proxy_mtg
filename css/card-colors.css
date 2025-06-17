@@ -135,9 +135,24 @@ div.card.white.blue.black.red.green {
 
 }
 
+span.art-credits {
+    font-weight: bold;
+    font-family: var(--art-credit-font);
+    font-size: var(--art-credit-font-size);
+    color: white;
+    text-shadow:
+        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black,
+        0 0 1pt black, 0 0 1pt black, 0 0 1pt black, 0 0 1pt black;
+}
+
 div.card.token>div.title.bar {
     border-style: none;
     justify-content: center;
+    color: white;
+}
+
+div.card.token>div.alt-title.bar {
+    border-style: none;
     color: white;
 }
 
@@ -151,9 +166,4 @@ div.card.token>div.alt-title.bar>span.name {
     text-shadow:
         0 0 2pt black, 0 0 2pt black, 0 0 2pt black, 0 0 2pt black,
         0 0 2pt black, 0 0 2pt black, 0 0 2pt black, 0 0 2pt black;
-}
-
-div.card.token>div.alt-title.bar {
-    border-style: none;
-    color: white;
 }

@@ -27,6 +27,7 @@ div.card.portrait {
 
 /* CARD */
 
+
 div.card {
     position: relative;
     box-sizing: border-box;
@@ -197,21 +198,24 @@ div.text-box.vertical {
     width: var(--halfwidth-box);
 }
 
-div.text-box.vertical {
+div.text-box.vertical.left,
+img.art.vertical.left {
     left: var(--fullwidth-margin);
     right: auto;
 }
 
-img.art.vertical {
+div.text-box.vertical.right,
+img.art.vertical.right {
+    right: var(--fullwidth-margin);
+    left: auto;
+}
+
+img.art.vertical.left {
+    border-right-width: 0;
+}
+
+img.art.vertical.right {
     border-left-width: 0;
-}
-
-img.art.vertical {
-    left: calc(var(--fullwidth-margin) + var(--halfwidth-box));
-}
-
-div.card.reverse.flip>img.art {
-    transform: rotate(180deg);
 }
 
 span.art-credits {
@@ -399,25 +403,30 @@ div.dual-face-indicator.bar>span {
 
 div.card.obverse.transform>div.title.bar::before,
 div.card.reverse.transform>div.dual-face-indicator.bar::before {
-    content: "▲";
+    font-family: Mana;
+    content: "\e9d3";
 }
 
 div.card.reverse.transform>div.title.bar::before,
 div.card.obverse.transform>div.dual-face-indicator.bar::before {
-    content: "▼";
+    font-family: Mana;
+    content: "\e9d4";
 }
 
 div.card.obverse.modal>div.title.bar::before,
 div.card.reverse.modal>div.dual-face-indicator.bar::before {
-    content: "◭";
+    font-family: Mana;
+    content: "\e983";
 }
 
 div.card.reverse.modal>div.title.bar::before,
 div.card.obverse.modal>div.dual-face-indicator.bar::before {
-    content: "◮";
+    font-family: Mana;
+    content: "\e984";
 }
 
 div.card.obverse.meld>div.title.bar::before,
 div.card.obverse.meld>div.dual-face-indicator.bar::before {
-    content: "⧓";
+    font-family: Mana;
+    content: "\e9d5";
 }

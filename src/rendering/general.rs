@@ -23,12 +23,6 @@ pub fn empty_card(card: &Card, proxy: &Proxy) -> Element {
         .nodes(title_bar_div(card, proxy))
 }
 
-pub fn raw_card(card: &Card, proxy: &Proxy) -> Element {
-    empty_card(card, proxy)
-        .node(type_line_div(card, proxy))
-        .nodes(card_art_img(card, proxy))
-}
-
 pub fn title_bar_div(card: &Card, proxy: &Proxy) -> Vec<Element> {
     let (name, alt) = card_name_spans(card, proxy);
 
@@ -119,43 +113,6 @@ pub fn card_name_spans(card: &Card, proxy: &Proxy) -> (Element, Option<Element>)
     }
 }
 
-pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Element> {
-    let mut side = card.side;
-    let mut classes = vec!["art"];
-
-    if proxy.layout() == &CardLayout::Flip && card.side == Side::B {
-        if let Some(Art { scryfall: true, .. }) = get_side(Side::A, &proxy.arts) {
-            side = Side::A;
-        }
-    }
-
-    let Some(art) = get_side(side, &proxy.arts) else {
-        return vec![];
-    };
-
-    if art.full {
-        classes.push("full-art");
-    }
-    if card.face_layout().is_vertical() {
-        classes.push("vertical")
-    }
-
-    let mut res = vec![];
-
-    if !art.url.is_empty() {
-        res.push(Element::new(Tag::img).class(classes).attr("src", &art.url));
-    }
-    if !art.credit.is_empty() {
-        res.push(
-            Element::new(Tag::span)
-                .class(["art-credits"])
-                .node(&art.credit),
-        );
-    }
-
-    res
-}
-
 pub fn type_line_div(card: &Card, proxy: &Proxy) -> Element {
     let mut classes = vec!["type-line".s(), "bar".s()];
 
@@ -163,19 +120,15 @@ pub fn type_line_div(card: &Card, proxy: &Proxy) -> Element {
         classes.push("bottom".s());
     }
 
-    if let Some(Art {
-        full, text_style, ..
-    }) = get_side(card.side, &proxy.arts)
-    {
+    if let Some(Art { full, .. }) = get_side(card.side, &proxy.arts) {
         if *full && !classes.contains(&"bottom".s()) {
             classes.push("bottom".s());
         }
-        classes.append(&mut text_style.clone());
     }
 
     Element::new(Tag::div)
         .class(classes)
-        .node(color_indicator_span(card, proxy))
+        .nodes(color_indicator_span(card, proxy))
         .node(type_line_span(card, proxy))
 }
 
@@ -191,14 +144,17 @@ pub fn type_line_span(card: &Card, proxy: &Proxy) -> Element {
     Element::new(Tag::span).class(["type"]).node(type_line)
 }
 
-pub fn color_indicator_span(card: &Card, _proxy: &Proxy) -> Element {
-    Element::new(Tag::span).class(["indicator"]).nodes(
-        WUBRG::render(&card.colors)
-            .to_lowercase()
-            .chars()
-            .map(|c| Element::new(Tag::i).class(vec!["ms".s(), format!("ms-{}", c)]))
-            .collvect(),
-    )
+pub fn color_indicator_span(card: &Card, _proxy: &Proxy) -> Option<Element> {
+    if !card.colors.iter().all(|c| card.mana_cost.contains(&c.s())) {
+        Some(Element::new(Tag::i).class(vec![
+            "ms".s(),
+            "ms-ci".s(),
+            format!("ms-ci-{}", card.colors.len()),
+            format!("ms-ci-{}", WUBRG::render(&card.colors).to_lowercase()),
+        ]))
+    } else {
+        None
+    }
 }
 
 pub fn anchor_words(words: &str) -> Vec<Node> {
@@ -225,6 +181,18 @@ pub fn card_css_class(card: &Card) -> Vec<&'static str> {
     }
 
     res
+}
+
+pub fn text_style(card: &Card, proxy: &Proxy, default: Vec<String>) -> Vec<String> {
+    if let Some(Art {
+        text_style: Some(text_style),
+        ..
+    }) = get_side(card.side, &proxy.arts)
+    {
+        text_style.clone()
+    } else {
+        default
+    }
 }
 
 pub fn rules_text_filter(proxy: &Proxy) -> fn(&str) -> Vec<Node> {

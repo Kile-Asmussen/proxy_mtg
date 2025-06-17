@@ -6,7 +6,10 @@ use crate::{
     html::{Element, Node, Tag},
     proxy::Proxy,
     rendering::{
-        general::{anchor_words, corner_bubble, raw_card, rules_text_filter, rules_text_paragraph},
+        general::{
+            anchor_words, corner_bubble, empty_card, rules_text_filter, rules_text_paragraph,
+            text_style, type_line_div,
+        },
         parsing::{loyalty_symbol, split_anchor_word, split_loyalty_ability},
         reminders::ReminderText,
     },
@@ -25,6 +28,12 @@ pub fn normal_layout_proxy(proxy: &Proxy) -> Vec<Element> {
         FaceLayout::Unadorned => unadorned_card(card, proxy),
         _ => raw_card(card, proxy),
     }]
+}
+
+pub fn raw_card(card: &Card, proxy: &Proxy) -> Element {
+    empty_card(card, proxy)
+        .node(type_line_div(card, proxy))
+        .nodes(card_art_img(card, proxy))
 }
 
 pub fn basic_land(card: &Card, proxy: &Proxy) -> Element {
@@ -50,7 +59,7 @@ pub fn planeswalker_card(card: &Card, proxy: &Proxy) -> Element {
 pub fn rules_text_normal_div(card: &Card, proxy: &Proxy) -> Element {
     let mut text = card.text.clone();
 
-    if let Some(c) = get_side(Side::A, &proxy.customize) {
+    if let Some(c) = get_side(card.side, &proxy.customize) {
         let ctext = c.get_text();
         if !ctext.is_empty() {
             text = ctext;
@@ -80,15 +89,9 @@ pub fn rules_text_normal_div(card: &Card, proxy: &Proxy) -> Element {
     }
     paragraphs.append(&mut flavor);
 
-    let style = if let Some(a) = get_side(Side::A, &proxy.arts) {
-        a.text_style.clone()
-    } else {
-        vec![]
-    };
-
     Element::new(Tag::div)
         .class(["text-box"])
-        .class(style)
+        .class(text_style(card, proxy, vec![]))
         .nodes(paragraphs)
 }
 
@@ -128,15 +131,9 @@ pub fn rules_text_planeswalker_div(card: &Card, proxy: &Proxy) -> Element {
         paragraphs.push(rules_text_paragraph(par));
     }
 
-    let style = if let Some(a) = get_side(Side::A, &proxy.arts) {
-        a.text_style.clone()
-    } else {
-        vec![]
-    };
-
     Element::new(Tag::div)
         .class(["text-box"])
-        .class(style)
+        .class(text_style(card, proxy, vec![]))
         .nodes(paragraphs)
 }
 
@@ -177,4 +174,31 @@ pub fn power_toughness(card: &Card) -> Element {
 
 pub fn planeswalker_loyalty(card: &Card) -> Element {
     corner_bubble(&card.loyalty).class(["shield"])
+}
+
+pub fn card_art_img(card: &Card, proxy: &Proxy) -> Vec<Element> {
+    let mut classes = vec!["art"];
+
+    let Some(art) = get_side(card.side, &proxy.arts) else {
+        return vec![];
+    };
+
+    if art.full {
+        classes.push("full-art");
+    }
+
+    let mut res = vec![];
+
+    if !art.url.is_empty() {
+        res.push(Element::new(Tag::img).class(classes).attr("src", &art.url));
+    }
+    if !art.credit.is_empty() {
+        res.push(
+            Element::new(Tag::span)
+                .class(["art-credits"])
+                .node(&art.credit),
+        );
+    }
+
+    res
 }

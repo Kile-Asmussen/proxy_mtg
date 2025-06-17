@@ -22,6 +22,10 @@
     --gold-2: goldenrod;
 }
 
-div.card.black.token>div.title.bar>span.name {
-    color: white;
+.ms.ms-ci.ms-ci-0 {
+    background-color: #9c9a98;
+}
+
+.ms.ms-ci.ms-ci-0::before {
+    content: ""
 }
