@@ -1,5 +1,3 @@
-use crate::utils::escape_html_text;
-
 use super::is_default;
 use serde::{Deserialize, Serialize};
 
@@ -59,23 +57,24 @@ pub struct ForeignData {
 
 impl ForeignData {
     pub fn get_name(&self) -> String {
-        escape_html_text(if self.name.is_empty() {
+        if self.name.is_empty() {
             &self.face_name
         } else {
             &self.name
-        })
+        }
+        .clone()
     }
 
     pub fn get_text(&self) -> String {
-        escape_html_text(&self.text)
+        self.text.clone()
     }
 
     pub fn get_flavor(&self) -> String {
-        escape_html_text(&self.flavor_text)
+        self.flavor_text.clone()
     }
 
     pub fn get_type_line(&self) -> String {
-        escape_html_text(&self.type_line)
+        self.type_line.clone()
     }
 }
 

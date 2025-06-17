@@ -3,8 +3,8 @@ pub mod general;
 pub mod landscapes;
 pub mod manafont;
 pub mod normal;
+pub mod notation;
 pub mod parsing;
-pub mod reminders;
 pub mod tokens;
 pub mod verticalia;
 

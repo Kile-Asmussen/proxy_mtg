@@ -10,7 +10,7 @@ use itertools::{EitherOrBoth, Itertools};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    atomic_cards::{cardoids::Cardoid, metadata::ForeignData, types::CardLayout},
+    atomic_cards::{cardoids::Cardoid, types::CardLayout},
     scryfall::api::ScryfallCard,
     utils::{iter::IterExt, ToS},
 };
@@ -32,8 +32,8 @@ pub struct Proxy {
     pub tags: IndexSet<String>,
     #[serde(default)]
     pub notes: String,
-    #[serde(default, deserialize_with = "OneOrMany::<ForeignData>::one_or_many")]
-    pub customize: Vec<ForeignData>,
+    #[serde(default, deserialize_with = "OneOrMany::<Customization>::one_or_many")]
+    pub customize: Vec<Customization>,
     #[serde(default, deserialize_with = "Cardoid::one_or_many")]
     pub cardoid: Cardoid,
 }
@@ -131,12 +131,8 @@ pub struct Art {
     pub credit: String,
     #[serde(default)]
     pub full: bool,
-    #[serde(default, rename = "centerText")]
-    pub center_text: bool,
     #[serde(default)]
     pub scryfall: bool,
-    #[serde(default, rename = "textStyle")]
-    pub text_style: Option<Vec<String>>,
 }
 
 impl Art {
@@ -147,22 +143,41 @@ impl Art {
             self.credit = other.credit.to_string();
             self.scryfall = other.scryfall;
         }
-        if self.text_style.is_none() {
-            self.text_style = other.text_style.clone();
-        }
         self
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Clone, Debug)]
+pub struct Customization {
+    #[serde(default, rename = "flavorText")]
+    pub flavor_text: Option<String>,
+    #[serde(default)]
+    pub language: Option<String>,
+    // #[serde(default, rename = "multiverseId")]
+    // pub multiverse_id: f64,
+    #[serde(default)]
+    pub name: Option<String>,
+    #[serde(default)]
+    pub text: Option<String>,
+    #[serde(default, rename = "type")]
+    pub type_line: Option<String>,
+    #[serde(default)]
+    pub text_scale: Option<f64>,
+    #[serde(
+        default,
+        rename = "textStyle",
+        deserialize_with = "OneOrMany::<TextStyle>::none_or_one_or_many"
+    )]
+    pub text_style: Option<Vec<TextStyle>>,
+}
+
+#[derive(Deserialize, Serialize, Clone, Copy, Debug)]
 pub enum TextStyle {
-    #[serde(rename = "slim-margins")]
-    SlimMargins,
     #[serde(rename = "no-line-spacing")]
     NoLineSpacing,
     #[serde(rename = "centered-text")]
     CenteredText,
-    #[serde(rename = "bigger-text")]
+    #[serde(rename = "big-text")]
     BigText,
     #[serde(rename = "small-text")]
     SmallText,

@@ -4,16 +4,14 @@ use crate::{
         types::{FaceLayout, Side, Supertype, WUBRG},
     },
     html::{Element, Node, Tag},
-    proxy::Proxy,
+    proxy::{Customization, Proxy},
     rendering::{
         general::{
             anchor_words, corner_bubble, empty_card, rules_text_filter, rules_text_paragraph,
             text_style, type_line_div,
         },
         parsing::{loyalty_symbol, split_anchor_word, split_loyalty_ability},
-        reminders::ReminderText,
     },
-    utils::symbolics::replace_symbols,
 };
 
 use super::general::{flavor_text_paragraphs, get_side};
@@ -57,13 +55,13 @@ pub fn planeswalker_card(card: &Card, proxy: &Proxy) -> Element {
 }
 
 pub fn rules_text_normal_div(card: &Card, proxy: &Proxy) -> Element {
-    let mut text = card.text.clone();
+    let mut text = &card.text;
 
-    if let Some(c) = get_side(card.side, &proxy.customize) {
-        let ctext = c.get_text();
-        if !ctext.is_empty() {
-            text = ctext;
-        }
+    if let Some(Customization {
+        text: Some(ctext), ..
+    }) = get_side(card.side, &proxy.customize)
+    {
+        text = ctext;
     }
 
     let rules_text = rules_text_filter(proxy);
@@ -96,13 +94,13 @@ pub fn rules_text_normal_div(card: &Card, proxy: &Proxy) -> Element {
 }
 
 pub fn rules_text_planeswalker_div(card: &Card, proxy: &Proxy) -> Element {
-    let mut text = card.text.clone();
+    let mut text = &card.text;
 
-    if let Some(c) = get_side(Side::A, &proxy.customize) {
-        let ctext = c.get_text();
-        if !ctext.is_empty() {
-            text = ctext;
-        }
+    if let Some(Customization {
+        text: Some(ctext), ..
+    }) = get_side(Side::A, &proxy.customize)
+    {
+        text = ctext;
     }
 
     let rules_text = rules_text_filter(proxy);
@@ -147,12 +145,6 @@ pub fn rules_text_basic_div(card: &Card, proxy: &Proxy) -> Element {
     }
 
     let mut paragraphs = vec![big_symbol.into()];
-
-    if proxy.reminder_text {
-        paragraphs.push(rules_text_paragraph(
-            replace_symbols::<ReminderText>(&card.text).concat(),
-        ))
-    }
 
     paragraphs.append(&mut flavor_text_paragraphs(card, proxy));
 

@@ -115,7 +115,7 @@ img.art {
 }
 
 .ms.ms-ci {
-    background-color: none;
+    background: none;
 }
 
 /* mono color */
@@ -145,6 +145,10 @@ img.art {
 }
 
 /* Two colors */
+
+.ms.ms-ci.ms-ci-2 {
+    width: 2em;
+}
 
 .ms.ms-ci.ms-ci-2.ms-ci-wu::before {
     content: "\e600\e601";
@@ -188,6 +192,10 @@ img.art {
 
 /* tricolor */
 
+.ms.ms-ci.ms-ci-3 {
+    width: 3em;
+}
+
 .ms.ms-ci.ms-ci-3.ms-ci-wub::before {
     content: "\e600\e601\e602";
 }
@@ -230,6 +238,10 @@ img.art {
 
 /* quad color */
 
+.ms.ms-ci.ms-ci-4 {
+    width: 4em;
+}
+
 .ms.ms-ci.ms-ci-4.ms-ci-wubr::before {
     content: "\e600\e601\e602\e603";
 }
@@ -248,6 +260,10 @@ img.art {
 
 .ms.ms-ci.ms-ci-4.ms-ci-gwur::before {
     content: "\e604\e600\e601\e602";
+}
+
+.ms.ms-ci.ms-ci-5 {
+    width: 5em;
 }
 
 .ms.ms-ci-ms-ci-5::before {

@@ -1,10 +1,12 @@
 use std::fmt::Display;
 
-use crate::utils::{
-    escape_html_attr,
-    iter::IterExt,
-    vec::{VecEntryMethods, VecExt},
-    ToS,
+use crate::{
+    html::escape_html_attr,
+    utils::{
+        iter::IterExt,
+        vec::{VecEntryMethods, VecExt},
+        ToS,
+    },
 };
 
 use super::{Node, Tag};
@@ -25,7 +27,7 @@ impl Display for Element {
                 if k == v {
                     k.s()
                 } else {
-                    format!("{}='{}'", k, v)
+                    format!("{}='{}'", k, escape_html_attr(v))
                 }
             })
             .collvect();
@@ -35,10 +37,19 @@ impl Display for Element {
         f.write_fmt(format_args!("<{}>", tag_content.join(" ")))?;
 
         if !self.tag.void {
-            for node in &self.nodes {
-                node.fmt(f)?
+            if let Some((s, e)) = self.tag.literal {
+                f.write_str(s)?;
+                for node in &self.nodes {
+                    if node.is_text() {
+                        write!(f, "{:#}", node)?;
+                    }
+                }
+                f.write_str(e)?;
+            } else {
+                for node in &self.nodes {
+                    node.fmt(f)?
+                }
             }
-
             f.write_fmt(format_args!("</{}>", self.tag.name))?
         }
 

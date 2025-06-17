@@ -239,7 +239,7 @@ div.text-box {
 }
 
 div.text-box>p {
-    margin: 1.5mm 3mm 0mm;
+    margin: 1.2mm 2mm 0mm;
 }
 
 div.text-box>hr {
@@ -253,16 +253,8 @@ div.text-box>hr {
     margin: 1.5mm auto 0mm;
 }
 
-div.text-box.slim-margins>p {
-    margin: 1mm 1mm 0mm;
-}
-
 div.text-box.no-line-spacing {
-    padding-top: 1.5mm;
-}
-
-div.text-box.no-line-spacing.slim-margins {
-    padding-top: 1mm;
+    padding-top: 1.2mm;
 }
 
 div.text-box.no-line-spacing>p {
@@ -271,35 +263,8 @@ div.text-box.no-line-spacing>p {
 }
 
 div.text-box.no-line-spacing>hr {
-    margin-top: 1.5mm;
-    margin-bottom: 1.5mm;
-}
-
-div.text-box.no-line-spacing.slim-margins>hr {
-    margin-top: 1mm;
-    margin-bottom: 1mm;
-}
-
-div.text-box.slim-margins>hr {
-    margin: 1mm auto 0mm;
-}
-
-div.text-box.vertical>p.level-up {
-    margin-top: 0.75mm;
-    padding: 0.75mm 3mm 0mm;
-    margin-bottom: -1.5mm;
-}
-
-div.text-box.vertical.slim-margins>p.level-up {
-    margin-top: 0.5mm;
-    padding: 0.5mm 1mm 0mm;
-    margin-bottom: -1mm;
-}
-
-div.text-box.vertical.compact>p.level-up {
-    margin-top: 0.25mm;
-    padding: 0.25mm 1mm 0mm;
-    margin-bottom: -0.5mm;
+    margin-top: 1.2mm;
+    margin-bottom: 1.2mm;
 }
 
 div.text-box.centered-text {
@@ -322,9 +287,10 @@ div.text-box.vertical>p.saga-chapter {
 div.text-box.vertical>p.level-up {
     background: linear-gradient(180deg, lightgray 0%, white 50%);
     width: 100%;
-    margin: 0;
     box-sizing: border-box;
     border-top: black solid var(--pin-line-width);
+    margin: 1.2mm 0 -0.6mm;
+    padding: 0.75mm 2mm 0mm;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

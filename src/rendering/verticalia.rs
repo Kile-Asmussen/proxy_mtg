@@ -6,7 +6,7 @@ use crate::{
         types::{FaceLayout, Side, Type},
     },
     html::{Element, Node, Tag},
-    proxy::Proxy,
+    proxy::{Customization, Proxy, TextStyle},
     rendering::{
         general::{
             anchor_words, empty_card, get_side, rules_text_filter, rules_text_paragraph,
@@ -15,7 +15,6 @@ use crate::{
         normal::power_toughness,
         parsing::{chapter_symbol, split_anchor_word, split_chapter_abilities},
     },
-    utils::ToS,
 };
 
 pub fn class_layout_proxy(proxy: &Proxy) -> Vec<Element> {
@@ -63,12 +62,13 @@ fn vertical_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
 }
 
 fn class_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
-    let mut text = card.text.clone();
+    let mut text = &card.text;
 
-    if let Some(c) = get_side(Side::A, &proxy.customize) {
-        if !c.text.is_empty() {
-            text = c.text.clone();
-        }
+    if let Some(Customization {
+        text: Some(ctext), ..
+    }) = get_side(Side::A, &proxy.customize)
+    {
+        text = ctext;
     }
 
     let rules_text = rules_text_filter(proxy);
@@ -102,21 +102,18 @@ fn class_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
 
     Element::new(Tag::div)
         .class(["text-box", "dense", "vertical", "right"])
-        .class(text_style(
-            card,
-            proxy,
-            vec!["text-small".s(), "slim-margins".s()],
-        ))
+        .class(text_style(card, proxy, vec![TextStyle::SmallText]))
         .nodes(paragraphs)
 }
 
 fn saga_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
-    let mut text = card.text.clone();
+    let mut text = &card.text;
 
-    if let Some(c) = get_side(card.side, &proxy.customize) {
-        if !c.text.is_empty() {
-            text = c.text.clone();
-        }
+    if let Some(Customization {
+        text: Some(ctext), ..
+    }) = get_side(card.side, &proxy.customize)
+    {
+        text = ctext;
     }
 
     let rules_text = rules_text_filter(proxy);
@@ -136,11 +133,7 @@ fn saga_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
 
     Element::new(Tag::div)
         .class(["text-box", "vertical", "left"])
-        .class(text_style(
-            card,
-            proxy,
-            vec!["text-small".s(), "slim-margins".s()],
-        ))
+        .class(text_style(card, proxy, vec![TextStyle::SmallText]))
         .nodes(paragraphs)
 }
 

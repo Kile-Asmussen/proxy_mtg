@@ -1,14 +1,14 @@
 use crate::{
-    atomic_cards::{cards::Card, metadata::ForeignData, types::*},
+    atomic_cards::{cards::Card, types::*},
     html::*,
-    proxy::{Art, Proxy},
+    proxy::{Art, Customization, Proxy, TextStyle},
     rendering::{
         manafont::ManaFontSymbolics,
-        reminders::{NoReminderText, ReminderText},
+        notation::{NoReminderText, PowerToughnessNobreak, ReminderText},
     },
     utils::{
         iter::IterExt,
-        symbolics::{replace_symbols, replace_symbols_with},
+        symbolics::{replace_symbols, replace_symbols_with, Symchain},
         ToS,
     },
 };
@@ -63,7 +63,11 @@ where
 }
 
 pub fn flavor_text_paragraphs(card: &Card, proxy: &Proxy) -> Vec<Element> {
-    let Some(ForeignData { flavor_text, .. }) = get_side(card.side, &proxy.customize) else {
+    let Some(Customization {
+        flavor_text: Some(flavor_text),
+        ..
+    }) = get_side(card.side, &proxy.customize)
+    else {
         return vec![];
     };
 
@@ -86,20 +90,18 @@ where
 }
 
 pub fn card_name_spans(card: &Card, proxy: &Proxy) -> (Element, Option<Element>) {
-    let mut name = card.face_name.clone();
-    let mut alt_name = String::new();
+    let mut name = &card.face_name;
+    let mut alt_name = &String::new();
     if name.is_empty() {
-        name = card.name.clone();
+        name = &card.name;
     }
 
-    if let Some(c) = get_side(card.side, &proxy.customize) {
-        if !c.name.is_empty() {
-            alt_name = name;
-            name = c.name.clone();
-        } else if !c.face_name.is_empty() {
-            alt_name = name;
-            name = c.face_name.clone();
-        }
+    if let Some(Customization {
+        name: Some(cname), ..
+    }) = get_side(card.side, &proxy.customize)
+    {
+        alt_name = name;
+        name = cname;
     }
 
     let res = Element::new(Tag::span).class(["name"]).node(name);
@@ -128,33 +130,39 @@ pub fn type_line_div(card: &Card, proxy: &Proxy) -> Element {
 
     Element::new(Tag::div)
         .class(classes)
-        .nodes(color_indicator_span(card, proxy))
+        .node(color_indicator_span(card, proxy))
         .node(type_line_span(card, proxy))
 }
 
 pub fn type_line_span(card: &Card, proxy: &Proxy) -> Element {
     let mut type_line = &card.type_line;
 
-    if let Some(c) = get_side(card.side, &proxy.customize) {
-        if !c.type_line.is_empty() {
-            type_line = &c.type_line;
-        }
+    if let Some(Customization {
+        type_line: Some(ctype_line),
+        ..
+    }) = get_side(card.side, &proxy.customize)
+    {
+        type_line = ctype_line;
     }
 
     Element::new(Tag::span).class(["type"]).node(type_line)
 }
 
-pub fn color_indicator_span(card: &Card, _proxy: &Proxy) -> Option<Element> {
-    if !card.colors.iter().all(|c| card.mana_cost.contains(&c.s())) {
-        Some(Element::new(Tag::i).class(vec![
-            "ms".s(),
-            "ms-ci".s(),
-            format!("ms-ci-{}", card.colors.len()),
-            format!("ms-ci-{}", WUBRG::render(&card.colors).to_lowercase()),
-        ]))
-    } else {
-        None
-    }
+pub fn color_indicator_span(card: &Card, _proxy: &Proxy) -> Element {
+    Element::new(Tag::span).class(["indicator"]).nodes(
+        if !card.colors.iter().all(|c| card.mana_cost.contains(&c.s()))
+            || card.layout == CardLayout::Token
+        {
+            Some(Element::new(Tag::i).class(vec![
+                "ms".s(),
+                "ms-ci".s(),
+                format!("ms-ci-{}", card.colors.len()),
+                format!("ms-ci-{}", WUBRG::render(&card.colors).to_lowercase()),
+            ]))
+        } else {
+            None
+        },
+    )
 }
 
 pub fn anchor_words(words: &str) -> Vec<Node> {
@@ -183,11 +191,11 @@ pub fn card_css_class(card: &Card) -> Vec<&'static str> {
     res
 }
 
-pub fn text_style(card: &Card, proxy: &Proxy, default: Vec<String>) -> Vec<String> {
-    if let Some(Art {
+pub fn text_style(card: &Card, proxy: &Proxy, default: Vec<TextStyle>) -> Vec<TextStyle> {
+    if let Some(Customization {
         text_style: Some(text_style),
         ..
-    }) = get_side(card.side, &proxy.arts)
+    }) = get_side(card.side, &proxy.customize)
     {
         text_style.clone()
     } else {
@@ -197,9 +205,11 @@ pub fn text_style(card: &Card, proxy: &Proxy, default: Vec<String>) -> Vec<Strin
 
 pub fn rules_text_filter(proxy: &Proxy) -> fn(&str) -> Vec<Node> {
     if proxy.reminder_text {
-        |s| replace_symbols::<ReminderText>(s).concat()
+        replace_symbols::<Symchain<ReminderText, Symchain<PowerToughnessNobreak, ManaFontSymbolics>>>
     } else {
-        |s| replace_symbols::<NoReminderText>(s).concat()
+        replace_symbols::<
+            Symchain<NoReminderText, Symchain<PowerToughnessNobreak, ManaFontSymbolics>>,
+        >
     }
 }
 

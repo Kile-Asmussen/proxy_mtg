@@ -96,9 +96,7 @@ impl ScryfallArt {
             credit: self.artist.s(),
             url: self.image_uris.art_crop.s(),
             full: false,
-            center_text: false,
             scryfall: true,
-            text_style: None,
         }
     }
 }

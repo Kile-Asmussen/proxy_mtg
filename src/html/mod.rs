@@ -84,12 +84,7 @@ impl Document {
         //     }
         // };
 
-        Ok(self.head(
-            Element::new(Tag::style)
-                .node("/*<![CDATA[*/")
-                .node(input)
-                .node("/*]]>*/"),
-        ))
+        Ok(self.head(Element::new(Tag::style).node(input)))
     }
 }
 

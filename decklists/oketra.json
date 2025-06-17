@@ -7,7 +7,10 @@
                 "credit": "Chase Stone"
             },
             "customize": {
-                "name": "God-Epurrnal Okittytra"
+                "name": "God-Epurrnal Okittytra",
+                "textStyle": [
+                    "small-text"
+                ]
             },
             "tags": [
                 "Commander"
@@ -21,6 +24,7 @@
         },
         {
             "name": "Caretaker's Talent",
+            "reminderText": false,
             "arts": {
                 "url": "https://cards.scryfall.io/art_crop/front/5/9/59988d6c-d43c-4f37-85d5-27c5c47bc792.jpg?1748013667",
                 "credit": "Andrew Mar"
@@ -47,14 +51,23 @@
         },
         {
             "name": "Idol of Oblivion"
+        },
+        {
+            "name": "Welcoming Vampire"
         }
     ],
     "Land Advantage": [
         {
-            "name": "Archaeomancer's Map"
+            "name": "Archaeomancer's Map",
+            "customize": {
+                "textStyle": "small-text"
+            }
         },
         {
-            "name": "Claim Jumper"
+            "name": "Claim Jumper",
+            "customize": {
+                "textStyle": "small-text"
+            }
         },
         {
             "name": "Deep Gnome Terramancer"
@@ -63,7 +76,10 @@
             "name": "Extraplanar Lens"
         },
         {
-            "name": "Keeper of the Accord"
+            "name": "Keeper of the Accord",
+            "customize": {
+                "textStyle": "small-text"
+            }
         },
         {
             "name": "Knight of the White Orchid"
@@ -78,7 +94,10 @@
             "name": "Surveyor's Scope"
         },
         {
-            "name": "Sand Scout"
+            "name": "Sand Scout",
+            "customize": {
+                "textStyle": "smaller-text"
+            }
         }
     ],
     "Tutors": [
@@ -98,7 +117,10 @@
     ],
     "Control": [
         {
-            "name": "Austere Command"
+            "name": "Austere Command",
+            "customize": {
+                "textStyle": "no-line-spacing"
+            }
         },
         {
             "name": "Dismantling Wave",
@@ -180,10 +202,13 @@
     ],
     "Bounce Synergy": [
         {
-            "name": "Ambrosia Whiteheart"
+            "name": "Ambrosia Whiteheart",
+            "customize": {
+                "textStyle": "small-text"
+            }
         },
         {
-            "name": "Aviary Mechanic"
+            "name": "Loyal Gryff"
         },
         {
             "name": "Jeskai Barricade",
@@ -192,7 +217,7 @@
             }
         },
         {
-            "name": "Kor Skyfisher"
+            "name": "Rescuer Chwinga"
         },
         {
             "name": "Stonecloaker"
@@ -215,7 +240,10 @@
             "name": "Concerted Effort"
         },
         {
-            "name": "Defiler of Faith"
+            "name": "Defiler of Faith",
+            "customize": {
+                "textStyle": "small-text"
+            }
         },
         {
             "name": "Mondrak, Glory Dominus",
@@ -241,10 +269,13 @@
         },
         {
             "name": "Desert of the True",
-            "reminderText": false
+            "reminderText": true
         },
         {
-            "name": "Lazotep Quarry"
+            "name": "Lazotep Quarry",
+            "customize": {
+                "textStyle": "small-text"
+            }
         },
         {
             "name": "Scavenger Grounds"
@@ -275,8 +306,11 @@
             "name": "Vesuva"
         },
         {
+            "name": "Bonders' Enclave"
+        },
+        {
             "name": "Snow-Covered Plains",
-            "repeats": 28,
+            "repeats": 26,
             "reminderText": false,
             "arts": {
                 "url": "https://cards.scryfall.io/art_crop/front/7/a/7a961768-6166-4852-b518-23eb4cced47d.jpg?1562202622",
@@ -290,8 +324,13 @@
             "repeats": 2,
             "arts": {
                 "url": "https://cards.scryfall.io/art_crop/front/3/4/343fc82d-7d10-4489-8f7e-9995322114e2.jpg?1543675258",
-                "credit": "Josh Hass",
-                "centerText": true
+                "credit": "Josh Hass"
+            },
+            "customize": {
+                "textStyle": [
+                    "big-text",
+                    "centered-text"
+                ]
             },
             "cardoid": {
                 "name": "Zombie Warrior",
@@ -339,6 +378,12 @@
                 "url": "https://cards.scryfall.io/art_crop/front/1/d/1d7b1dfa-14a2-4e4e-baf2-e06672651db1.jpg?1675455562",
                 "credit": "Magali Villeneuve"
             },
+            "customize": {
+                "textStyle": [
+                    "big-text",
+                    "centered-text"
+                ]
+            },
             "cardoid": {
                 "name": "Warrior",
                 "layout": "token",
@@ -385,6 +430,13 @@
             "arts": {
                 "url": "https://cards.scryfall.io/art_crop/front/f/c/fc70e127-ffc8-45ed-9ca3-7f9f926ac4d5.jpg?1700321873",
                 "credit": "Kev Walker"
+            },
+            "customize": {
+                "textStyle": [
+                    "big-text",
+                    "centered-text"
+                ],
+                "flavorText": "From Kile with love ♥"
             },
             "cardoid": {
                 "name": "Elephant",

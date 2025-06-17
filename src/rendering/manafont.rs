@@ -3,35 +3,31 @@ use regex::Regex;
 use crate::{
     html::{Element, Node, Tag},
     rendering::parsing::{colored_mana, generic_mana, hybrid_mana, loyalty_symbol, tap_untap},
-    utils::{symbolics::RulesTextSymbolReplacer, ToS},
+    utils::{symbolics::SymbolReplacer, ToS},
 };
 
 #[derive(Default, Clone, Copy)]
 pub struct ManaFontSymbolics;
 
-impl RulesTextSymbolReplacer for ManaFontSymbolics {
-    type Item = Node;
+impl SymbolReplacer for ManaFontSymbolics {
+    const WRAPPER: bool = false;
 
     fn matcher(&self) -> regex::Regex {
         Regex::new(r"\{.*?\}|\[.*?\]").unwrap()
     }
 
-    fn map_symbol(&self, matched: &str) -> Self::Item {
-        colored_mana(matched)
+    fn map_symbol(&self, matched: &str) -> Vec<Node> {
+        vec![colored_mana(matched)
             .or_else(|| tap_untap(matched))
             .or_else(|| hybrid_mana(matched))
             .or_else(|| generic_mana(matched))
             .or_else(|| loyalty_symbol(matched))
-            .map(<Node as From<Element>>::from)
-            .unwrap_or_else(|| matched.s().into())
+            .map(|s| s.into())
+            .unwrap_or_else(|| matched.s().into())]
     }
 
-    fn intermediate_text(&self, non_matched: &str) -> Self::Item {
-        Node::from(non_matched)
-    }
-
-    fn joiner(&self) -> Option<Self::Item> {
-        None
+    fn intermediate_text(&self, non_matched: &str) -> Vec<Node> {
+        vec![Node::from(non_matched)]
     }
 }
 

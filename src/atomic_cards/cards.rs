@@ -7,6 +7,7 @@ use super::{
     types::{CardLayout, FaceLayout, LeadershipSkills, Side, Supertype, Type, WUBRG},
 };
 
+use core::f64;
 use std::{collections::BTreeSet, fmt::Display};
 
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
@@ -39,7 +40,7 @@ pub struct Card {
     // #[serde(default, skip_serializing_if = "is_default",  rename = "faceConvertedManaCost")]
     // pub face_converted_mana_cost: f64,
     #[serde(default, skip_serializing_if = "is_default", rename = "faceManaValue")]
-    pub face_mana_value: f64,
+    pub face_mana_value: Option<f64>,
     #[serde(default, skip_serializing_if = "is_default", rename = "faceName")]
     pub face_name: String,
     // #[serde(default, skip_serializing_if = "is_default",  rename = "firstPrinting")]
@@ -173,6 +174,22 @@ impl Card {
             FaceLayout::Battle
         } else {
             FaceLayout::Unadorned
+        }
+    }
+
+    pub fn get_name(&self) -> String {
+        if self.face_name.is_empty() {
+            self.name.clone()
+        } else {
+            self.face_name.clone()
+        }
+    }
+
+    pub fn get_mana_value(&self) -> f64 {
+        if let Some(n) = self.face_mana_value {
+            n
+        } else {
+            self.mana_value
         }
     }
 }
