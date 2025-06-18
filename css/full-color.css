@@ -1,25 +1,25 @@
 :root {
 
-    --white-color-1: white;
-    --white-color-2: lightyellow;
+    --white-color-1: lightyellow;
+    --white-color-2: wheat;
 
-    --blue-color-1: aqua;
-    --blue-color-2: darkblue;
+    --blue-color-1: skyblue;
+    --blue-color-2: steelblue;
 
-    --black-color-1: indigo;
-    --black-color-2: darkslategrey;
+    --black-color-1: #3d3d6d;
+    --black-color-2: #3d0000;
 
-    --red-color-1: red;
+    --red-color-1: lightcoral;
     --red-color-2: darkred;
 
-    --green-color-1: lightgreen;
-    --green-color-2: green;
+    --green-color-1: olivedrab;
+    --green-color-2: darkolivegreen;
 
-    --colorless-1: silver;
-    --colorless-2: slategrey;
+    --colorless-1: gainsboro;
+    --colorless-2: silver;
 
-    --gold-1: gold;
-    --gold-2: goldenrod;
+    --gold-1: goldenrod;
+    --gold-2: darkgoldenrod;
 }
 
 .ms.ms-ci.ms-ci-0 {

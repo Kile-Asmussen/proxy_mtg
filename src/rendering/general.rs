@@ -19,7 +19,7 @@ pub fn blank_card() -> Element {
 
 pub fn empty_card(card: &Card, proxy: &Proxy) -> Element {
     blank_card()
-        .class(card_css_class(card))
+        .class(card_css_class(card, proxy))
         .nodes(title_bar_div(card, proxy))
 }
 
@@ -175,18 +175,27 @@ pub fn anchor_words(words: &str) -> Vec<Node> {
     ]
 }
 
-pub fn card_css_class(card: &Card) -> Vec<&'static str> {
-    let mut res = if card.face_layout().is_landscape() {
-        vec!["landscape"]
+pub fn card_css_class(card: &Card, proxy: &Proxy) -> Vec<&'static str> {
+    let mut res = if let Some(Customization {
+        colored: Some(colored),
+        ..
+    }) = get_side(card.side, &proxy.customize)
+    {
+        colored
+    } else if card.types.contains(&Type::Land) {
+        &card.color_identity
     } else {
-        vec!["portrait"]
-    };
-
-    if card.types.contains(&Type::Land) {
-        res.append(&mut card.color_identity.iter().map(WUBRG::name).collvect());
-    } else {
-        res.append(&mut card.colors.iter().map(WUBRG::name).collvect());
+        &card.colors
     }
+    .iter()
+    .map(WUBRG::name)
+    .collvect();
+
+    res.push(if card.face_layout().is_landscape() {
+        "landscape"
+    } else {
+        "portrait"
+    });
 
     res
 }

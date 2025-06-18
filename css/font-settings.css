@@ -23,12 +23,70 @@
 
     --proxy-mark-font: Inconsolata;
     --proxy-mark-font-size: 1.5mm;
-    --proxy-mark-nudge: 0.2mm;
+    --proxy-mark-nudge: -0.1mm;
 
     --cost-symbol-size-text: 0.65em;
     --cost-symbol-size-title: 0.75em;
     --cost-adjustment-title: -0.75mm;
     --cost-adjustment-text: -0.3mm;
+}
+
+div.text-box {
+    font-family: var(--text-font-family);
+    font-size: var(--text-font-size);
+}
+
+div.text-box.text-size-120 {
+    font-size: calc(1.2 * var(--text-font-size));
+}
+
+div.text-box.text-size-115 {
+    font-size: calc(1.15 * var(--text-font-size));
+}
+
+div.text-box.text-size-110 {
+    font-size: calc(1.10 * var(--text-font-size));
+}
+
+div.text-box.text-size-105 {
+    font-size: calc(1.05 * var(--text-font-size));
+}
+
+div.text-box.text-size-95 {
+    font-size: calc(0.95 * var(--text-font-size));
+}
+
+div.text-box.text-size-90 {
+    font-size: calc(0.90 * var(--text-font-size));
+}
+
+div.text-box.text-size-85 {
+    font-size: calc(0.85 * var(--text-font-size));
+}
+
+div.text-box.text-size-80 {
+    font-size: calc(0.80 * var(--text-font-size));
+}
+
+div.text-box.indented-paragraphs>p.rules-text+p.rules-text,
+div.text-box.indented-paragraphs>p.flavor-text+p.flavor-text {
+    text-indent: 2mm;
+}
+
+div.text-box.indented-paragraphs .ms {
+    text-indent: 0;
+}
+
+p.flavor-text {
+    font-style: italic;
+}
+
+span.reminder {
+    font-style: italic;
+}
+
+span.anchor-word {
+    font-style: italic;
 }
 
 p.rules-text>span.reminder {
@@ -93,55 +151,6 @@ div.title.bar>span.cost>i.ms-6x {
 
 .ms-2 {
     margin-left: 0 !important;
-}
-
-p.rules-text,
-p.saga-chapter,
-p.flavor-text {
-    font-family: var(--text-font-family);
-    font-size: var(--text-font-size);
-}
-
-p.flavor-text {
-    font-style: italic;
-}
-
-div.text-box.big-text>p.rules-text,
-div.text-box.big-text>p.saga-chapter,
-div.text-box.big-text>p.flavor-text {
-    font-size: calc(var(--text-font-size) / 0.90);
-}
-
-div.text-box.normal-text>p.rules-text,
-div.text-box.normal-text>p.saga-chapter,
-div.text-box.normal-text>p.flavor-text {
-    font-size: var(--text-font-size);
-}
-
-div.text-box.small-text>p.rules-text,
-div.text-box.small-text>p.saga-chapter,
-div.text-box.small-text>p.flavor-text {
-    font-size: calc(var(--text-font-size) * 0.9);
-}
-
-div.text-box.smaller-text>p.rules-text,
-div.text-box.smaller-text>p.saga-chapter,
-div.text-box.smaller-text>p.flavor-text {
-    font-size: calc(var(--text-font-size) * 0.9 * 0.9);
-}
-
-div.text-box.smallest-text>p.rules-text,
-div.text-box.smallest-text>p.saga-chapter,
-div.text-box.smallest-text>p.flavor-text {
-    font-size: calc(var(--text-font-size) * 0.9 * 0.9 * 0.9);
-}
-
-span.reminder {
-    font-style: italic;
-}
-
-span.anchor-word {
-    font-style: italic;
 }
 
 div.dual-face-indicator.bar>span {

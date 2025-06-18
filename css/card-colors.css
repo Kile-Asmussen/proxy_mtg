@@ -111,25 +111,49 @@ div.card.red.green {
         radial-gradient(ellipse at bottom right, var(--green-color-2), transparent 75% 75%);
 }
 
-div.card.white.blue.black,
-div.card.white.blue.red,
-div.card.white.blue.green,
-div.card.white.black.red,
-div.card.white.black.green,
-div.card.white.red.green,
-div.card.blue.black.red,
-div.card.blue.black.green,
-div.card.blue.red.green,
-div.card.black.red.green,
-div.card.white.blue.red.green,
-div.card.white.black.red.green,
-div.card.white.blue.black.green,
-div.card.white.blue.black.red,
-div.card.white.blue.black.red.green {
+div.card.portrait.white.blue.black,
+div.card.portrait.white.blue.red,
+div.card.portrait.white.blue.green,
+div.card.portrait.white.black.red,
+div.card.portrait.white.black.green,
+div.card.portrait.white.red.green,
+div.card.portrait.blue.black.red,
+div.card.portrait.blue.black.green,
+div.card.portrait.blue.red.green,
+div.card.portrait.black.red.green,
+div.card.portrait.white.blue.red.green,
+div.card.portrait.white.black.red.green,
+div.card.portrait.white.blue.black.green,
+div.card.portrait.white.blue.black.red,
+div.card.portrait.white.blue.black.red.green {
     background:
-        linear-gradient(-30deg, transparent 40%, white 50%, transparent 60%),
-        radial-gradient(ellipse at top left, var(--gold-1), transparent 75% 75%),
-        radial-gradient(ellipse at top right, var(--gold-2), transparent 75% 75%),
+        linear-gradient(55deg, transparent 45%, white 50%, transparent 55%),
+        radial-gradient(ellipse at top right, var(--gold-1), transparent 75% 75%),
+        radial-gradient(ellipse at top left, var(--gold-2), transparent 75% 75%),
+        radial-gradient(ellipse at bottom left, var(--gold-1), transparent 75% 75%),
+        radial-gradient(ellipse at bottom right, var(--gold-2), transparent 75% 75%);
+
+}
+
+div.card.landscape.white.blue.black,
+div.card.landscape.white.blue.red,
+div.card.landscape.white.blue.green,
+div.card.landscape.white.black.red,
+div.card.landscape.white.black.green,
+div.card.landscape.white.red.green,
+div.card.landscape.blue.black.red,
+div.card.landscape.blue.black.green,
+div.card.landscape.blue.red.green,
+div.card.landscape.black.red.green,
+div.card.landscape.white.blue.red.green,
+div.card.landscape.white.black.red.green,
+div.card.landscape.white.blue.black.green,
+div.card.landscape.white.blue.black.red,
+div.card.landscape.white.blue.black.red.green {
+    background:
+        linear-gradient(35deg, transparent 45%, white 50%, transparent 55%),
+        radial-gradient(ellipse at top right, var(--gold-1), transparent 75% 75%),
+        radial-gradient(ellipse at top left, var(--gold-2), transparent 75% 75%),
         radial-gradient(ellipse at bottom left, var(--gold-1), transparent 75% 75%),
         radial-gradient(ellipse at bottom right, var(--gold-2), transparent 75% 75%);
 
@@ -149,11 +173,13 @@ div.card.token>div.title.bar {
     border-style: none;
     justify-content: center;
     color: white;
+    background: none;
 }
 
 div.card.token>div.alt-title.bar {
     border-style: none;
     color: white;
+    background: none;
 }
 
 div.card.token>div.title.bar>span.name {

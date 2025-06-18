@@ -65,12 +65,15 @@ div.card::after {
 
 div.card::before {
     top: calc(-1*var(--card-corner-radius) + var(--card-border)/2 + var(--proxy-mark-nudge));
-    content: "PROXY";
 }
 
 div.card::after {
     bottom: calc(-1*var(--card-corner-radius) + var(--card-border)/2 - var(--proxy-mark-nudge));
-    content: "PROXY";
+}
+
+div.card::before,
+div.card::after {
+    content: "PROXY \2014  NOT FOR SALE";
 }
 
 /* CARD PARTS */

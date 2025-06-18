@@ -3,13 +3,14 @@
         {
             "name": "God-Eternal Oketra",
             "arts": {
-                "url": "https://cards.scryfall.io/art_crop/front/f/2/f2cc79cf-d4db-4236-b3e2-fd12662b2a74.jpg?1543674712",
+                "url": "https://cards.scryfall.io/art_crop/front/f/2/f2cc79cf-d4db-4236-b3e2-fd12662b2a74.jpg",
                 "credit": "Chase Stone"
             },
             "customize": {
                 "name": "God-Epurrnal Okittytra",
+                "type": "Legendary Creature - Zombie God (Kbity)",
                 "textStyle": [
-                    "small-text"
+                    "text-size-85"
                 ]
             },
             "tags": [
@@ -26,7 +27,7 @@
             "name": "Caretaker's Talent",
             "reminderText": false,
             "arts": {
-                "url": "https://cards.scryfall.io/art_crop/front/5/9/59988d6c-d43c-4f37-85d5-27c5c47bc792.jpg?1748013667",
+                "url": "https://cards.scryfall.io/art_crop/front/5/9/59988d6c-d43c-4f37-85d5-27c5c47bc792.jpg",
                 "credit": "Andrew Mar"
             }
         },
@@ -39,7 +40,7 @@
         {
             "name": "Skullclamp",
             "arts": {
-                "url": "https://cards.scryfall.io/art_crop/front/4/e/4e5d5649-3e30-4aca-80f8-5a7522d366da.jpg?1748705453",
+                "url": "https://cards.scryfall.io/art_crop/front/4/e/4e5d5649-3e30-4aca-80f8-5a7522d366da.jpg",
                 "credit": "Josephine Chang"
             }
         },
@@ -47,30 +48,41 @@
             "name": "Tocasia's Welcome"
         },
         {
-            "name": "War Room"
-        },
-        {
             "name": "Idol of Oblivion"
         },
         {
             "name": "Welcoming Vampire"
+        },
+        {
+            "name": "Well of Knowledge"
         }
     ],
     "Land Advantage": [
         {
             "name": "Archaeomancer's Map",
             "customize": {
-                "textStyle": "small-text"
+                "textStyle": [
+                    "text-size-85",
+                    "no-line-spacing",
+                    "indented-paragraphs"
+                ]
             }
         },
         {
             "name": "Claim Jumper",
             "customize": {
-                "textStyle": "small-text"
+                "textStyle": [
+                    "text-size-85",
+                    "no-line-spacing",
+                    "indented-paragraphs"
+                ]
             }
         },
         {
-            "name": "Deep Gnome Terramancer"
+            "name": "Deep Gnome Terramancer",
+            "customize": {
+                "textStyle": "text-size-90"
+            }
         },
         {
             "name": "Extraplanar Lens"
@@ -78,7 +90,7 @@
         {
             "name": "Keeper of the Accord",
             "customize": {
-                "textStyle": "small-text"
+                "textStyle": "text-size-80"
             }
         },
         {
@@ -96,7 +108,11 @@
         {
             "name": "Sand Scout",
             "customize": {
-                "textStyle": "smaller-text"
+                "textStyle": [
+                    "text-size-80",
+                    "no-line-spacing",
+                    "indented-paragraphs"
+                ]
             }
         }
     ],
@@ -130,9 +146,6 @@
             "name": "Generous Gift"
         },
         {
-            "name": "Loran of the Third Path"
-        },
-        {
             "name": "Return to Dust"
         },
         {
@@ -140,7 +153,10 @@
         },
         {
             "name": "Winds of Abandon",
-            "reminderText": false
+            "reminderText": false,
+            "customize": {
+                "textStyle": "text-size-90"
+            }
         }
     ],
     "Stax": [
@@ -204,7 +220,7 @@
         {
             "name": "Ambrosia Whiteheart",
             "customize": {
-                "textStyle": "small-text"
+                "textStyle": "text-size-90"
             }
         },
         {
@@ -220,7 +236,11 @@
             "name": "Rescuer Chwinga"
         },
         {
-            "name": "Stonecloaker"
+            "name": "Stonecloaker",
+            "customize": {
+                "text": "Flash, flying\nWhen this creature enters, return a creature you control to its owner's hand.\nWhen this creature enters, exile target card from a graveyard.",
+                "textStyle": "text-size-95"
+            }
         },
         {
             "name": "Sunpearl Kirin",
@@ -234,6 +254,12 @@
     ],
     "Wincon Enabler": [
         {
+            "name": "Angelic Sell-Sword",
+            "customize": {
+                "textStyle": "text-size-80"
+            }
+        },
+        {
             "name": "Anointed Procession"
         },
         {
@@ -242,15 +268,25 @@
         {
             "name": "Defiler of Faith",
             "customize": {
-                "textStyle": "small-text"
+                "textStyle": [
+                    "text-size-80",
+                    "no-line-spacing",
+                    "indented-paragraphs"
+                ]
             }
         },
         {
             "name": "Mondrak, Glory Dominus",
-            "reminderText": false
+            "reminderText": false,
+            "customize": {
+                "textStyle": "text-size-95"
+            }
         },
         {
-            "name": "Odric, Lunarch Marshal"
+            "name": "Odric, Lunarch Marshal",
+            "customize": {
+                "textStyle": "text-size-90"
+            }
         },
         {
             "name": "Oketra's Monument"
@@ -269,12 +305,16 @@
         },
         {
             "name": "Desert of the True",
-            "reminderText": true
+            "reminderText": false
         },
         {
             "name": "Lazotep Quarry",
             "customize": {
-                "textStyle": "small-text"
+                "textStyle": [
+                    "text-size-85",
+                    "no-line-spacing",
+                    "indented-paragraphs"
+                ]
             }
         },
         {
@@ -287,33 +327,73 @@
             "name": "Karoo"
         },
         {
-            "name": "Lotus Field"
+            "name": "Lotus Field",
+            "customize": {
+                "colored": [
+                    "W",
+                    "U",
+                    "B",
+                    "R",
+                    "G"
+                ]
+            }
         },
         {
-            "name": "Lotus Vale"
+            "name": "Lotus Vale",
+            "customize": {
+                "colored": [
+                    "W",
+                    "U",
+                    "B",
+                    "R",
+                    "G"
+                ]
+            }
         },
         {
             "name": "Nykthos, Shrine to Nyx",
-            "reminderText": false
+            "reminderText": false,
+            "customize": {
+                "colored": [
+                    "W",
+                    "U",
+                    "B",
+                    "R",
+                    "G"
+                ]
+            }
         },
         {
             "name": "Scorched Ruins"
         },
         {
-            "name": "Thespian's Stage"
+            "name": "Thespian's Stage",
+            "customize": {
+                "colored": [
+                    "U"
+                ]
+            }
         },
         {
-            "name": "Vesuva"
+            "name": "Vesuva",
+            "customize": {
+                "colored": [
+                    "U"
+                ]
+            }
         },
         {
             "name": "Bonders' Enclave"
         },
         {
+            "name": "War Room"
+        },
+        {
             "name": "Snow-Covered Plains",
-            "repeats": 26,
+            "repeats": 25,
             "reminderText": false,
             "arts": {
-                "url": "https://cards.scryfall.io/art_crop/front/7/a/7a961768-6166-4852-b518-23eb4cced47d.jpg?1562202622",
+                "url": "https://cards.scryfall.io/art_crop/front/7/a/7a961768-6166-4852-b518-23eb4cced47d.jpg",
                 "credit": "Titus Lunter"
             }
         }
@@ -323,14 +403,15 @@
             "name": "Zombie Warrior",
             "repeats": 2,
             "arts": {
-                "url": "https://cards.scryfall.io/art_crop/front/3/4/343fc82d-7d10-4489-8f7e-9995322114e2.jpg?1543675258",
+                "url": "https://cards.scryfall.io/art_crop/front/3/4/343fc82d-7d10-4489-8f7e-9995322114e2.jpg",
                 "credit": "Josh Hass"
             },
             "customize": {
                 "textStyle": [
-                    "big-text",
+                    "text-size-120",
                     "centered-text"
-                ]
+                ],
+                "name": "My Wincon is Beating Face"
             },
             "cardoid": {
                 "name": "Zombie Warrior",
@@ -341,7 +422,7 @@
                 "power": "4",
                 "toughness": "4",
                 "text": "Vigilance",
-                "type": "Creature Token — Zombie Warrior",
+                "type": "Token Creature — Zombie Warrior",
                 "types": [
                     "Creature"
                 ]
@@ -351,9 +432,12 @@
             "name": "Soldier",
             "repeats": 2,
             "arts": {
-                "url": "https://cards.scryfall.io/art_crop/front/6/4/6455d903-6996-448f-9148-9068febecb00.jpg?1742506671",
+                "url": "https://cards.scryfall.io/art_crop/front/6/4/6455d903-6996-448f-9148-9068febecb00.jpg",
                 "credit": "Eelis Kyttanen",
                 "full": true
+            },
+            "customize": {
+                "name": "Skullclamp Fodder"
             },
             "cardoid": {
                 "name": "Soldier",
@@ -364,7 +448,7 @@
                 "power": "1",
                 "toughness": "1",
                 "text": "",
-                "type": "Creature Token — Soldier",
+                "type": "Token Creature — Soldier",
                 "types": [
                     "Creature"
                 ]
@@ -375,12 +459,13 @@
             "repeats": 2,
             "arts": {
                 "centerText": true,
-                "url": "https://cards.scryfall.io/art_crop/front/1/d/1d7b1dfa-14a2-4e4e-baf2-e06672651db1.jpg?1675455562",
+                "url": "https://cards.scryfall.io/art_crop/front/1/d/1d7b1dfa-14a2-4e4e-baf2-e06672651db1.jpg",
                 "credit": "Magali Villeneuve"
             },
             "customize": {
+                "name": "Skullclamp Fodder",
                 "textStyle": [
-                    "big-text",
+                    "text-size-120",
                     "centered-text"
                 ]
             },
@@ -393,7 +478,33 @@
                 "power": "1",
                 "toughness": "1",
                 "text": "Vigilance",
-                "type": "Creature Token — Warrior",
+                "type": "Token Creature — Warrior",
+                "types": [
+                    "Creature"
+                ]
+            }
+        },
+        {
+            "name": "Mercenary",
+            "repeats": 2,
+            "arts": {
+                "centerText": true,
+                "url": "https://cards.scryfall.io/art_crop/front/5/f/5f04607f-eed2-462e-897f-82e41e5f7049.jpg",
+                "credit": "Magali Villeneuve"
+            },
+            "customize": {
+                "name": "Skullclamp Fodder"
+            },
+            "cardoid": {
+                "name": "Mercenary",
+                "layout": "token",
+                "colors": [
+                    "R"
+                ],
+                "power": "1",
+                "toughness": "1",
+                "text": "{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.",
+                "type": "Token Creature — Mercenary",
                 "types": [
                     "Creature"
                 ]
@@ -404,9 +515,12 @@
             "repeats": 2,
             "arts": {
                 "centerText": true,
-                "url": "https://cards.scryfall.io/art_crop/front/1/7/17812f4e-a10c-472b-970f-35a8f392235a.jpg?1717194127",
+                "url": "https://cards.scryfall.io/art_crop/front/1/7/17812f4e-a10c-472b-970f-35a8f392235a.jpg",
                 "credit": "Piotr Foksowicz",
                 "full": true
+            },
+            "customize": {
+                "name": "Skullclamp Fodder"
             },
             "cardoid": {
                 "name": "Sand Warrior",
@@ -419,7 +533,7 @@
                 "power": "1",
                 "toughness": "1",
                 "text": "",
-                "type": "Creature Token — Sand Warrior",
+                "type": "Token Creature — Sand Warrior",
                 "types": [
                     "Creature"
                 ]
@@ -428,14 +542,15 @@
         {
             "name": "Elephant",
             "arts": {
-                "url": "https://cards.scryfall.io/art_crop/front/f/c/fc70e127-ffc8-45ed-9ca3-7f9f926ac4d5.jpg?1700321873",
+                "url": "https://cards.scryfall.io/art_crop/front/f/c/fc70e127-ffc8-45ed-9ca3-7f9f926ac4d5.jpg",
                 "credit": "Kev Walker"
             },
             "customize": {
                 "textStyle": [
-                    "big-text",
+                    "text-size-120",
                     "centered-text"
                 ],
+                "name": "A Gift For You! Yes You!",
                 "flavorText": "From Kile with love ♥"
             },
             "cardoid": {
@@ -447,7 +562,7 @@
                 "power": "3",
                 "toughness": "3",
                 "text": "",
-                "type": "Creature Token — Elephant",
+                "type": "Token Creature — Elephant",
                 "types": [
                     "Creature"
                 ]
@@ -456,9 +571,12 @@
         {
             "name": "Eldrazi",
             "arts": {
-                "url": "https://cards.scryfall.io/art_crop/front/2/0/209a3cfb-2c5a-4a9f-87f8-f9f6e290a88b.jpg?1717193455",
+                "url": "https://cards.scryfall.io/art_crop/front/2/0/209a3cfb-2c5a-4a9f-87f8-f9f6e290a88b.jpg",
                 "credit": "Jack Wang",
                 "full": true
+            },
+            "customize": {
+                "name": "We Call Him Jerry"
             },
             "cardoid": {
                 "name": "Eldrazi",
@@ -467,7 +585,7 @@
                 "power": "10",
                 "toughness": "10",
                 "text": "",
-                "type": "Creature Token — Eldrazi",
+                "type": "Token Creature — Eldrazi",
                 "types": [
                     "Creature"
                 ]

@@ -102,7 +102,7 @@ fn class_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
 
     Element::new(Tag::div)
         .class(["text-box", "dense", "vertical", "right"])
-        .class(text_style(card, proxy, vec![TextStyle::SmallText]))
+        .class(text_style(card, proxy, vec![TextStyle::TextSize90]))
         .nodes(paragraphs)
 }
 
@@ -133,7 +133,7 @@ fn saga_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
 
     Element::new(Tag::div)
         .class(["text-box", "vertical", "left"])
-        .class(text_style(card, proxy, vec![TextStyle::SmallText]))
+        .class(text_style(card, proxy, vec![TextStyle::TextSize90]))
         .nodes(paragraphs)
 }
 

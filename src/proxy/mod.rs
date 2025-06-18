@@ -1,7 +1,7 @@
 pub mod decklists;
 pub mod deserializers;
 
-use std::fmt::Display;
+use std::{collections::BTreeSet, fmt::Display};
 
 use deserializers::OneOrMany;
 use indexmap::IndexSet;
@@ -10,7 +10,10 @@ use itertools::{EitherOrBoth, Itertools};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    atomic_cards::{cardoids::Cardoid, types::CardLayout},
+    atomic_cards::{
+        cardoids::Cardoid,
+        types::{CardLayout, WUBRG},
+    },
     scryfall::api::ScryfallCard,
     utils::{iter::IterExt, ToS},
 };
@@ -152,17 +155,15 @@ pub struct Customization {
     #[serde(default, rename = "flavorText")]
     pub flavor_text: Option<String>,
     #[serde(default)]
+    pub colored: Option<BTreeSet<WUBRG>>,
+    #[serde(default)]
     pub language: Option<String>,
-    // #[serde(default, rename = "multiverseId")]
-    // pub multiverse_id: f64,
     #[serde(default)]
     pub name: Option<String>,
     #[serde(default)]
     pub text: Option<String>,
     #[serde(default, rename = "type")]
     pub type_line: Option<String>,
-    #[serde(default)]
-    pub text_scale: Option<f64>,
     #[serde(
         default,
         rename = "textStyle",
@@ -175,16 +176,26 @@ pub struct Customization {
 pub enum TextStyle {
     #[serde(rename = "no-line-spacing")]
     NoLineSpacing,
+    #[serde(rename = "indented-paragraphs")]
+    IndentedParagraphs,
     #[serde(rename = "centered-text")]
     CenteredText,
-    #[serde(rename = "big-text")]
-    BigText,
-    #[serde(rename = "small-text")]
-    SmallText,
-    #[serde(rename = "smaller-text")]
-    SmallerText,
-    #[serde(rename = "smallest-text")]
-    SmallestText,
+    #[serde(rename = "text-size-120")]
+    TextSize120,
+    #[serde(rename = "text-size-115")]
+    TextSize115,
+    #[serde(rename = "text-size-110")]
+    TextSize110,
+    #[serde(rename = "text-size-105")]
+    TextSize105,
+    #[serde(rename = "text-size-95")]
+    TextSize95,
+    #[serde(rename = "text-size-90")]
+    TextSize90,
+    #[serde(rename = "text-size-85")]
+    TextSize85,
+    #[serde(rename = "text-size-80")]
+    TextSize80,
 }
 
 impl Display for TextStyle {
