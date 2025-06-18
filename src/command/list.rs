@@ -383,10 +383,20 @@ impl List {
     fn print_moxfield(decklist: &DeckList) {
         for proxy in decklist {
             if proxy.in_deck() {
-                if proxy.tags.contains("Commander") {
-                    println!("{} {} #Commander", proxy.repeats, proxy.name,);
-                } else {
+                if proxy.tags.is_empty() {
                     println!("{} {}", proxy.repeats, proxy.name,);
+                } else {
+                    println!(
+                        "{} {} {}",
+                        proxy.repeats,
+                        proxy.name,
+                        proxy
+                            .tags
+                            .iter()
+                            .map(|s| format!("#{}", s))
+                            .collvect()
+                            .join("")
+                    );
                 }
             }
         }

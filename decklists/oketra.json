@@ -88,6 +88,9 @@
             "name": "Extraplanar Lens"
         },
         {
+            "name": "Gauntlet of Power"
+        },
+        {
             "name": "Keeper of the Accord",
             "customize": {
                 "textStyle": "text-size-80"
@@ -104,16 +107,6 @@
         },
         {
             "name": "Surveyor's Scope"
-        },
-        {
-            "name": "Sand Scout",
-            "customize": {
-                "textStyle": [
-                    "text-size-80",
-                    "no-line-spacing",
-                    "indented-paragraphs"
-                ]
-            }
         }
     ],
     "Tutors": [
@@ -129,6 +122,12 @@
         },
         {
             "name": "Recruiter of the Guard"
+        },
+        {
+            "name": "Cloud, Midgar Mercenary"
+        },
+        {
+            "name": "Stoneforge Mystic"
         }
     ],
     "Control": [
@@ -170,29 +169,15 @@
             "name": "Clarion Conqueror"
         },
         {
-            "name": "Magus of the Moat"
+            "name": "Deafening Silence"
         },
         {
-            "name": "Binding Mummy"
-        }
-    ],
-    "Commander Protection": [
-        {
-            "name": "Commander's Plate"
-        },
-        {
-            "name": "Darksteel Plate"
+            "name": "Solemnity"
         }
     ],
     "Board Protection": [
         {
-            "name": "Brought Back"
-        },
-        {
             "name": "Eerie Interlude"
-        },
-        {
-            "name": "Emeria, the Sky Ruin"
         },
         {
             "name": "Flare of Fortitude"
@@ -224,9 +209,6 @@
             }
         },
         {
-            "name": "Loyal Gryff"
-        },
-        {
             "name": "Jeskai Barricade",
             "customize": {
                 "text": "Flash, defender\nWhen this creature enters, you may return another target creature you control to its owner's hand."
@@ -234,13 +216,6 @@
         },
         {
             "name": "Rescuer Chwinga"
-        },
-        {
-            "name": "Stonecloaker",
-            "customize": {
-                "text": "Flash, flying\nWhen this creature enters, return a creature you control to its owner's hand.\nWhen this creature enters, exile target card from a graveyard.",
-                "textStyle": "text-size-95"
-            }
         },
         {
             "name": "Sunpearl Kirin",
@@ -254,6 +229,9 @@
     ],
     "Wincon Enabler": [
         {
+            "name": "Binding Mummy"
+        },
+        {
             "name": "Angelic Sell-Sword",
             "customize": {
                 "textStyle": "text-size-80"
@@ -264,6 +242,12 @@
         },
         {
             "name": "Concerted Effort"
+        },
+        {
+            "name": "Bond of Discipline"
+        },
+        {
+            "name": "Akroma's Will"
         },
         {
             "name": "Defiler of Faith",
@@ -302,20 +286,6 @@
         {
             "name": "Arid Archway",
             "reminderText": false
-        },
-        {
-            "name": "Desert of the True",
-            "reminderText": false
-        },
-        {
-            "name": "Lazotep Quarry",
-            "customize": {
-                "textStyle": [
-                    "text-size-85",
-                    "no-line-spacing",
-                    "indented-paragraphs"
-                ]
-            }
         },
         {
             "name": "Scavenger Grounds"
@@ -389,8 +359,11 @@
             "name": "War Room"
         },
         {
+            "name": "Karakas"
+        },
+        {
             "name": "Snow-Covered Plains",
-            "repeats": 25,
+            "repeats": 27,
             "reminderText": false,
             "arts": {
                 "url": "https://cards.scryfall.io/art_crop/front/7/a/7a961768-6166-4852-b518-23eb4cced47d.jpg",
