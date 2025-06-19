@@ -52,9 +52,6 @@
         },
         {
             "name": "Welcoming Vampire"
-        },
-        {
-            "name": "Well of Knowledge"
         }
     ],
     "Land Advantage": [
@@ -85,9 +82,6 @@
         },
         {
             "name": "Extraplanar Lens"
-        },
-        {
-            "name": "Gauntlet of Power"
         },
         {
             "name": "Keeper of the Accord",
@@ -182,6 +176,12 @@
         }
     ],
     "Board Protection": [
+        {
+            "name": "Brought Back"
+        },
+        {
+            "name": "Argivian Archaeologist"
+        },
         {
             "name": "Eerie Interlude"
         },
@@ -301,9 +301,6 @@
             "reminderText": false
         },
         {
-            "name": "Scavenger Grounds"
-        },
-        {
             "name": "Guildless Commons"
         },
         {
@@ -366,13 +363,44 @@
             }
         },
         {
-            "name": "Bonders' Enclave"
+            "name": "Bonders' Enclave",
+            "customize": {
+                "colored": [
+                    "R"
+                ]
+            }
         },
         {
-            "name": "War Room"
+            "name": "War Room",
+            "customize": {
+                "colored": [
+                    "R"
+                ]
+            }
         },
         {
-            "name": "Karakas"
+            "name": "Lazotep Quarry",
+            "customize": {
+                "colored": [
+                    "B"
+                ]
+            }
+        },
+        {
+            "name": "Cactus Preserve",
+            "customize": {
+                "colored": [
+                    "G"
+                ]
+            }
+        },
+        {
+            "name": "Scavenger Grounds",
+            "customize": {
+                "colored": [
+                    "B"
+                ]
+            }
         },
         {
             "name": "Snow-Covered Plains",
