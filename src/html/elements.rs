@@ -68,11 +68,9 @@ impl Element {
 
     pub fn attr<S>(mut self, k: &'static str, v: S) -> Self
     where
-        S: AsRef<str>,
+        S: ToString,
     {
-        self.attributes
-            .entry(k)
-            .insert_entry(escape_html_attr(v.as_ref()));
+        self.attributes.entry(k).insert_entry(v.s());
         self
     }
 

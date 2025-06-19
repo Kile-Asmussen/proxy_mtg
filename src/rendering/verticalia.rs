@@ -6,7 +6,7 @@ use crate::{
         types::{FaceLayout, Side, Type},
     },
     html::{Element, Node, Tag},
-    proxy::{Customization, Proxy, TextStyle},
+    proxy::{Customization, Proxy},
     rendering::{
         general::{
             anchor_words, empty_card, get_side, rules_text_filter, rules_text_paragraph,
@@ -102,7 +102,7 @@ fn class_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
 
     Element::new(Tag::div)
         .class(["text-box", "dense", "vertical", "right"])
-        .class(text_style(card, proxy, vec![TextStyle::TextSize90]))
+        .class(text_style(card, proxy, vec![]))
         .nodes(paragraphs)
 }
 
@@ -133,7 +133,7 @@ fn saga_rules_text_div(card: &Card, proxy: &Proxy) -> Element {
 
     Element::new(Tag::div)
         .class(["text-box", "vertical", "left"])
-        .class(text_style(card, proxy, vec![TextStyle::TextSize90]))
+        .class(text_style(card, proxy, vec![]))
         .nodes(paragraphs)
 }
 

@@ -18,7 +18,7 @@
     --bar-small-font-size: 6pt;
     --bar-small-font-adjustment: -0.1mm;
 
-    --art-credit-font: Crimson Text;
+    --art-credit-font: Crimson Text, Times;
     --art-credit-font-size: 4.5pt;
 
     --proxy-mark-font: Inconsolata;
@@ -32,7 +32,7 @@
 }
 
 div.text-box {
-    font-family: var(--text-font-family);
+    font-family: var(--text-font-family) !important;
     font-size: var(--text-font-size);
 }
 

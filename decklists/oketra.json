@@ -62,7 +62,6 @@
             "name": "Archaeomancer's Map",
             "customize": {
                 "textStyle": [
-                    "text-size-85",
                     "no-line-spacing",
                     "indented-paragraphs"
                 ]
@@ -72,7 +71,7 @@
             "name": "Claim Jumper",
             "customize": {
                 "textStyle": [
-                    "text-size-85",
+                    "text-size-95",
                     "no-line-spacing",
                     "indented-paragraphs"
                 ]
@@ -93,7 +92,11 @@
         {
             "name": "Keeper of the Accord",
             "customize": {
-                "textStyle": "text-size-80"
+                "textStyle": [
+                    "text-size-95",
+                    "no-line-spacing",
+                    "indented-paragraphs"
+                ]
             }
         },
         {
@@ -124,7 +127,10 @@
             "name": "Recruiter of the Guard"
         },
         {
-            "name": "Cloud, Midgar Mercenary"
+            "name": "Cloud, Midgar Mercenary",
+            "customize": {
+                "type": "Leg. Crt. \u2014 Human Soldier Mercenary"
+            }
         },
         {
             "name": "Stoneforge Mystic"
@@ -234,7 +240,11 @@
         {
             "name": "Angelic Sell-Sword",
             "customize": {
-                "textStyle": "text-size-80"
+                "textStyle": [
+                    "text-size-90",
+                    "no-line-spacing",
+                    "indented-paragraphs"
+                ]
             }
         },
         {
@@ -247,13 +257,19 @@
             "name": "Bond of Discipline"
         },
         {
-            "name": "Akroma's Will"
+            "name": "Akroma's Will",
+            "customize": {
+                "textStyle": [
+                    "text-size-95",
+                    "no-line-spacing"
+                ]
+            }
         },
         {
             "name": "Defiler of Faith",
             "customize": {
                 "textStyle": [
-                    "text-size-80",
+                    "text-size-95",
                     "no-line-spacing",
                     "indented-paragraphs"
                 ]
@@ -267,10 +283,7 @@
             }
         },
         {
-            "name": "Odric, Lunarch Marshal",
-            "customize": {
-                "textStyle": "text-size-90"
-            }
+            "name": "Odric, Lunarch Marshal"
         },
         {
             "name": "Oketra's Monument"
