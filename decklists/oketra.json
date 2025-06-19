@@ -403,8 +403,11 @@
             }
         },
         {
+            "name": "Desert of the True"
+        },
+        {
             "name": "Snow-Covered Plains",
-            "repeats": 27,
+            "repeats": 25,
             "reminderText": false,
             "arts": {
                 "url": "https://cards.scryfall.io/art_crop/front/7/a/7a961768-6166-4852-b518-23eb4cced47d.jpg",
