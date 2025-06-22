@@ -59,21 +59,18 @@ impl SqliteTable for Cardoid {
     }
 
     fn post_store(&self, id: i64, conn: &Connection) -> anyhow::Result<()> {
-        let mut data = self
-            .0
-            .iter()
-            .map(|c| {
-                (
+        Card::store_rows(&conn, |mut s| {
+            for c in self {
+                s.store(
                     c,
-                    Card_Keys {
-                        legalities: None,
+                    &mut Card_Keys {
                         cardoid: id,
+                        legalities: None,
                     },
-                )
-            })
-            .collect_vec();
-
-        Card::store_rows(data.iter_mut().map(|(c, ck)| (*c, ck)), &conn)?;
+                )?;
+            }
+            Ok(())
+        })?;
 
         Ok(())
     }

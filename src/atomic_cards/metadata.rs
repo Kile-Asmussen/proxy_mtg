@@ -51,11 +51,10 @@ fn test_metadata() -> anyhow::Result<()> {
         version: "0.9b".s(),
     };
 
-    let r = MetaData::store_rows([(&m, &mut ())], &conn)?;
-    assert_eq!(r, vec![1]);
+    MetaData::store_rows(&conn, |mut s| s.store(&m, &mut ()).map(|_| ()))?;
 
     let mut ms = vec![];
-    MetaData::load_rows(r, &conn, |i, m, mk| Ok(ms.push((i, m, mk))))?;
+    MetaData::load_rows([1], &conn, |i, m, mk| Ok(ms.push((i, m, mk))))?;
     assert_eq!(ms, vec![(1, m, ())]);
 
     Ok(())
@@ -147,7 +146,14 @@ fn test_foreign_data() -> anyhow::Result<()> {
 
     println!("{}", ForeignData::insert_row_stmt());
 
-    let ids = ForeignData::store_rows(data.iter_mut().map(|(o, k)| (&*o, k)), &conn)?;
+    let mut ids = vec![];
+
+    ForeignData::store_rows(&conn, |mut s| {
+        for (f, fk) in &mut data {
+            ids.push(s.store(f, fk)?);
+        }
+        Ok(())
+    })?;
 
     println!("{}", ForeignData::select_row_stmt());
 
@@ -269,35 +275,42 @@ fn test_legalities() -> anyhow::Result<()> {
     println!("{}", Legalities::full_setup_script().join("\n"));
     Legalities::setup(&conn);
 
-    let mut data = vec![(
-        Legalities {
-            alchemy: Legality::Legal,
-            brawl: Legality::Legal,
-            commander: Legality::Legal,
-            duel: Legality::Legal,
-            explorer: Legality::Legal,
-            future: Legality::Legal,
-            gladiator: Legality::Legal,
-            historic: Legality::Legal,
-            historicbrawl: Legality::Legal,
-            legacy: Legality::Legal,
-            modern: Legality::Legal,
-            oldschool: Legality::Legal,
-            pauper: Legality::Legal,
-            penny: Legality::Legal,
-            pioneer: Legality::Legal,
-            predh: Legality::Legal,
-            premodern: Legality::Legal,
-            standard: Legality::Legal,
-            vintage: Legality::Legal,
-        },
-        (),
-    )];
+    let data = Legalities {
+        alchemy: Legality::Legal,
+        brawl: Legality::Legal,
+        commander: Legality::Legal,
+        duel: Legality::Legal,
+        explorer: Legality::Legal,
+        future: Legality::Legal,
+        gladiator: Legality::Legal,
+        historic: Legality::Legal,
+        historicbrawl: Legality::Legal,
+        legacy: Legality::Legal,
+        modern: Legality::Legal,
+        oldschool: Legality::Legal,
+        pauper: Legality::Legal,
+        penny: Legality::Legal,
+        pioneer: Legality::Legal,
+        predh: Legality::Legal,
+        premodern: Legality::Legal,
+        standard: Legality::Legal,
+        vintage: Legality::Legal,
+    };
 
-    let ids = Legalities::store_rows(data.iter_mut().map(move |(l, q)| (&*l, q)), &conn)?;
-    let ids2 = Legalities::store_rows(data.iter_mut().map(move |(l, q)| (&*l, q)), &conn)?;
+    let mut id = 0;
 
-    assert_eq!(ids, ids2);
+    Legalities::store_rows(&conn, |mut s| {
+        id = s.store(&data, &mut ())?;
+        Ok(())
+    })?;
+
+    let mut id2 = 0;
+    Legalities::store_rows(&conn, |mut s| {
+        id2 = s.store(&data, &mut ())?;
+        Ok(())
+    })?;
+
+    assert_eq!(id, id2);
     Ok(())
 }
 

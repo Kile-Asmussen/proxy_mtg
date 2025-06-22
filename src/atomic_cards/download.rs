@@ -1,16 +1,12 @@
 use std::time::Instant;
 
-use itertools::Itertools;
 use rusqlite::Connection;
 
-use crate::{
-    atomic_cards::{
-        cardoids::{Cardoid, Cardoid_Keys},
-        metadata::MetaData,
-        sqlite::SqliteTableImpl,
-        AtomicCardsDb, AtomicCardsFile,
-    },
-    utils::ToS,
+use crate::atomic_cards::{
+    cardoids::{Cardoid, Cardoid_Keys},
+    metadata::MetaData,
+    sqlite::SqliteTableImpl,
+    AtomicCardsDb, AtomicCardsFile,
 };
 
 impl AtomicCardsFile {
