@@ -13,7 +13,7 @@ use anyhow::anyhow;
 #[derive(Debug, Clone, Copy)]
 pub struct DbColumn<O, K>
 where
-    O: SqliteTable<ForeignKeys = K> + 'static,
+    O: SqliteTable<Keys = K> + 'static,
     K: 'static,
 {
     pub name: &'static str,
@@ -25,27 +25,27 @@ where
 
 macro_rules! getsetters {
     ($obj_or_key:ident.$field:ident, val.$method:ident()) => {
-        crate::atomic_cards::sqlite::GetSetter::$obj_or_key {
+        crate::atomic_cards::sqlite::GetSetter::$obj_or_key(crate::atomic_cards::sqlite::GetSet {
             get: |thing| thing.$field.to_sql(),
             set: |thing, val| Ok(thing.$field = val.$method()?.into()),
-        }
+        })
     };
     ($obj_or_key:ident.$field:ident, $val:ident -> $body:expr) => {
-        crate::atomic_cards::sqlite::GetSetter::$obj_or_key {
+        crate::atomic_cards::sqlite::GetSetter::$obj_or_key(crate::atomic_cards::sqlite::GetSet {
             get: |thing| thing.$field.to_sql(),
             set: |thing, $val| Ok(thing.$field = $body),
-        }
+        })
     };
     ($obj_or_key:ident.$field:ident,
         $val1:ident -> $body1:expr,
         $val2:ident <- $body2:expr) => {
-        crate::atomic_cards::sqlite::GetSetter::$obj_or_key {
+        crate::atomic_cards::sqlite::GetSetter::$obj_or_key(crate::atomic_cards::sqlite::GetSet {
             get: |thing| {
                 let $val2 = &thing.$field;
                 Ok(ToSqlOutput::Owned($body2))
             },
             set: |thing, $val1| Ok(thing.$field = $body1),
-        }
+        })
     };
 }
 
@@ -112,7 +112,7 @@ pub(crate) use db_column;
 
 impl<O, K> DbColumn<O, K>
 where
-    O: SqliteTable<ForeignKeys = K>,
+    O: SqliteTable<Keys = K>,
 {
     fn column_spec(&self) -> String {
         let DbColumn { name, typ, .. } = self;
@@ -151,23 +151,15 @@ impl Display for IsIndexed {
 
 #[derive(Debug, Clone, Copy)]
 pub enum GetSetter<O, K> {
-    Object {
-        get: for<'a> fn(&'a O) -> rusqlite::Result<ToSqlOutput<'a>>,
-        set: for<'a> fn(&'a mut O, ValueRef<'a>) -> rusqlite::Result<()>,
-    },
-    Key {
-        get: for<'a> fn(&'a K) -> rusqlite::Result<ToSqlOutput<'a>>,
-        set: for<'a> fn(&'a mut K, ValueRef<'a>) -> rusqlite::Result<()>,
-    },
-    None,
+    Object(GetSet<O>),
+    Key(GetSet<K>),
 }
 
 impl<O, K> GetSetter<O, K> {
     fn get<'b, 'a>(&'b self, object: &'a O, key: &'a K) -> rusqlite::Result<ToSqlOutput<'a>> {
         match self {
-            GetSetter::Object { get, .. } => get(object),
-            GetSetter::Key { get, .. } => get(key),
-            GetSetter::None => Ok(ToSqlOutput::Owned(Value::Null)),
+            GetSetter::Object(g) => g.get(object),
+            GetSetter::Key(g) => g.get(key),
         }
     }
 
@@ -178,21 +170,59 @@ impl<O, K> GetSetter<O, K> {
         val: ValueRef<'a>,
     ) -> rusqlite::Result<()> {
         match self {
-            GetSetter::Object { set, .. } => set(object, val),
-            GetSetter::Key { set, .. } => set(key, val),
-            GetSetter::None => Ok(()),
+            GetSetter::Object(s) => s.set(object, val),
+            GetSetter::Key(s) => s.set(key, val),
+        }
+    }
+
+    fn key(&self) -> Option<GetSet<K>> {
+        match self {
+            GetSetter::Key(get_set) => Some(*get_set),
+            _ => None,
+        }
+    }
+
+    fn object(&self) -> Option<GetSet<O>> {
+        match self {
+            GetSetter::Object(get_set) => Some(*get_set),
+            _ => None,
         }
     }
 }
 
+#[derive(Debug)]
+pub struct GetSet<X> {
+    pub get: for<'a> fn(&'a X) -> rusqlite::Result<ToSqlOutput<'a>>,
+    pub set: for<'a> fn(&'a mut X, ValueRef<'a>) -> rusqlite::Result<()>,
+}
+
+impl<X> Clone for GetSet<X> {
+    fn clone(&self) -> Self {
+        Self {
+            get: self.get,
+            set: self.set,
+        }
+    }
+}
+impl<X> Copy for GetSet<X> {}
+
+impl<X> GetSet<X> {
+    pub fn get<'a>(&self, x: &'a X) -> rusqlite::Result<ToSqlOutput<'a>> {
+        (self.get)(x)
+    }
+    pub fn set<'a>(&self, x: &'a mut X, v: ValueRef<'a>) -> rusqlite::Result<()> {
+        (self.set)(x, v)
+    }
+}
+
 pub trait SqliteTable: Sized + Default + 'static {
-    type ForeignKeys: Default + 'static;
+    type Keys: Default + 'static;
 
-    const COLUMNS: &'static [DbColumn<Self, Self::ForeignKeys>];
+    const COLUMNS: &'static [DbColumn<Self, Self::Keys>];
 
-    fn into_params<'a>(
+    fn as_params<'a>(
         &'a self,
-        keys: &'a Self::ForeignKeys,
+        keys: &'a Self::Keys,
     ) -> anyhow::Result<Vec<(&'static str, ToSqlOutput<'a>)>> {
         let mut res = vec![];
 
@@ -203,36 +233,49 @@ pub trait SqliteTable: Sized + Default + 'static {
         Ok(res)
     }
 
-    fn from_row(row: &Row) -> rusqlite::Result<(i64, Self, Self::ForeignKeys)> {
+    fn full_row(row: &Row) -> rusqlite::Result<(i64, Self, Self::Keys)> {
         let mut res_self = Self::default();
-        let mut res_keys = Self::ForeignKeys::default();
+        let mut res_keys = Self::Keys::default();
 
-        for (i, DbColumn { get_set, .. }) in Self::COLUMNS.iter().enumerate() {
-            get_set.set(&mut res_self, &mut res_keys, row.get_ref(i + 1)?)?;
+        for DbColumn { name, get_set, .. } in Self::COLUMNS.iter() {
+            get_set.set(&mut res_self, &mut res_keys, row.get_ref(name)?)?;
         }
 
-        Ok((row.get(0)?, res_self, res_keys))
+        Ok((row.get("rowid")?, res_self, res_keys))
     }
 
-    fn into_keys<'a>(
-        keys: &'a Self::ForeignKeys,
-    ) -> anyhow::Result<Vec<(&'static str, ToSqlOutput<'a>)>> {
+    fn key_from_row(row: &Row) -> rusqlite::Result<Self::Keys> {}
+
+    fn object_from_row(row: &Row) -> rusqlite::Result<Self> {}
+
+    fn generalized_keying_builder<K, F, X>(k: &K, mut f: F) -> anyhow::Result<Vec<X>>
+    where
+        F: FnMut(&K, &DbColumn<Self, Self::Keys>) -> anyhow::Result<X>,
+    {
         let mut res = vec![];
 
-        for column in Self::COLUMNS {
+        for c in Self::COLUMNS {
             let DbColumn {
-                param,
                 index: IsIndexed::INDEX | IsIndexed::UNIQUE,
-                get_set: GetSetter::Key { get, .. },
+                get_set: GetSetter::Key { .. },
                 ..
-            } = column
+            } = c
             else {
                 continue;
             };
-            res.push((*param, get(keys)?))
+
+            res.push(f(k, c)?);
         }
 
         Ok(res)
+    }
+
+    fn into_key_params<'a>(
+        keys: &'a Self::Keys,
+    ) -> anyhow::Result<Vec<(&'static str, ToSqlOutput<'a>)>> {
+        Self::generalized_keying_builder(keys, |k, c| {
+            Ok((c.param, c.get_set.key().unwrap().get(keys)?))
+        })
     }
 
     fn table_name() -> &'static str {
@@ -278,22 +321,15 @@ pub trait SqliteTable: Sized + Default + 'static {
     }
 
     fn key_matches() -> Vec<String> {
-        Self::COLUMNS
-            .iter()
-            .filter_map(|c| {
-                if let DbColumn {
-                    name,
-                    index: IsIndexed::INDEX | IsIndexed::UNIQUE,
-                    get_set: GetSetter::Key { .. },
-                    ..
-                } = c
-                {
-                    Some(format!("{name} = :{name}"))
-                } else {
-                    None
-                }
-            })
-            .collect_vec()
+        Self::generalized_keying_builder(&(), |(), DbColumn { name, param, .. }| {
+            Ok(format!("{name} = {param}"))
+        })
+        .unwrap()
+    }
+
+    fn key_columns() -> Vec<String> {
+        Self::generalized_keying_builder(&(), |(), DbColumn { name, .. }| Ok(format!("{name}")))
+            .unwrap()
     }
 
     fn insert_row_stmt() -> String {
@@ -340,7 +376,7 @@ pub trait SqliteTable: Sized + Default + 'static {
         Ok(())
     }
 
-    fn pre_store(&self, key: &mut Self::ForeignKeys, conn: &Connection) -> anyhow::Result<()> {
+    fn pre_store(&self, key: &mut Self::Keys, conn: &Connection) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -349,7 +385,7 @@ pub trait SqliteTable: Sized + Default + 'static {
     }
 
     fn store_rows<'a>(
-        data: impl IntoIterator<Item = (&'a Self, &'a mut Self::ForeignKeys)>,
+        data: impl IntoIterator<Item = (&'a Self, &'a mut Self::Keys)>,
         conn: &Connection,
     ) -> anyhow::Result<Vec<i64>>
     where
@@ -360,7 +396,7 @@ pub trait SqliteTable: Sized + Default + 'static {
 
         for (obj, keys) in data {
             obj.pre_store(keys, &conn)?;
-            let id = stmt.insert(&obj.into_params(keys)?[..])?;
+            let id = stmt.insert(&obj.as_params(keys)?[..])?;
             obj.post_store(id, conn)?;
             res.push(id);
         }
@@ -368,20 +404,20 @@ pub trait SqliteTable: Sized + Default + 'static {
         Ok(res)
     }
 
-    fn load(&mut self, id: i64, key: &Self::ForeignKeys, conn: &Connection) -> anyhow::Result<()> {
+    fn load(&mut self, id: i64, key: &Self::Keys, conn: &Connection) -> anyhow::Result<()> {
         Ok(())
     }
 
     fn load_rows(
         ids: impl IntoIterator<Item = i64>,
         conn: &Connection,
-    ) -> anyhow::Result<Vec<(i64, Self, Self::ForeignKeys)>> {
+    ) -> anyhow::Result<Vec<(i64, Self, Self::Keys)>> {
         let mut res = vec![];
         let mut stmt = conn.prepare(&Self::select_row_stmt())?;
 
         for id in ids {
             let (id, mut object, key) =
-                stmt.query_one(&[(":rowid", &id)], |row| Self::from_row(row))?;
+                stmt.query_one(&[(":rowid", &id)], |row| Self::full_row(row))?;
 
             object.load(id, &key, conn)?;
 
@@ -391,15 +427,15 @@ pub trait SqliteTable: Sized + Default + 'static {
     }
 
     fn load_keys<'a>(
-        keys: impl IntoIterator<Item = &'a Self::ForeignKeys>,
+        keys: impl IntoIterator<Item = &'a Self::Keys>,
         conn: &Connection,
-    ) -> anyhow::Result<Vec<(i64, Self, Self::ForeignKeys)>> {
+    ) -> anyhow::Result<Vec<(i64, Self, Self::Keys)>> {
         let mut res = vec![];
         let mut stmt = conn.prepare(&Self::select_keyed_stmt())?;
 
         for key in keys {
-            let params = Self::into_keys(key);
-            for row in stmt.query_and_then(&params?[..], |r| Self::from_row(r))? {
+            let params = Self::into_key_params(key);
+            for row in stmt.query_and_then(&params?[..], |r| Self::full_row(r))? {
                 let (id, mut object, key) = row?;
                 object.load(id, &key, &conn);
                 res.push((id, object, key));
@@ -409,12 +445,12 @@ pub trait SqliteTable: Sized + Default + 'static {
         Ok(res)
     }
 
-    fn load_all(conn: &Connection) -> anyhow::Result<Vec<(i64, Self, Self::ForeignKeys)>> {
+    fn load_all(conn: &Connection) -> anyhow::Result<Vec<(i64, Self, Self::Keys)>> {
         let mut res = vec![];
         let select_all = Self::select_all_stmt();
         let mut stmt = conn.prepare(&select_all)?;
 
-        for row in stmt.query_and_then([], |r| Self::from_row(r))? {
+        for row in stmt.query_and_then([], |r| Self::full_row(r))? {
             let (id, mut object, key) = row?;
             object.load(id, &key, &conn);
             res.push((id, object, key));

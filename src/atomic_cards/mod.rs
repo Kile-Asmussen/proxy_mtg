@@ -23,55 +23,57 @@ use crate::{
 
 use anyhow::anyhow;
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct AtomicCardsFile {
-    pub meta: metadata::MetaData,
-    pub data: IndexMap<String, Cardoid>,
+#[derive(Debug, Default)]
+pub struct AtomicCards {
+    db: Option<AtomicCardsDb>,
+    file: Option<AtomicCardsFile>,
 }
 
-impl AtomicCardsFile {
-    const ATOMIC_CARDS_DUMP: &'static str = "AtomicCards.dump.json";
-    const ATOMIC_CARDS_FILE: &'static str = "AtomicCards.json";
-    const ATOMIC_CARDS_DB: &'static str = "AtomicCards.sqlite";
-    const ATOMIC_CARDS_URL: &'static str = "https://mtgjson.com/api/v5/AtomicCards.json";
-
-    pub fn store(&self, conn: &Connection) -> anyhow::Result<()> {
-        MetaData::setup(conn)?;
-        Cardoid::setup(conn)?;
-
-        MetaData::store_rows([(&self.meta, &mut ())], conn)?;
-
-        let mut data = self
-            .data
-            .iter()
-            .map(|(n, c)| (&*c, Cardoid_Keys { card_name: n.s() }))
-            .collect_vec();
-
-        Cardoid::store_rows(data.iter_mut().map(|(c, ck)| (*c, ck)), conn)?;
-
-        Ok(())
+impl AtomicCards {
+    pub fn lookup(&self, cardname: &str) -> Option<Cardoid> {
+        if let Some(db) = &self.db {
+            todo!();
+        } else if let Some(file) = &self.file {
+            file.data.get(cardname.clone()).map(Clone::clone)
+        } else {
+            None
+        }
     }
 
-    pub fn load(conn: &Connection) -> anyhow::Result<AtomicCardsFile> {
-        let meta = MetaData::load_rows([1], conn)?
-            .pop()
-            .ok_or(anyhow!("No metadata"))?
-            .1;
+    pub fn load_db(&mut self, verbose: bool) -> anyhow::Result<&mut Self> {
+        Err(anyhow!("Unimplemented"))
+    }
 
-        let data = IndexMap::from_iter(
-            Cardoid::load_all(conn)?
-                .into_iter()
-                .map(|(_, c, ck)| (ck.card_name, c)),
-        );
+    pub fn load_json(&mut self, verbose: bool) -> anyhow::Result<&mut Self> {
+        self.file = Some(AtomicCardsFile::load_json(verbose)?);
+        Ok(self)
+    }
 
-        Ok(Self { meta, data })
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn card_names(&self) -> Vec<String> {
+        if let Some(db) = &self.db {
+            let x = Cardoid::load_all(&db.conn)?;
+            x.into_iter().map(|(_, _, ck)| ck.card_name).collect_vec();
+        } else if let Some(file) = &self.file {
+            file.data.get(cardname.clone()).map(Clone::clone)
+        } else {
+            None
+        }
     }
 
     #[allow(unused)]
     pub fn validate(&self) -> anyhow::Result<()> {
         let mut malformed_cards = IndexSet::new();
 
-        for (name, cardoid) in &self.data {
+        for name in self.card_names() {
+            let Some(cardoid) = self.lookup(&name) else {
+                malformed_cards.insert(name);
+                continue;
+            };
+
             if cardoid.sides().len() < 1 || !cardoid.sides().is_sorted() {
                 malformed_cards.insert(name.clone());
             }
@@ -86,15 +88,36 @@ impl AtomicCardsFile {
         if malformed_cards.is_empty() {
             Ok(())
         } else {
-            Err(AtomicCardsBuildError(malformed_cards.into_iter().collect_vec()).into())
+            Err(AtomicCardsError(malformed_cards.into_iter().collect_vec()).into())
         }
     }
 }
 
 #[derive(Debug)]
-pub struct AtomicCardsBuildError(pub Vec<String>);
+pub struct AtomicCardsDb {
+    conn: Connection,
+}
 
-impl Display for AtomicCardsBuildError {
+impl AtomicCardsDb {
+    const ATOMIC_CARDS_DB: &'static str = "AtomicCards.sqlite";
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
+pub struct AtomicCardsFile {
+    pub meta: metadata::MetaData,
+    pub data: IndexMap<String, Cardoid>,
+}
+
+impl AtomicCardsFile {
+    const ATOMIC_CARDS_DUMP: &'static str = "AtomicCards.dump.json";
+    const ATOMIC_CARDS_FILE: &'static str = "AtomicCards.json";
+    const ATOMIC_CARDS_URL: &'static str = "https://mtgjson.com/api/v5/AtomicCards.json";
+}
+
+#[derive(Debug)]
+pub struct AtomicCardsError(pub Vec<String>);
+
+impl Display for AtomicCardsError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str("The following atomic cards were malformed:\n")?;
 
@@ -106,7 +129,7 @@ impl Display for AtomicCardsBuildError {
     }
 }
 
-impl Error for AtomicCardsBuildError {}
+impl Error for AtomicCardsError {}
 
 fn is_default<T: Default + PartialEq>(it: &T) -> bool {
     T::default() == *it

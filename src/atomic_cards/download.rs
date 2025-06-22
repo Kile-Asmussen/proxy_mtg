@@ -1,6 +1,17 @@
 use std::time::Instant;
 
-use crate::atomic_cards::AtomicCardsFile;
+use itertools::Itertools;
+use rusqlite::Connection;
+
+use crate::{
+    atomic_cards::{
+        cardoids::{Cardoid, Cardoid_Keys},
+        metadata::MetaData,
+        sqlite::SqliteTable,
+        AtomicCardsDb, AtomicCardsFile,
+    },
+    utils::ToS,
+};
 
 impl AtomicCardsFile {
     pub fn load_raw_file(verbose: bool) -> anyhow::Result<Vec<u8>> {
@@ -70,33 +81,41 @@ impl AtomicCardsFile {
 
         Ok(atomic_cards)
     }
+}
 
-    pub fn load_sqlite(verbose: bool) -> anyhow::Result<AtomicCardsFile> {
+impl AtomicCardsDb {
+    pub fn load_sqlite(verbose: bool) -> anyhow::Result<AtomicCardsDb> {
         let start = Instant::now();
-        let atomic_cards = if std::fs::exists(Self::ATOMIC_CARDS_DB)? {
-            let db = rusqlite::Connection::open(Self::ATOMIC_CARDS_DB)?;
-
-            AtomicCardsFile::load(&db)?
+        if std::fs::exists(Self::ATOMIC_CARDS_DB)? {
+            Ok(AtomicCardsDb {
+                conn: Connection::open(Self::ATOMIC_CARDS_DB)?,
+            })
         } else {
-            if verbose {
-                eprintln!("{} not found, recreating...", Self::ATOMIC_CARDS_DB);
-            }
-            let atomic_cards = Self::load_json(verbose)?;
-            let db = rusqlite::Connection::open(Self::ATOMIC_CARDS_DB)?;
-            atomic_cards.store(&db)?;
-            db.release_memory()?;
-            atomic_cards
-        };
-
-        if verbose {
-            eprintln!(
-                "Loaded {}, {} cards in {} milliseconds.",
-                Self::ATOMIC_CARDS_DB,
-                atomic_cards.data.len(),
-                start.elapsed().as_millis()
-            );
+            Ok(AtomicCardsDb {
+                conn: Connection::open_in_memory()?,
+            })
         }
+    }
 
-        Ok(atomic_cards)
+    pub fn initialize(&self, file: &AtomicCardsFile) -> anyhow::Result<()> {
+        MetaData::setup(&self.conn)?;
+        Cardoid::setup(&self.conn)?;
+
+        MetaData::store_rows([(&file.meta, &mut ())], &self.conn)?;
+
+        let mut data = file
+            .data
+            .iter()
+            .map(|(n, c)| (&*c, Cardoid_Keys { card_name: n.s() }))
+            .collect_vec();
+
+        Cardoid::store_rows(data.iter_mut().map(|(c, ck)| (*c, ck)), &self.conn)?;
+
+        Ok(())
+    }
+
+    pub fn save(&self) -> anyhow::Result<()> {
+        self.conn.backup("main", Self::ATOMIC_CARDS_DB, None)?;
+        Ok(())
     }
 }

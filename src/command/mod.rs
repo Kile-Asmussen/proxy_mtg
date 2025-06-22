@@ -1,6 +1,7 @@
 pub mod build;
 pub mod list;
 pub mod search;
+pub mod setup;
 
 use std::{fmt::Debug, path::Path};
 
@@ -17,11 +18,22 @@ pub struct Command {
     pub verbose: bool,
 }
 
+pub struct Context {
+    pub atomics: AtomicCardsFile,
+    pub decklist: DeckList,
+}
+
+impl Context {
+    pub fn load_atomics(&mut self) -> anyhow::Result<()> {}
+    pub fn load_decklist(&mut self, path: &Path) -> anyhow::Result<()> {}
+}
+
 #[derive(Subcommand, Debug)]
 pub enum ListBuildSearch {
     List(list::List),
     Build(build::Build),
     Search(search::Search),
+    Setup(setup::Setup),
 }
 
 impl ListBuildSearch {
@@ -30,6 +42,7 @@ impl ListBuildSearch {
             ListBuildSearch::List(list) => list.decklist_file(),
             ListBuildSearch::Build(build) => build.decklist_file(),
             ListBuildSearch::Search(search) => search.decklist_file(),
+            ListBuildSearch::Setup(setup) => setup.decklist_file(),
         }
     }
 
@@ -42,6 +55,7 @@ impl ListBuildSearch {
             Self::List(l) => l.dispatch(decklist),
             Self::Build(b) => b.dispatch(decklist),
             Self::Search(s) => s.dispatch(atomics, decklist),
+            Self::Setup(s) => s.dispatch(),
         }
     }
 }

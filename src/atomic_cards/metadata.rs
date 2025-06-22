@@ -21,7 +21,7 @@ pub struct MetaData {
 }
 
 impl SqliteTable for MetaData {
-    type ForeignKeys = ();
+    type Keys = ();
 
     const COLUMNS: &'static [DbColumn<MetaData, ()>] = &[
         db_column!(object.date "TEXT NOT NULL", val.as_str()),
@@ -89,9 +89,9 @@ impl Default for ForeignData_Keys {
 }
 
 impl SqliteTable for ForeignData {
-    type ForeignKeys = ForeignData_Keys;
+    type Keys = ForeignData_Keys;
 
-    const COLUMNS: &'static [DbColumn<Self, Self::ForeignKeys>] = &[
+    const COLUMNS: &'static [DbColumn<Self, Self::Keys>] = &[
         db_column!(key.parent_card "INTEGER NOT NULL", val.as_i64()),
         db_column!(object.face_name "TEXT NOT NULL", val.as_str()),
         db_column!(object.flavor_text "TEXT NOT NULL", val.as_str()),
@@ -220,9 +220,9 @@ pub struct Legalities {
 }
 
 impl SqliteTable for Legalities {
-    type ForeignKeys = ();
+    type Keys = ();
 
-    const COLUMNS: &'static [DbColumn<Self, Self::ForeignKeys>] = &[
+    const COLUMNS: &'static [DbColumn<Self, Self::Keys>] = &[
         db_column!(object.alchemy "      INTEGER NOT NULL", val.as_i64()),
         db_column!(object.brawl "        INTEGER NOT NULL", val.as_i64()),
         db_column!(object.commander "    INTEGER NOT NULL", val.as_i64()),

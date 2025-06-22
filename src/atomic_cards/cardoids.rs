@@ -31,7 +31,7 @@ pub struct Cardoid_Keys {
 }
 
 impl SqliteTable for Cardoid {
-    type ForeignKeys = Cardoid_Keys;
+    type Keys = Cardoid_Keys;
 
     const COLUMNS: &'static [super::sqlite::DbColumn<Cardoid, Cardoid_Keys>] =
         &[db_column!(UNIQUE key.card_name "TEXT NOT NULL", val.as_str())];
@@ -41,7 +41,7 @@ impl SqliteTable for Cardoid {
         Ok(())
     }
 
-    fn load(&mut self, id: i64, _key: &Self::ForeignKeys, conn: &Connection) -> anyhow::Result<()> {
+    fn load(&mut self, id: i64, _key: &Self::Keys, conn: &Connection) -> anyhow::Result<()> {
         let cards = Card::load_keys(
             [&Card_Keys {
                 legalities: None,

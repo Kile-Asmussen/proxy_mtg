@@ -103,7 +103,7 @@ impl Default for Card_Keys {
 }
 
 impl SqliteTable for Card {
-    type ForeignKeys = Card_Keys;
+    type Keys = Card_Keys;
 
     const COLUMNS: &'static [sqlite::DbColumn<Card, Card_Keys>] = &[
         db_column!(object.colors "TEXT NOT NULL", val -> val.as_str()?.into()),
@@ -156,7 +156,7 @@ impl SqliteTable for Card {
     fn load(
         &mut self,
         id: i64,
-        key: &Self::ForeignKeys,
+        key: &Self::Keys,
         conn: &rusqlite::Connection,
     ) -> anyhow::Result<()> {
         let (_, legal, ()) =
@@ -175,7 +175,7 @@ impl SqliteTable for Card {
 
     fn pre_store(
         &self,
-        key: &mut Self::ForeignKeys,
+        key: &mut Self::Keys,
         conn: &rusqlite::Connection,
     ) -> anyhow::Result<()> {
         let legality = Legalities::store_rows([(&self.legalities, &mut ())], conn)?
