@@ -18,14 +18,20 @@ pub struct Command {
     pub verbose: bool,
 }
 
+#[allow(unused)]
 pub struct Context {
     pub atomics: AtomicCardsFile,
     pub decklist: DeckList,
 }
 
+#[allow(unused)]
 impl Context {
-    pub fn load_atomics(&mut self) -> anyhow::Result<()> {}
-    pub fn load_decklist(&mut self, path: &Path) -> anyhow::Result<()> {}
+    pub fn load_atomics(&mut self) -> anyhow::Result<()> {
+        todo!()
+    }
+    pub fn load_decklist(&mut self, _path: &Path) -> anyhow::Result<()> {
+        todo!()
+    }
 }
 
 #[derive(Subcommand, Debug)]
@@ -33,7 +39,7 @@ pub enum ListBuildSearch {
     List(list::List),
     Build(build::Build),
     Search(search::Search),
-    Setup(setup::Setup),
+    // Setup(setup::Setup),
 }
 
 impl ListBuildSearch {
@@ -42,7 +48,6 @@ impl ListBuildSearch {
             ListBuildSearch::List(list) => list.decklist_file(),
             ListBuildSearch::Build(build) => build.decklist_file(),
             ListBuildSearch::Search(search) => search.decklist_file(),
-            ListBuildSearch::Setup(setup) => setup.decklist_file(),
         }
     }
 
@@ -55,7 +60,6 @@ impl ListBuildSearch {
             Self::List(l) => l.dispatch(decklist),
             Self::Build(b) => b.dispatch(decklist),
             Self::Search(s) => s.dispatch(atomics, decklist),
-            Self::Setup(s) => s.dispatch(),
         }
     }
 }

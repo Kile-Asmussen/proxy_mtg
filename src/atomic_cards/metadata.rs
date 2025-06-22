@@ -1,7 +1,7 @@
 #![allow(unused)]
 
 use crate::{
-    atomic_cards::sqlite::{db_column, DbColumn, SqliteTable},
+    atomic_cards::sqlite::{db_column, DbColumn, SqliteTable, SqliteTableImpl},
     utils::ToS,
 };
 
@@ -54,7 +54,8 @@ fn test_metadata() -> anyhow::Result<()> {
     let r = MetaData::store_rows([(&m, &mut ())], &conn)?;
     assert_eq!(r, vec![1]);
 
-    let ms = MetaData::load_rows(r, &conn)?;
+    let mut ms = vec![];
+    MetaData::load_rows(r, &conn, |i, m, mk| Ok(ms.push((i, m, mk))))?;
     assert_eq!(ms, vec![(1, m, ())]);
 
     Ok(())
@@ -105,7 +106,7 @@ impl SqliteTable for ForeignData {
 #[test]
 fn test_foreign_data() -> anyhow::Result<()> {
     let conn = Connection::open_in_memory()?;
-    println!("{}", ForeignData::full_setup().join("\n"));
+    println!("{}", ForeignData::full_setup_script().join("\n"));
     ForeignData::setup(&conn)?;
 
     let mut data = vec![
@@ -150,29 +151,31 @@ fn test_foreign_data() -> anyhow::Result<()> {
 
     println!("{}", ForeignData::select_row_stmt());
 
-    let data2 = ForeignData::load_rows([1], &conn)?;
+    let mut data2 = vec![];
 
-    assert_eq!(&data[0].0, &data2[0].1);
-    assert_eq!(&data[0].1, &data2[0].2);
+    ForeignData::load_rows([1], &conn, |i, f, fk| Ok(data2.push((f, fk))))?;
+
+    assert_eq!(&data[0].0, &data2[0].0);
+    assert_eq!(&data[0].1, &data2[0].1);
     assert_eq!(data2.len(), 1);
 
     println!("{}", ForeignData::select_all_stmt());
 
-    let data3 = ForeignData::load_all(&conn)?
-        .into_iter()
-        .map(|(_, f, fk)| (f, fk))
-        .collect_vec();
+    let mut data3 = vec![];
+    ForeignData::load_all(&conn, |_, f, fk| Ok(data3.push((f, fk))))?;
 
     assert_eq!(data, data3);
 
     println!("{}", ForeignData::select_keyed_stmt());
 
-    let data4 = ForeignData::load_keys([&ForeignData_Keys { parent_card: 22 }], &conn)?;
+    let mut data4 = vec![];
+    ForeignData::load_keys(
+        [&ForeignData_Keys { parent_card: 22 }],
+        &conn,
+        |_, f, fk| Ok(data4.push((f, fk))),
+    )?;
 
-    assert_eq!(
-        &data[0..=1],
-        data4.into_iter().map(|(_, f, fk)| (f, fk)).collect_vec()
-    );
+    assert_eq!(&data[0..=1], data4);
 
     Ok(())
 }
@@ -263,7 +266,7 @@ impl SqliteTable for Legalities {
 #[test]
 fn test_legalities() -> anyhow::Result<()> {
     let conn = Connection::open_in_memory()?;
-    println!("{}", Legalities::full_setup().join("\n"));
+    println!("{}", Legalities::full_setup_script().join("\n"));
     Legalities::setup(&conn);
 
     let mut data = vec![(

@@ -5,7 +5,7 @@ use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 
 use crate::atomic_cards::metadata::ForeignData_Keys;
-use crate::atomic_cards::sqlite::{db_column, SqliteTable};
+use crate::atomic_cards::sqlite::{db_column, SqliteTable, SqliteTableImpl};
 
 use crate::utils::ToS;
 use rusqlite::ToSql;
@@ -18,8 +18,6 @@ use super::{
     types::{CardLayout, FaceLayout, Side, Supertype, Type, WUBRG},
 };
 
-use anyhow::anyhow;
-use core::f64;
 use std::fmt::Display;
 
 #[cfg(test)]
@@ -159,25 +157,18 @@ impl SqliteTable for Card {
         key: &Self::Keys,
         conn: &rusqlite::Connection,
     ) -> anyhow::Result<()> {
-        let (_, legal, ()) =
-            Legalities::load_rows([key.legalities.ok_or(anyhow!("no legality"))?], conn)?
-                .pop()
-                .unwrap_or_default();
+        if let Some(id) = key.legalities {
+            Legalities::load_rows([id], conn, |_, l, _| Ok(self.legalities = l))?;
+        }
 
-        self.legalities = legal;
-
-        let foreign_data = ForeignData::load_keys([&ForeignData_Keys { parent_card: id }], conn)?;
-
-        self.foreign_data = foreign_data.into_iter().map(|(_, fd, _)| fd).collect_vec();
+        ForeignData::load_keys([&ForeignData_Keys { parent_card: id }], conn, |_, f, _| {
+            Ok(self.foreign_data.push(f))
+        })?;
 
         Ok(())
     }
 
-    fn pre_store(
-        &self,
-        key: &mut Self::Keys,
-        conn: &rusqlite::Connection,
-    ) -> anyhow::Result<()> {
+    fn pre_store(&self, key: &mut Self::Keys, conn: &rusqlite::Connection) -> anyhow::Result<()> {
         let legality = Legalities::store_rows([(&self.legalities, &mut ())], conn)?
             .pop()
             .unwrap_or_default();
@@ -254,16 +245,15 @@ fn card_tests() -> anyhow::Result<()> {
 
     let ids = Card::store_rows(data.iter_mut().map(|(c, ck)| (&*c, ck)), &conn)?;
 
-    let data2 = Card::load_rows(ids, &conn)?
-        .into_iter()
-        .map(|(_, c, ck)| (c, ck))
-        .collect_vec();
+    let mut data2 = vec![];
+    Card::load_rows(ids, &conn, |_, c, ck| Ok(data2.push((c, ck))))?;
 
     assert_eq!(data, data2);
 
-    let legalities = Legalities::load_all(&conn)?[0].1.clone();
+    let mut legalities = vec![];
+    Legalities::load_all(&conn, |_, l, _| Ok(legalities.push(l)))?;
 
-    assert_eq!(&legalities, &data[0].0.legalities);
+    assert_eq!(&legalities[0], &data[0].0.legalities);
 
     Ok(())
 }

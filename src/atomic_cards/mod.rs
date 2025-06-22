@@ -12,13 +12,9 @@ use itertools::Itertools;
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    atomic_cards::{
-        cardoids::{Cardoid, Cardoid_Keys},
-        metadata::MetaData,
-        sqlite::SqliteTable,
-    },
-    utils::ToS,
+use crate::atomic_cards::{
+    cardoids::{Cardoid, Cardoid_Keys},
+    sqlite::SqliteTableImpl,
 };
 
 use anyhow::anyhow;
@@ -31,44 +27,50 @@ pub struct AtomicCards {
 
 impl AtomicCards {
     pub fn lookup(&self, cardname: &str) -> Option<Cardoid> {
-        if let Some(db) = &self.db {
+        if let Some(_db) = &self.db {
             todo!();
         } else if let Some(file) = &self.file {
-            file.data.get(cardname.clone()).map(Clone::clone)
-        } else {
-            None
-        }
-    }
-
-    pub fn load_db(&mut self, verbose: bool) -> anyhow::Result<&mut Self> {
-        Err(anyhow!("Unimplemented"))
-    }
-
-    pub fn load_json(&mut self, verbose: bool) -> anyhow::Result<&mut Self> {
-        self.file = Some(AtomicCardsFile::load_json(verbose)?);
-        Ok(self)
-    }
-
-    pub fn new() -> Self {
-        Self::default()
-    }
-
-    pub fn card_names(&self) -> Vec<String> {
-        if let Some(db) = &self.db {
-            let x = Cardoid::load_all(&db.conn)?;
-            x.into_iter().map(|(_, _, ck)| ck.card_name).collect_vec();
-        } else if let Some(file) = &self.file {
-            file.data.get(cardname.clone()).map(Clone::clone)
+            file.data.get(cardname).cloned()
         } else {
             None
         }
     }
 
     #[allow(unused)]
+    pub fn load_db(&mut self, _verbose: bool) -> anyhow::Result<&mut Self> {
+        Err(anyhow!("Unimplemented"))
+    }
+
+    #[allow(unused)]
+    pub fn load_json(&mut self, verbose: bool) -> anyhow::Result<&mut Self> {
+        self.file = Some(AtomicCardsFile::load_json(verbose)?);
+        Ok(self)
+    }
+
+    #[allow(unused)]
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn card_names(&self) -> anyhow::Result<Vec<String>> {
+        Ok(if let Some(db) = &self.db {
+            let mut res = vec![];
+            Cardoid::load_all(&db.conn, |_, _, Cardoid_Keys { card_name }| {
+                Ok(res.push(card_name))
+            })?;
+            res
+        } else if let Some(file) = &self.file {
+            file.data.keys().cloned().collect_vec()
+        } else {
+            vec![]
+        })
+    }
+
+    #[allow(unused)]
     pub fn validate(&self) -> anyhow::Result<()> {
         let mut malformed_cards = IndexSet::new();
 
-        for name in self.card_names() {
+        for name in self.card_names()? {
             let Some(cardoid) = self.lookup(&name) else {
                 malformed_cards.insert(name);
                 continue;

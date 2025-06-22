@@ -4,7 +4,7 @@ use serde::{Deserialize, Deserializer, Serialize};
 use crate::{
     atomic_cards::{
         cards::Card_Keys,
-        sqlite::{db_column, SqliteTable},
+        sqlite::{db_column, SqliteTable, SqliteTableImpl},
         types::WUBRG,
     },
     proxy::deserializers::OneOrMany,
@@ -42,15 +42,18 @@ impl SqliteTable for Cardoid {
     }
 
     fn load(&mut self, id: i64, _key: &Self::Keys, conn: &Connection) -> anyhow::Result<()> {
-        let cards = Card::load_keys(
+        let mut cards = vec![];
+
+        Card::load_keys(
             [&Card_Keys {
                 legalities: None,
                 cardoid: id,
             }],
             conn,
+            |_, c, _| Ok(cards.push(c)),
         )?;
 
-        self.0 = cards.into_iter().map(|(_, c, _)| c).collect_vec();
+        self.0 = cards;
 
         Ok(())
     }
@@ -90,10 +93,8 @@ fn test_cardoid() -> anyhow::Result<()> {
 
     let ids = Cardoid::store_rows(data.iter_mut().map(|(c, ck)| (&*c, ck)), &conn)?;
 
-    let datas = Cardoid::load_rows(ids, &conn)?
-        .into_iter()
-        .map(|(_, c, ck)| (c, ck))
-        .collect_vec();
+    let mut datas = vec![];
+    Cardoid::load_rows(ids, &conn, |_, c, ck| Ok(datas.push((c, ck))))?;
 
     assert_eq!(data, datas);
 
@@ -125,7 +126,7 @@ impl Cardoid {
     }
 
     pub fn sides(&self) -> Vec<Side> {
-        self.0.iter().map(|c| c.side.clone()).collect_vec()
+        self.0.iter().map(|c| c.side).collect_vec()
     }
 
     pub fn color_identity(&self) -> &WUBRG {

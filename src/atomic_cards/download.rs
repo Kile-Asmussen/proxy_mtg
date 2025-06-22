@@ -7,7 +7,7 @@ use crate::{
     atomic_cards::{
         cardoids::{Cardoid, Cardoid_Keys},
         metadata::MetaData,
-        sqlite::SqliteTable,
+        sqlite::SqliteTableImpl,
         AtomicCardsDb, AtomicCardsFile,
     },
     utils::ToS,
@@ -84,8 +84,8 @@ impl AtomicCardsFile {
 }
 
 impl AtomicCardsDb {
-    pub fn load_sqlite(verbose: bool) -> anyhow::Result<AtomicCardsDb> {
-        let start = Instant::now();
+    #[allow(unused)]
+    pub fn load_sqlite() -> anyhow::Result<AtomicCardsDb> {
         if std::fs::exists(Self::ATOMIC_CARDS_DB)? {
             Ok(AtomicCardsDb {
                 conn: Connection::open(Self::ATOMIC_CARDS_DB)?,
@@ -97,6 +97,7 @@ impl AtomicCardsDb {
         }
     }
 
+    #[allow(unused)]
     pub fn initialize(&self, file: &AtomicCardsFile) -> anyhow::Result<()> {
         MetaData::setup(&self.conn)?;
         Cardoid::setup(&self.conn)?;
@@ -114,6 +115,7 @@ impl AtomicCardsDb {
         Ok(())
     }
 
+    #[allow(unused)]
     pub fn save(&self) -> anyhow::Result<()> {
         self.conn.backup("main", Self::ATOMIC_CARDS_DB, None)?;
         Ok(())

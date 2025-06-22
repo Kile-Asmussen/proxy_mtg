@@ -110,6 +110,8 @@ macro_rules! db_column {
 
 pub(crate) use db_column;
 
+use crate::utils::ToS;
+
 impl<O, K> DbColumn<O, K>
 where
     O: SqliteTable<Keys = K>,
@@ -220,7 +222,63 @@ pub trait SqliteTable: Sized + Default + 'static {
 
     const COLUMNS: &'static [DbColumn<Self, Self::Keys>];
 
-    fn as_params<'a>(
+    fn table_name() -> String {
+        std::any::type_name::<Self>()
+            .split("::")
+            .last()
+            .unwrap()
+            .s()
+    }
+
+    fn create_extras() -> Vec<String> {
+        vec![]
+    }
+
+    fn insert_row_stmt() -> String {
+        let table_name = Self::table_name();
+        let column_names = Self::column_names().join(", ");
+        let params = Self::param_names().join(", ");
+        format!("INSERT INTO {table_name} ({column_names}) VALUES ({params});")
+    }
+
+    fn select_row_stmt() -> String {
+        let table_name = Self::table_name();
+        let column_names = Self::column_names().join(", ");
+        format!("SELECT rowid, {column_names} FROM {table_name} WHERE rowid = :rowid;")
+    }
+
+    fn select_keyed_stmt() -> String {
+        let table_name = Self::table_name();
+        let column_names = Self::column_names().join(", ");
+        let key_matches = Self::key_comparisons().join(" AND ");
+        format!("SELECT rowid, {column_names} FROM {table_name} WHERE {key_matches};")
+    }
+
+    fn select_all_stmt() -> String {
+        let table_name = Self::table_name();
+        let column_names = Self::column_names().join(", ");
+        format!("SELECT rowid, {column_names} FROM {table_name};")
+    }
+
+    fn extra_setup(conn: &Connection) -> anyhow::Result<()> {
+        Ok(())
+    }
+
+    fn pre_store(&self, key: &mut Self::Keys, conn: &Connection) -> anyhow::Result<()> {
+        Ok(())
+    }
+
+    fn post_store(&self, id: i64, conn: &Connection) -> anyhow::Result<()> {
+        Ok(())
+    }
+
+    fn load(&mut self, id: i64, key: &Self::Keys, conn: &Connection) -> anyhow::Result<()> {
+        Ok(())
+    }
+}
+
+pub trait SqliteTableImpl: SqliteTable {
+    fn into_params<'a>(
         &'a self,
         keys: &'a Self::Keys,
     ) -> anyhow::Result<Vec<(&'static str, ToSqlOutput<'a>)>> {
@@ -233,20 +291,76 @@ pub trait SqliteTable: Sized + Default + 'static {
         Ok(res)
     }
 
-    fn full_row(row: &Row) -> rusqlite::Result<(i64, Self, Self::Keys)> {
+    fn from_row(row: &Row) -> rusqlite::Result<(i64, Self, Self::Keys)> {
         let mut res_self = Self::default();
         let mut res_keys = Self::Keys::default();
 
         for DbColumn { name, get_set, .. } in Self::COLUMNS.iter() {
-            get_set.set(&mut res_self, &mut res_keys, row.get_ref(name)?)?;
+            get_set.set(&mut res_self, &mut res_keys, row.get_ref(*name)?)?;
         }
 
         Ok((row.get("rowid")?, res_self, res_keys))
     }
 
-    fn key_from_row(row: &Row) -> rusqlite::Result<Self::Keys> {}
+    fn key_comparisons() -> Vec<String> {
+        Self::generalized_keying_builder(&(), |(), DbColumn { name, param, .. }| {
+            Ok(format!("{name} = {param}"))
+        })
+        .unwrap()
+    }
 
-    fn object_from_row(row: &Row) -> rusqlite::Result<Self> {}
+    fn key_column_names() -> Vec<String> {
+        Self::generalized_keying_builder(&(), |(), DbColumn { name, .. }| Ok(format!("{name}")))
+            .unwrap()
+    }
+
+    fn column_names() -> Vec<&'static str> {
+        Self::COLUMNS
+            .iter()
+            .map(|DbColumn { name, .. }| *name)
+            .collect_vec()
+    }
+
+    fn param_names() -> Vec<&'static str> {
+        Self::COLUMNS
+            .iter()
+            .map(|DbColumn { param, .. }| *param)
+            .collect_vec()
+    }
+
+    fn create_table_script() -> Vec<String> {
+        let table_name = Self::table_name();
+
+        let column_specs = Self::COLUMNS.iter().map(DbColumn::column_spec).join(", ");
+
+        let mut res = vec![format!(
+            "CREATE TABLE IF NOT EXISTS {table_name} ({column_specs});"
+        )];
+
+        let mut indexes = Self::COLUMNS
+            .iter()
+            .map(DbColumn::create_index)
+            .filter_map(|x| x)
+            .collect_vec();
+
+        res.append(&mut indexes);
+
+        res
+    }
+
+    fn full_setup_script() -> Vec<String> {
+        let mut res = Self::create_table_script();
+        res.append(&mut Self::create_extras());
+        res
+    }
+
+    fn setup(conn: &Connection) -> anyhow::Result<()> {
+        for stmt in Self::full_setup_script() {
+            conn.execute(&stmt, [])?;
+        }
+        Self::extra_setup(conn)?;
+        Ok(())
+    }
 
     fn generalized_keying_builder<K, F, X>(k: &K, mut f: F) -> anyhow::Result<Vec<X>>
     where
@@ -278,112 +392,6 @@ pub trait SqliteTable: Sized + Default + 'static {
         })
     }
 
-    fn table_name() -> &'static str {
-        std::any::type_name::<Self>().split("::").last().unwrap()
-    }
-
-    fn column_names() -> Vec<&'static str> {
-        Self::COLUMNS
-            .iter()
-            .map(|DbColumn { name, .. }| *name)
-            .collect_vec()
-    }
-
-    fn create_table_stmt() -> Vec<String> {
-        let table_name = Self::table_name();
-
-        let column_specs = Self::COLUMNS.iter().map(DbColumn::column_spec).join(", ");
-
-        let mut res = vec![format!(
-            "CREATE TABLE IF NOT EXISTS {table_name} ({column_specs});"
-        )];
-
-        let mut indexes = Self::COLUMNS
-            .iter()
-            .map(DbColumn::create_index)
-            .filter_map(|x| x)
-            .collect_vec();
-
-        res.append(&mut indexes);
-
-        res
-    }
-
-    fn create_extras() -> Vec<String> {
-        vec![]
-    }
-
-    fn param_names() -> Vec<&'static str> {
-        Self::COLUMNS
-            .iter()
-            .map(|DbColumn { param, .. }| *param)
-            .collect_vec()
-    }
-
-    fn key_matches() -> Vec<String> {
-        Self::generalized_keying_builder(&(), |(), DbColumn { name, param, .. }| {
-            Ok(format!("{name} = {param}"))
-        })
-        .unwrap()
-    }
-
-    fn key_columns() -> Vec<String> {
-        Self::generalized_keying_builder(&(), |(), DbColumn { name, .. }| Ok(format!("{name}")))
-            .unwrap()
-    }
-
-    fn insert_row_stmt() -> String {
-        let table_name = Self::table_name();
-        let column_names = Self::column_names().join(", ");
-        let params = Self::param_names().join(", ");
-        format!("INSERT INTO {table_name} ({column_names}) VALUES ({params});")
-    }
-
-    fn select_row_stmt() -> String {
-        let table_name = Self::table_name();
-        let column_names = Self::column_names().join(", ");
-        format!("SELECT rowid, {column_names} FROM {table_name} WHERE rowid = :rowid;")
-    }
-
-    fn select_keyed_stmt() -> String {
-        let table_name = Self::table_name();
-        let column_names = Self::column_names().join(", ");
-        let key_matches = Self::key_matches().join(" AND ");
-        format!("SELECT rowid, {column_names} FROM {table_name} WHERE {key_matches};")
-    }
-
-    fn select_all_stmt() -> String {
-        let table_name = Self::table_name();
-        let column_names = Self::column_names().join(", ");
-        format!("SELECT rowid, {column_names} FROM {table_name};")
-    }
-
-    fn full_setup() -> Vec<String> {
-        let mut res = Self::create_table_stmt();
-        res.append(&mut Self::create_extras());
-        res
-    }
-
-    fn setup(conn: &Connection) -> anyhow::Result<()> {
-        for stmt in Self::full_setup() {
-            conn.execute(&stmt, [])?;
-        }
-        Self::extra_setup(conn)?;
-        Ok(())
-    }
-
-    fn extra_setup(conn: &Connection) -> anyhow::Result<()> {
-        Ok(())
-    }
-
-    fn pre_store(&self, key: &mut Self::Keys, conn: &Connection) -> anyhow::Result<()> {
-        Ok(())
-    }
-
-    fn post_store(&self, id: i64, conn: &Connection) -> anyhow::Result<()> {
-        Ok(())
-    }
-
     fn store_rows<'a>(
         data: impl IntoIterator<Item = (&'a Self, &'a mut Self::Keys)>,
         conn: &Connection,
@@ -396,7 +404,7 @@ pub trait SqliteTable: Sized + Default + 'static {
 
         for (obj, keys) in data {
             obj.pre_store(keys, &conn)?;
-            let id = stmt.insert(&obj.as_params(keys)?[..])?;
+            let id = stmt.insert(&obj.into_params(keys)?[..])?;
             obj.post_store(id, conn)?;
             res.push(id);
         }
@@ -404,58 +412,64 @@ pub trait SqliteTable: Sized + Default + 'static {
         Ok(res)
     }
 
-    fn load(&mut self, id: i64, key: &Self::Keys, conn: &Connection) -> anyhow::Result<()> {
-        Ok(())
-    }
-
-    fn load_rows(
+    fn load_rows<F>(
         ids: impl IntoIterator<Item = i64>,
         conn: &Connection,
-    ) -> anyhow::Result<Vec<(i64, Self, Self::Keys)>> {
-        let mut res = vec![];
+        mut mapper: F,
+    ) -> anyhow::Result<()>
+    where
+        F: FnMut(i64, Self, Self::Keys) -> anyhow::Result<()>,
+    {
         let mut stmt = conn.prepare(&Self::select_row_stmt())?;
 
         for id in ids {
             let (id, mut object, key) =
-                stmt.query_one(&[(":rowid", &id)], |row| Self::full_row(row))?;
+                stmt.query_one(&[(":rowid", &id)], |row| Self::from_row(row))?;
 
             object.load(id, &key, conn)?;
 
-            res.push((id, object, key));
+            mapper(id, object, key)?;
         }
-        Ok(res)
+        Ok(())
     }
 
-    fn load_keys<'a>(
+    fn load_keys<'a, F>(
         keys: impl IntoIterator<Item = &'a Self::Keys>,
         conn: &Connection,
-    ) -> anyhow::Result<Vec<(i64, Self, Self::Keys)>> {
-        let mut res = vec![];
+        mut mapper: F,
+    ) -> anyhow::Result<()>
+    where
+        F: FnMut(i64, Self, Self::Keys) -> anyhow::Result<()>,
+    {
         let mut stmt = conn.prepare(&Self::select_keyed_stmt())?;
 
         for key in keys {
             let params = Self::into_key_params(key);
-            for row in stmt.query_and_then(&params?[..], |r| Self::full_row(r))? {
+            for row in stmt.query_and_then(&params?[..], |r| Self::from_row(r))? {
                 let (id, mut object, key) = row?;
                 object.load(id, &key, &conn);
-                res.push((id, object, key));
+                mapper(id, object, key)?;
             }
         }
 
-        Ok(res)
+        Ok(())
     }
 
-    fn load_all(conn: &Connection) -> anyhow::Result<Vec<(i64, Self, Self::Keys)>> {
-        let mut res = vec![];
+    fn load_all<F>(conn: &Connection, mut mapper: F) -> anyhow::Result<()>
+    where
+        F: FnMut(i64, Self, Self::Keys) -> anyhow::Result<()>,
+    {
         let select_all = Self::select_all_stmt();
         let mut stmt = conn.prepare(&select_all)?;
 
-        for row in stmt.query_and_then([], |r| Self::full_row(r))? {
+        for row in stmt.query_and_then([], |r| Self::from_row(r))? {
             let (id, mut object, key) = row?;
             object.load(id, &key, &conn);
-            res.push((id, object, key));
+            mapper(id, object, key)?;
         }
 
-        Ok(res)
+        Ok(())
     }
 }
+
+impl<T: SqliteTable> SqliteTableImpl for T {}

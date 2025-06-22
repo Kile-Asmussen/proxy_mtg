@@ -20,7 +20,7 @@ fn main() -> anyhow::Result<()> {
     let command = Command::parse();
 
     let atomic_cards = AtomicCardsFile::load_json(command.verbose)?;
-    atomic_cards.validate()?;
+    //atomic_cards.validate()?;
 
     let decklist_file = command.subcommand.decklist_file();
     let mut decklist = if decklist_file == Path::new("") {
