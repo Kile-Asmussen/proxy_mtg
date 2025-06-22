@@ -102,15 +102,22 @@ impl AtomicCardsDb {
         MetaData::setup(&self.conn)?;
         Cardoid::setup(&self.conn)?;
 
-        MetaData::store_rows([(&file.meta, &mut ())], &self.conn)?;
+        MetaData::store_rows(&self.conn, |mut s| {
+            s.store(&file.meta, &mut ())?;
+            Ok(())
+        })?;
 
-        let mut data = file
-            .data
-            .iter()
-            .map(|(n, c)| (&*c, Cardoid_Keys { card_name: n.s() }))
-            .collect_vec();
-
-        Cardoid::store_rows(data.iter_mut().map(|(c, ck)| (*c, ck)), &self.conn)?;
+        Cardoid::store_rows(&self.conn, |mut s| {
+            for (n, c) in &file.data {
+                s.store(
+                    c,
+                    &mut Cardoid_Keys {
+                        card_name: n.clone(),
+                    },
+                )?;
+            }
+            Ok(())
+        })?;
 
         Ok(())
     }

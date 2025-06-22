@@ -91,7 +91,13 @@ fn test_cardoid() -> anyhow::Result<()> {
         },
     )];
 
-    let ids = Cardoid::store_rows(data.iter_mut().map(|(c, ck)| (&*c, ck)), &conn)?;
+    let mut ids = vec![];
+    Cardoid::store_rows(&conn, |mut s| {
+        for (c, ck) in &mut data {
+            ids.push(s.store(c, ck)?)
+        }
+        Ok(())
+    })?;
 
     let mut datas = vec![];
     Cardoid::load_rows(ids, &conn, |_, c, ck| Ok(datas.push((c, ck))))?;

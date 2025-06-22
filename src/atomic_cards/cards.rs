@@ -169,22 +169,20 @@ impl SqliteTable for Card {
     }
 
     fn pre_store(&self, key: &mut Self::Keys, conn: &rusqlite::Connection) -> anyhow::Result<()> {
-        let legality = Legalities::store_rows([(&self.legalities, &mut ())], conn)?
-            .pop()
-            .unwrap_or_default();
-        key.legalities = Some(legality);
+        Legalities::store_rows(conn, |mut s| {
+            Ok(key.legalities = Some(s.store(&self.legalities, &mut ())?))
+        })?;
 
         Ok(())
     }
 
     fn post_store(&self, id: i64, conn: &Connection) -> anyhow::Result<()> {
-        let mut foreign_data = vec![];
-
-        for fd in &self.foreign_data {
-            foreign_data.push((fd, ForeignData_Keys { parent_card: id }))
-        }
-
-        ForeignData::store_rows(foreign_data.iter_mut().map(|(fd, fdk)| (*fd, fdk)), conn)?;
+        ForeignData::store_rows(conn, |mut s| {
+            for f in &self.foreign_data {
+                s.store(f, &mut ForeignData_Keys { parent_card: id })?;
+            }
+            Ok(())
+        })?;
 
         Ok(())
     }
@@ -243,7 +241,13 @@ fn card_tests() -> anyhow::Result<()> {
         },
     )];
 
-    let ids = Card::store_rows(data.iter_mut().map(|(c, ck)| (&*c, ck)), &conn)?;
+    let mut ids = vec![];
+    Card::store_rows(&conn, |mut s| {
+        for (c, ck) in &mut data {
+            ids.push(s.store(c, ck)?);
+        }
+        Ok(())
+    })?;
 
     let mut data2 = vec![];
     Card::load_rows(ids, &conn, |_, c, ck| Ok(data2.push((c, ck))))?;

@@ -5,7 +5,7 @@ use std::{any::Any, default, fmt::Display, marker::PhantomData, time::Instant};
 use itertools::Itertools;
 use rusqlite::{
     types::{FromSql, ToSqlOutput, Value, ValueRef},
-    Connection, Params, Row, ToSql,
+    Connection, Params, Row, Statement, ToSql,
 };
 
 use anyhow::anyhow;
@@ -392,26 +392,6 @@ pub trait SqliteTableImpl: SqliteTable {
         })
     }
 
-    fn store_rows<'a>(
-        data: impl IntoIterator<Item = (&'a Self, &'a mut Self::Keys)>,
-        conn: &Connection,
-    ) -> anyhow::Result<Vec<i64>>
-    where
-        Self: 'a,
-    {
-        let mut res = vec![];
-        let mut stmt = conn.prepare(&Self::insert_row_stmt())?;
-
-        for (obj, keys) in data {
-            obj.pre_store(keys, &conn)?;
-            let id = stmt.insert(&obj.into_params(keys)?[..])?;
-            obj.post_store(id, conn)?;
-            res.push(id);
-        }
-
-        Ok(res)
-    }
-
     fn load_rows<F>(
         ids: impl IntoIterator<Item = i64>,
         conn: &Connection,
@@ -469,6 +449,36 @@ pub trait SqliteTableImpl: SqliteTable {
         }
 
         Ok(())
+    }
+
+    fn store_rows<'a, F>(conn: &'a Connection, data_provider: F) -> anyhow::Result<()>
+    where
+        F: FnOnce(Store<'a, Self, Self::Keys>) -> anyhow::Result<()>,
+    {
+        let mut stmt = conn.prepare(&Self::insert_row_stmt())?;
+
+        data_provider(Store {
+            stmt,
+            conn,
+            _marker: PhantomData,
+        })?;
+
+        Ok(())
+    }
+}
+
+pub struct Store<'a, O: SqliteTable<Keys = K>, K> {
+    stmt: Statement<'a>,
+    conn: &'a Connection,
+    _marker: PhantomData<(O, K)>,
+}
+
+impl<'a, O: SqliteTable<Keys = K>, K> Store<'a, O, K> {
+    pub fn store(&mut self, obj: &O, key: &mut K) -> anyhow::Result<i64> {
+        obj.pre_store(key, &self.conn)?;
+        let id = self.stmt.insert(&obj.into_params(key)?[..])?;
+        obj.post_store(id, &self.conn)?;
+        Ok(id)
     }
 }
 
