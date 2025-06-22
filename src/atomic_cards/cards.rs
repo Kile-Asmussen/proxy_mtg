@@ -1,66 +1,55 @@
 use indexmap::IndexSet;
+use itertools::Itertools;
+use rusqlite::types::{ToSqlOutput, Value};
+use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 
+use crate::atomic_cards::metadata::ForeignData_Keys;
+use crate::atomic_cards::sqlite::{db_column, SqliteTable};
+
+use crate::utils::ToS;
+use rusqlite::ToSql;
+
+use super::sqlite;
+use super::types::LeadershipSkills;
 use super::{
     is_default,
-    metadata::{ForeignData, Legalities, RelatedCards /*Ruling*/},
-    types::{CardLayout, FaceLayout, LeadershipSkills, Side, Supertype, Type, WUBRG},
+    metadata::{ForeignData, Legalities},
+    types::{CardLayout, FaceLayout, Side, Supertype, Type, WUBRG},
 };
 
+use anyhow::anyhow;
 use core::f64;
-use std::{collections::BTreeSet, fmt::Display};
+use std::fmt::Display;
 
-#[derive(Deserialize, Serialize, Debug, Clone, Default)]
+#[cfg(test)]
+use crate::atomic_cards::metadata::Legality;
+#[cfg(test)]
+use crate::atomic_cards::types::Pie;
+#[cfg(test)]
+use std::collections::BTreeSet;
+
+#[derive(Deserialize, Serialize, Debug, Clone, Default, PartialEq)]
 pub struct Card {
-    #[serde(default, skip_serializing_if = "is_default", rename = "asciiName")]
-    pub ascii_name: String,
-    #[serde(
-        default,
-        skip_serializing_if = "is_default",
-        rename = "attractionLights"
-    )]
-    pub attraction_lights: Vec<String>,
     #[serde(default, skip_serializing_if = "is_default", rename = "colorIdentity")]
-    pub color_identity: BTreeSet<WUBRG>,
+    pub color_identity: WUBRG,
     #[serde(default, skip_serializing_if = "is_default", rename = "colorIndicator")]
-    pub color_indicator: BTreeSet<WUBRG>,
-    pub colors: BTreeSet<WUBRG>,
-    // #[serde(default, skip_serializing_if = "is_default",  rename = "convertedManaCost")]
-    // pub converted_mana_cost: f64,
+    pub color_indicator: WUBRG,
+    pub colors: WUBRG,
     #[serde(default, skip_serializing_if = "is_default")]
     pub defense: String,
-    #[serde(default, skip_serializing_if = "is_default", rename = "edhrecRank")]
-    pub edhrec_rank: Option<f64>,
-    #[serde(
-        default,
-        skip_serializing_if = "is_default",
-        rename = "edhrecSaltiness"
-    )]
-    pub edhrec_saltiness: Option<f64>,
-    // #[serde(default, skip_serializing_if = "is_default",  rename = "faceConvertedManaCost")]
-    // pub face_converted_mana_cost: f64,
     #[serde(default, skip_serializing_if = "is_default", rename = "faceManaValue")]
     pub face_mana_value: Option<f64>,
     #[serde(default, skip_serializing_if = "is_default", rename = "faceName")]
     pub face_name: String,
-    // #[serde(default, skip_serializing_if = "is_default",  rename = "firstPrinting")]
-    // pub first_printing: String,
     #[serde(default, skip_serializing_if = "Vec::is_empty", rename = "foreignData")]
     pub foreign_data: Vec<ForeignData>,
-    // #[serde(default)]
-    // pub hand: String,
     #[serde(
         default,
         skip_serializing_if = "is_default",
         rename = "hasAlternativeDeckLimit"
     )]
     pub has_alternative_deck_limit: bool,
-    // #[serde(default)]
-    // pub identifiers: Identifiers,
-    #[serde(default, skip_serializing_if = "is_default", rename = "isFunny")]
-    pub is_funny: bool,
-    // #[serde(default, skip_serializing_if = "is_default",  rename = "isReserved")]
-    // pub is_reserved: bool,
     #[serde(default, skip_serializing_if = "is_default")]
     pub keywords: IndexSet<String>,
     pub layout: CardLayout,
@@ -72,8 +61,6 @@ pub struct Card {
     pub leadership_skills: LeadershipSkills,
     #[serde(default, skip_serializing_if = "is_default")]
     pub legalities: Legalities,
-    // #[serde(default, skip_serializing_if = "is_default")]
-    // pub life: String,
     #[serde(default, skip_serializing_if = "is_default")]
     pub loyalty: String,
     #[serde(default, skip_serializing_if = "is_default", rename = "manaCost")]
@@ -83,18 +70,8 @@ pub struct Card {
     pub name: String,
     #[serde(default, skip_serializing_if = "is_default")]
     pub power: String,
-    // #[serde(default)]
-    // pub printings: Vec<String>,
-    // #[serde(default, skip_serializing_if = "is_default",  rename = "purchaseUrls")]
-    // pub purchase_urls: PurchaseUrls,
-    #[serde(default, skip_serializing_if = "is_default", rename = "relatedCards")]
-    pub related_cards: RelatedCards,
-    // #[serde(default, skip_serializing_if = "is_default")]
-    // pub rulings: Vec<Ruling>,
     #[serde(default, skip_serializing_if = "is_default")]
     pub side: Side,
-    // #[serde(default, skip_serializing_if = "is_default")]
-    // pub subsets: Vec<String>,
     #[serde(default, skip_serializing_if = "is_default")]
     pub subtypes: Vec<String>,
     #[serde(default, skip_serializing_if = "is_default")]
@@ -109,7 +86,210 @@ pub struct Card {
     pub types: Vec<Type>,
 }
 
+#[allow(non_camel_case_types)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Card_Keys {
+    pub cardoid: i64,
+    pub legalities: Option<i64>,
+}
+
+impl Default for Card_Keys {
+    fn default() -> Self {
+        Self {
+            cardoid: -1,
+            legalities: None,
+        }
+    }
+}
+
+impl SqliteTable for Card {
+    type ForeignKeys = Card_Keys;
+
+    const COLUMNS: &'static [sqlite::DbColumn<Card, Card_Keys>] = &[
+        db_column!(object.colors "TEXT NOT NULL", val -> val.as_str()?.into()),
+        db_column!(object.color_identity "TEXT NOT NULL", val -> val.as_str()?.into()),
+        db_column!(object.color_indicator "TEXT NOT NULL", val -> val.as_str()?.into()),
+        db_column!(object.defense "TEXT NOT NULL", val.as_str()),
+        db_column!(object.face_name "TEXT NOT NULL", val.as_str()),
+        db_column!(object.face_mana_value "REAL", val.as_f64_or_null()),
+        db_column!(
+            object.has_alternative_deck_limit "INTEGER NOT NULL",
+            val -> val.as_i64()? != 0
+        ),
+        db_column!(
+            object.keywords "TEXT NOT NULL",
+            val -> Card::stringlist_load(val.as_str()?),
+            val <- Value::Text(Card::stringlist_store(val))
+        ),
+        db_column!(object.layout "INTEGER NOT NULL", val.as_i64()),
+        db_column!(object.leadership_skills "BLOB NOT NULL", val.as_blob()),
+        db_column!(object.mana_cost "TEXT NOT NULL", val.as_str()),
+        db_column!(object.mana_value "REAL NOT NULL", val.as_f64()),
+        db_column!(INDEX object.name "TEXT NOT NULL", val.as_str()),
+        db_column!(object.power "TEXT NOT NULL", val.as_str()),
+        db_column!(object.side "INTEGER NOT NULL", val.as_i64()),
+        db_column!(object.subtypes "TEXT NOT NULL",
+            val -> Card::stringlist_load(val.as_str()?),
+            val <- Value::Text(Card::stringlist_store(val))
+        ),
+        db_column!(object.supertypes "BOLB NOT NULL",
+            val -> val.as_blob()?.into_iter().map(|b| (*b).into()).collect_vec(),
+            val <- Value::Blob(val.iter().map(|s| *s as u8).collect_vec())
+        ),
+        db_column!(object.text "TEXT NOT NULL", val.as_str()),
+        db_column!(object.toughness "TEXT NOT NULL", val.as_str()),
+        db_column!(object.type_line "TEXT NOT NULL", val.as_str()),
+        db_column!(object.types "BLOB NOT NULL",
+            val -> val.as_blob()?.into_iter().map(|b| (*b).into()).collect_vec(),
+            val <- Value::Blob(val.iter().map(|s| *s as u8).collect_vec())
+        ),
+        db_column!(key.cardoid "INTEGER NOT NULL", val.as_i64()),
+        db_column!(NOINDEX key.legalities "INTEGER NOT NULL", val.as_i64()),
+    ];
+
+    fn extra_setup(conn: &Connection) -> anyhow::Result<()> {
+        ForeignData::setup(conn)?;
+        Legalities::setup(conn)?;
+        Ok(())
+    }
+
+    fn load(
+        &mut self,
+        id: i64,
+        key: &Self::ForeignKeys,
+        conn: &rusqlite::Connection,
+    ) -> anyhow::Result<()> {
+        let (_, legal, ()) =
+            Legalities::load_rows([key.legalities.ok_or(anyhow!("no legality"))?], conn)?
+                .pop()
+                .unwrap_or_default();
+
+        self.legalities = legal;
+
+        let foreign_data = ForeignData::load_keys([&ForeignData_Keys { parent_card: id }], conn)?;
+
+        self.foreign_data = foreign_data.into_iter().map(|(_, fd, _)| fd).collect_vec();
+
+        Ok(())
+    }
+
+    fn pre_store(
+        &self,
+        key: &mut Self::ForeignKeys,
+        conn: &rusqlite::Connection,
+    ) -> anyhow::Result<()> {
+        let legality = Legalities::store_rows([(&self.legalities, &mut ())], conn)?
+            .pop()
+            .unwrap_or_default();
+        key.legalities = Some(legality);
+
+        Ok(())
+    }
+
+    fn post_store(&self, id: i64, conn: &Connection) -> anyhow::Result<()> {
+        let mut foreign_data = vec![];
+
+        for fd in &self.foreign_data {
+            foreign_data.push((fd, ForeignData_Keys { parent_card: id }))
+        }
+
+        ForeignData::store_rows(foreign_data.iter_mut().map(|(fd, fdk)| (*fd, fdk)), conn)?;
+
+        Ok(())
+    }
+}
+
+#[test]
+fn card_tests() -> anyhow::Result<()> {
+    let conn = rusqlite::Connection::open_in_memory()?;
+    Card::setup(&conn)?;
+
+    let mut data = vec![(
+        Card {
+            color_identity: WUBRG::wubrg(),
+            color_indicator: WUBRG::colorless(),
+            colors: WUBRG(BTreeSet::from_iter([Pie::R, Pie::G])),
+            defense: "".s(),
+            face_mana_value: None,
+            face_name: "".s(),
+            foreign_data: vec![ForeignData {
+                face_name: "Få".s(),
+                flavor_text: "".s(),
+                language: "Danish".s(),
+                name: "Foo // Bar".s(),
+                text: "".s(),
+                type_line: "Land".s(),
+            }],
+            has_alternative_deck_limit: false,
+            keywords: IndexSet::from_iter(["Flying".s()]),
+            layout: CardLayout::Normal,
+            leadership_skills: LeadershipSkills {
+                brawl: false,
+                commander: true,
+                oathbreaker: false,
+            },
+            legalities: {
+                let mut x = Legalities::default();
+                x.legacy = Legality::Legal;
+                x
+            },
+            loyalty: "".s(),
+            mana_cost: "{1}{W}".s(),
+            mana_value: 2.0,
+            name: "Foo".s(),
+            power: "1".s(),
+            side: Side::B,
+            subtypes: vec!["Borb".s()],
+            supertypes: vec![Supertype::Legendary],
+            text: "Flying\nVery good boy.".s(),
+            toughness: "2".s(),
+            type_line: "Legendary Creature - Borb".s(),
+            types: vec![Type::Creature],
+        },
+        Card_Keys {
+            cardoid: -1,
+            legalities: None,
+        },
+    )];
+
+    let ids = Card::store_rows(data.iter_mut().map(|(c, ck)| (&*c, ck)), &conn)?;
+
+    let data2 = Card::load_rows(ids, &conn)?
+        .into_iter()
+        .map(|(_, c, ck)| (c, ck))
+        .collect_vec();
+
+    assert_eq!(data, data2);
+
+    let legalities = Legalities::load_all(&conn)?[0].1.clone();
+
+    assert_eq!(&legalities, &data[0].0.legalities);
+
+    Ok(())
+}
+
 impl Card {
+    fn stringlist_load<S>(val: &str) -> S
+    where
+        S: FromIterator<String>,
+    {
+        if val.is_empty() {
+            FromIterator::from_iter([])
+        } else {
+            let mut res = val.split("\n").map(|s| s.s()).collect_vec();
+            res.pop();
+            FromIterator::from_iter(res)
+        }
+    }
+    fn stringlist_store(val: impl IntoIterator<Item = impl ToString>) -> String {
+        let val = val.into_iter().map(|s| s.s()).collect_vec();
+        if val.is_empty() {
+            "".s()
+        } else {
+            val.into_iter().join("\n") + "\n"
+        }
+    }
+
     pub fn is_land(&self) -> bool {
         self.is_type(Type::Land)
     }
@@ -185,11 +365,11 @@ impl Card {
         }
     }
 
-    pub fn get_mana_value(&self) -> f64 {
+    pub fn get_mana_value(&self) -> usize {
         if let Some(n) = self.face_mana_value {
-            n
+            n as usize
         } else {
-            self.mana_value
+            self.mana_value as usize
         }
     }
 }
@@ -201,7 +381,7 @@ impl Display for Card {
             name = &self.name;
         }
         write!(f, "{} {}", &name, &self.mana_cost)?;
-        write!(f, "\n({}) {}", WUBRG::render(&self.colors), self.type_line)?;
+        write!(f, "\n({}) {}", self.colors.to_string(), self.type_line)?;
         for line in self.text.lines() {
             write!(f, "\n{}", line)?;
         }

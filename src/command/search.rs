@@ -1,23 +1,14 @@
-use std::{
-    collections::BTreeSet,
-    path::{Path, PathBuf},
-};
+use std::path::{Path, PathBuf};
 
 use clap::Parser;
 use indexmap::IndexSet;
+use itertools::Itertools;
 use regex::Regex;
 
-use anyhow::anyhow;
-
 use crate::{
-    atomic_cards::{
-        cardoids::Cardoid,
-        cards::Card,
-        types::{CardLayout, WUBRG},
-        AtomicCardsFile,
-    },
+    atomic_cards::{cardoids::Cardoid, cards::Card, types::WUBRG, AtomicCardsFile},
     proxy::{decklists::DeckList, Proxy},
-    utils::{iter::IterExt, ToS},
+    utils::ToS,
 };
 
 #[derive(Parser, Debug, Clone)]
@@ -46,8 +37,6 @@ pub struct Search {
     pub vgrep: Vec<String>,
     #[arg(long)]
     pub sideboard: bool,
-    #[arg(long)]
-    pub funnies: bool,
     #[arg(long)]
     pub debug: bool,
     #[arg(long)]
@@ -83,8 +72,8 @@ impl Search {
 
 struct Searcher {
     tags: IndexSet<String>,
-    color: BTreeSet<WUBRG>,
-    commander: BTreeSet<WUBRG>,
+    color: WUBRG,
+    commander: WUBRG,
     name: Vec<Regex>,
     vname: Vec<Regex>,
     r#type: Vec<Regex>,
@@ -94,7 +83,6 @@ struct Searcher {
     text: Vec<Regex>,
     vtext: Vec<Regex>,
     sideboard: bool,
-    funnies: bool,
     debug: bool,
 }
 
@@ -114,7 +102,6 @@ impl Searcher {
             vtext: Self::build_regexes(it.case_sensitive, it.vtext)?,
             debug: it.debug,
             sideboard: it.sideboard,
-            funnies: it.funnies,
         })
     }
 
@@ -123,7 +110,7 @@ impl Searcher {
             .into_iter()
             .filter(|p| p.in_deck() != self.sideboard)
             .filter(|p| self.matches_proxy(p))
-            .collvect()
+            .collect_vec()
     }
 
     fn matches_cardoids<'a>(
@@ -132,13 +119,8 @@ impl Searcher {
     ) -> Vec<&'a Cardoid> {
         cardoids
             .into_iter()
-            .filter(|c| c.face().is_funny <= self.funnies)
-            .filter(|c| match c.layout() {
-                &CardLayout::Unsupported => self.funnies,
-                _ => true,
-            })
             .filter(|c| self.matches_cardoid(c))
-            .collvect()
+            .collect_vec()
     }
 
     fn matches_proxy(&self, proxy: &Proxy) -> bool {
@@ -146,37 +128,26 @@ impl Searcher {
     }
 
     fn matches_cardoid(&self, cardoid: &Cardoid) -> bool {
-        cardoid.color_identity().is_subset(&self.commander)
+        cardoid.color_identity().0.is_subset(&self.commander.0)
             && Self::regex_match(&self.name, &self.vname, cardoid.name())
             && Self::regex_match(&self.grep, &self.vgrep, &format!("{}", cardoid))
             && cardoid.iter().any(|card| self.matches_card(card))
     }
 
     fn matches_card(&self, card: &Card) -> bool {
-        self.color.is_subset(&card.colors)
+        self.color.0.is_subset(&card.colors.0)
             && Self::regex_match(&self.r#type, &self.vtype, &card.type_line)
             && Self::regex_match(&self.text, &self.vtext, &card.text)
     }
 
-    fn build_color(it: Option<String>, or: BTreeSet<WUBRG>) -> anyhow::Result<BTreeSet<WUBRG>> {
+    fn build_color(it: Option<String>, or: WUBRG) -> anyhow::Result<WUBRG> {
         let Some(it) = it else {
             return Ok(or);
         };
         if it == "C" || it == "c" {
-            return Ok(BTreeSet::new());
+            return Ok(WUBRG::colorless());
         }
-        let mut res = BTreeSet::new();
-        for c in it.chars() {
-            res.insert(match c {
-                'W' | 'w' => WUBRG::W,
-                'U' | 'u' => WUBRG::U,
-                'B' | 'b' => WUBRG::B,
-                'R' | 'r' => WUBRG::R,
-                'G' | 'g' => WUBRG::R,
-                c => return Err(anyhow!("{} is not a color", c)),
-            });
-        }
-        return Ok(res);
+        return Ok(WUBRG::from(it));
     }
 
     fn build_regexes(case: bool, it: Vec<String>) -> anyhow::Result<Vec<Regex>> {

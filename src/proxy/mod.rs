@@ -1,7 +1,7 @@
 pub mod decklists;
 pub mod deserializers;
 
-use std::{collections::BTreeSet, fmt::Display};
+use std::fmt::Display;
 
 use deserializers::OneOrMany;
 use indexmap::IndexSet;
@@ -15,7 +15,7 @@ use crate::{
         types::{CardLayout, WUBRG},
     },
     scryfall::api::ScryfallCard,
-    utils::{iter::IterExt, ToS},
+    utils::ToS,
 };
 
 #[derive(Clone, Debug, Default, Deserialize)]
@@ -85,7 +85,7 @@ impl Proxy {
                     EitherOrBoth::Left(a) => a.clone(),
                     EitherOrBoth::Right(a) => a,
                 })
-                .collvect();
+                .collect_vec();
         }
         Ok(())
     }
@@ -116,7 +116,7 @@ impl Display for Proxy {
             write!(
                 f,
                 "\ntags: {}",
-                &self.tags.iter().map(Clone::clone).collvect().join(", ")
+                &self.tags.iter().map(Clone::clone).collect_vec().join(", ")
             )?;
         }
         if self.repeats > 1 {
@@ -155,7 +155,7 @@ pub struct Customization {
     #[serde(default, rename = "flavorText")]
     pub flavor_text: Option<String>,
     #[serde(default)]
-    pub colored: Option<BTreeSet<WUBRG>>,
+    pub colored: Option<WUBRG>,
     #[serde(default)]
     pub language: Option<String>,
     #[serde(default)]

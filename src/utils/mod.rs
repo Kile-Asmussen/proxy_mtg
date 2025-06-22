@@ -1,4 +1,3 @@
-pub mod iter;
 pub mod symbolics;
 pub mod vec;
 

@@ -1,47 +1,77 @@
 pub mod cardoids;
 pub mod cards;
+pub mod download;
 pub mod metadata;
+pub mod sqlite;
 pub mod types;
 
-use std::{
-    collections::BTreeSet,
-    error::Error,
-    fmt::Display,
-    fs::{self},
-    time::Instant,
-};
+use std::{collections::BTreeSet, error::Error, fmt::Display};
 
 use indexmap::{IndexMap, IndexSet};
+use itertools::Itertools;
+use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 
-use crate::utils::iter::*;
+use crate::{
+    atomic_cards::{
+        cardoids::{Cardoid, Cardoid_Keys},
+        metadata::MetaData,
+        sqlite::SqliteTable,
+    },
+    utils::ToS,
+};
+
+use anyhow::anyhow;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct AtomicCardsFile {
     pub meta: metadata::MetaData,
-    pub data: IndexMap<String, cardoids::Cardoid>,
+    pub data: IndexMap<String, Cardoid>,
 }
 
 impl AtomicCardsFile {
-    const ATOMIC_CARDS_FILENAME: &'static str = "AtomicCards.json";
+    const ATOMIC_CARDS_DUMP: &'static str = "AtomicCards.dump.json";
+    const ATOMIC_CARDS_FILE: &'static str = "AtomicCards.json";
+    const ATOMIC_CARDS_DB: &'static str = "AtomicCards.sqlite";
     const ATOMIC_CARDS_URL: &'static str = "https://mtgjson.com/api/v5/AtomicCards.json";
 
-    pub fn load(verbose: bool) -> anyhow::Result<Self> {
-        let (mut atomic_cards, start) = Self::read_or_download(verbose)?;
+    pub fn store(&self, conn: &Connection) -> anyhow::Result<()> {
+        MetaData::setup(conn)?;
+        Cardoid::setup(conn)?;
 
-        let atomic_cards: AtomicCardsFile = serde_json::from_slice(&mut atomic_cards[..])?;
+        MetaData::store_rows([(&self.meta, &mut ())], conn)?;
 
-        if verbose {
-            eprintln!(
-                "Loaded {} cards in {} milliseconds.",
-                atomic_cards.data.len(),
-                start.elapsed().as_millis()
-            );
-        }
+        let mut data = self
+            .data
+            .iter()
+            .map(|(n, c)| (&*c, Cardoid_Keys { card_name: n.s() }))
+            .collect_vec();
 
+        Cardoid::store_rows(data.iter_mut().map(|(c, ck)| (*c, ck)), conn)?;
+
+        Ok(())
+    }
+
+    pub fn load(conn: &Connection) -> anyhow::Result<AtomicCardsFile> {
+        let meta = MetaData::load_rows([1], conn)?
+            .pop()
+            .ok_or(anyhow!("No metadata"))?
+            .1;
+
+        let data = IndexMap::from_iter(
+            Cardoid::load_all(conn)?
+                .into_iter()
+                .map(|(_, c, ck)| (ck.card_name, c)),
+        );
+
+        Ok(Self { meta, data })
+    }
+
+    #[allow(unused)]
+    pub fn validate(&self) -> anyhow::Result<()> {
         let mut malformed_cards = IndexSet::new();
 
-        for (name, cardoid) in &atomic_cards.data {
+        for (name, cardoid) in &self.data {
             if cardoid.sides().len() < 1 || !cardoid.sides().is_sorted() {
                 malformed_cards.insert(name.clone());
             }
@@ -54,68 +84,9 @@ impl AtomicCardsFile {
         }
 
         if malformed_cards.is_empty() {
-            Ok(atomic_cards)
+            Ok(())
         } else {
-            Err(AtomicCardsBuildError(malformed_cards.into_iter().collvect()).into())
-        }
-    }
-
-    fn read_or_download(verbose: bool) -> anyhow::Result<(Vec<u8>, Instant)> {
-        let mut start = Instant::now();
-
-        if !(fs::exists(Self::ATOMIC_CARDS_FILENAME)?) {
-            eprintln!(
-                "{} file not found, downloading...",
-                Self::ATOMIC_CARDS_FILENAME
-            );
-
-            let client = reqwest::blocking::ClientBuilder::new()
-                .timeout(None)
-                .build()?;
-
-            let request = client.get(Self::ATOMIC_CARDS_URL).build()?;
-
-            let response = client.execute(request)?;
-
-            let mut downloaded = response.bytes()?.to_vec();
-
-            if verbose {
-                eprintln!(
-                    "Downloaded {} megabytes in {} seconds.",
-                    downloaded.len() / 1024 / 1000,
-                    start.elapsed().as_secs()
-                );
-
-                eprintln!("Storing cards database...");
-                start = Instant::now();
-            }
-
-            let mut reserialized = vec![];
-            let cleaned: AtomicCardsFile = serde_json::from_slice(&mut downloaded[..])?;
-
-            serde_json::to_writer(&mut reserialized, &cleaned)?;
-
-            std::fs::write(Self::ATOMIC_CARDS_FILENAME, &reserialized[..])?;
-
-            if verbose {
-                eprintln!(
-                    "Stored {} megabytes in {} milliseconds.",
-                    reserialized.len() / 1024 / 1000,
-                    start.elapsed().as_millis()
-                );
-
-                eprintln!("Loading cards database...");
-            }
-
-            start = Instant::now();
-
-            Ok((reserialized, start))
-        } else {
-            if verbose {
-                eprintln!("Loading cards database...");
-            }
-
-            Ok((std::fs::read(Self::ATOMIC_CARDS_FILENAME)?, start))
+            Err(AtomicCardsBuildError(malformed_cards.into_iter().collect_vec()).into())
         }
     }
 }

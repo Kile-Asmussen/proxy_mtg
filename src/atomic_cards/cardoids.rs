@@ -1,18 +1,104 @@
+use itertools::Itertools;
 use serde::{Deserialize, Deserializer, Serialize};
 
-use crate::proxy::deserializers::OneOrMany;
-use crate::utils::iter::IterExt;
+use crate::{
+    atomic_cards::{
+        cards::Card_Keys,
+        sqlite::{db_column, SqliteTable},
+        types::WUBRG,
+    },
+    proxy::deserializers::OneOrMany,
+};
+
+#[cfg(test)]
+use crate::utils::ToS;
 
 use super::{
     cards::Card,
-    types::{CardLayout, Side, WUBRG},
+    types::{CardLayout, Side},
 };
+use rusqlite::{Connection, ToSql};
+use std::fmt::Display;
 
-use std::{collections::BTreeSet, fmt::Display};
-
-#[derive(Deserialize, Serialize, Debug, Clone, Default)]
+#[derive(Deserialize, Serialize, Debug, Clone, Default, PartialEq)]
 #[serde(transparent)]
 pub struct Cardoid(Vec<Card>);
+
+#[derive(Default, PartialEq, Eq, Clone, Debug)]
+#[allow(non_camel_case_types, unused)]
+pub struct Cardoid_Keys {
+    pub card_name: String,
+}
+
+impl SqliteTable for Cardoid {
+    type ForeignKeys = Cardoid_Keys;
+
+    const COLUMNS: &'static [super::sqlite::DbColumn<Cardoid, Cardoid_Keys>] =
+        &[db_column!(UNIQUE key.card_name "TEXT NOT NULL", val.as_str())];
+
+    fn extra_setup(conn: &Connection) -> anyhow::Result<()> {
+        Card::setup(conn)?;
+        Ok(())
+    }
+
+    fn load(&mut self, id: i64, _key: &Self::ForeignKeys, conn: &Connection) -> anyhow::Result<()> {
+        let cards = Card::load_keys(
+            [&Card_Keys {
+                legalities: None,
+                cardoid: id,
+            }],
+            conn,
+        )?;
+
+        self.0 = cards.into_iter().map(|(_, c, _)| c).collect_vec();
+
+        Ok(())
+    }
+
+    fn post_store(&self, id: i64, conn: &Connection) -> anyhow::Result<()> {
+        let mut data = self
+            .0
+            .iter()
+            .map(|c| {
+                (
+                    c,
+                    Card_Keys {
+                        legalities: None,
+                        cardoid: id,
+                    },
+                )
+            })
+            .collect_vec();
+
+        Card::store_rows(data.iter_mut().map(|(c, ck)| (*c, ck)), &conn)?;
+
+        Ok(())
+    }
+}
+
+#[test]
+fn test_cardoid() -> anyhow::Result<()> {
+    let conn = Connection::open_in_memory()?;
+    Cardoid::setup(&conn)?;
+
+    let mut data = vec![(
+        Cardoid(vec![Card::default()]),
+        Cardoid_Keys {
+            card_name: "FooBar".s(),
+        },
+    )];
+
+    let ids = Cardoid::store_rows(data.iter_mut().map(|(c, ck)| (&*c, ck)), &conn)?;
+
+    let datas = Cardoid::load_rows(ids, &conn)?
+        .into_iter()
+        .map(|(_, c, ck)| (c, ck))
+        .collect_vec();
+
+    assert_eq!(data, datas);
+
+    Ok(())
+}
 
 impl Cardoid {
     pub fn one_or_many<'de, D>(de: D) -> Result<Cardoid, D::Error>
@@ -39,10 +125,10 @@ impl Cardoid {
     }
 
     pub fn sides(&self) -> Vec<Side> {
-        self.0.iter().map(|c| c.side.clone()).collvect()
+        self.0.iter().map(|c| c.side.clone()).collect_vec()
     }
 
-    pub fn color_identity(&self) -> &BTreeSet<WUBRG> {
+    pub fn color_identity(&self) -> &WUBRG {
         &self.face().color_identity
     }
 
@@ -118,4 +204,19 @@ impl Display for Cardoid {
         }
         Ok(())
     }
+}
+
+#[allow(unused)]
+impl Cardoid {
+    const CREATE_TABLE: &'static str = r##"
+        CREATE TABLE Cardoid (
+            id INTEGER NOT NULL PRIMARY KEY,
+            name INTEGER NOT NULL,
+            side_a INTEGER NOT NULL,
+            side_b INTEGER,
+            side_c INTEGER,
+            side_d INTEGER,
+            side_e INTEGER
+        );
+    "##;
 }

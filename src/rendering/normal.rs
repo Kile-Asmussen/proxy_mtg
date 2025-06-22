@@ -1,7 +1,7 @@
 use crate::{
     atomic_cards::{
         cards::Card,
-        types::{FaceLayout, Side, Supertype, WUBRG},
+        types::{FaceLayout, Side, Supertype},
     },
     html::{Element, Node, Tag},
     proxy::{Customization, Proxy},
@@ -136,9 +136,10 @@ pub fn rules_text_planeswalker_div(card: &Card, proxy: &Proxy) -> Element {
 }
 
 pub fn rules_text_basic_div(card: &Card, proxy: &Proxy) -> Element {
-    let mut big_symbol = rules_text_paragraph([big_mana_glyph(
-        format!("ms-{}", WUBRG::render(&card.color_identity)).to_lowercase(),
-    )]);
+    let mut big_symbol = rules_text_paragraph([big_mana_glyph(format!(
+        "ms-{}",
+        card.color_identity.to_string().to_lowercase(),
+    ))]);
 
     if card.is_supertype(Supertype::Snow) {
         big_symbol = big_symbol.node(big_mana_glyph("ms-s"));

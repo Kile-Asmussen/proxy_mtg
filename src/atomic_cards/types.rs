@@ -1,5 +1,10 @@
 use super::is_default;
-use crate::utils::{iter::IterExt, ToS};
+use crate::utils::ToS;
+use itertools::Itertools;
+use rusqlite::{
+    types::{ToSqlOutput, Value},
+    ToSql,
+};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::BTreeSet,
@@ -7,7 +12,8 @@ use std::{
     ops::Sub,
 };
 
-#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[repr(u8)]
 pub enum Supertype {
     Basic,
     Legendary,
@@ -23,7 +29,19 @@ impl Display for Supertype {
     }
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+impl From<u8> for Supertype {
+    fn from(value: u8) -> Self {
+        match value {
+            0 => Self::Basic,
+            1 => Self::Legendary,
+            2 => Self::Snow,
+            _ => Self::Unsupported,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[repr(u8)]
 pub enum Type {
     Artifact,
     Battle,
@@ -37,6 +55,17 @@ pub enum Type {
 
     #[serde(other)]
     Unsupported,
+}
+
+impl From<u8> for Type {
+    fn from(value: u8) -> Self {
+        const LO: u8 = Type::Artifact as u8;
+        const HI: u8 = Type::Unsupported as u8;
+        match value {
+            LO..=HI => unsafe { std::mem::transmute(value as u8) },
+            _ => Self::Unsupported,
+        }
+    }
 }
 
 impl Type {
@@ -55,9 +84,9 @@ impl Display for Type {
     }
 }
 
-#[derive(Clone, Copy, Deserialize, Serialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Deserialize, Serialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u8)]
-pub enum WUBRG {
+pub enum Pie {
     W,
     U,
     B,
@@ -65,9 +94,93 @@ pub enum WUBRG {
     G,
 }
 
+impl Pie {
+    pub fn name(&self) -> &'static str {
+        match self {
+            Pie::W => "white",
+            Pie::U => "blue",
+            Pie::B => "black",
+            Pie::R => "red",
+            Pie::G => "green",
+        }
+    }
+}
+
+impl TryFrom<char> for Pie {
+    type Error = ();
+
+    fn try_from(value: char) -> Result<Self, Self::Error> {
+        Ok(match value {
+            'W' | 'w' => Self::W,
+            'U' | 'u' => Self::U,
+            'B' | 'b' => Self::B,
+            'R' | 'r' => Self::R,
+            'G' | 'g' => Self::G,
+            _ => return Err(()),
+        })
+    }
+}
+
+impl Sub for Pie {
+    type Output = usize;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        if self == rhs {
+            0
+        } else if self < rhs {
+            (self as usize).abs_diff(rhs as usize)
+        } else {
+            (self as usize).abs_diff(rhs as usize + 5)
+        }
+    }
+}
+
+impl Sub for &Pie {
+    type Output = usize;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        *self - *rhs
+    }
+}
+
+impl Display for Pie {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(match self {
+            Pie::W => "W",
+            Pie::U => "U",
+            Pie::B => "B",
+            Pie::R => "R",
+            Pie::G => "G",
+        })
+    }
+}
+
+#[derive(Clone, Deserialize, Serialize, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+pub struct WUBRG(pub BTreeSet<Pie>);
+
 impl WUBRG {
-    pub fn render(colors: &BTreeSet<WUBRG>) -> String {
-        match &colors.iter().map(Clone::clone).collvect()[..] {
+    pub fn wubrg() -> WUBRG {
+        use Pie::*;
+        WUBRG(BTreeSet::from_iter([W, U, B, R, G]))
+    }
+
+    pub fn colorless() -> WUBRG {
+        WUBRG(BTreeSet::new())
+    }
+}
+
+impl<S: AsRef<str>> From<S> for WUBRG {
+    fn from(s: S) -> WUBRG {
+        WUBRG(BTreeSet::from_iter(
+            s.as_ref().chars().filter_map(|c| Pie::try_from(c).ok()),
+        ))
+    }
+}
+
+impl ToString for WUBRG {
+    fn to_string(&self) -> String {
+        match &self.0.iter().map(Clone::clone).collect_vec()[..] {
             &[] => "C".s(),
             &[a] => format!("{a}"),
             &[a, b] => {
@@ -101,62 +214,18 @@ impl WUBRG {
             _ => "".s(),
         }
     }
+}
 
-    pub fn wubrg() -> BTreeSet<WUBRG> {
-        use WUBRG::*;
-        BTreeSet::from_iter([W, U, B, R, G])
-    }
-
-    pub fn colorless() -> BTreeSet<WUBRG> {
-        BTreeSet::new()
-    }
-
-    pub fn name(&self) -> &'static str {
-        match self {
-            WUBRG::W => "white",
-            WUBRG::U => "blue",
-            WUBRG::B => "black",
-            WUBRG::R => "red",
-            WUBRG::G => "green",
-        }
+impl ToSql for WUBRG {
+    fn to_sql(&self) -> rusqlite::Result<ToSqlOutput<'_>> {
+        Ok(ToSqlOutput::Owned(Value::Text(self.to_string())))
     }
 }
 
-impl Sub for WUBRG {
-    type Output = usize;
-
-    fn sub(self, rhs: Self) -> Self::Output {
-        if self == rhs {
-            0
-        } else if self < rhs {
-            (self as usize).abs_diff(rhs as usize)
-        } else {
-            (self as usize).abs_diff(rhs as usize + 5)
-        }
-    }
-}
-
-impl Sub for &WUBRG {
-    type Output = usize;
-
-    fn sub(self, rhs: Self) -> Self::Output {
-        *self - *rhs
-    }
-}
-
-impl Display for WUBRG {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(match self {
-            WUBRG::W => "W",
-            WUBRG::U => "U",
-            WUBRG::B => "B",
-            WUBRG::R => "R",
-            WUBRG::G => "G",
-        })
-    }
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[derive(
+    Debug, Clone, Copy, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord, Hash, Default,
+)]
+#[repr(u8)]
 pub enum CardLayout {
     #[serde(rename = "adventure")]
     Adventure,
@@ -193,6 +262,23 @@ pub enum CardLayout {
     Transform,
     #[serde(other)]
     Unsupported,
+}
+
+impl ToSql for CardLayout {
+    fn to_sql(&self) -> rusqlite::Result<ToSqlOutput<'_>> {
+        Ok(ToSqlOutput::Owned(Value::Integer(*self as u8 as i64)))
+    }
+}
+
+impl From<i64> for CardLayout {
+    fn from(value: i64) -> Self {
+        const LO: i64 = CardLayout::Adventure as u8 as i64;
+        const HI: i64 = CardLayout::Unsupported as u8 as i64;
+        match value {
+            LO..=HI => unsafe { std::mem::transmute(value as u8) },
+            _ => Self::Unsupported,
+        }
+    }
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -248,17 +334,50 @@ pub struct LeadershipSkills {
     pub oathbreaker: bool,
 }
 
+impl From<&[u8]> for LeadershipSkills {
+    fn from(value: &[u8]) -> Self {
+        Self {
+            brawl: value.get(0).unwrap_or(&0) > &0,
+            commander: value.get(1).unwrap_or(&0) > &0,
+            oathbreaker: value.get(2).unwrap_or(&0) > &0,
+        }
+    }
+}
+
+impl ToSql for LeadershipSkills {
+    fn to_sql(&self) -> rusqlite::Result<ToSqlOutput<'_>> {
+        Ok(ToSqlOutput::Owned(Value::Blob(vec![
+            self.brawl as u8,
+            self.commander as u8,
+            self.oathbreaker as u8,
+        ])))
+    }
+}
+
 #[derive(Deserialize, Serialize, Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
+#[repr(u8)]
 pub enum Side {
     #[serde(rename = "a")]
     #[default]
     A,
     #[serde(rename = "b")]
     B,
-    #[serde(rename = "c")]
-    C,
-    #[serde(rename = "d")]
-    D,
-    #[serde(rename = "e")]
-    E,
+    #[serde(other)]
+    Unsupported,
+}
+
+impl ToSql for Side {
+    fn to_sql(&self) -> rusqlite::Result<ToSqlOutput<'_>> {
+        Ok(ToSqlOutput::Owned(Value::Integer(*self as u8 as i64)))
+    }
+}
+
+impl From<i64> for Side {
+    fn from(value: i64) -> Self {
+        match value {
+            0 => Side::A,
+            1 => Side::B,
+            _ => Side::Unsupported,
+        }
+    }
 }

@@ -6,6 +6,7 @@ use std::{
 };
 
 use indexmap::{IndexMap, IndexSet};
+use itertools::Itertools;
 use serde::Deserialize;
 
 use crate::{
@@ -13,7 +14,7 @@ use crate::{
         types::{Type, WUBRG},
         AtomicCardsFile,
     },
-    utils::{iter::IterExt, ToS},
+    utils::ToS,
 };
 
 use super::Proxy;
@@ -57,7 +58,7 @@ impl DeckList {
     }
 
     pub fn extras(&self) -> Vec<&Proxy> {
-        self.iter().filter(|p| !p.in_deck()).collvect()
+        self.iter().filter(|p| !p.in_deck()).collect_vec()
     }
 
     pub fn count_cards<F>(&self, filter: F) -> usize
@@ -86,7 +87,7 @@ impl DeckList {
         res
     }
 
-    pub fn color_hist(&self) -> BTreeMap<BTreeSet<WUBRG>, usize> {
+    pub fn color_hist(&self) -> BTreeMap<WUBRG, usize> {
         let mut res = BTreeMap::new();
 
         for proxy in &self.0 {
@@ -104,7 +105,7 @@ impl DeckList {
         res
     }
 
-    pub fn color_id(&self) -> BTreeSet<WUBRG> {
+    pub fn color_id(&self) -> WUBRG {
         let mut res = BTreeSet::new();
 
         for proxy in &self.0 {
@@ -112,11 +113,11 @@ impl DeckList {
                 continue;
             }
             for card in &proxy.cardoid {
-                res.append(&mut card.color_identity.clone())
+                res.append(&mut card.color_identity.clone().0)
             }
         }
 
-        res
+        WUBRG(res)
     }
 
     pub fn curve(&self) -> BTreeMap<usize, usize> {

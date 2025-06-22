@@ -1,5 +1,6 @@
 use clap::Parser;
 use indexmap::IndexSet;
+use itertools::Itertools;
 use rand::{seq::SliceRandom, SeedableRng};
 use regex::Regex;
 
@@ -11,7 +12,7 @@ use std::{
 use crate::{
     atomic_cards::types::*,
     proxy::{decklists::DeckList, Proxy},
-    utils::{iter::*, ToS},
+    utils::ToS,
 };
 
 #[derive(Parser, Debug, Clone)]
@@ -214,17 +215,17 @@ impl List {
             pt_count
                 .into_iter()
                 .map(|((p, t), n)| (format!("{p}/{t}"), n))
-                .collvect()
+                .collect_vec()
         } else {
             pt_count
                 .into_iter()
                 .map(|((t, p), n)| (format!("{p}/{t}"), n))
-                .collvect()
+                .collect_vec()
         });
     }
 
     pub fn print_color_id(decklist: &DeckList) {
-        println!("Color Identity: {}", WUBRG::render(&decklist.color_id()))
+        println!("Color Identity: {}", decklist.color_id().to_string())
     }
 
     pub fn print_color_hist(decklist: &DeckList) {
@@ -233,8 +234,8 @@ impl List {
             decklist
                 .color_hist()
                 .into_iter()
-                .map(|s| (WUBRG::render(&s.0), s.1))
-                .collvect(),
+                .map(|s| (s.0.to_string(), s.1))
+                .collect_vec(),
         );
     }
 
@@ -249,25 +250,25 @@ impl List {
             (0..=*max)
                 .into_iter()
                 .map(|n| (n.s(), *curve.get(&n).unwrap_or(&0)))
-                .collvect(),
+                .collect_vec(),
         );
     }
 
     pub fn print_tag_hist(decklist: &DeckList) {
         println!("Tags:");
-        Self::print_histo(decklist.tag_hist().into_iter().collvect());
+        Self::print_histo(decklist.tag_hist().into_iter().collect_vec());
     }
 
     pub fn print_type_hist(decklist: &DeckList) {
         println!("Card Types:");
-        Self::print_histo(decklist.type_hist().into_iter().collvect());
+        Self::print_histo(decklist.type_hist().into_iter().collect_vec());
     }
 
     pub fn print_example_hand(decklist: &DeckList) {
         let mut names = decklist
             .iter()
             .flat_map(|x| vec![x.name.clone(); x.repeats])
-            .collvect();
+            .collect_vec();
 
         let mut rng = rand::rngs::SmallRng::from_os_rng();
         names.shuffle(&mut rng);
@@ -344,7 +345,7 @@ impl List {
         }
 
         println!("Creature types:");
-        Self::print_histo(types.into_iter().collvect())
+        Self::print_histo(types.into_iter().collect_vec())
     }
 
     pub fn print_pips(decklist: &DeckList) {
@@ -361,7 +362,7 @@ impl List {
             }
         }
 
-        let mut res = res.into_iter().collvect();
+        let mut res = res.into_iter().collect_vec();
         res.sort_by_key(|x| -(x.1 as isize));
         println!("Mana Symbols:");
         Self::print_histo(res);
@@ -394,7 +395,7 @@ impl List {
                             .tags
                             .iter()
                             .map(|s| format!("#{}", s))
-                            .collvect()
+                            .collect_vec()
                             .join("")
                     );
                 }

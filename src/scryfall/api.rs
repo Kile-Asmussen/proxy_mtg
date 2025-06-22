@@ -1,9 +1,10 @@
+use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 
 use crate::{
     proxy::Art,
     scryfall::tags::{DeserializeAsTag, Tag},
-    utils::{iter::IterExt, ToS as _},
+    utils::ToS,
 };
 
 #[derive(Deserialize, Serialize, Clone)]
@@ -137,7 +138,7 @@ pub struct ScryfallMulti {
 
 impl ScryfallMulti {
     pub fn arts(&self) -> Vec<Art> {
-        self.card_faces.iter().map(ScryfallArt::art).collvect()
+        self.card_faces.iter().map(ScryfallArt::art).collect_vec()
     }
 }
 

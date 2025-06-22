@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::{
     atomic_cards::{cards::Card, types::*},
     html::*,
@@ -7,7 +9,6 @@ use crate::{
         notation::{NoReminderText, PowerToughnessNobreak, ReminderText},
     },
     utils::{
-        iter::IterExt,
         symbolics::{replace_symbols, replace_symbols_with, Symchain},
         ToS,
     },
@@ -77,7 +78,7 @@ pub fn flavor_text_paragraphs(card: &Card, proxy: &Proxy) -> Vec<Element> {
         flavor_text
             .lines()
             .map(|s| flavor_text_paragraph([s]))
-            .collvect()
+            .collect_vec()
     }
 }
 
@@ -150,14 +151,18 @@ pub fn type_line_span(card: &Card, proxy: &Proxy) -> Element {
 
 pub fn color_indicator_span(card: &Card, _proxy: &Proxy) -> Element {
     Element::new(Tag::span).class(["indicator"]).nodes(
-        if !card.colors.iter().all(|c| card.mana_cost.contains(&c.s()))
+        if !card
+            .colors
+            .0
+            .iter()
+            .all(|c| card.mana_cost.contains(&c.s()))
             || card.layout == CardLayout::Token
         {
             Some(Element::new(Tag::i).class(vec![
                 "ms".s(),
                 "ms-ci".s(),
-                format!("ms-ci-{}", card.colors.len()),
-                format!("ms-ci-{}", WUBRG::render(&card.colors).to_lowercase()),
+                format!("ms-ci-{}", card.colors.0.len()),
+                format!("ms-ci-{}", card.colors.to_string().to_lowercase()),
             ]))
         } else {
             None
@@ -187,9 +192,10 @@ pub fn card_css_class(card: &Card, proxy: &Proxy) -> Vec<&'static str> {
     } else {
         &card.colors
     }
+    .0
     .iter()
-    .map(WUBRG::name)
-    .collvect();
+    .map(Pie::name)
+    .collect_vec();
 
     res.push(if card.face_layout().is_landscape() {
         "landscape"

@@ -1,9 +1,10 @@
 use std::fmt::Display;
 
+use itertools::Itertools;
+
 use crate::{
     html::escape_html_attr,
     utils::{
-        iter::IterExt,
         vec::{VecEntryMethods, VecExt},
         ToS,
     },
@@ -30,7 +31,7 @@ impl Display for Element {
                     format!("{}='{}'", k, escape_html_attr(v))
                 }
             })
-            .collvect();
+            .collect_vec();
 
         tag_content.insert(0, self.tag.name.s());
 
@@ -89,7 +90,7 @@ impl Element {
             *entry += " ";
         }
 
-        *entry += &classes.into_iter().map(|s| s.s()).collvect().join(" ");
+        *entry += &classes.into_iter().map(|s| s.s()).collect_vec().join(" ");
 
         self
     }
