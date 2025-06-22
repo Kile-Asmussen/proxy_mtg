@@ -4,6 +4,7 @@ use clap::Parser;
 pub struct Setup;
 
 impl Setup {
+    #[allow(unused)]
     fn dispatch() -> anyhow::Result<()> {
         Ok(())
     }
