@@ -381,6 +381,7 @@
         {
             "name": "Lazotep Quarry",
             "customize": {
+                "textStyle": "text-size-90",
                 "colored": [
                     "B"
                 ]
@@ -389,6 +390,7 @@
         {
             "name": "Cactus Preserve",
             "customize": {
+                "textStyle": "text-size-95",
                 "colored": [
                     "G"
                 ]
