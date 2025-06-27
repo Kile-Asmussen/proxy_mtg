@@ -610,6 +610,36 @@
                     "Creature"
                 ]
             }
+        },
+        {
+            "name": "Sand Scout"
+        },
+        {
+            "name": "Three Tree City"
+        },
+        {
+            "name": "Fountainport"
+        },
+        {
+            "name": "Temple of the False God"
+        },
+        {
+            "name": "Myriad Landscape"
+        },
+        {
+            "name": "Terrain Generator"
+        },
+        {
+            "name": "Strip Mine"
+        },
+        {
+            "name": "Demolition Field"
+        },
+        {
+            "name": "Cavern of Souls"
+        },
+        {
+            "name": "Esper Sentinel"
         }
     ]
 }
